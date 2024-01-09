@@ -25,9 +25,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Ploch.Common.Data.Model">
-        <HintPath>..\..\Data.Model\bin\Debug\net8.0\Ploch.Common.Data.Model.dll</HintPath>
-      </Reference>
+        <Reference Include="Ploch.Common.Data.Model">
+            <HintPath>..\..\Data.Model\bin\Debug\net8.0\Ploch.Common.Data.Model.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

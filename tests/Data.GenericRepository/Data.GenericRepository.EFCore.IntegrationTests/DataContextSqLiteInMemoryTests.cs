@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
+﻿using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;

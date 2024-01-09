@@ -18,5 +18,6 @@
 ///     </para>
 /// </remarks>
 /// <typeparam name="TParent">The type of the parent entity.</typeparam>
-public interface IHierarchicalWithParentComposite<TParent> : IHierarchicalWithParent<TParent> where TParent : IHierarchicalWithParent<TParent>
+public interface IHierarchicalWithParentComposite<TParent> : IHierarchicalWithParent<TParent>
+    where TParent : IHierarchicalWithParent<TParent>
 { }

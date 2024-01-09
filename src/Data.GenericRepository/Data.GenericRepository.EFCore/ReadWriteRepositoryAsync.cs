@@ -20,7 +20,7 @@ public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntit
     where TEntity : class, IHasId<TId>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReadWriteRepositoryAsync{TEntity, TId}" /> class.
+    ///     Initializes a new instance of the <see cref="ReadWriteRepositoryAsync{TEntity, TId}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
     public ReadWriteRepositoryAsync(DbContext dbContext) : base(dbContext)

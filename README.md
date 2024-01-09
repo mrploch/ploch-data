@@ -3,6 +3,7 @@
 [![Qodana](https://github.com/mrploch/ploch-common/actions/workflows/code_quality.yml/badge.svg)](https://github.com/mrploch/ploch-common/actions/workflows/code_quality.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-common&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-common)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-common&metric=coverage)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-common)
+
 # Ploch Common Utilities
 
 ## Overview
@@ -16,7 +17,7 @@ The repository consists of the following main prsojects:
 - Ploch.Common
 - Ploch.Common.Data.Model
 - Ploch.Common.Data.GenericRepository
-  - Ploch.Common.Data.GenericRepository.EFCore
+    - Ploch.Common.Data.GenericRepository.EFCore
 
 - Ploch.Common.Data.StandardDataSets
 - Ploch.Common.Data.Utilities

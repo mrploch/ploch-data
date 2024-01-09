@@ -32,7 +32,8 @@ public class ServiceCollectionRegistrationsTests
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCustomReadWriteAsyncRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
-                                                                                                               collection.AddScoped(repositoryInterface, repositoryImpl));
+                                                                                                                        collection.AddScoped(repositoryInterface,
+                                                                                                                                             repositoryImpl));
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 

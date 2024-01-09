@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ploch.Common.Data.Model;
+﻿namespace Ploch.Common.Data.Model;
 
 /// <summary>
 ///     An entity with a <c>AccessedTime</c> property.

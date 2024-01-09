@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Ploch.Common.Data.Model.CommonTypes;
 
 namespace Ploch.Common.Data.Model;

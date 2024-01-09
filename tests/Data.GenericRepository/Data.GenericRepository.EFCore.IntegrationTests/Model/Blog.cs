@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Ploch.Common.Data.Model;
+﻿using Ploch.Common.Data.Model;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
