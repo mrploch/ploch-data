@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <authors>Kris Ploch</authors>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://dev.azure.com/ploch/</projectUrl>
+    <description>Library with shared utilities which don't fall under a specific category.</description>
+  </metadata>
+</package>

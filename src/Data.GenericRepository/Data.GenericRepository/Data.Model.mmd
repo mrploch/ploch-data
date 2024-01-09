@@ -1,0 +1,89 @@
+classDiagram
+    class IHasAccessedBy
+    IHasAccessedBy: +String LastAccessedBy
+
+    class IHasAccessedTime
+    IHasAccessedTime: +Nullable~DateTime~ AccessedTime
+
+    class IHasAuditTimeProperties
+
+    class IHasCategories`2
+	IHasCategories`2 : +ICollection~TCategory~ Categories
+
+class IHasCategories`1
+
+	class IHasCreatedBy
+	IHasCreatedBy : +String CreatedBy
+
+	class IHasCreatedTime
+	IHasCreatedTime : +Nullable~DateTime~ CreatedTime
+
+	class IHasDescription
+	IHasDescription : +String Description
+
+	class IHasId`1
+IHasId`1 : +IHasId~TId~.TId Id
+
+	class IHasIdSettable`1
+IHasIdSettable`1 : +IHasIdSettable~TId~.TId Id
+
+	class IHasModifiedBy
+	IHasModifiedBy : +String LastModifiedBy
+
+	class IHasModifiedTime
+	IHasModifiedTime : +Nullable~DateTime~ ModifiedTime
+
+	class IHasParentId`1
+IHasParentId`1 : +IHasParentId~TId~.TId ParentId
+
+	class IHasTags`2
+IHasTags`2 : +ICollection~TTag~ Tags
+
+	class IHasTags`1
+
+class IHasTitle
+IHasTitle: +String Title
+
+class IHasValue`1
+	IHasValue`1: +IHasValue~TValue~.TValue Value
+
+class IHierarchicalWithChildren`1
+	IHierarchicalWithChildren`1: +ICollection~TChildren~ Children
+
+class IHierarchicalWithChildrenComposite`1
+
+	class IHierarchicalWithParent`1
+IHierarchicalWithParent`1 : +IHierarchicalWithParent~TParent~.TParent Parent
+
+	class IHierarchicalWithParentComposite`1
+
+class INamed
+INamed: +String Name
+
+class Category`1
+	Category`1: +Int32 Id
+Category`1 : +ICollection~TCategory~ Children
+	Category`1: +Category~TCategory~.TCategory Parent
+Category`1 : +String Name
+
+	class Category`2
+Category`2 : +Category~TCategory,TId~.TId Id
+	Category`2: +ICollection~TCategory~ Children
+Category`2 : +Category~TCategory,TId~.TCategory Parent
+	Category`2: +String Name
+
+class Image
+Image: +Byte[] Contents
+Image: +String Description
+Image: +Int32 Id
+Image: +String Name
+
+class Tag`1
+	Tag`1: +Tag~TId~.TId Id
+Tag`1 : +String Name
+	Tag`1: +String Description
+
+class Tag
+Tag: +Int32 Id
+Tag : +String Name
+Tag: +String Description

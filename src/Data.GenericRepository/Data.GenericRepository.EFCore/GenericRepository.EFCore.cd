@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository&lt;TEntity&gt;">
+    <Position X="4.5" Y="1" Width="3" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAEAAAAIAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>QueryableRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository&lt;TEntity, TId&gt;">
+    <Position X="8" Y="7" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>ReadRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository&lt;TEntity&gt;">
+    <Position X="8" Y="4.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAgAAAAAAAIA=</HashCode>
+      <FileName>ReadRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync&lt;TEntity, TId&gt;">
+    <Position X="1.25" Y="7" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>ReadRepositoryAsync.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync&lt;TEntity&gt;">
+    <Position X="1.25" Y="4.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAIAAAAAIAA=</HashCode>
+      <FileName>ReadRepositoryAsync.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository&lt;TEntity, TId&gt;">
+    <Position X="8" Y="9.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>ReadWriteRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync&lt;TEntity, TId&gt;">
+    <Position X="1.25" Y="9.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAEAAAAAAAgAAAAAAAAAAIA=</HashCode>
+      <FileName>ReadWriteRepositoryAsync.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

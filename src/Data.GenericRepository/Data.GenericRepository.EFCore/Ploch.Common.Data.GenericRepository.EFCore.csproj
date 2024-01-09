@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Description>Generic repository for Entity Framework Core</Description>
+        <PackageTags>efcore;dotnetcore</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Dawn.Guard" Version="1.12.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
+        <PackageReference Update="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Update="SonarAnalyzer.CSharp" Version="9.14.0.81108">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Data.GenericRepository\Ploch.Common.Data.GenericRepository.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Ploch.Common.Data.Model">
+        <HintPath>..\..\Data.Model\bin\Debug\net8.0\Ploch.Common.Data.Model.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

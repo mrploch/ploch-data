@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <PropertyGroup>
+        <Authors>Kris Ploch</Authors>
+        <Company>Ploch</Company>
+        <Product>Ploch.Common</Product>
+        <PackageProjectUrl>https://common.github.ploch.dev/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/mrploch/ploch-common.git</RepositoryUrl>
+        <Description>Common utility libraries.</Description>
+        <Copyright>Kris Ploch $([System.DateTime]::Now.Year)</Copyright>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest-Recommended</AnalysisLevel>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <VersionPrefix>1.2.0</VersionPrefix>
+        <VersionSuffix>-prerelease</VersionSuffix>
+        <BuildNumber>$([System.DateTime]::UtcNow.ToString("yyMMddHHmmss"))</BuildNumber>
+        <FullVersionSuffix>$(VersionSuffix)-$(BuildNumber)</FullVersionSuffix>
+        <Version>$(VersionPrefix)$(FullVersionSuffix)</Version>
+        <FileVersion>$(InformationalVersion)</FileVersion>
+        <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+        <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
+    </PropertyGroup>
+
+    <PropertyGroup Label="ProjectType">
+        <IsReleaseBuild>false</IsReleaseBuild>
+        <IsReleaseBuild Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">true</IsReleaseBuild>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(IsTestProject)">
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    </PropertyGroup>
+    <PropertyGroup Condition="!$(IsTestProject)">
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IsTestProject>false</IsTestProject>
+    </PropertyGroup>
+
+    <Target Name="PrintSettings" BeforeTargets="Build">
+        <Message Text="Building $(MSBuildProjectName) with settings:" Importance="high" />
+        <Message Text="MSBuildProjectName -> '$(MSBuildProjectName)'" Importance="high" />
+        <Message Text="Configuration -> '$(Configuration)' " Importance="high" />
+        <Message Text="DebugType -> '$(DebugType)' " Importance="high" />
+        <Message Text="DebugSymbols -> '$(DebugSymbols)' " Importance="high" />
+        <Message Text="AssemblyName -> '$(AssemblyName)' " Importance="high" />
+        <Message Text="IsTestProject -> '$(IsTestProject)' " Importance="high" />
+        <Message Text="GeneratePackageOnBuild -> '$(GeneratePackageOnBuild)' " Importance="high" />
+        <Message Text="GenerateDocumentationFile -> '$(GenerateDocumentationFile)' " Importance="high" />
+        <Message Text="IsPackable -> '$(IsPackable)' " Importance="high" />
+    </Target>
+    <PropertyGroup>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+</Project>

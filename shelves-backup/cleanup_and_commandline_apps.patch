@@ -1,0 +1,215 @@
+Subject: [PATCH] cleanup and commandline apps
+---
+Index: src/Common.Data/Data.Model/IHasDescription.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Common.Data/Data.Model/IHasDescription.cs b/src/Common.Data/Data.Model/IHasDescription.cs
+--- a/src/Common.Data/Data.Model/IHasDescription.cs	
++++ b/src/Common.Data/Data.Model/IHasDescription.cs	
+@@ -2,6 +2,6 @@
+ {
+     public interface IHasDescription
+     {
+-        string Description { get; set; }
++        string? Description { get; set; }
+     }
+ }
+\ No newline at end of file
+Index: src/Common.CommandLine/IAsyncCommand.cs
+===================================================================
+diff --git a/src/Common.CommandLine/IAsyncCommand.cs b/src/Common.CommandLine/IAsyncCommand.cs
+new file mode 100644
+--- /dev/null	
++++ b/src/Common.CommandLine/IAsyncCommand.cs	
+@@ -0,0 +1,10 @@
++using System.Threading;
++using System.Threading.Tasks;
++
++namespace Ploch.Common.CommandLine
++{
++    public interface IAsyncCommand
++    {
++        Task OnExecuteAsync(CancellationToken cancellationToken = default);
++    }
++}
+\ No newline at end of file
+Index: src/Common/Reflection/PropertyHelpers.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Common/Reflection/PropertyHelpers.cs b/src/Common/Reflection/PropertyHelpers.cs
+--- a/src/Common/Reflection/PropertyHelpers.cs	
++++ b/src/Common/Reflection/PropertyHelpers.cs	
+@@ -145,7 +145,7 @@
+         /// <returns>
+         ///     Property information
+         /// </returns>
+-        public static PropertyInfo GetPropertyInfo(this Type type, string propertyName, bool throwIfNotFound)
++        public static PropertyInfo? GetPropertyInfo(this Type type, string propertyName, bool throwIfNotFound)
+         {
+             var propertyInfo = type.GetTypeInfo().GetProperty(propertyName);
+ 
+Index: src/Common.CommandLine/ICommand.cs
+===================================================================
+diff --git a/src/Common.CommandLine/ICommand.cs b/src/Common.CommandLine/ICommand.cs
+--- a/src/Common.CommandLine/ICommand.cs	
++++ b/src/Common.CommandLine/ICommand.cs	
+@@ -7,15 +7,8 @@
+         /// <summary>
+         ///     Executes the command.
+         /// </summary
+-        /// <remarks>
+-        ///     OnExecuyt is called by the commandline app framework.
+-        ///     This method should return an integer that represents the executed status code. As a starting point use:
+-        ///     0 - ExecutionSuccessful
+-        ///     10 - UnknownError
+-        ///     Other codes/states are bespoke to nature of the functionality.
+-        /// </remarks>
+         /// <returns>Executed status code integer</returns>
+         [SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = "Called dynamically by the CommandLineUtils library")]
+-        int OnExecute();
++        void OnExecute();
+     }
+ }
+\ No newline at end of file
+Index: nuget.config
+===================================================================
+diff --git a/nuget.config b/nuget.config
+--- a/nuget.config	
++++ b/nuget.config	
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <configuration>
+   <packageSources>
+-    <add key="NuGet" value="https://api.nuget.org/v3/index.json"/>
+-    <add key="ploch-artifacts" value="https://pkgs.dev.azure.com/ploch/_packaging/ploch-artifacts/nuget/v3/index.json"/>
++    <add key="NuGet" value="https://api.nuget.org/v3/index.json" />
++    <add key="ploch-artifacts" value="https://pkgs.dev.azure.com/ploch/_packaging/ploch-artifacts/nuget/v3/index.json" />
+   </packageSources>
+ </configuration>
+\ No newline at end of file
+Index: src/Common/ExpressionHelpers.cs
+===================================================================
+diff --git a/src/Common/ExpressionHelpers.cs b/src/Common/ExpressionHelpers.cs
+--- a/src/Common/ExpressionHelpers.cs	
++++ b/src/Common/ExpressionHelpers.cs	
+@@ -29,7 +29,7 @@
+             return dele.DynamicInvoke();
+         }
+ 
+-        private static object getValue(Expression expression, bool allowCompile)
++        private static object? getValue(Expression expression, bool allowCompile)
+         {
+             if (expression == null)
+             {
+Index: src/Common/EnvironmentUtilities.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Common/EnvironmentUtilities.cs b/src/Common/EnvironmentUtilities.cs
+--- a/src/Common/EnvironmentUtilities.cs	
++++ b/src/Common/EnvironmentUtilities.cs	
+@@ -1,4 +1,5 @@
+ using System;
++using System.IO;
+ using System.Reflection;
+ 
+ namespace Ploch.Common
+@@ -7,7 +8,7 @@
+     {
+         public static string GetCurrentAppPath()
+         {
+-            return Assembly.GetEntryAssembly()?.GetName().Name ??
++            return Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location ?? AppDomain.CurrentDomain.BaseDirectory) ??
+                    throw new InvalidOperationException("Could not get entry assembly name, one of the components was null");
+         }
+     }
+Index: src/TestingSupport/TestData/TestDataConfiguration.cs
+===================================================================
+diff --git a/src/TestingSupport/TestData/TestDataConfiguration.cs b/src/TestingSupport/TestData/TestDataConfiguration.cs
+--- a/src/TestingSupport/TestData/TestDataConfiguration.cs	
++++ b/src/TestingSupport/TestData/TestDataConfiguration.cs	
+@@ -20,6 +20,10 @@
+             set
+             {
+                 Debug.Assert(value != null, "value != null");
++                if (value == null)
++                {
++                    throw new ArgumentNullException("value");
++                }
+                 _basePath = value.Trim('\\');
+             }
+         }
+Index: src/Common/Collections/EnumerableExtensions.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Common/Collections/EnumerableExtensions.cs b/src/Common/Collections/EnumerableExtensions.cs
+--- a/src/Common/Collections/EnumerableExtensions.cs	
++++ b/src/Common/Collections/EnumerableExtensions.cs	
+@@ -82,7 +82,7 @@
+ 
+         public static string Join<TValue>(this IEnumerable<TValue> source, string separator)
+         {
+-            return Join(source, separator, v => v.ToString());
++            return Join(source, separator, v => v!.ToString());
+         }
+ 
+         public static string Join<TValue, TResult>(this IEnumerable<TValue> source, string separator, Func<TValue, TResult> valueSelector)
+@@ -92,7 +92,7 @@
+ 
+         public static string JoinWithFinalSeparator<TValue>(this IEnumerable<TValue> source, string separator, string finalSeparator)
+         {
+-            return JoinWithFinalSeparator(source, separator, finalSeparator, v => v.ToString());
++            return JoinWithFinalSeparator(source, separator, finalSeparator, v => v!.ToString());
+         }
+ 
+         public static string JoinWithFinalSeparator<TValue, TResult>(this IEnumerable<TValue> source,
+Index: src/Common.DawnGuard.Tests/TypeGuardsTests.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Common.DawnGuard.Tests/TypeGuardsTests.cs b/src/Common.DawnGuard.Tests/TypeGuardsTests.cs
+--- a/src/Common.DawnGuard.Tests/TypeGuardsTests.cs	
++++ b/src/Common.DawnGuard.Tests/TypeGuardsTests.cs	
+@@ -65,7 +65,7 @@
+         [Fact]
+         public void AssignableToOrNull_guard_should_not_throw_if_argument_is_null()
+         {
+-            Type nullArg = null;
++            Type? nullArg = null;
+ 
+             Action act = () => Guard.Argument(nullArg, nameof(nullArg))!.AssignableToOrNull(typeof(ITestService1));
+ 
+@@ -75,7 +75,7 @@
+         [Fact]
+         public void AssignableToOrNull_generic_guard_should_not_throw_if_argument_is_null()
+         {
+-            Type nullArg = null;
++            Type? nullArg = null;
+ 
+ #pragma warning disable CS8620
+             Action act = () => Guard.Argument(nullArg, nameof(nullArg)).AssignableToOrNull<ITestService1>();
+Index: src/Common.Data/Data.Model/INamed.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Common.Data/Data.Model/INamed.cs b/src/Common.Data/Data.Model/INamed.cs
+--- a/src/Common.Data/Data.Model/INamed.cs	
++++ b/src/Common.Data/Data.Model/INamed.cs	
+@@ -2,6 +2,6 @@
+ {
+     public interface INamed
+     {
+-        string Name { get; set; }
++        string? Name { get; set; }
+     }
+ }
+\ No newline at end of file

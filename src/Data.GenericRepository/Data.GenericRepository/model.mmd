@@ -1,0 +1,19 @@
+classDiagram
+    class IReadRepository~TEntity~
+    IReadRepository~TEntity~: +IQueryable~TEntity~ Entities
+
+    class IReadRepository~TEntity;TId~
+    IReadRepository~TEntity;TId~: +IQueryable~TEntity~ Entities
+
+    class IReadRepositoryAsync~TEntity;TId~
+    IReadRepositoryAsync~TEntity;TId~: +IQueryable~TEntity~ Entities
+
+    class IRepository~TEntity;TId~
+
+    class IWriteRepository~TEntity;TId~
+
+    class IRepositoryAsync~TEntity;TId~
+
+    class IWriteRepositoryAsync~TEntity;TId~
+
+    class IUnitOfWork

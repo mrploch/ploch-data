@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="Ploch.Common.Data.GenericRepository.IQueryableRepository&lt;TEntity&gt;">
+    <Position X="3" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>IQueryableRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IReadRepository&lt;TEntity, TId&gt;">
+    <Position X="8" Y="5.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>IReadRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IReadRepository&lt;TEntity&gt;">
+    <Position X="8" Y="2.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAgAAAAAAAIA=</HashCode>
+      <FileName>IReadRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IReadRepositoryAsync&lt;TEntity, TId&gt;">
+    <Position X="0.5" Y="5.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>IReadRepositoryAsync.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IReadRepositoryAsync&lt;TEntity&gt;">
+    <Position X="0.5" Y="2.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAIAAAAAIAA=</HashCode>
+      <FileName>IReadRepositoryAsync.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IReadWriteRepository&lt;TEntity, TId&gt;">
+    <Position X="10" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IReadWriteRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync&lt;TEntity, TId&gt;">
+    <Position X="2.5" Y="7.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IReadWriteRepositoryAsync.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IUnitOfWork">
+    <Position X="7" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAACA=</HashCode>
+      <FileName>IUnitOfWork.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IWriteRepository&lt;TEntity, TId&gt;">
+    <Position X="11.75" Y="4.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>IWriteRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync&lt;TEntity, TId&gt;">
+    <Position X="4.5" Y="4.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAEAAAAAAAgAAAAAAAAAAIA=</HashCode>
+      <FileName>IWriteRepositoryAsync.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
