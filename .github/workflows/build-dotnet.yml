@@ -22,20 +22,36 @@ jobs:
       - uses: actions/checkout@v3
       - name: Copy documentation files
         run: cp ./README.md ./DocumentationSite/index.md
-      - name: Build, test and scan
-        uses: mrploch/ploch-github-actions/build-test-sonar@main            
+      - uses: actions/setup-java@v4
         with:
-          solution-path: './Ploch.Data.sln'
-          sonar-project-key: ${{ env.SONAR_PROJECT_KEY }}
-          sonar-organization: ${{ env.SONAR_ORGANIZATION }}
-          sonar-token: ${{ secrets.SONAR_TOKEN }}
-      # - name: Publish Test Results
-      #   uses: EnricoMi/publish-unit-test-result-action@v2
-      #   if: always()
-      #   with:
-      #     files: |
-      #       **/TestResults/*.xml
-      #       **/TestResults/*.trx
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        shell: pwsh
+        run: dotnet restore ./Ploch.Data.sln
+      - name: Install SonarCloud Scanner
+        shell: pwsh
+        run: dotnet tool install --global dotnet-sonarscanner
+      - name: Install dotnet-coverage
+        shell: pwsh
+        run: dotnet tool install --global dotnet-coverage
+      - name: SonarScanner Begin
+        shell: pwsh
+        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
+      - name: Build
+        shell: pwsh
+        run: dotnet build ./Ploch.Data.sln --no-restore
+      - name: Test Coverage
+        shell: pwsh
+        run: dotnet test ./Ploch.Data.sln --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+      - name: SonarScanner End
+        shell: pwsh
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
