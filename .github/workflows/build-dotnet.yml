@@ -9,7 +9,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 env: 
-  SONAR_PROJECT_KEY: mrploch_ploch-common
+  SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
   SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
       - name: Build, test and scan
         uses: mrploch/ploch-github-actions/build-test-sonar@main            
         with:
-          solution-path: './Ploch.Common.sln'
+          solution-path: './Ploch.Data.sln'
           sonar-project-key: ${{ env.SONAR_PROJECT_KEY }}
           sonar-organization: ${{ env.SONAR_ORGANIZATION }}
           sonar-token: ${{ secrets.SONAR_TOKEN }}
