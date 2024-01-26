@@ -38,7 +38,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{576228
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
-		directory.build.targets = directory.build.targets
 		Directory.Packages.props = Directory.Packages.props
 		global.json = global.json
 		NuGet.Config = NuGet.Config
