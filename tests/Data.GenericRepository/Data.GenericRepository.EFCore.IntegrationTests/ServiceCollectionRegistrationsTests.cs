@@ -42,27 +42,53 @@ public class ServiceCollectionRegistrationsTests
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         // Resolving the custom repository interface
-        // serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
+        serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
+
+        
+        // Resolving the default repository interfaces
+        serviceProvider.GetRequiredService<IReadRepositoryAsync<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
+        serviceProvider.GetRequiredService<IReadRepositoryAsync<Blog>>().Should().BeOfType<CustomBlogRepository>();
+        serviceProvider.GetRequiredService<IWriteRepositoryAsync<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
+        serviceProvider.GetRequiredService<IReadWriteRepositoryAsync<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
+
+        // Resolving the open-generic repository interfaces
+        serviceProvider.GetRequiredService<IReadRepositoryAsync<TestEntity>>().Should().BeOfType<ReadRepositoryAsync<TestEntity>>();
+        serviceProvider.GetRequiredService<IReadRepositoryAsync<TestEntity, int>>().Should().BeOfType<ReadRepositoryAsync<TestEntity, int>>();
+        serviceProvider.GetRequiredService<IWriteRepositoryAsync<TestEntity, int>>().Should().BeOfType<ReadWriteRepositoryAsync<TestEntity, int>>();
+        serviceProvider.GetRequiredService<IReadWriteRepositoryAsync<TestEntity, int>>().Should().BeOfType<ReadWriteRepositoryAsync<TestEntity, int>>();
+
+        serviceProvider.GetRequiredService<TestCommandReadRepository>().Should().BeOfType<TestCommandReadRepository>();
+    }
+
+    [Fact]
+    public void AddCustomRepository_should_register_custom_repository()
+    {
+        var serviceCollection = new ServiceCollection();
+
+        serviceCollection.AddCustomReadWriteRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
+                                                                                                                   collection.AddScoped(repositoryInterface,
+                                                                                                                                        repositoryImpl));
+        serviceCollection.AddScoped<TestCommandReadRepository>();
+        serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
+
+        RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TestDbContext>(serviceCollection);
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        // Resolving the custom repository interface
+        serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
 
         // Resolving the default repository interfaces
         serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
         serviceProvider.GetRequiredService<IReadRepository<Blog>>().Should().BeOfType<CustomBlogRepository>();
-        serviceProvider.GetRequiredService<IReadRepositoryAsync<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
-        serviceProvider.GetRequiredService<IReadRepositoryAsync<Blog>>().Should().BeOfType<CustomBlogRepository>();
         serviceProvider.GetRequiredService<IWriteRepository<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
-        serviceProvider.GetRequiredService<IWriteRepositoryAsync<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
         serviceProvider.GetRequiredService<IReadWriteRepository<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
-        serviceProvider.GetRequiredService<IReadWriteRepositoryAsync<Blog, int>>().Should().BeOfType<CustomBlogRepository>();
 
         // Resolving the open-generic repository interfaces
         serviceProvider.GetRequiredService<IReadRepository<TestEntity>>().Should().BeOfType<ReadRepository<TestEntity>>();
         serviceProvider.GetRequiredService<IReadRepository<TestEntity, int>>().Should().BeOfType<ReadRepository<TestEntity, int>>();
-        serviceProvider.GetRequiredService<IReadRepositoryAsync<TestEntity>>().Should().BeOfType<ReadRepositoryAsync<TestEntity>>();
-        serviceProvider.GetRequiredService<IReadRepositoryAsync<TestEntity, int>>().Should().BeOfType<ReadRepositoryAsync<TestEntity, int>>();
         serviceProvider.GetRequiredService<IWriteRepository<TestEntity, int>>().Should().BeOfType<ReadWriteRepository<TestEntity, int>>();
-        serviceProvider.GetRequiredService<IWriteRepositoryAsync<TestEntity, int>>().Should().BeOfType<ReadWriteRepositoryAsync<TestEntity, int>>();
         serviceProvider.GetRequiredService<IReadWriteRepository<TestEntity, int>>().Should().BeOfType<ReadWriteRepository<TestEntity, int>>();
-        serviceProvider.GetRequiredService<IReadWriteRepositoryAsync<TestEntity, int>>().Should().BeOfType<ReadWriteRepositoryAsync<TestEntity, int>>();
 
         serviceProvider.GetRequiredService<TestCommandReadRepository>().Should().BeOfType<TestCommandReadRepository>();
     }
