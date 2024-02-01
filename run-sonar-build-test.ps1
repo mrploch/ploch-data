@@ -1,5 +1,5 @@
 .\Clean-Repository.ps1
-$sonarToken = "c0c34330546655bd8ee2110dec144fd306c27925"
+$sonarToken = $env:PLOCH_DATA_SONAR_TOKEN
 dotnet tool install --global dotnet-sonarscanner
 dotnet tool install --global dotnet-coverage
 dotnet restore Ploch.Data.sln
