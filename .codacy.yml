@@ -3,3 +3,5 @@ engines:
   sonarscharp:
     exclude_paths:
       - "src/**Tests/**"
+  markdownlint:
+    line_length: 120

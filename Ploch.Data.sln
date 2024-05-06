@@ -46,6 +46,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{576228
 		Ploch.Common.nuspec = Ploch.Common.nuspec
 		qodana.sarif.json = qodana.sarif.json
 		qodana.yaml = qodana.yaml
+		.codacy.yml = .codacy.yml
+		.dockerignore = .dockerignore
+		.gitattributes = .gitattributes
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{73418E3A-0260-462E-A269-0540040A06A3}"
