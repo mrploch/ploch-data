@@ -18,10 +18,6 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable
         ConfigureServices(serviceCollection);
 
         (ServiceProvider, DbContext) = RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TDbContext>(serviceCollection, connectionString);
-        // ServiceProvider = serviceCollection.BuildServiceProvider();
-        // var testDbContext = ServiceProvider.GetRequiredService<TDbContext>();
-        // testDbContext.Database.EnsureCreated();
-        // DbContext = testDbContext;
     }
 
     protected TDbContext DbContext { get; }

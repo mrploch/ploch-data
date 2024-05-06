@@ -21,6 +21,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="FluentAssertions.Microsoft.Extensions.DependencyInjection" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
         <PackageReference Include="Moq" />
@@ -46,9 +47,5 @@
         <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
         <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository\Ploch.Common.Data.GenericRepository.csproj" />
         <ProjectReference Include="..\..\..\src\Data.Model\Ploch.Common.Data.Model.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageVersion Update="Ploch.Common" Version="2.0.1" />
     </ItemGroup>
 </Project>

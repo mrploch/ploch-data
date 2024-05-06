@@ -1,20 +1,6 @@
-# Ploch Common Utilities
+# .NET EF Core Generic Repository and Unit of Work
 
 ## Overview
 
-This repository is a collection of miscellaneous utility libraries for .NET.
-
-## Projects and Packages
-
-The repository consists of the following main projects:
-
-- Ploch.Common
-- Ploch.Common.Data.Model
-- Ploch.Common.Data.StandardDataSets
-- Ploch.Common.Data.Utilities
-- Ploch.Common.DawnGuard
-- Ploch.Common.DependencyInjection
-- Ploch.Common.WebUI
-- Ploch.TestingSupport
-- Ploch.TestingSupport.FluentAssertions
-- Ploch.TestingSupport.Xunit
+**Ploch.Data** is an implementation of a Generic Repository and Unit of Work for .NET. It also contains data access
+utilities and extensions for Entity Framework Core.

@@ -3,16 +3,25 @@
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
     <ItemGroup>
-        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
-        <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
-        <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.0" />
+        <!-- Entity Framework and Data -->
+        <PackageVersion Include="FluentAssertions.Microsoft.Extensions.DependencyInjection" Version="1.0.0" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.1" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.1" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageVersion>
+        <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.1" />
+        <PackageVersion Include="Ploch.Common" Version="2.0.1" />
+        <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+        <!-- Microsoft.Extensions -->
         <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
         <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-        <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
-        <PackageVersion Include="Ploch.Common`" Version="2.0.1" />
-
+        <PackageVersion Include="Dawn.Guard" Version="1.12.0" />
+        <!-- My Packages -->
+        <!-- Testing -->
         <PackageVersion Include="AutoFixture" Version="4.18.1" />
         <PackageVersion Include="AutoFixture.Xunit2" Version="4.18.1" />
         <PackageVersion Include="coverlet.msbuild" Version="6.0.0">
@@ -20,7 +29,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
         <PackageVersion Include="FluentAssertions" Version="6.12.0" />
-        <PackageVersion Include="FluentAssertions.Analyzers" Version="0.26.0">
+        <PackageVersion Include="FluentAssertions.Analyzers" Version="0.29.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
@@ -30,10 +39,11 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
-        <PackageVersion Include="Objectivity.AutoFixture.XUnit2.AutoMoq" Version="3.6.0" />
-        <PackageVersion Include="xunit" Version="2.6.2" />
-        <PackageVersion Include="xunit.analyzers" Version="1.6.0" />
-        <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.4">
+        <PackageVersion Include="Objectivity.AutoFixture.XUnit2.AutoMoq" Version="3.6.1" />
+        <PackageVersion Include="xunit" Version="2.6.6" />
+        <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
+        <PackageVersion Include="xunit.analyzers" Version="1.10.0" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.6">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
@@ -41,6 +51,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageVersion>
+        <!-- Documentation Site -->
         <PackageVersion Include="docfx.console" Version="2.59.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

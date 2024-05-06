@@ -3,10 +3,10 @@
     <PropertyGroup>
         <Authors>Kris Ploch</Authors>
         <Company>Ploch</Company>
-        <Product>Ploch.Common</Product>
-        <PackageProjectUrl>https://common.github.ploch.dev/</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/mrploch/ploch-common.git</RepositoryUrl>
-        <Description>Common utility libraries.</Description>
+        <Product>Ploch.Data</Product>
+        <PackageProjectUrl>https://github.com/mrploch/ploch-data</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/mrploch/ploch-data.git</RepositoryUrl>
+        <Description>Generic Repository, Unit of Work and Data Utilities</Description>
         <Copyright>Kris Ploch $([System.DateTime]::Now.Year)</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
@@ -14,7 +14,7 @@
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
         <AnalysisLevel>latest-Recommended</AnalysisLevel>
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-        <VersionPrefix>1.2.0</VersionPrefix>
+        <VersionPrefix>1.0.0</VersionPrefix>
         <VersionSuffix>-prerelease</VersionSuffix>
         <BuildNumber>$([System.DateTime]::UtcNow.ToString("yyMMddHHmmss"))</BuildNumber>
         <FullVersionSuffix>$(VersionSuffix)-$(BuildNumber)</FullVersionSuffix>
