@@ -1,0 +1,2508 @@
+### YamlMime:XRefMap
+sorted: true
+references:
+- uid: Ploch.Common.Data.EFCore
+  name: Ploch.Common.Data.EFCore
+  href: api/Ploch.Common.Data.EFCore.html
+  commentId: N:Ploch.Common.Data.EFCore
+  fullName: Ploch.Common.Data.EFCore
+  nameWithType: Ploch.Common.Data.EFCore
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1
+  name: BaseDbContextFactory<TDbContext>
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html
+  commentId: T:Ploch.Common.Data.EFCore.BaseDbContextFactory`1
+  name.vb: BaseDbContextFactory(Of TDbContext)
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext)
+  nameWithType: BaseDbContextFactory<TDbContext>
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext)
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0})
+  name: BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1__ctor_Func_DbContextOptions__0___0__
+  commentId: M:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0})
+  name.vb: BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+  nameWithType: BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  name: BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1__ctor_Func_DbContextOptions__0___0__Func_System_String__
+  commentId: M:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  name.vb: BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<System.String>)
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of System.String))
+  nameWithType: BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.#ctor*
+  name: BaseDbContextFactory
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1__ctor_
+  commentId: Overload:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.BaseDbContextFactory
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).BaseDbContextFactory
+  nameWithType: BaseDbContextFactory<TDbContext>.BaseDbContextFactory
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).BaseDbContextFactory
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly*
+  name: ApplyMigrationsAssembly
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1_ApplyMigrationsAssembly_
+  commentId: Overload:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly
+  isSpec: "True"
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly
+  nameWithType: BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly``2(RelationalDbContextOptionsBuilder{``0,``1})
+  name: ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1_ApplyMigrationsAssembly__2_RelationalDbContextOptionsBuilder___0___1__
+  commentId: M:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly``2(RelationalDbContextOptionsBuilder{``0,``1})
+  name.vb: ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
+  nameWithType: BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  name: ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1_ConfigureOptions_Func_System_String__DbContextOptionsBuilder__0__
+  commentId: M:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  name.vb: ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.ConfigureOptions(Func<System.String>, DbContextOptionsBuilder<TDbContext>)
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).ConfigureOptions(Func(Of System.String), DbContextOptionsBuilder(Of TDbContext))
+  nameWithType: BaseDbContextFactory<TDbContext>.ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions*
+  name: ConfigureOptions
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1_ConfigureOptions_
+  commentId: Overload:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions
+  isSpec: "True"
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.ConfigureOptions
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).ConfigureOptions
+  nameWithType: BaseDbContextFactory<TDbContext>.ConfigureOptions
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ConfigureOptions
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.CreateDbContext(System.String[])
+  name: CreateDbContext(String[])
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1_CreateDbContext_System_String___
+  commentId: M:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.CreateDbContext(System.String[])
+  name.vb: CreateDbContext(String())
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.CreateDbContext(System.String[])
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).CreateDbContext(System.String())
+  nameWithType: BaseDbContextFactory<TDbContext>.CreateDbContext(String[])
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).CreateDbContext(String())
+- uid: Ploch.Common.Data.EFCore.BaseDbContextFactory`1.CreateDbContext*
+  name: CreateDbContext
+  href: api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Common_Data_EFCore_BaseDbContextFactory_1_CreateDbContext_
+  commentId: Overload:Ploch.Common.Data.EFCore.BaseDbContextFactory`1.CreateDbContext
+  isSpec: "True"
+  fullName: Ploch.Common.Data.EFCore.BaseDbContextFactory<TDbContext>.CreateDbContext
+  fullName.vb: Ploch.Common.Data.EFCore.BaseDbContextFactory(Of TDbContext).CreateDbContext
+  nameWithType: BaseDbContextFactory<TDbContext>.CreateDbContext
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext).CreateDbContext
+- uid: Ploch.Common.Data.EFCore.ConnectionString
+  name: ConnectionString
+  href: api/Ploch.Common.Data.EFCore.ConnectionString.html
+  commentId: T:Ploch.Common.Data.EFCore.ConnectionString
+  fullName: Ploch.Common.Data.EFCore.ConnectionString
+  nameWithType: ConnectionString
+- uid: Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile(ConfigurationBuilder,System.String,System.String)
+  name: FromJsonFile(ConfigurationBuilder, String, String)
+  href: api/Ploch.Common.Data.EFCore.ConnectionString.html#Ploch_Common_Data_EFCore_ConnectionString_FromJsonFile_ConfigurationBuilder_System_String_System_String_
+  commentId: M:Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile(ConfigurationBuilder,System.String,System.String)
+  fullName: Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile(ConfigurationBuilder, System.String, System.String)
+  nameWithType: ConnectionString.FromJsonFile(ConfigurationBuilder, String, String)
+- uid: Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile(System.String,System.String)
+  name: FromJsonFile(String, String)
+  href: api/Ploch.Common.Data.EFCore.ConnectionString.html#Ploch_Common_Data_EFCore_ConnectionString_FromJsonFile_System_String_System_String_
+  commentId: M:Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile(System.String,System.String)
+  fullName: Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile(System.String, System.String)
+  nameWithType: ConnectionString.FromJsonFile(String, String)
+- uid: Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile*
+  name: FromJsonFile
+  href: api/Ploch.Common.Data.EFCore.ConnectionString.html#Ploch_Common_Data_EFCore_ConnectionString_FromJsonFile_
+  commentId: Overload:Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile
+  isSpec: "True"
+  fullName: Ploch.Common.Data.EFCore.ConnectionString.FromJsonFile
+  nameWithType: ConnectionString.FromJsonFile
+- uid: Ploch.Common.Data.EFCore.DataSeeder`1
+  name: DataSeeder<TDbContext>
+  href: api/Ploch.Common.Data.EFCore.DataSeeder-1.html
+  commentId: T:Ploch.Common.Data.EFCore.DataSeeder`1
+  name.vb: DataSeeder(Of TDbContext)
+  fullName: Ploch.Common.Data.EFCore.DataSeeder<TDbContext>
+  fullName.vb: Ploch.Common.Data.EFCore.DataSeeder(Of TDbContext)
+  nameWithType: DataSeeder<TDbContext>
+  nameWithType.vb: DataSeeder(Of TDbContext)
+- uid: Ploch.Common.Data.GenericRepository
+  name: Ploch.Common.Data.GenericRepository
+  href: api/Ploch.Common.Data.GenericRepository.html
+  commentId: N:Ploch.Common.Data.GenericRepository
+  fullName: Ploch.Common.Data.GenericRepository
+  nameWithType: Ploch.Common.Data.GenericRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore
+  name: Ploch.Common.Data.GenericRepository.EFCore
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.html
+  commentId: N:Ploch.Common.Data.GenericRepository.EFCore
+  fullName: Ploch.Common.Data.GenericRepository.EFCore
+  nameWithType: Ploch.Common.Data.GenericRepository.EFCore
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
+  name: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.html
+  commentId: N:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
+  nameWithType: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1
+  name: DataIntegrationTest<TDbContext>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1
+  name.vb: DataIntegrationTest(Of TDbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext)
+  nameWithType: DataIntegrationTest<TDbContext>
+  nameWithType.vb: DataIntegrationTest(Of TDbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor(System.String)
+  name: DataIntegrationTest(String)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_System_String_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor(System.String)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DataIntegrationTest(System.String)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DataIntegrationTest(System.String)
+  nameWithType: DataIntegrationTest<TDbContext>.DataIntegrationTest(String)
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DataIntegrationTest(String)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor*
+  name: DataIntegrationTest
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DataIntegrationTest
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DataIntegrationTest
+  nameWithType: DataIntegrationTest<TDbContext>.DataIntegrationTest
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DataIntegrationTest
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices(IServiceCollection)
+  name: ConfigureServices(IServiceCollection)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_IServiceCollection_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices(IServiceCollection)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
+  nameWithType: DataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices*
+  name: ConfigureServices
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ConfigureServices
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ConfigureServices
+  nameWithType: DataIntegrationTest<TDbContext>.ConfigureServices
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ConfigureServices
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository*
+  name: CreateReadRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepository
+  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepository
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository``2
+  name: CreateReadRepository<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepository__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository``2
+  name.vb: CreateReadRepository(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepository<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepository(Of TEntity, TId)()
+  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepository<TEntity, TId>()
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepository(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync*
+  name: CreateReadRepositoryAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepositoryAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync
+  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync``2
+  name: CreateReadRepositoryAsync<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepositoryAsync__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync``2
+  name.vb: CreateReadRepositoryAsync(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync(Of TEntity, TId)()
+  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync<TEntity, TId>()
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync*
+  name: CreateReadWriteRepositoryAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadWriteRepositoryAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync
+  nameWithType: DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync``2
+  name: CreateReadWriteRepositoryAsync<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadWriteRepositoryAsync__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync``2
+  name.vb: CreateReadWriteRepositoryAsync(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync(Of TEntity, TId)()
+  nameWithType: DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync<TEntity, TId>()
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository*
+  name: CreateRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateRepository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateRepository
+  nameWithType: DataIntegrationTest<TDbContext>.CreateRepository
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository``2
+  name: CreateRepository<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateRepository__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository``2
+  name.vb: CreateRepository(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateRepository<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateRepository(Of TEntity, TId)()
+  nameWithType: DataIntegrationTest<TDbContext>.CreateRepository<TEntity, TId>()
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateRepository(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork
+  name: CreateUnitOfWork()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateUnitOfWork
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateUnitOfWork()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateUnitOfWork()
+  nameWithType: DataIntegrationTest<TDbContext>.CreateUnitOfWork()
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateUnitOfWork()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork*
+  name: CreateUnitOfWork
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateUnitOfWork_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateUnitOfWork
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateUnitOfWork
+  nameWithType: DataIntegrationTest<TDbContext>.CreateUnitOfWork
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateUnitOfWork
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
+  name: DbContext
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DbContext
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DbContext
+  nameWithType: DataIntegrationTest<TDbContext>.DbContext
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DbContext
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext*
+  name: DbContext
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DbContext
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DbContext
+  nameWithType: DataIntegrationTest<TDbContext>.DbContext
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DbContext
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
+  name: Dispose()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose()
+  nameWithType: DataIntegrationTest<TDbContext>.Dispose()
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose(System.Boolean)
+  name: Dispose(Boolean)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_System_Boolean_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose(System.Boolean)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose(System.Boolean)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose(System.Boolean)
+  nameWithType: DataIntegrationTest<TDbContext>.Dispose(Boolean)
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose(Boolean)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose*
+  name: Dispose
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose
+  nameWithType: DataIntegrationTest<TDbContext>.Dispose
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
+  name: ServiceProvider
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ServiceProvider
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ServiceProvider
+  nameWithType: DataIntegrationTest<TDbContext>.ServiceProvider
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ServiceProvider
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider*
+  name: ServiceProvider
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ServiceProvider
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ServiceProvider
+  nameWithType: DataIntegrationTest<TDbContext>.ServiceProvider
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ServiceProvider
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1
+  name: DbTestServices<TDbContext>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1
+  name.vb: DbTestServices(Of TDbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext)
+  nameWithType: DbTestServices<TDbContext>
+  nameWithType.vb: DbTestServices(Of TDbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator,System.Nullable{Action{IServiceCollection}})
+  name: DbTestServices(IDbContextConfigurator, Nullable<Action<IServiceCollection>>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1__ctor_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_IDbContextConfigurator_System_Nullable_Action_IServiceCollection___
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator,System.Nullable{Action{IServiceCollection}})
+  name.vb: DbTestServices(IDbContextConfigurator, Nullable(Of Action(Of IServiceCollection)))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.DbTestServices(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator, System.Nullable<Action<IServiceCollection>>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).DbTestServices(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator, System.Nullable(Of Action(Of IServiceCollection)))
+  nameWithType: DbTestServices<TDbContext>.DbTestServices(IDbContextConfigurator, Nullable<Action<IServiceCollection>>)
+  nameWithType.vb: DbTestServices(Of TDbContext).DbTestServices(IDbContextConfigurator, Nullable(Of Action(Of IServiceCollection)))
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.#ctor*
+  name: DbTestServices
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.DbTestServices
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).DbTestServices
+  nameWithType: DbTestServices<TDbContext>.DbTestServices
+  nameWithType.vb: DbTestServices(Of TDbContext).DbTestServices
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ConfigureDbContextServices(IServiceCollection,Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  name: ConfigureDbContextServices(IServiceCollection, IDbContextConfigurator)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_ConfigureDbContextServices_IServiceCollection_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_IDbContextConfigurator_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ConfigureDbContextServices(IServiceCollection,Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.ConfigureDbContextServices(IServiceCollection, Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).ConfigureDbContextServices(IServiceCollection, Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  nameWithType: DbTestServices<TDbContext>.ConfigureDbContextServices(IServiceCollection, IDbContextConfigurator)
+  nameWithType.vb: DbTestServices(Of TDbContext).ConfigureDbContextServices(IServiceCollection, IDbContextConfigurator)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ConfigureDbContextServices*
+  name: ConfigureDbContextServices
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_ConfigureDbContextServices_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ConfigureDbContextServices
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.ConfigureDbContextServices
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).ConfigureDbContextServices
+  nameWithType: DbTestServices<TDbContext>.ConfigureDbContextServices
+  nameWithType.vb: DbTestServices(Of TDbContext).ConfigureDbContextServices
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.DbContext
+  name: DbContext
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_DbContext
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.DbContext
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.DbContext
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).DbContext
+  nameWithType: DbTestServices<TDbContext>.DbContext
+  nameWithType.vb: DbTestServices(Of TDbContext).DbContext
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.DbContext*
+  name: DbContext
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_DbContext_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.DbContext
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.DbContext
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).DbContext
+  nameWithType: DbTestServices<TDbContext>.DbContext
+  nameWithType.vb: DbTestServices(Of TDbContext).DbContext
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.Dispose
+  name: Dispose()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_Dispose
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.Dispose
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.Dispose()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).Dispose()
+  nameWithType: DbTestServices<TDbContext>.Dispose()
+  nameWithType.vb: DbTestServices(Of TDbContext).Dispose()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.Dispose*
+  name: Dispose
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_Dispose_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.Dispose
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.Dispose
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).Dispose
+  nameWithType: DbTestServices<TDbContext>.Dispose
+  nameWithType.vb: DbTestServices(Of TDbContext).Dispose
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ServiceProvider
+  name: ServiceProvider
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_ServiceProvider
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ServiceProvider
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.ServiceProvider
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).ServiceProvider
+  nameWithType: DbTestServices<TDbContext>.ServiceProvider
+  nameWithType.vb: DbTestServices(Of TDbContext).ServiceProvider
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ServiceProvider*
+  name: ServiceProvider
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DbTestServices_1_ServiceProvider_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1.ServiceProvider
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices<TDbContext>.ServiceProvider
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).ServiceProvider
+  nameWithType: DbTestServices<TDbContext>.ServiceProvider
+  nameWithType.vb: DbTestServices(Of TDbContext).ServiceProvider
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator
+  name: IDbContextConfigurator
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator
+  nameWithType: IDbContextConfigurator
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.Configure(DbContextOptionsBuilder)
+  name: Configure(DbContextOptionsBuilder)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_IDbContextConfigurator_Configure_DbContextOptionsBuilder_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.Configure(DbContextOptionsBuilder)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.Configure(DbContextOptionsBuilder)
+  nameWithType: IDbContextConfigurator.Configure(DbContextOptionsBuilder)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.Configure*
+  name: Configure
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_IDbContextConfigurator_Configure_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.Configure
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.Configure
+  nameWithType: IDbContextConfigurator.Configure
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper
+  name: RepositoryServicesRegistrationHelper
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper
+  nameWithType: RepositoryServicesRegistrationHelper
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices*
+  name: RegisterRepositoryServices
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_RepositoryServicesRegistrationHelper_RegisterRepositoryServices_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices
+  nameWithType: RepositoryServicesRegistrationHelper.RegisterRepositoryServices
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices``1(IServiceCollection,System.String)
+  name: RegisterRepositoryServices<TDbContext>(IServiceCollection, String)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_RepositoryServicesRegistrationHelper_RegisterRepositoryServices__1_IServiceCollection_System_String_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices``1(IServiceCollection,System.String)
+  name.vb: RegisterRepositoryServices(Of TDbContext)(IServiceCollection, String)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TDbContext>(IServiceCollection, System.String)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices(Of TDbContext)(IServiceCollection, System.String)
+  nameWithType: RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TDbContext>(IServiceCollection, String)
+  nameWithType.vb: RepositoryServicesRegistrationHelper.RegisterRepositoryServices(Of TDbContext)(IServiceCollection, String)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions
+  name: SqLiteConnectionOptions
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions
+  nameWithType: SqLiteConnectionOptions
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor(System.Boolean,System.Nullable{System.String})
+  name: SqLiteConnectionOptions(Boolean, Nullable<String>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions__ctor_System_Boolean_System_Nullable_System_String__
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor(System.Boolean,System.Nullable{System.String})
+  name.vb: SqLiteConnectionOptions(Boolean, Nullable(Of String))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions(System.Boolean, System.Nullable<System.String>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions(System.Boolean, System.Nullable(Of System.String))
+  nameWithType: SqLiteConnectionOptions.SqLiteConnectionOptions(Boolean, Nullable<String>)
+  nameWithType.vb: SqLiteConnectionOptions.SqLiteConnectionOptions(Boolean, Nullable(Of String))
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor*
+  name: SqLiteConnectionOptions
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions
+  nameWithType: SqLiteConnectionOptions.SqLiteConnectionOptions
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
+  name: DbFilePath
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_DbFilePath
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
+  nameWithType: SqLiteConnectionOptions.DbFilePath
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath*
+  name: DbFilePath
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_DbFilePath_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
+  nameWithType: SqLiteConnectionOptions.DbFilePath
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory
+  name: InMemory
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_InMemory
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory
+  nameWithType: SqLiteConnectionOptions.InMemory
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory*
+  name: InMemory
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_InMemory_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory
+  nameWithType: SqLiteConnectionOptions.InMemory
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator
+  name: SqLiteDbContextConfigurator
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator
+  nameWithType: SqLiteDbContextConfigurator
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions)
+  name: SqLiteDbContextConfigurator(SqLiteConnectionOptions)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteDbContextConfigurator__ctor_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions)
+  nameWithType: SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(SqLiteConnectionOptions)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor*
+  name: SqLiteDbContextConfigurator
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteDbContextConfigurator__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.SqLiteDbContextConfigurator
+  nameWithType: SqLiteDbContextConfigurator.SqLiteDbContextConfigurator
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.Configure(DbContextOptionsBuilder)
+  name: Configure(DbContextOptionsBuilder)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteDbContextConfigurator_Configure_DbContextOptionsBuilder_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.Configure(DbContextOptionsBuilder)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.Configure(DbContextOptionsBuilder)
+  nameWithType: SqLiteDbContextConfigurator.Configure(DbContextOptionsBuilder)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.Configure*
+  name: Configure
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteDbContextConfigurator_Configure_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.Configure
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.Configure
+  nameWithType: SqLiteDbContextConfigurator.Configure
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1
+  name: QueryableRepository<TEntity>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1
+  name.vb: QueryableRepository(Of TEntity)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity)
+  nameWithType: QueryableRepository<TEntity>
+  nameWithType.vb: QueryableRepository(Of TEntity)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.#ctor(DbContext)
+  name: QueryableRepository(DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1__ctor_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.#ctor(DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.QueryableRepository(DbContext)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).QueryableRepository(DbContext)
+  nameWithType: QueryableRepository<TEntity>.QueryableRepository(DbContext)
+  nameWithType.vb: QueryableRepository(Of TEntity).QueryableRepository(DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.#ctor*
+  name: QueryableRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.QueryableRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).QueryableRepository
+  nameWithType: QueryableRepository<TEntity>.QueryableRepository
+  nameWithType.vb: QueryableRepository(Of TEntity).QueryableRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbContext
+  name: DbContext
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbContext
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbContext
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.DbContext
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).DbContext
+  nameWithType: QueryableRepository<TEntity>.DbContext
+  nameWithType.vb: QueryableRepository(Of TEntity).DbContext
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbContext*
+  name: DbContext
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbContext_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbContext
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.DbContext
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).DbContext
+  nameWithType: QueryableRepository<TEntity>.DbContext
+  nameWithType.vb: QueryableRepository(Of TEntity).DbContext
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbSet
+  name: DbSet
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbSet
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbSet
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.DbSet
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).DbSet
+  nameWithType: QueryableRepository<TEntity>.DbSet
+  nameWithType.vb: QueryableRepository(Of TEntity).DbSet
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbSet*
+  name: DbSet
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbSet_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.DbSet
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.DbSet
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).DbSet
+  nameWithType: QueryableRepository<TEntity>.DbSet
+  nameWithType.vb: QueryableRepository(Of TEntity).DbSet
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.Entities
+  name: Entities
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_Entities
+  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.Entities
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.Entities
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).Entities
+  nameWithType: QueryableRepository<TEntity>.Entities
+  nameWithType.vb: QueryableRepository(Of TEntity).Entities
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.Entities*
+  name: Entities
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_Entities_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.Entities
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.Entities
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).Entities
+  nameWithType: QueryableRepository<TEntity>.Entities
+  nameWithType.vb: QueryableRepository(Of TEntity).Entities
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery(System.Int32,System.Int32)
+  name: GetPageQuery(Int32, Int32)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery(System.Int32,System.Int32)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.GetPageQuery(System.Int32, System.Int32)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).GetPageQuery(System.Int32, System.Int32)
+  nameWithType: QueryableRepository<TEntity>.GetPageQuery(Int32, Int32)
+  nameWithType.vb: QueryableRepository(Of TEntity).GetPageQuery(Int32, Int32)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery*
+  name: GetPageQuery
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.GetPageQuery
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).GetPageQuery
+  nameWithType: QueryableRepository<TEntity>.GetPageQuery
+  nameWithType.vb: QueryableRepository(Of TEntity).GetPageQuery
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1
+  name: ReadRepository<TEntity>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1
+  name.vb: ReadRepository(Of TEntity)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity)
+  nameWithType: ReadRepository<TEntity>
+  nameWithType.vb: ReadRepository(Of TEntity)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.#ctor(DbContext)
+  name: ReadRepository(DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1__ctor_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.#ctor(DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.ReadRepository(DbContext)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).ReadRepository(DbContext)
+  nameWithType: ReadRepository<TEntity>.ReadRepository(DbContext)
+  nameWithType.vb: ReadRepository(Of TEntity).ReadRepository(DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.#ctor*
+  name: ReadRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.ReadRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).ReadRepository
+  nameWithType: ReadRepository<TEntity>.ReadRepository
+  nameWithType.vb: ReadRepository(Of TEntity).ReadRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.Count
+  name: Count()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_Count
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.Count
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.Count()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).Count()
+  nameWithType: ReadRepository<TEntity>.Count()
+  nameWithType.vb: ReadRepository(Of TEntity).Count()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.Count*
+  name: Count
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_Count_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.Count
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.Count
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).Count
+  nameWithType: ReadRepository<TEntity>.Count
+  nameWithType.vb: ReadRepository(Of TEntity).Count
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetAll
+  name: GetAll()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetAll
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetAll
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetAll()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetAll()
+  nameWithType: ReadRepository<TEntity>.GetAll()
+  nameWithType.vb: ReadRepository(Of TEntity).GetAll()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetAll*
+  name: GetAll
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetAll_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetAll
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetAll
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetAll
+  nameWithType: ReadRepository<TEntity>.GetAll
+  nameWithType.vb: ReadRepository(Of TEntity).GetAll
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetById(System.Object[])
+  name: GetById(Object[])
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetById_System_Object___
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetById(System.Object[])
+  name.vb: GetById(Object())
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetById(System.Object[])
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetById(System.Object())
+  nameWithType: ReadRepository<TEntity>.GetById(Object[])
+  nameWithType.vb: ReadRepository(Of TEntity).GetById(Object())
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetById*
+  name: GetById
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetById_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetById
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetById
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetById
+  nameWithType: ReadRepository<TEntity>.GetById
+  nameWithType.vb: ReadRepository(Of TEntity).GetById
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetPage(System.Int32,System.Int32)
+  name: GetPage(Int32, Int32)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_System_Int32_System_Int32_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetPage(System.Int32,System.Int32)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetPage(System.Int32, System.Int32)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetPage(System.Int32, System.Int32)
+  nameWithType: ReadRepository<TEntity>.GetPage(Int32, Int32)
+  nameWithType.vb: ReadRepository(Of TEntity).GetPage(Int32, Int32)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetPage*
+  name: GetPage
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1.GetPage
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetPage
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetPage
+  nameWithType: ReadRepository<TEntity>.GetPage
+  nameWithType.vb: ReadRepository(Of TEntity).GetPage
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2
+  name: ReadRepository<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2
+  name.vb: ReadRepository(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity, TId)
+  nameWithType: ReadRepository<TEntity, TId>
+  nameWithType.vb: ReadRepository(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.#ctor(DbContext)
+  name: ReadRepository(DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2__ctor_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.#ctor(DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity, TId>.ReadRepository(DbContext)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity, TId).ReadRepository(DbContext)
+  nameWithType: ReadRepository<TEntity, TId>.ReadRepository(DbContext)
+  nameWithType.vb: ReadRepository(Of TEntity, TId).ReadRepository(DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.#ctor*
+  name: ReadRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity, TId>.ReadRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity, TId).ReadRepository
+  nameWithType: ReadRepository<TEntity, TId>.ReadRepository
+  nameWithType.vb: ReadRepository(Of TEntity, TId).ReadRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.GetById(`1)
+  name: GetById(TId)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2_GetById__1_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.GetById(`1)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity, TId>.GetById(TId)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity, TId).GetById(TId)
+  nameWithType: ReadRepository<TEntity, TId>.GetById(TId)
+  nameWithType.vb: ReadRepository(Of TEntity, TId).GetById(TId)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.GetById*
+  name: GetById
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2_GetById_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.GetById
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository<TEntity, TId>.GetById
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepository(Of TEntity, TId).GetById
+  nameWithType: ReadRepository<TEntity, TId>.GetById
+  nameWithType.vb: ReadRepository(Of TEntity, TId).GetById
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1
+  name: ReadRepositoryAsync<TEntity>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1
+  name.vb: ReadRepositoryAsync(Of TEntity)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity)
+  nameWithType: ReadRepositoryAsync<TEntity>
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.#ctor(DbContext)
+  name: ReadRepositoryAsync(DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1__ctor_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.#ctor(DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.ReadRepositoryAsync(DbContext)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).ReadRepositoryAsync(DbContext)
+  nameWithType: ReadRepositoryAsync<TEntity>.ReadRepositoryAsync(DbContext)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).ReadRepositoryAsync(DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.#ctor*
+  name: ReadRepositoryAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.ReadRepositoryAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).ReadRepositoryAsync
+  nameWithType: ReadRepositoryAsync<TEntity>.ReadRepositoryAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).ReadRepositoryAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(CancellationToken)
+  name: GetAllAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetAllAsync(CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetAllAsync(CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity>.GetAllAsync(CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetAllAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync*
+  name: GetAllAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetAllAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetAllAsync
+  nameWithType: ReadRepositoryAsync<TEntity>.GetAllAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetAllAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetByIdAsync(System.Object[],CancellationToken)
+  name: GetByIdAsync(Object[], CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetByIdAsync_System_Object___CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetByIdAsync(System.Object[],CancellationToken)
+  name.vb: GetByIdAsync(Object(), CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetByIdAsync(System.Object[], CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetByIdAsync(System.Object(), CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity>.GetByIdAsync(Object[], CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetByIdAsync(Object(), CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetByIdAsync*
+  name: GetByIdAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetByIdAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetByIdAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetByIdAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetByIdAsync
+  nameWithType: ReadRepositoryAsync<TEntity>.GetByIdAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetByIdAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetCountAsync(CancellationToken)
+  name: GetCountAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetCountAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetCountAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetCountAsync(CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetCountAsync(CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity>.GetCountAsync(CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetCountAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetCountAsync*
+  name: GetCountAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetCountAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetCountAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetCountAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetCountAsync
+  nameWithType: ReadRepositoryAsync<TEntity>.GetCountAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetCountAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,CancellationToken)
+  name: GetPageAsync(Int32, Int32, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetPageAsync(System.Int32, System.Int32, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetPageAsync(System.Int32, System.Int32, CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity>.GetPageAsync(Int32, Int32, CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetPageAsync(Int32, Int32, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync*
+  name: GetPageAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetPageAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetPageAsync
+  nameWithType: ReadRepositoryAsync<TEntity>.GetPageAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetPageAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2
+  name: ReadRepositoryAsync<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2
+  name.vb: ReadRepositoryAsync(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity, TId)
+  nameWithType: ReadRepositoryAsync<TEntity, TId>
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.#ctor(DbContext)
+  name: ReadRepositoryAsync(DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_2__ctor_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.#ctor(DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity, TId>.ReadRepositoryAsync(DbContext)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity, TId).ReadRepositoryAsync(DbContext)
+  nameWithType: ReadRepositoryAsync<TEntity, TId>.ReadRepositoryAsync(DbContext)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity, TId).ReadRepositoryAsync(DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.#ctor*
+  name: ReadRepositoryAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_2__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity, TId>.ReadRepositoryAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity, TId).ReadRepositoryAsync
+  nameWithType: ReadRepositoryAsync<TEntity, TId>.ReadRepositoryAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity, TId).ReadRepositoryAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.GetByIdAsync(`1,CancellationToken)
+  name: GetByIdAsync(TId, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_2_GetByIdAsync__1_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.GetByIdAsync(`1,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity, TId>.GetByIdAsync(TId, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity, TId).GetByIdAsync(TId, CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity, TId>.GetByIdAsync(TId, CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity, TId).GetByIdAsync(TId, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.GetByIdAsync*
+  name: GetByIdAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_2_GetByIdAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.GetByIdAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity, TId>.GetByIdAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity, TId).GetByIdAsync
+  nameWithType: ReadRepositoryAsync<TEntity, TId>.GetByIdAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity, TId).GetByIdAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2
+  name: ReadWriteRepository<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2
+  name.vb: ReadWriteRepository(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId)
+  nameWithType: ReadWriteRepository<TEntity, TId>
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.#ctor(DbContext)
+  name: ReadWriteRepository(DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2__ctor_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.#ctor(DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.ReadWriteRepository(DbContext)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).ReadWriteRepository(DbContext)
+  nameWithType: ReadWriteRepository<TEntity, TId>.ReadWriteRepository(DbContext)
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).ReadWriteRepository(DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.#ctor*
+  name: ReadWriteRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.ReadWriteRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).ReadWriteRepository
+  nameWithType: ReadWriteRepository<TEntity, TId>.ReadWriteRepository
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).ReadWriteRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Add(`0)
+  name: Add(TEntity)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_Add__0_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Add(`0)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.Add(TEntity)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).Add(TEntity)
+  nameWithType: ReadWriteRepository<TEntity, TId>.Add(TEntity)
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).Add(TEntity)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Add*
+  name: Add
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_Add_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Add
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.Add
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).Add
+  nameWithType: ReadWriteRepository<TEntity, TId>.Add
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).Add
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.AddRange(IEnumerable{`0})
+  name: AddRange(IEnumerable<TEntity>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_AddRange_IEnumerable__0__
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.AddRange(IEnumerable{`0})
+  name.vb: AddRange(IEnumerable(Of TEntity))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.AddRange(IEnumerable<TEntity>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).AddRange(IEnumerable(Of TEntity))
+  nameWithType: ReadWriteRepository<TEntity, TId>.AddRange(IEnumerable<TEntity>)
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).AddRange(IEnumerable(Of TEntity))
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.AddRange*
+  name: AddRange
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_AddRange_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.AddRange
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.AddRange
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).AddRange
+  nameWithType: ReadWriteRepository<TEntity, TId>.AddRange
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).AddRange
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Delete(`0)
+  name: Delete(TEntity)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_Delete__0_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Delete(`0)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.Delete(TEntity)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).Delete(TEntity)
+  nameWithType: ReadWriteRepository<TEntity, TId>.Delete(TEntity)
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).Delete(TEntity)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Delete*
+  name: Delete
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_Delete_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Delete
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.Delete
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).Delete
+  nameWithType: ReadWriteRepository<TEntity, TId>.Delete
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).Delete
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Update(`0)
+  name: Update(TEntity)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_Update__0_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Update(`0)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.Update(TEntity)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).Update(TEntity)
+  nameWithType: ReadWriteRepository<TEntity, TId>.Update(TEntity)
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).Update(TEntity)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Update*
+  name: Update
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepository_2_Update_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository`2.Update
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository<TEntity, TId>.Update
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository(Of TEntity, TId).Update
+  nameWithType: ReadWriteRepository<TEntity, TId>.Update
+  nameWithType.vb: ReadWriteRepository(Of TEntity, TId).Update
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2
+  name: ReadWriteRepositoryAsync<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2
+  name.vb: ReadWriteRepositoryAsync(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId)
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.#ctor(DbContext)
+  name: ReadWriteRepositoryAsync(DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2__ctor_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.#ctor(DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.ReadWriteRepositoryAsync(DbContext)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).ReadWriteRepositoryAsync(DbContext)
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.ReadWriteRepositoryAsync(DbContext)
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).ReadWriteRepositoryAsync(DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.#ctor*
+  name: ReadWriteRepositoryAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.ReadWriteRepositoryAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).ReadWriteRepositoryAsync
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.ReadWriteRepositoryAsync
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).ReadWriteRepositoryAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddAsync(`0,CancellationToken)
+  name: AddAsync(TEntity, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_AddAsync__0_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddAsync(`0,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.AddAsync(TEntity, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).AddAsync(TEntity, CancellationToken)
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.AddAsync(TEntity, CancellationToken)
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).AddAsync(TEntity, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddAsync*
+  name: AddAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_AddAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.AddAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).AddAsync
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.AddAsync
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).AddAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddRangeAsync(IEnumerable{`0},CancellationToken)
+  name: AddRangeAsync(IEnumerable<TEntity>, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_AddRangeAsync_IEnumerable__0__CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddRangeAsync(IEnumerable{`0},CancellationToken)
+  name.vb: AddRangeAsync(IEnumerable(Of TEntity), CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.AddRangeAsync(IEnumerable<TEntity>, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync(IEnumerable(Of TEntity), CancellationToken)
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.AddRangeAsync(IEnumerable<TEntity>, CancellationToken)
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync(IEnumerable(Of TEntity), CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddRangeAsync*
+  name: AddRangeAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_AddRangeAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.AddRangeAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.AddRangeAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.AddRangeAsync
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.DeleteAsync(`0,CancellationToken)
+  name: DeleteAsync(TEntity, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_DeleteAsync__0_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.DeleteAsync(`0,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.DeleteAsync(TEntity, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).DeleteAsync(TEntity, CancellationToken)
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.DeleteAsync(TEntity, CancellationToken)
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).DeleteAsync(TEntity, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.DeleteAsync*
+  name: DeleteAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_DeleteAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.DeleteAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.DeleteAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).DeleteAsync
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.DeleteAsync
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).DeleteAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.UpdateAsync(`0,CancellationToken)
+  name: UpdateAsync(TEntity, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_UpdateAsync__0_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.UpdateAsync(`0,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.UpdateAsync(TEntity, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).UpdateAsync(TEntity, CancellationToken)
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.UpdateAsync(TEntity, CancellationToken)
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).UpdateAsync(TEntity, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.UpdateAsync*
+  name: UpdateAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_EFCore_ReadWriteRepositoryAsync_2_UpdateAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync`2.UpdateAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync<TEntity, TId>.UpdateAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync(Of TEntity, TId).UpdateAsync
+  nameWithType: ReadWriteRepositoryAsync<TEntity, TId>.UpdateAsync
+  nameWithType.vb: ReadWriteRepositoryAsync(Of TEntity, TId).UpdateAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration
+  name: ServiceCollectionRegistration
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration
+  nameWithType: ServiceCollectionRegistration
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository*
+  name: AddCustomReadWriteAsyncRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html#Ploch_Common_Data_GenericRepository_EFCore_ServiceCollectionRegistration_AddCustomReadWriteAsyncRepository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository
+  nameWithType: ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository``4(IServiceCollection,Func{IServiceCollection,Type,Type,IServiceCollection})
+  name: AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html#Ploch_Common_Data_GenericRepository_EFCore_ServiceCollectionRegistration_AddCustomReadWriteAsyncRepository__4_IServiceCollection_Func_IServiceCollection_Type_Type_IServiceCollection__
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository``4(IServiceCollection,Func{IServiceCollection,Type,Type,IServiceCollection})
+  name.vb: AddCustomReadWriteAsyncRepository(Of TRepositoryInterface, TRepository, TEntity, TId)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository(Of TRepositoryInterface, TRepository, TEntity, TId)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+  nameWithType: ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  nameWithType.vb: ServiceCollectionRegistration.AddCustomReadWriteAsyncRepository(Of TRepositoryInterface, TRepository, TEntity, TId)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteRepository*
+  name: AddCustomReadWriteRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html#Ploch_Common_Data_GenericRepository_EFCore_ServiceCollectionRegistration_AddCustomReadWriteRepository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteRepository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteRepository
+  nameWithType: ServiceCollectionRegistration.AddCustomReadWriteRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteRepository``4(IServiceCollection,Func{IServiceCollection,Type,Type,IServiceCollection})
+  name: AddCustomReadWriteRepository<TRepositoryInterface, TRepository, TEntity, TId>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html#Ploch_Common_Data_GenericRepository_EFCore_ServiceCollectionRegistration_AddCustomReadWriteRepository__4_IServiceCollection_Func_IServiceCollection_Type_Type_IServiceCollection__
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteRepository``4(IServiceCollection,Func{IServiceCollection,Type,Type,IServiceCollection})
+  name.vb: AddCustomReadWriteRepository(Of TRepositoryInterface, TRepository, TEntity, TId)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteRepository<TRepositoryInterface, TRepository, TEntity, TId>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddCustomReadWriteRepository(Of TRepositoryInterface, TRepository, TEntity, TId)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+  nameWithType: ServiceCollectionRegistration.AddCustomReadWriteRepository<TRepositoryInterface, TRepository, TEntity, TId>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  nameWithType.vb: ServiceCollectionRegistration.AddCustomReadWriteRepository(Of TRepositoryInterface, TRepository, TEntity, TId)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories*
+  name: AddRepositories
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html#Ploch_Common_Data_GenericRepository_EFCore_ServiceCollectionRegistration_AddRepositories_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories
+  nameWithType: ServiceCollectionRegistration.AddRepositories
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories``1(IServiceCollection)
+  name: AddRepositories<TDbContext>(IServiceCollection)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html#Ploch_Common_Data_GenericRepository_EFCore_ServiceCollectionRegistration_AddRepositories__1_IServiceCollection_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories``1(IServiceCollection)
+  name.vb: AddRepositories(Of TDbContext)(IServiceCollection)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories<TDbContext>(IServiceCollection)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories(Of TDbContext)(IServiceCollection)
+  nameWithType: ServiceCollectionRegistration.AddRepositories<TDbContext>(IServiceCollection)
+  nameWithType.vb: ServiceCollectionRegistration.AddRepositories(Of TDbContext)(IServiceCollection)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories``1(IServiceCollection,Func{IServiceCollection,Type,Type,IServiceCollection})
+  name: AddRepositories<TDbContext>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html#Ploch_Common_Data_GenericRepository_EFCore_ServiceCollectionRegistration_AddRepositories__1_IServiceCollection_Func_IServiceCollection_Type_Type_IServiceCollection__
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories``1(IServiceCollection,Func{IServiceCollection,Type,Type,IServiceCollection})
+  name.vb: AddRepositories(Of TDbContext)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories<TDbContext>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.AddRepositories(Of TDbContext)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+  nameWithType: ServiceCollectionRegistration.AddRepositories<TDbContext>(IServiceCollection, Func<IServiceCollection, Type, Type, IServiceCollection>)
+  nameWithType.vb: ServiceCollectionRegistration.AddRepositories(Of TDbContext)(IServiceCollection, Func(Of IServiceCollection, Type, Type, IServiceCollection))
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork
+  name: UnitOfWork
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork
+  nameWithType: UnitOfWork
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.#ctor(IServiceProvider,DbContext)
+  name: UnitOfWork(IServiceProvider, DbContext)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork__ctor_IServiceProvider_DbContext_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.#ctor(IServiceProvider,DbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.UnitOfWork(IServiceProvider, DbContext)
+  nameWithType: UnitOfWork.UnitOfWork(IServiceProvider, DbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.#ctor*
+  name: UnitOfWork
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.UnitOfWork
+  nameWithType: UnitOfWork.UnitOfWork
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.CommitAsync(CancellationToken)
+  name: CommitAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_CommitAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.CommitAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.CommitAsync(CancellationToken)
+  nameWithType: UnitOfWork.CommitAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.CommitAsync*
+  name: CommitAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_CommitAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.CommitAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.CommitAsync
+  nameWithType: UnitOfWork.CommitAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose
+  name: Dispose()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_Dispose
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose()
+  nameWithType: UnitOfWork.Dispose()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose(System.Boolean)
+  name: Dispose(Boolean)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_Dispose_System_Boolean_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose(System.Boolean)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose(System.Boolean)
+  nameWithType: UnitOfWork.Dispose(Boolean)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose*
+  name: Dispose
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_Dispose_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Dispose
+  nameWithType: UnitOfWork.Dispose
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository*
+  name: Repository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_Repository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository
+  nameWithType: UnitOfWork.Repository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository``2
+  name: Repository<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_Repository__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository``2
+  name.vb: Repository(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository(Of TEntity, TId)()
+  nameWithType: UnitOfWork.Repository<TEntity, TId>()
+  nameWithType.vb: UnitOfWork.Repository(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository``3
+  name: Repository<TRepository, TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_Repository__3
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository``3
+  name.vb: Repository(Of TRepository, TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository<TRepository, TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.Repository(Of TRepository, TEntity, TId)()
+  nameWithType: UnitOfWork.Repository<TRepository, TEntity, TId>()
+  nameWithType.vb: UnitOfWork.Repository(Of TRepository, TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.RollbackAsync(CancellationToken)
+  name: RollbackAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_RollbackAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.RollbackAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.RollbackAsync(CancellationToken)
+  nameWithType: UnitOfWork.RollbackAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.RollbackAsync*
+  name: RollbackAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html#Ploch_Common_Data_GenericRepository_EFCore_UnitOfWork_RollbackAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.RollbackAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.RollbackAsync
+  nameWithType: UnitOfWork.RollbackAsync
+- uid: Ploch.Common.Data.GenericRepository.IQueryableRepository`1
+  name: IQueryableRepository<TEntity>
+  href: api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IQueryableRepository`1
+  name.vb: IQueryableRepository(Of TEntity)
+  fullName: Ploch.Common.Data.GenericRepository.IQueryableRepository<TEntity>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IQueryableRepository(Of TEntity)
+  nameWithType: IQueryableRepository<TEntity>
+  nameWithType.vb: IQueryableRepository(Of TEntity)
+- uid: Ploch.Common.Data.GenericRepository.IQueryableRepository`1.Entities
+  name: Entities
+  href: api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Common_Data_GenericRepository_IQueryableRepository_1_Entities
+  commentId: P:Ploch.Common.Data.GenericRepository.IQueryableRepository`1.Entities
+  fullName: Ploch.Common.Data.GenericRepository.IQueryableRepository<TEntity>.Entities
+  fullName.vb: Ploch.Common.Data.GenericRepository.IQueryableRepository(Of TEntity).Entities
+  nameWithType: IQueryableRepository<TEntity>.Entities
+  nameWithType.vb: IQueryableRepository(Of TEntity).Entities
+- uid: Ploch.Common.Data.GenericRepository.IQueryableRepository`1.Entities*
+  name: Entities
+  href: api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Common_Data_GenericRepository_IQueryableRepository_1_Entities_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IQueryableRepository`1.Entities
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IQueryableRepository<TEntity>.Entities
+  fullName.vb: Ploch.Common.Data.GenericRepository.IQueryableRepository(Of TEntity).Entities
+  nameWithType: IQueryableRepository<TEntity>.Entities
+  nameWithType.vb: IQueryableRepository(Of TEntity).Entities
+- uid: Ploch.Common.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32)
+  name: GetPageQuery(Int32, Int32)
+  href: api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Common_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_
+  commentId: M:Ploch.Common.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32)
+  fullName: Ploch.Common.Data.GenericRepository.IQueryableRepository<TEntity>.GetPageQuery(System.Int32, System.Int32)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IQueryableRepository(Of TEntity).GetPageQuery(System.Int32, System.Int32)
+  nameWithType: IQueryableRepository<TEntity>.GetPageQuery(Int32, Int32)
+  nameWithType.vb: IQueryableRepository(Of TEntity).GetPageQuery(Int32, Int32)
+- uid: Ploch.Common.Data.GenericRepository.IQueryableRepository`1.GetPageQuery*
+  name: GetPageQuery
+  href: api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Common_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IQueryableRepository`1.GetPageQuery
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IQueryableRepository<TEntity>.GetPageQuery
+  fullName.vb: Ploch.Common.Data.GenericRepository.IQueryableRepository(Of TEntity).GetPageQuery
+  nameWithType: IQueryableRepository<TEntity>.GetPageQuery
+  nameWithType.vb: IQueryableRepository(Of TEntity).GetPageQuery
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1
+  name: IReadRepository<TEntity>
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IReadRepository`1
+  name.vb: IReadRepository(Of TEntity)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity)
+  nameWithType: IReadRepository<TEntity>
+  nameWithType.vb: IReadRepository(Of TEntity)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.Count
+  name: Count()
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_Count
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepository`1.Count
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.Count()
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).Count()
+  nameWithType: IReadRepository<TEntity>.Count()
+  nameWithType.vb: IReadRepository(Of TEntity).Count()
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.Count*
+  name: Count
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_Count_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepository`1.Count
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.Count
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).Count
+  nameWithType: IReadRepository<TEntity>.Count
+  nameWithType.vb: IReadRepository(Of TEntity).Count
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.GetAll
+  name: GetAll()
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_GetAll
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepository`1.GetAll
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.GetAll()
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).GetAll()
+  nameWithType: IReadRepository<TEntity>.GetAll()
+  nameWithType.vb: IReadRepository(Of TEntity).GetAll()
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.GetAll*
+  name: GetAll
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_GetAll_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepository`1.GetAll
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.GetAll
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).GetAll
+  nameWithType: IReadRepository<TEntity>.GetAll
+  nameWithType.vb: IReadRepository(Of TEntity).GetAll
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.GetById(System.Object[])
+  name: GetById(Object[])
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_GetById_System_Object___
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepository`1.GetById(System.Object[])
+  name.vb: GetById(Object())
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.GetById(System.Object[])
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).GetById(System.Object())
+  nameWithType: IReadRepository<TEntity>.GetById(Object[])
+  nameWithType.vb: IReadRepository(Of TEntity).GetById(Object())
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.GetById*
+  name: GetById
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_GetById_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepository`1.GetById
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.GetById
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).GetById
+  nameWithType: IReadRepository<TEntity>.GetById
+  nameWithType.vb: IReadRepository(Of TEntity).GetById
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.GetPage(System.Int32,System.Int32)
+  name: GetPage(Int32, Int32)
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_GetPage_System_Int32_System_Int32_
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepository`1.GetPage(System.Int32,System.Int32)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.GetPage(System.Int32, System.Int32)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).GetPage(System.Int32, System.Int32)
+  nameWithType: IReadRepository<TEntity>.GetPage(Int32, Int32)
+  nameWithType.vb: IReadRepository(Of TEntity).GetPage(Int32, Int32)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`1.GetPage*
+  name: GetPage
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html#Ploch_Common_Data_GenericRepository_IReadRepository_1_GetPage_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepository`1.GetPage
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity>.GetPage
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity).GetPage
+  nameWithType: IReadRepository<TEntity>.GetPage
+  nameWithType.vb: IReadRepository(Of TEntity).GetPage
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`2
+  name: IReadRepository<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IReadRepository`2
+  name.vb: IReadRepository(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity, TId)
+  nameWithType: IReadRepository<TEntity, TId>
+  nameWithType.vb: IReadRepository(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`2.GetById(`1)
+  name: GetById(TId)
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-2.html#Ploch_Common_Data_GenericRepository_IReadRepository_2_GetById__1_
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepository`2.GetById(`1)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity, TId>.GetById(TId)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity, TId).GetById(TId)
+  nameWithType: IReadRepository<TEntity, TId>.GetById(TId)
+  nameWithType.vb: IReadRepository(Of TEntity, TId).GetById(TId)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepository`2.GetById*
+  name: GetById
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepository-2.html#Ploch_Common_Data_GenericRepository_IReadRepository_2_GetById_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepository`2.GetById
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepository<TEntity, TId>.GetById
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepository(Of TEntity, TId).GetById
+  nameWithType: IReadRepository<TEntity, TId>.GetById
+  nameWithType.vb: IReadRepository(Of TEntity, TId).GetById
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1
+  name: IReadRepositoryAsync<TEntity>
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1
+  name.vb: IReadRepositoryAsync(Of TEntity)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity)
+  nameWithType: IReadRepositoryAsync<TEntity>
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync(CancellationToken)
+  name: GetAllAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetAllAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetAllAsync(CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetAllAsync(CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity>.GetAllAsync(CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetAllAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync*
+  name: GetAllAsync
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetAllAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetAllAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetAllAsync
+  nameWithType: IReadRepositoryAsync<TEntity>.GetAllAsync
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetAllAsync
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetByIdAsync(System.Object[],CancellationToken)
+  name: GetByIdAsync(Object[], CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetByIdAsync_System_Object___CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetByIdAsync(System.Object[],CancellationToken)
+  name.vb: GetByIdAsync(Object(), CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetByIdAsync(System.Object[], CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetByIdAsync(System.Object(), CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity>.GetByIdAsync(Object[], CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetByIdAsync(Object(), CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetByIdAsync*
+  name: GetByIdAsync
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetByIdAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetByIdAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetByIdAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetByIdAsync
+  nameWithType: IReadRepositoryAsync<TEntity>.GetByIdAsync
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetByIdAsync
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetCountAsync(CancellationToken)
+  name: GetCountAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetCountAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetCountAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetCountAsync(CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetCountAsync(CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity>.GetCountAsync(CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetCountAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetCountAsync*
+  name: GetCountAsync
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetCountAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetCountAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetCountAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetCountAsync
+  nameWithType: IReadRepositoryAsync<TEntity>.GetCountAsync
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetCountAsync
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,CancellationToken)
+  name: GetPageAsync(Int32, Int32, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetPageAsync(System.Int32, System.Int32, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetPageAsync(System.Int32, System.Int32, CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity>.GetPageAsync(Int32, Int32, CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetPageAsync(Int32, Int32, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync*
+  name: GetPageAsync
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_1_GetPageAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetPageAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetPageAsync
+  nameWithType: IReadRepositoryAsync<TEntity>.GetPageAsync
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetPageAsync
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`2
+  name: IReadRepositoryAsync<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`2
+  name.vb: IReadRepositoryAsync(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity, TId)
+  nameWithType: IReadRepositoryAsync<TEntity, TId>
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`2.GetByIdAsync(`1,CancellationToken)
+  name: GetByIdAsync(TId, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_2_GetByIdAsync__1_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`2.GetByIdAsync(`1,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity, TId>.GetByIdAsync(TId, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity, TId).GetByIdAsync(TId, CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity, TId>.GetByIdAsync(TId, CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity, TId).GetByIdAsync(TId, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`2.GetByIdAsync*
+  name: GetByIdAsync
+  href: api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IReadRepositoryAsync_2_GetByIdAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IReadRepositoryAsync`2.GetByIdAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync<TEntity, TId>.GetByIdAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadRepositoryAsync(Of TEntity, TId).GetByIdAsync
+  nameWithType: IReadRepositoryAsync<TEntity, TId>.GetByIdAsync
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity, TId).GetByIdAsync
+- uid: Ploch.Common.Data.GenericRepository.IReadWriteRepository`2
+  name: IReadWriteRepository<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.IReadWriteRepository-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IReadWriteRepository`2
+  name.vb: IReadWriteRepository(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.IReadWriteRepository<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadWriteRepository(Of TEntity, TId)
+  nameWithType: IReadWriteRepository<TEntity, TId>
+  nameWithType.vb: IReadWriteRepository(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync`2
+  name: IReadWriteRepositoryAsync<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync`2
+  name.vb: IReadWriteRepositoryAsync(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync(Of TEntity, TId)
+  nameWithType: IReadWriteRepositoryAsync<TEntity, TId>
+  nameWithType.vb: IReadWriteRepositoryAsync(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork
+  name: IUnitOfWork
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IUnitOfWork
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork
+  nameWithType: IUnitOfWork
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork.CommitAsync(CancellationToken)
+  name: CommitAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html#Ploch_Common_Data_GenericRepository_IUnitOfWork_CommitAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IUnitOfWork.CommitAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork.CommitAsync(CancellationToken)
+  nameWithType: IUnitOfWork.CommitAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork.CommitAsync*
+  name: CommitAsync
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html#Ploch_Common_Data_GenericRepository_IUnitOfWork_CommitAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IUnitOfWork.CommitAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork.CommitAsync
+  nameWithType: IUnitOfWork.CommitAsync
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository*
+  name: Repository
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html#Ploch_Common_Data_GenericRepository_IUnitOfWork_Repository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository
+  nameWithType: IUnitOfWork.Repository
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository``2
+  name: Repository<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html#Ploch_Common_Data_GenericRepository_IUnitOfWork_Repository__2
+  commentId: M:Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository``2
+  name.vb: Repository(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository(Of TEntity, TId)()
+  nameWithType: IUnitOfWork.Repository<TEntity, TId>()
+  nameWithType.vb: IUnitOfWork.Repository(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository``3
+  name: Repository<TRepository, TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html#Ploch_Common_Data_GenericRepository_IUnitOfWork_Repository__3
+  commentId: M:Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository``3
+  name.vb: Repository(Of TRepository, TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository<TRepository, TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.IUnitOfWork.Repository(Of TRepository, TEntity, TId)()
+  nameWithType: IUnitOfWork.Repository<TRepository, TEntity, TId>()
+  nameWithType.vb: IUnitOfWork.Repository(Of TRepository, TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork.RollbackAsync(CancellationToken)
+  name: RollbackAsync(CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html#Ploch_Common_Data_GenericRepository_IUnitOfWork_RollbackAsync_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IUnitOfWork.RollbackAsync(CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork.RollbackAsync(CancellationToken)
+  nameWithType: IUnitOfWork.RollbackAsync(CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IUnitOfWork.RollbackAsync*
+  name: RollbackAsync
+  href: api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html#Ploch_Common_Data_GenericRepository_IUnitOfWork_RollbackAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IUnitOfWork.RollbackAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IUnitOfWork.RollbackAsync
+  nameWithType: IUnitOfWork.RollbackAsync
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2
+  name: IWriteRepository<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IWriteRepository`2
+  name.vb: IWriteRepository(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId)
+  nameWithType: IWriteRepository<TEntity, TId>
+  nameWithType.vb: IWriteRepository(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.Add(`0)
+  name: Add(TEntity)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_Add__0_
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepository`2.Add(`0)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.Add(TEntity)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).Add(TEntity)
+  nameWithType: IWriteRepository<TEntity, TId>.Add(TEntity)
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).Add(TEntity)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.Add*
+  name: Add
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_Add_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepository`2.Add
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.Add
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).Add
+  nameWithType: IWriteRepository<TEntity, TId>.Add
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).Add
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.AddRange(IEnumerable{`0})
+  name: AddRange(IEnumerable<TEntity>)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_AddRange_IEnumerable__0__
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepository`2.AddRange(IEnumerable{`0})
+  name.vb: AddRange(IEnumerable(Of TEntity))
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.AddRange(IEnumerable<TEntity>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).AddRange(IEnumerable(Of TEntity))
+  nameWithType: IWriteRepository<TEntity, TId>.AddRange(IEnumerable<TEntity>)
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).AddRange(IEnumerable(Of TEntity))
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.AddRange*
+  name: AddRange
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_AddRange_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepository`2.AddRange
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.AddRange
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).AddRange
+  nameWithType: IWriteRepository<TEntity, TId>.AddRange
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).AddRange
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.Delete(`0)
+  name: Delete(TEntity)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_Delete__0_
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepository`2.Delete(`0)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.Delete(TEntity)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).Delete(TEntity)
+  nameWithType: IWriteRepository<TEntity, TId>.Delete(TEntity)
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).Delete(TEntity)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.Delete*
+  name: Delete
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_Delete_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepository`2.Delete
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.Delete
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).Delete
+  nameWithType: IWriteRepository<TEntity, TId>.Delete
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).Delete
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.Update(`0)
+  name: Update(TEntity)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_Update__0_
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepository`2.Update(`0)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.Update(TEntity)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).Update(TEntity)
+  nameWithType: IWriteRepository<TEntity, TId>.Update(TEntity)
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).Update(TEntity)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepository`2.Update*
+  name: Update
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html#Ploch_Common_Data_GenericRepository_IWriteRepository_2_Update_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepository`2.Update
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepository<TEntity, TId>.Update
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepository(Of TEntity, TId).Update
+  nameWithType: IWriteRepository<TEntity, TId>.Update
+  nameWithType.vb: IWriteRepository(Of TEntity, TId).Update
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2
+  name: IWriteRepositoryAsync<TEntity, TId>
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html
+  commentId: T:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2
+  name.vb: IWriteRepositoryAsync(Of TEntity, TId)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId)
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddAsync(`0,CancellationToken)
+  name: AddAsync(TEntity, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_AddAsync__0_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddAsync(`0,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.AddAsync(TEntity, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).AddAsync(TEntity, CancellationToken)
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.AddAsync(TEntity, CancellationToken)
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).AddAsync(TEntity, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddAsync*
+  name: AddAsync
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_AddAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.AddAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).AddAsync
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.AddAsync
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).AddAsync
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddRangeAsync(IEnumerable{`0},CancellationToken)
+  name: AddRangeAsync(IEnumerable<TEntity>, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_AddRangeAsync_IEnumerable__0__CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddRangeAsync(IEnumerable{`0},CancellationToken)
+  name.vb: AddRangeAsync(IEnumerable(Of TEntity), CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.AddRangeAsync(IEnumerable<TEntity>, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync(IEnumerable(Of TEntity), CancellationToken)
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.AddRangeAsync(IEnumerable<TEntity>, CancellationToken)
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync(IEnumerable(Of TEntity), CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddRangeAsync*
+  name: AddRangeAsync
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_AddRangeAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.AddRangeAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.AddRangeAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.AddRangeAsync
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).AddRangeAsync
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.DeleteAsync(`0,CancellationToken)
+  name: DeleteAsync(TEntity, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_DeleteAsync__0_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.DeleteAsync(`0,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.DeleteAsync(TEntity, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).DeleteAsync(TEntity, CancellationToken)
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.DeleteAsync(TEntity, CancellationToken)
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).DeleteAsync(TEntity, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.DeleteAsync*
+  name: DeleteAsync
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_DeleteAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.DeleteAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.DeleteAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).DeleteAsync
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.DeleteAsync
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).DeleteAsync
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.UpdateAsync(`0,CancellationToken)
+  name: UpdateAsync(TEntity, CancellationToken)
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_UpdateAsync__0_CancellationToken_
+  commentId: M:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.UpdateAsync(`0,CancellationToken)
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.UpdateAsync(TEntity, CancellationToken)
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).UpdateAsync(TEntity, CancellationToken)
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.UpdateAsync(TEntity, CancellationToken)
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).UpdateAsync(TEntity, CancellationToken)
+- uid: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.UpdateAsync*
+  name: UpdateAsync
+  href: api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html#Ploch_Common_Data_GenericRepository_IWriteRepositoryAsync_2_UpdateAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync`2.UpdateAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync<TEntity, TId>.UpdateAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync(Of TEntity, TId).UpdateAsync
+  nameWithType: IWriteRepositoryAsync<TEntity, TId>.UpdateAsync
+  nameWithType.vb: IWriteRepositoryAsync(Of TEntity, TId).UpdateAsync
+- uid: Ploch.Common.Data.Model
+  name: Ploch.Common.Data.Model
+  href: api/Ploch.Common.Data.Model.html
+  commentId: N:Ploch.Common.Data.Model
+  fullName: Ploch.Common.Data.Model
+  nameWithType: Ploch.Common.Data.Model
+- uid: Ploch.Common.Data.Model.CommonTypes
+  name: Ploch.Common.Data.Model.CommonTypes
+  href: api/Ploch.Common.Data.Model.CommonTypes.html
+  commentId: N:Ploch.Common.Data.Model.CommonTypes
+  fullName: Ploch.Common.Data.Model.CommonTypes
+  nameWithType: Ploch.Common.Data.Model.CommonTypes
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`1
+  name: Category<TCategory>
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-1.html
+  commentId: T:Ploch.Common.Data.Model.CommonTypes.Category`1
+  name.vb: Category(Of TCategory)
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory>
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory)
+  nameWithType: Category<TCategory>
+  nameWithType.vb: Category(Of TCategory)
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2
+  name: Category<TCategory, TId>
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html
+  commentId: T:Ploch.Common.Data.Model.CommonTypes.Category`2
+  name.vb: Category(Of TCategory, TId)
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId)
+  nameWithType: Category<TCategory, TId>
+  nameWithType.vb: Category(Of TCategory, TId)
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Children
+  name: Children
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Children
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Category`2.Children
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Children
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Children
+  nameWithType: Category<TCategory, TId>.Children
+  nameWithType.vb: Category(Of TCategory, TId).Children
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Children*
+  name: Children
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Children_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Category`2.Children
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Children
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Children
+  nameWithType: Category<TCategory, TId>.Children
+  nameWithType.vb: Category(Of TCategory, TId).Children
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Id
+  name: Id
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Id
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Category`2.Id
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Id
+  nameWithType: Category<TCategory, TId>.Id
+  nameWithType.vb: Category(Of TCategory, TId).Id
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Id*
+  name: Id
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Id_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Category`2.Id
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Id
+  nameWithType: Category<TCategory, TId>.Id
+  nameWithType.vb: Category(Of TCategory, TId).Id
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Name
+  name: Name
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Name
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Category`2.Name
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Name
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Name
+  nameWithType: Category<TCategory, TId>.Name
+  nameWithType.vb: Category(Of TCategory, TId).Name
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Name*
+  name: Name
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Name_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Category`2.Name
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Name
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Name
+  nameWithType: Category<TCategory, TId>.Name
+  nameWithType.vb: Category(Of TCategory, TId).Name
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Parent
+  name: Parent
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Parent
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Category`2.Parent
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Parent
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Parent
+  nameWithType: Category<TCategory, TId>.Parent
+  nameWithType.vb: Category(Of TCategory, TId).Parent
+- uid: Ploch.Common.Data.Model.CommonTypes.Category`2.Parent*
+  name: Parent
+  href: api/Ploch.Common.Data.Model.CommonTypes.Category-2.html#Ploch_Common_Data_Model_CommonTypes_Category_2_Parent_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Category`2.Parent
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Category<TCategory, TId>.Parent
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Category(Of TCategory, TId).Parent
+  nameWithType: Category<TCategory, TId>.Parent
+  nameWithType.vb: Category(Of TCategory, TId).Parent
+- uid: Ploch.Common.Data.Model.CommonTypes.Image
+  name: Image
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html
+  commentId: T:Ploch.Common.Data.Model.CommonTypes.Image
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image
+  nameWithType: Image
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Contents
+  name: Contents
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Contents
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Image.Contents
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Contents
+  nameWithType: Image.Contents
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Contents*
+  name: Contents
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Contents_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Image.Contents
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Contents
+  nameWithType: Image.Contents
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Description
+  name: Description
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Description
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Image.Description
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Description
+  nameWithType: Image.Description
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Description*
+  name: Description
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Description_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Image.Description
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Description
+  nameWithType: Image.Description
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Id
+  name: Id
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Id
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Image.Id
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Id
+  nameWithType: Image.Id
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Id*
+  name: Id
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Id_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Image.Id
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Id
+  nameWithType: Image.Id
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Name
+  name: Name
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Name
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Image.Name
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Name
+  nameWithType: Image.Name
+- uid: Ploch.Common.Data.Model.CommonTypes.Image.Name*
+  name: Name
+  href: api/Ploch.Common.Data.Model.CommonTypes.Image.html#Ploch_Common_Data_Model_CommonTypes_Image_Name_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Image.Name
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Image.Name
+  nameWithType: Image.Name
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag
+  name: Tag
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag.html
+  commentId: T:Ploch.Common.Data.Model.CommonTypes.Tag
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag
+  nameWithType: Tag
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag`1
+  name: Tag<TId>
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html
+  commentId: T:Ploch.Common.Data.Model.CommonTypes.Tag`1
+  name.vb: Tag(Of TId)
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag<TId>
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Tag(Of TId)
+  nameWithType: Tag<TId>
+  nameWithType.vb: Tag(Of TId)
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag`1.Description
+  name: Description
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html#Ploch_Common_Data_Model_CommonTypes_Tag_1_Description
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Tag`1.Description
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag<TId>.Description
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Tag(Of TId).Description
+  nameWithType: Tag<TId>.Description
+  nameWithType.vb: Tag(Of TId).Description
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag`1.Description*
+  name: Description
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html#Ploch_Common_Data_Model_CommonTypes_Tag_1_Description_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Tag`1.Description
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag<TId>.Description
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Tag(Of TId).Description
+  nameWithType: Tag<TId>.Description
+  nameWithType.vb: Tag(Of TId).Description
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag`1.Id
+  name: Id
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html#Ploch_Common_Data_Model_CommonTypes_Tag_1_Id
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Tag`1.Id
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Tag(Of TId).Id
+  nameWithType: Tag<TId>.Id
+  nameWithType.vb: Tag(Of TId).Id
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag`1.Id*
+  name: Id
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html#Ploch_Common_Data_Model_CommonTypes_Tag_1_Id_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Tag`1.Id
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Tag(Of TId).Id
+  nameWithType: Tag<TId>.Id
+  nameWithType.vb: Tag(Of TId).Id
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag`1.Name
+  name: Name
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html#Ploch_Common_Data_Model_CommonTypes_Tag_1_Name
+  commentId: P:Ploch.Common.Data.Model.CommonTypes.Tag`1.Name
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag<TId>.Name
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Tag(Of TId).Name
+  nameWithType: Tag<TId>.Name
+  nameWithType.vb: Tag(Of TId).Name
+- uid: Ploch.Common.Data.Model.CommonTypes.Tag`1.Name*
+  name: Name
+  href: api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html#Ploch_Common_Data_Model_CommonTypes_Tag_1_Name_
+  commentId: Overload:Ploch.Common.Data.Model.CommonTypes.Tag`1.Name
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.CommonTypes.Tag<TId>.Name
+  fullName.vb: Ploch.Common.Data.Model.CommonTypes.Tag(Of TId).Name
+  nameWithType: Tag<TId>.Name
+  nameWithType.vb: Tag(Of TId).Name
+- uid: Ploch.Common.Data.Model.IGetOnlyId`1
+  name: IGetOnlyId<TId>
+  href: api/Ploch.Common.Data.Model.IGetOnlyId-1.html
+  commentId: T:Ploch.Common.Data.Model.IGetOnlyId`1
+  name.vb: IGetOnlyId(Of TId)
+  fullName: Ploch.Common.Data.Model.IGetOnlyId<TId>
+  fullName.vb: Ploch.Common.Data.Model.IGetOnlyId(Of TId)
+  nameWithType: IGetOnlyId<TId>
+  nameWithType.vb: IGetOnlyId(Of TId)
+- uid: Ploch.Common.Data.Model.IGetOnlyId`1.Id
+  name: Id
+  href: api/Ploch.Common.Data.Model.IGetOnlyId-1.html#Ploch_Common_Data_Model_IGetOnlyId_1_Id
+  commentId: P:Ploch.Common.Data.Model.IGetOnlyId`1.Id
+  fullName: Ploch.Common.Data.Model.IGetOnlyId<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.IGetOnlyId(Of TId).Id
+  nameWithType: IGetOnlyId<TId>.Id
+  nameWithType.vb: IGetOnlyId(Of TId).Id
+- uid: Ploch.Common.Data.Model.IGetOnlyId`1.Id*
+  name: Id
+  href: api/Ploch.Common.Data.Model.IGetOnlyId-1.html#Ploch_Common_Data_Model_IGetOnlyId_1_Id_
+  commentId: Overload:Ploch.Common.Data.Model.IGetOnlyId`1.Id
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IGetOnlyId<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.IGetOnlyId(Of TId).Id
+  nameWithType: IGetOnlyId<TId>.Id
+  nameWithType.vb: IGetOnlyId(Of TId).Id
+- uid: Ploch.Common.Data.Model.IHasAccessedBy
+  name: IHasAccessedBy
+  href: api/Ploch.Common.Data.Model.IHasAccessedBy.html
+  commentId: T:Ploch.Common.Data.Model.IHasAccessedBy
+  fullName: Ploch.Common.Data.Model.IHasAccessedBy
+  nameWithType: IHasAccessedBy
+- uid: Ploch.Common.Data.Model.IHasAccessedBy.LastAccessedBy
+  name: LastAccessedBy
+  href: api/Ploch.Common.Data.Model.IHasAccessedBy.html#Ploch_Common_Data_Model_IHasAccessedBy_LastAccessedBy
+  commentId: P:Ploch.Common.Data.Model.IHasAccessedBy.LastAccessedBy
+  fullName: Ploch.Common.Data.Model.IHasAccessedBy.LastAccessedBy
+  nameWithType: IHasAccessedBy.LastAccessedBy
+- uid: Ploch.Common.Data.Model.IHasAccessedBy.LastAccessedBy*
+  name: LastAccessedBy
+  href: api/Ploch.Common.Data.Model.IHasAccessedBy.html#Ploch_Common_Data_Model_IHasAccessedBy_LastAccessedBy_
+  commentId: Overload:Ploch.Common.Data.Model.IHasAccessedBy.LastAccessedBy
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasAccessedBy.LastAccessedBy
+  nameWithType: IHasAccessedBy.LastAccessedBy
+- uid: Ploch.Common.Data.Model.IHasAccessedTime
+  name: IHasAccessedTime
+  href: api/Ploch.Common.Data.Model.IHasAccessedTime.html
+  commentId: T:Ploch.Common.Data.Model.IHasAccessedTime
+  fullName: Ploch.Common.Data.Model.IHasAccessedTime
+  nameWithType: IHasAccessedTime
+- uid: Ploch.Common.Data.Model.IHasAccessedTime.AccessedTime
+  name: AccessedTime
+  href: api/Ploch.Common.Data.Model.IHasAccessedTime.html#Ploch_Common_Data_Model_IHasAccessedTime_AccessedTime
+  commentId: P:Ploch.Common.Data.Model.IHasAccessedTime.AccessedTime
+  fullName: Ploch.Common.Data.Model.IHasAccessedTime.AccessedTime
+  nameWithType: IHasAccessedTime.AccessedTime
+- uid: Ploch.Common.Data.Model.IHasAccessedTime.AccessedTime*
+  name: AccessedTime
+  href: api/Ploch.Common.Data.Model.IHasAccessedTime.html#Ploch_Common_Data_Model_IHasAccessedTime_AccessedTime_
+  commentId: Overload:Ploch.Common.Data.Model.IHasAccessedTime.AccessedTime
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasAccessedTime.AccessedTime
+  nameWithType: IHasAccessedTime.AccessedTime
+- uid: Ploch.Common.Data.Model.IHasAuditTimeProperties
+  name: IHasAuditTimeProperties
+  href: api/Ploch.Common.Data.Model.IHasAuditTimeProperties.html
+  commentId: T:Ploch.Common.Data.Model.IHasAuditTimeProperties
+  fullName: Ploch.Common.Data.Model.IHasAuditTimeProperties
+  nameWithType: IHasAuditTimeProperties
+- uid: Ploch.Common.Data.Model.IHasCategories`1
+  name: IHasCategories<TCategory>
+  href: api/Ploch.Common.Data.Model.IHasCategories-1.html
+  commentId: T:Ploch.Common.Data.Model.IHasCategories`1
+  name.vb: IHasCategories(Of TCategory)
+  fullName: Ploch.Common.Data.Model.IHasCategories<TCategory>
+  fullName.vb: Ploch.Common.Data.Model.IHasCategories(Of TCategory)
+  nameWithType: IHasCategories<TCategory>
+  nameWithType.vb: IHasCategories(Of TCategory)
+- uid: Ploch.Common.Data.Model.IHasCategories`2
+  name: IHasCategories<TCategory, TCategoryId>
+  href: api/Ploch.Common.Data.Model.IHasCategories-2.html
+  commentId: T:Ploch.Common.Data.Model.IHasCategories`2
+  name.vb: IHasCategories(Of TCategory, TCategoryId)
+  fullName: Ploch.Common.Data.Model.IHasCategories<TCategory, TCategoryId>
+  fullName.vb: Ploch.Common.Data.Model.IHasCategories(Of TCategory, TCategoryId)
+  nameWithType: IHasCategories<TCategory, TCategoryId>
+  nameWithType.vb: IHasCategories(Of TCategory, TCategoryId)
+- uid: Ploch.Common.Data.Model.IHasCategories`2.Categories
+  name: Categories
+  href: api/Ploch.Common.Data.Model.IHasCategories-2.html#Ploch_Common_Data_Model_IHasCategories_2_Categories
+  commentId: P:Ploch.Common.Data.Model.IHasCategories`2.Categories
+  fullName: Ploch.Common.Data.Model.IHasCategories<TCategory, TCategoryId>.Categories
+  fullName.vb: Ploch.Common.Data.Model.IHasCategories(Of TCategory, TCategoryId).Categories
+  nameWithType: IHasCategories<TCategory, TCategoryId>.Categories
+  nameWithType.vb: IHasCategories(Of TCategory, TCategoryId).Categories
+- uid: Ploch.Common.Data.Model.IHasCategories`2.Categories*
+  name: Categories
+  href: api/Ploch.Common.Data.Model.IHasCategories-2.html#Ploch_Common_Data_Model_IHasCategories_2_Categories_
+  commentId: Overload:Ploch.Common.Data.Model.IHasCategories`2.Categories
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasCategories<TCategory, TCategoryId>.Categories
+  fullName.vb: Ploch.Common.Data.Model.IHasCategories(Of TCategory, TCategoryId).Categories
+  nameWithType: IHasCategories<TCategory, TCategoryId>.Categories
+  nameWithType.vb: IHasCategories(Of TCategory, TCategoryId).Categories
+- uid: Ploch.Common.Data.Model.IHasCreatedBy
+  name: IHasCreatedBy
+  href: api/Ploch.Common.Data.Model.IHasCreatedBy.html
+  commentId: T:Ploch.Common.Data.Model.IHasCreatedBy
+  fullName: Ploch.Common.Data.Model.IHasCreatedBy
+  nameWithType: IHasCreatedBy
+- uid: Ploch.Common.Data.Model.IHasCreatedBy.CreatedBy
+  name: CreatedBy
+  href: api/Ploch.Common.Data.Model.IHasCreatedBy.html#Ploch_Common_Data_Model_IHasCreatedBy_CreatedBy
+  commentId: P:Ploch.Common.Data.Model.IHasCreatedBy.CreatedBy
+  fullName: Ploch.Common.Data.Model.IHasCreatedBy.CreatedBy
+  nameWithType: IHasCreatedBy.CreatedBy
+- uid: Ploch.Common.Data.Model.IHasCreatedBy.CreatedBy*
+  name: CreatedBy
+  href: api/Ploch.Common.Data.Model.IHasCreatedBy.html#Ploch_Common_Data_Model_IHasCreatedBy_CreatedBy_
+  commentId: Overload:Ploch.Common.Data.Model.IHasCreatedBy.CreatedBy
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasCreatedBy.CreatedBy
+  nameWithType: IHasCreatedBy.CreatedBy
+- uid: Ploch.Common.Data.Model.IHasCreatedTime
+  name: IHasCreatedTime
+  href: api/Ploch.Common.Data.Model.IHasCreatedTime.html
+  commentId: T:Ploch.Common.Data.Model.IHasCreatedTime
+  fullName: Ploch.Common.Data.Model.IHasCreatedTime
+  nameWithType: IHasCreatedTime
+- uid: Ploch.Common.Data.Model.IHasCreatedTime.CreatedTime
+  name: CreatedTime
+  href: api/Ploch.Common.Data.Model.IHasCreatedTime.html#Ploch_Common_Data_Model_IHasCreatedTime_CreatedTime
+  commentId: P:Ploch.Common.Data.Model.IHasCreatedTime.CreatedTime
+  fullName: Ploch.Common.Data.Model.IHasCreatedTime.CreatedTime
+  nameWithType: IHasCreatedTime.CreatedTime
+- uid: Ploch.Common.Data.Model.IHasCreatedTime.CreatedTime*
+  name: CreatedTime
+  href: api/Ploch.Common.Data.Model.IHasCreatedTime.html#Ploch_Common_Data_Model_IHasCreatedTime_CreatedTime_
+  commentId: Overload:Ploch.Common.Data.Model.IHasCreatedTime.CreatedTime
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasCreatedTime.CreatedTime
+  nameWithType: IHasCreatedTime.CreatedTime
+- uid: Ploch.Common.Data.Model.IHasDescription
+  name: IHasDescription
+  href: api/Ploch.Common.Data.Model.IHasDescription.html
+  commentId: T:Ploch.Common.Data.Model.IHasDescription
+  fullName: Ploch.Common.Data.Model.IHasDescription
+  nameWithType: IHasDescription
+- uid: Ploch.Common.Data.Model.IHasDescription.Description
+  name: Description
+  href: api/Ploch.Common.Data.Model.IHasDescription.html#Ploch_Common_Data_Model_IHasDescription_Description
+  commentId: P:Ploch.Common.Data.Model.IHasDescription.Description
+  fullName: Ploch.Common.Data.Model.IHasDescription.Description
+  nameWithType: IHasDescription.Description
+- uid: Ploch.Common.Data.Model.IHasDescription.Description*
+  name: Description
+  href: api/Ploch.Common.Data.Model.IHasDescription.html#Ploch_Common_Data_Model_IHasDescription_Description_
+  commentId: Overload:Ploch.Common.Data.Model.IHasDescription.Description
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasDescription.Description
+  nameWithType: IHasDescription.Description
+- uid: Ploch.Common.Data.Model.IHasId`1
+  name: IHasId<TId>
+  href: api/Ploch.Common.Data.Model.IHasId-1.html
+  commentId: T:Ploch.Common.Data.Model.IHasId`1
+  name.vb: IHasId(Of TId)
+  fullName: Ploch.Common.Data.Model.IHasId<TId>
+  fullName.vb: Ploch.Common.Data.Model.IHasId(Of TId)
+  nameWithType: IHasId<TId>
+  nameWithType.vb: IHasId(Of TId)
+- uid: Ploch.Common.Data.Model.IHasId`1.Id
+  name: Id
+  href: api/Ploch.Common.Data.Model.IHasId-1.html#Ploch_Common_Data_Model_IHasId_1_Id
+  commentId: P:Ploch.Common.Data.Model.IHasId`1.Id
+  fullName: Ploch.Common.Data.Model.IHasId<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.IHasId(Of TId).Id
+  nameWithType: IHasId<TId>.Id
+  nameWithType.vb: IHasId(Of TId).Id
+- uid: Ploch.Common.Data.Model.IHasId`1.Id*
+  name: Id
+  href: api/Ploch.Common.Data.Model.IHasId-1.html#Ploch_Common_Data_Model_IHasId_1_Id_
+  commentId: Overload:Ploch.Common.Data.Model.IHasId`1.Id
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasId<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.IHasId(Of TId).Id
+  nameWithType: IHasId<TId>.Id
+  nameWithType.vb: IHasId(Of TId).Id
+- uid: Ploch.Common.Data.Model.IHasIdSettable`1
+  name: IHasIdSettable<TId>
+  href: api/Ploch.Common.Data.Model.IHasIdSettable-1.html
+  commentId: T:Ploch.Common.Data.Model.IHasIdSettable`1
+  name.vb: IHasIdSettable(Of TId)
+  fullName: Ploch.Common.Data.Model.IHasIdSettable<TId>
+  fullName.vb: Ploch.Common.Data.Model.IHasIdSettable(Of TId)
+  nameWithType: IHasIdSettable<TId>
+  nameWithType.vb: IHasIdSettable(Of TId)
+- uid: Ploch.Common.Data.Model.IHasIdSettable`1.Id
+  name: Id
+  href: api/Ploch.Common.Data.Model.IHasIdSettable-1.html#Ploch_Common_Data_Model_IHasIdSettable_1_Id
+  commentId: P:Ploch.Common.Data.Model.IHasIdSettable`1.Id
+  fullName: Ploch.Common.Data.Model.IHasIdSettable<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.IHasIdSettable(Of TId).Id
+  nameWithType: IHasIdSettable<TId>.Id
+  nameWithType.vb: IHasIdSettable(Of TId).Id
+- uid: Ploch.Common.Data.Model.IHasIdSettable`1.Id*
+  name: Id
+  href: api/Ploch.Common.Data.Model.IHasIdSettable-1.html#Ploch_Common_Data_Model_IHasIdSettable_1_Id_
+  commentId: Overload:Ploch.Common.Data.Model.IHasIdSettable`1.Id
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasIdSettable<TId>.Id
+  fullName.vb: Ploch.Common.Data.Model.IHasIdSettable(Of TId).Id
+  nameWithType: IHasIdSettable<TId>.Id
+  nameWithType.vb: IHasIdSettable(Of TId).Id
+- uid: Ploch.Common.Data.Model.IHasModifiedBy
+  name: IHasModifiedBy
+  href: api/Ploch.Common.Data.Model.IHasModifiedBy.html
+  commentId: T:Ploch.Common.Data.Model.IHasModifiedBy
+  fullName: Ploch.Common.Data.Model.IHasModifiedBy
+  nameWithType: IHasModifiedBy
+- uid: Ploch.Common.Data.Model.IHasModifiedBy.LastModifiedBy
+  name: LastModifiedBy
+  href: api/Ploch.Common.Data.Model.IHasModifiedBy.html#Ploch_Common_Data_Model_IHasModifiedBy_LastModifiedBy
+  commentId: P:Ploch.Common.Data.Model.IHasModifiedBy.LastModifiedBy
+  fullName: Ploch.Common.Data.Model.IHasModifiedBy.LastModifiedBy
+  nameWithType: IHasModifiedBy.LastModifiedBy
+- uid: Ploch.Common.Data.Model.IHasModifiedBy.LastModifiedBy*
+  name: LastModifiedBy
+  href: api/Ploch.Common.Data.Model.IHasModifiedBy.html#Ploch_Common_Data_Model_IHasModifiedBy_LastModifiedBy_
+  commentId: Overload:Ploch.Common.Data.Model.IHasModifiedBy.LastModifiedBy
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasModifiedBy.LastModifiedBy
+  nameWithType: IHasModifiedBy.LastModifiedBy
+- uid: Ploch.Common.Data.Model.IHasModifiedTime
+  name: IHasModifiedTime
+  href: api/Ploch.Common.Data.Model.IHasModifiedTime.html
+  commentId: T:Ploch.Common.Data.Model.IHasModifiedTime
+  fullName: Ploch.Common.Data.Model.IHasModifiedTime
+  nameWithType: IHasModifiedTime
+- uid: Ploch.Common.Data.Model.IHasModifiedTime.ModifiedTime
+  name: ModifiedTime
+  href: api/Ploch.Common.Data.Model.IHasModifiedTime.html#Ploch_Common_Data_Model_IHasModifiedTime_ModifiedTime
+  commentId: P:Ploch.Common.Data.Model.IHasModifiedTime.ModifiedTime
+  fullName: Ploch.Common.Data.Model.IHasModifiedTime.ModifiedTime
+  nameWithType: IHasModifiedTime.ModifiedTime
+- uid: Ploch.Common.Data.Model.IHasModifiedTime.ModifiedTime*
+  name: ModifiedTime
+  href: api/Ploch.Common.Data.Model.IHasModifiedTime.html#Ploch_Common_Data_Model_IHasModifiedTime_ModifiedTime_
+  commentId: Overload:Ploch.Common.Data.Model.IHasModifiedTime.ModifiedTime
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasModifiedTime.ModifiedTime
+  nameWithType: IHasModifiedTime.ModifiedTime
+- uid: Ploch.Common.Data.Model.IHasParentId`1
+  name: IHasParentId<TId>
+  href: api/Ploch.Common.Data.Model.IHasParentId-1.html
+  commentId: T:Ploch.Common.Data.Model.IHasParentId`1
+  name.vb: IHasParentId(Of TId)
+  fullName: Ploch.Common.Data.Model.IHasParentId<TId>
+  fullName.vb: Ploch.Common.Data.Model.IHasParentId(Of TId)
+  nameWithType: IHasParentId<TId>
+  nameWithType.vb: IHasParentId(Of TId)
+- uid: Ploch.Common.Data.Model.IHasParentId`1.ParentId
+  name: ParentId
+  href: api/Ploch.Common.Data.Model.IHasParentId-1.html#Ploch_Common_Data_Model_IHasParentId_1_ParentId
+  commentId: P:Ploch.Common.Data.Model.IHasParentId`1.ParentId
+  fullName: Ploch.Common.Data.Model.IHasParentId<TId>.ParentId
+  fullName.vb: Ploch.Common.Data.Model.IHasParentId(Of TId).ParentId
+  nameWithType: IHasParentId<TId>.ParentId
+  nameWithType.vb: IHasParentId(Of TId).ParentId
+- uid: Ploch.Common.Data.Model.IHasParentId`1.ParentId*
+  name: ParentId
+  href: api/Ploch.Common.Data.Model.IHasParentId-1.html#Ploch_Common_Data_Model_IHasParentId_1_ParentId_
+  commentId: Overload:Ploch.Common.Data.Model.IHasParentId`1.ParentId
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasParentId<TId>.ParentId
+  fullName.vb: Ploch.Common.Data.Model.IHasParentId(Of TId).ParentId
+  nameWithType: IHasParentId<TId>.ParentId
+  nameWithType.vb: IHasParentId(Of TId).ParentId
+- uid: Ploch.Common.Data.Model.IHasTags`1
+  name: IHasTags<TTag>
+  href: api/Ploch.Common.Data.Model.IHasTags-1.html
+  commentId: T:Ploch.Common.Data.Model.IHasTags`1
+  name.vb: IHasTags(Of TTag)
+  fullName: Ploch.Common.Data.Model.IHasTags<TTag>
+  fullName.vb: Ploch.Common.Data.Model.IHasTags(Of TTag)
+  nameWithType: IHasTags<TTag>
+  nameWithType.vb: IHasTags(Of TTag)
+- uid: Ploch.Common.Data.Model.IHasTags`2
+  name: IHasTags<TTag, TTagId>
+  href: api/Ploch.Common.Data.Model.IHasTags-2.html
+  commentId: T:Ploch.Common.Data.Model.IHasTags`2
+  name.vb: IHasTags(Of TTag, TTagId)
+  fullName: Ploch.Common.Data.Model.IHasTags<TTag, TTagId>
+  fullName.vb: Ploch.Common.Data.Model.IHasTags(Of TTag, TTagId)
+  nameWithType: IHasTags<TTag, TTagId>
+  nameWithType.vb: IHasTags(Of TTag, TTagId)
+- uid: Ploch.Common.Data.Model.IHasTags`2.Tags
+  name: Tags
+  href: api/Ploch.Common.Data.Model.IHasTags-2.html#Ploch_Common_Data_Model_IHasTags_2_Tags
+  commentId: P:Ploch.Common.Data.Model.IHasTags`2.Tags
+  fullName: Ploch.Common.Data.Model.IHasTags<TTag, TTagId>.Tags
+  fullName.vb: Ploch.Common.Data.Model.IHasTags(Of TTag, TTagId).Tags
+  nameWithType: IHasTags<TTag, TTagId>.Tags
+  nameWithType.vb: IHasTags(Of TTag, TTagId).Tags
+- uid: Ploch.Common.Data.Model.IHasTags`2.Tags*
+  name: Tags
+  href: api/Ploch.Common.Data.Model.IHasTags-2.html#Ploch_Common_Data_Model_IHasTags_2_Tags_
+  commentId: Overload:Ploch.Common.Data.Model.IHasTags`2.Tags
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasTags<TTag, TTagId>.Tags
+  fullName.vb: Ploch.Common.Data.Model.IHasTags(Of TTag, TTagId).Tags
+  nameWithType: IHasTags<TTag, TTagId>.Tags
+  nameWithType.vb: IHasTags(Of TTag, TTagId).Tags
+- uid: Ploch.Common.Data.Model.IHasTitle
+  name: IHasTitle
+  href: api/Ploch.Common.Data.Model.IHasTitle.html
+  commentId: T:Ploch.Common.Data.Model.IHasTitle
+  fullName: Ploch.Common.Data.Model.IHasTitle
+  nameWithType: IHasTitle
+- uid: Ploch.Common.Data.Model.IHasTitle.Title
+  name: Title
+  href: api/Ploch.Common.Data.Model.IHasTitle.html#Ploch_Common_Data_Model_IHasTitle_Title
+  commentId: P:Ploch.Common.Data.Model.IHasTitle.Title
+  fullName: Ploch.Common.Data.Model.IHasTitle.Title
+  nameWithType: IHasTitle.Title
+- uid: Ploch.Common.Data.Model.IHasTitle.Title*
+  name: Title
+  href: api/Ploch.Common.Data.Model.IHasTitle.html#Ploch_Common_Data_Model_IHasTitle_Title_
+  commentId: Overload:Ploch.Common.Data.Model.IHasTitle.Title
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasTitle.Title
+  nameWithType: IHasTitle.Title
+- uid: Ploch.Common.Data.Model.IHasValue`1
+  name: IHasValue<TValue>
+  href: api/Ploch.Common.Data.Model.IHasValue-1.html
+  commentId: T:Ploch.Common.Data.Model.IHasValue`1
+  name.vb: IHasValue(Of TValue)
+  fullName: Ploch.Common.Data.Model.IHasValue<TValue>
+  fullName.vb: Ploch.Common.Data.Model.IHasValue(Of TValue)
+  nameWithType: IHasValue<TValue>
+  nameWithType.vb: IHasValue(Of TValue)
+- uid: Ploch.Common.Data.Model.IHasValue`1.Value
+  name: Value
+  href: api/Ploch.Common.Data.Model.IHasValue-1.html#Ploch_Common_Data_Model_IHasValue_1_Value
+  commentId: P:Ploch.Common.Data.Model.IHasValue`1.Value
+  fullName: Ploch.Common.Data.Model.IHasValue<TValue>.Value
+  fullName.vb: Ploch.Common.Data.Model.IHasValue(Of TValue).Value
+  nameWithType: IHasValue<TValue>.Value
+  nameWithType.vb: IHasValue(Of TValue).Value
+- uid: Ploch.Common.Data.Model.IHasValue`1.Value*
+  name: Value
+  href: api/Ploch.Common.Data.Model.IHasValue-1.html#Ploch_Common_Data_Model_IHasValue_1_Value_
+  commentId: Overload:Ploch.Common.Data.Model.IHasValue`1.Value
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHasValue<TValue>.Value
+  fullName.vb: Ploch.Common.Data.Model.IHasValue(Of TValue).Value
+  nameWithType: IHasValue<TValue>.Value
+  nameWithType.vb: IHasValue(Of TValue).Value
+- uid: Ploch.Common.Data.Model.IHierarchicalParentChildrenComposite`1
+  name: IHierarchicalParentChildrenComposite<TEntity>
+  href: api/Ploch.Common.Data.Model.IHierarchicalParentChildrenComposite-1.html
+  commentId: T:Ploch.Common.Data.Model.IHierarchicalParentChildrenComposite`1
+  name.vb: IHierarchicalParentChildrenComposite(Of TEntity)
+  fullName: Ploch.Common.Data.Model.IHierarchicalParentChildrenComposite<TEntity>
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalParentChildrenComposite(Of TEntity)
+  nameWithType: IHierarchicalParentChildrenComposite<TEntity>
+  nameWithType.vb: IHierarchicalParentChildrenComposite(Of TEntity)
+- uid: Ploch.Common.Data.Model.IHierarchicalWithChildren`1
+  name: IHierarchicalWithChildren<TChildren>
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithChildren-1.html
+  commentId: T:Ploch.Common.Data.Model.IHierarchicalWithChildren`1
+  name.vb: IHierarchicalWithChildren(Of TChildren)
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithChildren<TChildren>
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithChildren(Of TChildren)
+  nameWithType: IHierarchicalWithChildren<TChildren>
+  nameWithType.vb: IHierarchicalWithChildren(Of TChildren)
+- uid: Ploch.Common.Data.Model.IHierarchicalWithChildren`1.Children
+  name: Children
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithChildren-1.html#Ploch_Common_Data_Model_IHierarchicalWithChildren_1_Children
+  commentId: P:Ploch.Common.Data.Model.IHierarchicalWithChildren`1.Children
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithChildren<TChildren>.Children
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithChildren(Of TChildren).Children
+  nameWithType: IHierarchicalWithChildren<TChildren>.Children
+  nameWithType.vb: IHierarchicalWithChildren(Of TChildren).Children
+- uid: Ploch.Common.Data.Model.IHierarchicalWithChildren`1.Children*
+  name: Children
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithChildren-1.html#Ploch_Common_Data_Model_IHierarchicalWithChildren_1_Children_
+  commentId: Overload:Ploch.Common.Data.Model.IHierarchicalWithChildren`1.Children
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithChildren<TChildren>.Children
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithChildren(Of TChildren).Children
+  nameWithType: IHierarchicalWithChildren<TChildren>.Children
+  nameWithType.vb: IHierarchicalWithChildren(Of TChildren).Children
+- uid: Ploch.Common.Data.Model.IHierarchicalWithChildrenComposite`1
+  name: IHierarchicalWithChildrenComposite<TChildren>
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithChildrenComposite-1.html
+  commentId: T:Ploch.Common.Data.Model.IHierarchicalWithChildrenComposite`1
+  name.vb: IHierarchicalWithChildrenComposite(Of TChildren)
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithChildrenComposite<TChildren>
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithChildrenComposite(Of TChildren)
+  nameWithType: IHierarchicalWithChildrenComposite<TChildren>
+  nameWithType.vb: IHierarchicalWithChildrenComposite(Of TChildren)
+- uid: Ploch.Common.Data.Model.IHierarchicalWithParent`1
+  name: IHierarchicalWithParent<TParent>
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithParent-1.html
+  commentId: T:Ploch.Common.Data.Model.IHierarchicalWithParent`1
+  name.vb: IHierarchicalWithParent(Of TParent)
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithParent<TParent>
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithParent(Of TParent)
+  nameWithType: IHierarchicalWithParent<TParent>
+  nameWithType.vb: IHierarchicalWithParent(Of TParent)
+- uid: Ploch.Common.Data.Model.IHierarchicalWithParent`1.Parent
+  name: Parent
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithParent-1.html#Ploch_Common_Data_Model_IHierarchicalWithParent_1_Parent
+  commentId: P:Ploch.Common.Data.Model.IHierarchicalWithParent`1.Parent
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithParent<TParent>.Parent
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithParent(Of TParent).Parent
+  nameWithType: IHierarchicalWithParent<TParent>.Parent
+  nameWithType.vb: IHierarchicalWithParent(Of TParent).Parent
+- uid: Ploch.Common.Data.Model.IHierarchicalWithParent`1.Parent*
+  name: Parent
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithParent-1.html#Ploch_Common_Data_Model_IHierarchicalWithParent_1_Parent_
+  commentId: Overload:Ploch.Common.Data.Model.IHierarchicalWithParent`1.Parent
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithParent<TParent>.Parent
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithParent(Of TParent).Parent
+  nameWithType: IHierarchicalWithParent<TParent>.Parent
+  nameWithType.vb: IHierarchicalWithParent(Of TParent).Parent
+- uid: Ploch.Common.Data.Model.IHierarchicalWithParentComposite`1
+  name: IHierarchicalWithParentComposite<TParent>
+  href: api/Ploch.Common.Data.Model.IHierarchicalWithParentComposite-1.html
+  commentId: T:Ploch.Common.Data.Model.IHierarchicalWithParentComposite`1
+  name.vb: IHierarchicalWithParentComposite(Of TParent)
+  fullName: Ploch.Common.Data.Model.IHierarchicalWithParentComposite<TParent>
+  fullName.vb: Ploch.Common.Data.Model.IHierarchicalWithParentComposite(Of TParent)
+  nameWithType: IHierarchicalWithParentComposite<TParent>
+  nameWithType.vb: IHierarchicalWithParentComposite(Of TParent)
+- uid: Ploch.Common.Data.Model.INamed
+  name: INamed
+  href: api/Ploch.Common.Data.Model.INamed.html
+  commentId: T:Ploch.Common.Data.Model.INamed
+  fullName: Ploch.Common.Data.Model.INamed
+  nameWithType: INamed
+- uid: Ploch.Common.Data.Model.INamed.Name
+  name: Name
+  href: api/Ploch.Common.Data.Model.INamed.html#Ploch_Common_Data_Model_INamed_Name
+  commentId: P:Ploch.Common.Data.Model.INamed.Name
+  fullName: Ploch.Common.Data.Model.INamed.Name
+  nameWithType: INamed.Name
+- uid: Ploch.Common.Data.Model.INamed.Name*
+  name: Name
+  href: api/Ploch.Common.Data.Model.INamed.html#Ploch_Common_Data_Model_INamed_Name_
+  commentId: Overload:Ploch.Common.Data.Model.INamed.Name
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Model.INamed.Name
+  nameWithType: INamed.Name
+- uid: Ploch.Common.Data.Model.IParentChildrenComposite`2
+  name: IParentChildrenComposite<TParent, TChildren>
+  href: api/Ploch.Common.Data.Model.IParentChildrenComposite-2.html
+  commentId: T:Ploch.Common.Data.Model.IParentChildrenComposite`2
+  name.vb: IParentChildrenComposite(Of TParent, TChildren)
+  fullName: Ploch.Common.Data.Model.IParentChildrenComposite<TParent, TChildren>
+  fullName.vb: Ploch.Common.Data.Model.IParentChildrenComposite(Of TParent, TChildren)
+  nameWithType: IParentChildrenComposite<TParent, TChildren>
+  nameWithType.vb: IParentChildrenComposite(Of TParent, TChildren)
+- uid: Ploch.Common.Data.Model.ITestSomething
+  name: ITestSomething
+  href: api/Ploch.Common.Data.Model.ITestSomething.html
+  commentId: T:Ploch.Common.Data.Model.ITestSomething
+  fullName: Ploch.Common.Data.Model.ITestSomething
+  nameWithType: ITestSomething
+- uid: Ploch.Common.Data.StandardDataSets
+  name: Ploch.Common.Data.StandardDataSets
+  href: api/Ploch.Common.Data.StandardDataSets.html
+  commentId: N:Ploch.Common.Data.StandardDataSets
+  fullName: Ploch.Common.Data.StandardDataSets
+  nameWithType: Ploch.Common.Data.StandardDataSets
+- uid: Ploch.Common.Data.StandardDataSets.Regions
+  name: Regions
+  href: api/Ploch.Common.Data.StandardDataSets.Regions.html
+  commentId: T:Ploch.Common.Data.StandardDataSets.Regions
+  fullName: Ploch.Common.Data.StandardDataSets.Regions
+  nameWithType: Regions
+- uid: Ploch.Common.Data.StandardDataSets.Regions.EnglishCountryNames
+  name: EnglishCountryNames()
+  href: api/Ploch.Common.Data.StandardDataSets.Regions.html#Ploch_Common_Data_StandardDataSets_Regions_EnglishCountryNames
+  commentId: M:Ploch.Common.Data.StandardDataSets.Regions.EnglishCountryNames
+  fullName: Ploch.Common.Data.StandardDataSets.Regions.EnglishCountryNames()
+  nameWithType: Regions.EnglishCountryNames()
+- uid: Ploch.Common.Data.StandardDataSets.Regions.EnglishCountryNames*
+  name: EnglishCountryNames
+  href: api/Ploch.Common.Data.StandardDataSets.Regions.html#Ploch_Common_Data_StandardDataSets_Regions_EnglishCountryNames_
+  commentId: Overload:Ploch.Common.Data.StandardDataSets.Regions.EnglishCountryNames
+  isSpec: "True"
+  fullName: Ploch.Common.Data.StandardDataSets.Regions.EnglishCountryNames
+  nameWithType: Regions.EnglishCountryNames
+- uid: Ploch.Common.Data.StandardDataSets.Regions.GetRegions
+  name: GetRegions()
+  href: api/Ploch.Common.Data.StandardDataSets.Regions.html#Ploch_Common_Data_StandardDataSets_Regions_GetRegions
+  commentId: M:Ploch.Common.Data.StandardDataSets.Regions.GetRegions
+  fullName: Ploch.Common.Data.StandardDataSets.Regions.GetRegions()
+  nameWithType: Regions.GetRegions()
+- uid: Ploch.Common.Data.StandardDataSets.Regions.GetRegions*
+  name: GetRegions
+  href: api/Ploch.Common.Data.StandardDataSets.Regions.html#Ploch_Common_Data_StandardDataSets_Regions_GetRegions_
+  commentId: Overload:Ploch.Common.Data.StandardDataSets.Regions.GetRegions
+  isSpec: "True"
+  fullName: Ploch.Common.Data.StandardDataSets.Regions.GetRegions
+  nameWithType: Regions.GetRegions
+- uid: Ploch.Common.Data.Utilities
+  name: Ploch.Common.Data.Utilities
+  href: api/Ploch.Common.Data.Utilities.html
+  commentId: N:Ploch.Common.Data.Utilities
+  fullName: Ploch.Common.Data.Utilities
+  nameWithType: Ploch.Common.Data.Utilities
+- uid: Ploch.Common.Data.Utilities.DataColumnExtensions
+  name: DataColumnExtensions
+  href: api/Ploch.Common.Data.Utilities.DataColumnExtensions.html
+  commentId: T:Ploch.Common.Data.Utilities.DataColumnExtensions
+  fullName: Ploch.Common.Data.Utilities.DataColumnExtensions
+  nameWithType: DataColumnExtensions
+- uid: Ploch.Common.Data.Utilities.DataColumnExtensions.CopyProperties(DataColumn,DataColumn)
+  name: CopyProperties(DataColumn, DataColumn)
+  href: api/Ploch.Common.Data.Utilities.DataColumnExtensions.html#Ploch_Common_Data_Utilities_DataColumnExtensions_CopyProperties_DataColumn_DataColumn_
+  commentId: M:Ploch.Common.Data.Utilities.DataColumnExtensions.CopyProperties(DataColumn,DataColumn)
+  fullName: Ploch.Common.Data.Utilities.DataColumnExtensions.CopyProperties(DataColumn, DataColumn)
+  nameWithType: DataColumnExtensions.CopyProperties(DataColumn, DataColumn)
+- uid: Ploch.Common.Data.Utilities.DataColumnExtensions.CopyProperties*
+  name: CopyProperties
+  href: api/Ploch.Common.Data.Utilities.DataColumnExtensions.html#Ploch_Common_Data_Utilities_DataColumnExtensions_CopyProperties_
+  commentId: Overload:Ploch.Common.Data.Utilities.DataColumnExtensions.CopyProperties
+  isSpec: "True"
+  fullName: Ploch.Common.Data.Utilities.DataColumnExtensions.CopyProperties
+  nameWithType: DataColumnExtensions.CopyProperties
