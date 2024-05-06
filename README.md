@@ -28,6 +28,6 @@ Various utilities for working with data.
 
 Utility classes for working with Entity Framework Core.
 
-### [Common Datasets](src/Data.StandardDataSets) 
+### [Common Datasets](src/Data.StandardDataSets)
 
 Common data sets like a list of regions, countries, etc.
