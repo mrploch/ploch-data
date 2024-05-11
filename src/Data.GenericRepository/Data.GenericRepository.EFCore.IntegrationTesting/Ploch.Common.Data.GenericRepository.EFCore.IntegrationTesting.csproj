@@ -16,6 +16,5 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Data.Sqlite.Core" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
-        <PackageReference Include="xunit.abstractions" />
     </ItemGroup>
 </Project>
