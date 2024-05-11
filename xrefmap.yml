@@ -149,197 +149,6 @@ references:
   commentId: N:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
   fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
   nameWithType: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1
-  name: DataIntegrationTest<TDbContext>
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html
-  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1
-  name.vb: DataIntegrationTest(Of TDbContext)
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext)
-  nameWithType: DataIntegrationTest<TDbContext>
-  nameWithType.vb: DataIntegrationTest(Of TDbContext)
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor(System.String)
-  name: DataIntegrationTest(String)
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_System_String_
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor(System.String)
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DataIntegrationTest(System.String)
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DataIntegrationTest(System.String)
-  nameWithType: DataIntegrationTest<TDbContext>.DataIntegrationTest(String)
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).DataIntegrationTest(String)
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor*
-  name: DataIntegrationTest
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DataIntegrationTest
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DataIntegrationTest
-  nameWithType: DataIntegrationTest<TDbContext>.DataIntegrationTest
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).DataIntegrationTest
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices(IServiceCollection)
-  name: ConfigureServices(IServiceCollection)
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_IServiceCollection_
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices(IServiceCollection)
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
-  nameWithType: DataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices*
-  name: ConfigureServices
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ConfigureServices
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ConfigureServices
-  nameWithType: DataIntegrationTest<TDbContext>.ConfigureServices
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).ConfigureServices
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository*
-  name: CreateReadRepository
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepository_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepository
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepository
-  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepository
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepository
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository``2
-  name: CreateReadRepository<TEntity, TId>()
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepository__2
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepository``2
-  name.vb: CreateReadRepository(Of TEntity, TId)()
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepository<TEntity, TId>()
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepository(Of TEntity, TId)()
-  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepository<TEntity, TId>()
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepository(Of TEntity, TId)()
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync*
-  name: CreateReadRepositoryAsync
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepositoryAsync_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync
-  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync``2
-  name: CreateReadRepositoryAsync<TEntity, TId>()
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadRepositoryAsync__2
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadRepositoryAsync``2
-  name.vb: CreateReadRepositoryAsync(Of TEntity, TId)()
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync<TEntity, TId>()
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync(Of TEntity, TId)()
-  nameWithType: DataIntegrationTest<TDbContext>.CreateReadRepositoryAsync<TEntity, TId>()
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync(Of TEntity, TId)()
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync*
-  name: CreateReadWriteRepositoryAsync
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadWriteRepositoryAsync_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync
-  nameWithType: DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync``2
-  name: CreateReadWriteRepositoryAsync<TEntity, TId>()
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateReadWriteRepositoryAsync__2
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateReadWriteRepositoryAsync``2
-  name.vb: CreateReadWriteRepositoryAsync(Of TEntity, TId)()
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync<TEntity, TId>()
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync(Of TEntity, TId)()
-  nameWithType: DataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync<TEntity, TId>()
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync(Of TEntity, TId)()
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository*
-  name: CreateRepository
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateRepository_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateRepository
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateRepository
-  nameWithType: DataIntegrationTest<TDbContext>.CreateRepository
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateRepository
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository``2
-  name: CreateRepository<TEntity, TId>()
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateRepository__2
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateRepository``2
-  name.vb: CreateRepository(Of TEntity, TId)()
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateRepository<TEntity, TId>()
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateRepository(Of TEntity, TId)()
-  nameWithType: DataIntegrationTest<TDbContext>.CreateRepository<TEntity, TId>()
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateRepository(Of TEntity, TId)()
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork
-  name: CreateUnitOfWork()
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateUnitOfWork
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateUnitOfWork()
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateUnitOfWork()
-  nameWithType: DataIntegrationTest<TDbContext>.CreateUnitOfWork()
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateUnitOfWork()
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork*
-  name: CreateUnitOfWork
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_CreateUnitOfWork_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.CreateUnitOfWork
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.CreateUnitOfWork
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).CreateUnitOfWork
-  nameWithType: DataIntegrationTest<TDbContext>.CreateUnitOfWork
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).CreateUnitOfWork
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
-  name: DbContext
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext
-  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DbContext
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DbContext
-  nameWithType: DataIntegrationTest<TDbContext>.DbContext
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).DbContext
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext*
-  name: DbContext
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DbContext
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DbContext
-  nameWithType: DataIntegrationTest<TDbContext>.DbContext
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).DbContext
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
-  name: Dispose()
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose()
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose()
-  nameWithType: DataIntegrationTest<TDbContext>.Dispose()
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose()
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose(System.Boolean)
-  name: Dispose(Boolean)
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_System_Boolean_
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose(System.Boolean)
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose(System.Boolean)
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose(System.Boolean)
-  nameWithType: DataIntegrationTest<TDbContext>.Dispose(Boolean)
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose(Boolean)
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose*
-  name: Dispose
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose
-  nameWithType: DataIntegrationTest<TDbContext>.Dispose
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
-  name: ServiceProvider
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider
-  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ServiceProvider
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ServiceProvider
-  nameWithType: DataIntegrationTest<TDbContext>.ServiceProvider
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).ServiceProvider
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider*
-  name: ServiceProvider
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ServiceProvider
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ServiceProvider
-  nameWithType: DataIntegrationTest<TDbContext>.ServiceProvider
-  nameWithType.vb: DataIntegrationTest(Of TDbContext).ServiceProvider
 - uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices`1
   name: DbTestServices<TDbContext>
   href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html
@@ -435,6 +244,138 @@ references:
   fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices(Of TDbContext).ServiceProvider
   nameWithType: DbTestServices<TDbContext>.ServiceProvider
   nameWithType.vb: DbTestServices(Of TDbContext).ServiceProvider
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1
+  name: GenericRepositoryDataIntegrationTest<TDbContext>
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html
+  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1
+  name.vb: GenericRepositoryDataIntegrationTest(Of TDbContext)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext)
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  name: GenericRepositoryDataIntegrationTest(IDbContextConfigurator)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1__ctor_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_IDbContextConfigurator_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.GenericRepositoryDataIntegrationTest(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).GenericRepositoryDataIntegrationTest(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.GenericRepositoryDataIntegrationTest(IDbContextConfigurator)
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).GenericRepositoryDataIntegrationTest(IDbContextConfigurator)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.#ctor*
+  name: GenericRepositoryDataIntegrationTest
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1__ctor_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.GenericRepositoryDataIntegrationTest
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).GenericRepositoryDataIntegrationTest
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.GenericRepositoryDataIntegrationTest
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).GenericRepositoryDataIntegrationTest
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.ConfigureServices(IServiceCollection)
+  name: ConfigureServices(IServiceCollection)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_ConfigureServices_IServiceCollection_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.ConfigureServices(IServiceCollection)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.ConfigureServices*
+  name: ConfigureServices
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_ConfigureServices_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.ConfigureServices
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.ConfigureServices
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).ConfigureServices
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.ConfigureServices
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).ConfigureServices
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepository*
+  name: CreateReadRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateReadRepository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepository
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepository
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepository``2
+  name: CreateReadRepository<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateReadRepository__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepository``2
+  name.vb: CreateReadRepository(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepository<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepository(Of TEntity, TId)()
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepository<TEntity, TId>()
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepository(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepositoryAsync*
+  name: CreateReadRepositoryAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateReadRepositoryAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepositoryAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepositoryAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepositoryAsync
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepositoryAsync``2
+  name: CreateReadRepositoryAsync<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateReadRepositoryAsync__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadRepositoryAsync``2
+  name.vb: CreateReadRepositoryAsync(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepositoryAsync<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync(Of TEntity, TId)()
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadRepositoryAsync<TEntity, TId>()
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadRepositoryAsync(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadWriteRepositoryAsync*
+  name: CreateReadWriteRepositoryAsync
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateReadWriteRepositoryAsync_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadWriteRepositoryAsync
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadWriteRepositoryAsync``2
+  name: CreateReadWriteRepositoryAsync<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateReadWriteRepositoryAsync__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateReadWriteRepositoryAsync``2
+  name.vb: CreateReadWriteRepositoryAsync(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync(Of TEntity, TId)()
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateReadWriteRepositoryAsync<TEntity, TId>()
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateReadWriteRepositoryAsync(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateRepository*
+  name: CreateRepository
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateRepository_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateRepository
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateRepository
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateRepository
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateRepository
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateRepository
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateRepository``2
+  name: CreateRepository<TEntity, TId>()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateRepository__2
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateRepository``2
+  name.vb: CreateRepository(Of TEntity, TId)()
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateRepository<TEntity, TId>()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateRepository(Of TEntity, TId)()
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateRepository<TEntity, TId>()
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateRepository(Of TEntity, TId)()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateUnitOfWork
+  name: CreateUnitOfWork()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateUnitOfWork
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateUnitOfWork
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateUnitOfWork()
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateUnitOfWork()
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateUnitOfWork()
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateUnitOfWork()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateUnitOfWork*
+  name: CreateUnitOfWork
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_GenericRepositoryDataIntegrationTest_1_CreateUnitOfWork_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest`1.CreateUnitOfWork
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest<TDbContext>.CreateUnitOfWork
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest(Of TDbContext).CreateUnitOfWork
+  nameWithType: GenericRepositoryDataIntegrationTest<TDbContext>.CreateUnitOfWork
+  nameWithType.vb: GenericRepositoryDataIntegrationTest(Of TDbContext).CreateUnitOfWork
 - uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator
   name: IDbContextConfigurator
   href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.html
@@ -454,43 +395,21 @@ references:
   isSpec: "True"
   fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.Configure
   nameWithType: IDbContextConfigurator.Configure
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper
-  name: RepositoryServicesRegistrationHelper
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.html
-  commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper
-  nameWithType: RepositoryServicesRegistrationHelper
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices*
-  name: RegisterRepositoryServices
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_RepositoryServicesRegistrationHelper_RegisterRepositoryServices_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices
-  isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices
-  nameWithType: RepositoryServicesRegistrationHelper.RegisterRepositoryServices
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices``1(IServiceCollection,System.String)
-  name: RegisterRepositoryServices<TDbContext>(IServiceCollection, String)
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_RepositoryServicesRegistrationHelper_RegisterRepositoryServices__1_IServiceCollection_System_String_
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices``1(IServiceCollection,System.String)
-  name.vb: RegisterRepositoryServices(Of TDbContext)(IServiceCollection, String)
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TDbContext>(IServiceCollection, System.String)
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.RepositoryServicesRegistrationHelper.RegisterRepositoryServices(Of TDbContext)(IServiceCollection, System.String)
-  nameWithType: RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TDbContext>(IServiceCollection, String)
-  nameWithType.vb: RepositoryServicesRegistrationHelper.RegisterRepositoryServices(Of TDbContext)(IServiceCollection, String)
 - uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions
   name: SqLiteConnectionOptions
   href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html
   commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions
   fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions
   nameWithType: SqLiteConnectionOptions
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor(System.Boolean,System.Nullable{System.String})
-  name: SqLiteConnectionOptions(Boolean, Nullable<String>)
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions__ctor_System_Boolean_System_Nullable_System_String__
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor(System.Boolean,System.Nullable{System.String})
-  name.vb: SqLiteConnectionOptions(Boolean, Nullable(Of String))
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions(System.Boolean, System.Nullable<System.String>)
-  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions(System.Boolean, System.Nullable(Of System.String))
-  nameWithType: SqLiteConnectionOptions.SqLiteConnectionOptions(Boolean, Nullable<String>)
-  nameWithType.vb: SqLiteConnectionOptions.SqLiteConnectionOptions(Boolean, Nullable(Of String))
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor(Action{SqliteConnectionStringBuilder})
+  name: SqLiteConnectionOptions(Action<SqliteConnectionStringBuilder>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions__ctor_Action_SqliteConnectionStringBuilder__
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor(Action{SqliteConnectionStringBuilder})
+  name.vb: SqLiteConnectionOptions(Action(Of SqliteConnectionStringBuilder))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions(Action<SqliteConnectionStringBuilder>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions(Action(Of SqliteConnectionStringBuilder))
+  nameWithType: SqLiteConnectionOptions.SqLiteConnectionOptions(Action<SqliteConnectionStringBuilder>)
+  nameWithType.vb: SqLiteConnectionOptions.SqLiteConnectionOptions(Action(Of SqliteConnectionStringBuilder))
 - uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.#ctor*
   name: SqLiteConnectionOptions
   href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions__ctor_
@@ -498,19 +417,19 @@ references:
   isSpec: "True"
   fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.SqLiteConnectionOptions
   nameWithType: SqLiteConnectionOptions.SqLiteConnectionOptions
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
-  name: DbFilePath
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_DbFilePath
-  commentId: P:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
-  nameWithType: SqLiteConnectionOptions.DbFilePath
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath*
-  name: DbFilePath
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_DbFilePath_
-  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.BuildConnectionString
+  name: BuildConnectionString()
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_BuildConnectionString
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.BuildConnectionString
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.BuildConnectionString()
+  nameWithType: SqLiteConnectionOptions.BuildConnectionString()
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.BuildConnectionString*
+  name: BuildConnectionString
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_BuildConnectionString_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.BuildConnectionString
   isSpec: "True"
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.DbFilePath
-  nameWithType: SqLiteConnectionOptions.DbFilePath
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.BuildConnectionString
+  nameWithType: SqLiteConnectionOptions.BuildConnectionString
 - uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory
   name: InMemory
   href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_InMemory
@@ -524,18 +443,34 @@ references:
   isSpec: "True"
   fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.InMemory
   nameWithType: SqLiteConnectionOptions.InMemory
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.UsingFile(System.String)
+  name: UsingFile(String)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_UsingFile_System_String_
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.UsingFile(System.String)
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.UsingFile(System.String)
+  nameWithType: SqLiteConnectionOptions.UsingFile(String)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.UsingFile*
+  name: UsingFile
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_UsingFile_
+  commentId: Overload:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.UsingFile
+  isSpec: "True"
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.UsingFile
+  nameWithType: SqLiteConnectionOptions.UsingFile
 - uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator
   name: SqLiteDbContextConfigurator
   href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html
   commentId: T:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator
   fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator
   nameWithType: SqLiteDbContextConfigurator
-- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions)
-  name: SqLiteDbContextConfigurator(SqLiteConnectionOptions)
-  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteDbContextConfigurator__ctor_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_
-  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions)
-  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions)
-  nameWithType: SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(SqLiteConnectionOptions)
+- uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions,System.Nullable{Action{SqliteDbContextOptionsBuilder}})
+  name: SqLiteDbContextConfigurator(SqLiteConnectionOptions, Nullable<Action<SqliteDbContextOptionsBuilder>>)
+  href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteDbContextConfigurator__ctor_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteConnectionOptions_System_Nullable_Action_SqliteDbContextOptionsBuilder___
+  commentId: M:Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions,System.Nullable{Action{SqliteDbContextOptionsBuilder}})
+  name.vb: SqLiteDbContextConfigurator(SqLiteConnectionOptions, Nullable(Of Action(Of SqliteDbContextOptionsBuilder)))
+  fullName: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions, System.Nullable<Action<SqliteDbContextOptionsBuilder>>)
+  fullName.vb: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions, System.Nullable(Of Action(Of SqliteDbContextOptionsBuilder)))
+  nameWithType: SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(SqLiteConnectionOptions, Nullable<Action<SqliteDbContextOptionsBuilder>>)
+  nameWithType.vb: SqLiteDbContextConfigurator.SqLiteDbContextConfigurator(SqLiteConnectionOptions, Nullable(Of Action(Of SqliteDbContextOptionsBuilder)))
 - uid: Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.#ctor*
   name: SqLiteDbContextConfigurator
   href: api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html#Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_SqLiteDbContextConfigurator__ctor_
@@ -2506,3 +2441,142 @@ references:
   isSpec: "True"
   fullName: Ploch.Common.Data.Utilities.DataColumnExtensions.CopyProperties
   nameWithType: DataColumnExtensions.CopyProperties
+- uid: Ploch.Data.EFCore.IntegrationTesting
+  name: Ploch.Data.EFCore.IntegrationTesting
+  href: api/Ploch.Data.EFCore.IntegrationTesting.html
+  commentId: N:Ploch.Data.EFCore.IntegrationTesting
+  fullName: Ploch.Data.EFCore.IntegrationTesting
+  nameWithType: Ploch.Data.EFCore.IntegrationTesting
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1
+  name: DataIntegrationTest<TDbContext>
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html
+  commentId: T:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1
+  name.vb: DataIntegrationTest(Of TDbContext)
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext)
+  nameWithType: DataIntegrationTest<TDbContext>
+  nameWithType.vb: DataIntegrationTest(Of TDbContext)
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  name: DataIntegrationTest(IDbContextConfigurator)
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_IDbContextConfigurator_
+  commentId: M:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DataIntegrationTest(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DataIntegrationTest(Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  nameWithType: DataIntegrationTest<TDbContext>.DataIntegrationTest(IDbContextConfigurator)
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DataIntegrationTest(IDbContextConfigurator)
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor*
+  name: DataIntegrationTest
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_
+  commentId: Overload:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DataIntegrationTest
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DataIntegrationTest
+  nameWithType: DataIntegrationTest<TDbContext>.DataIntegrationTest
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DataIntegrationTest
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices(IServiceCollection)
+  name: ConfigureServices(IServiceCollection)
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_IServiceCollection_
+  commentId: M:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices(IServiceCollection)
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
+  nameWithType: DataIntegrationTest<TDbContext>.ConfigureServices(IServiceCollection)
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ConfigureServices(IServiceCollection)
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices*
+  name: ConfigureServices
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_
+  commentId: Overload:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ConfigureServices
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ConfigureServices
+  nameWithType: DataIntegrationTest<TDbContext>.ConfigureServices
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ConfigureServices
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
+  name: DbContext
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext
+  commentId: P:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DbContext
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DbContext
+  nameWithType: DataIntegrationTest<TDbContext>.DbContext
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DbContext
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext*
+  name: DbContext
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext_
+  commentId: Overload:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.DbContext
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).DbContext
+  nameWithType: DataIntegrationTest<TDbContext>.DbContext
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).DbContext
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
+  name: Dispose()
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose
+  commentId: M:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose()
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose()
+  nameWithType: DataIntegrationTest<TDbContext>.Dispose()
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose()
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose(System.Boolean)
+  name: Dispose(Boolean)
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_System_Boolean_
+  commentId: M:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose(System.Boolean)
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose(System.Boolean)
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose(System.Boolean)
+  nameWithType: DataIntegrationTest<TDbContext>.Dispose(Boolean)
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose(Boolean)
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose*
+  name: Dispose
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_
+  commentId: Overload:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.Dispose
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).Dispose
+  nameWithType: DataIntegrationTest<TDbContext>.Dispose
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).Dispose
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
+  name: ServiceProvider
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider
+  commentId: P:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ServiceProvider
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ServiceProvider
+  nameWithType: DataIntegrationTest<TDbContext>.ServiceProvider
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ServiceProvider
+- uid: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider*
+  name: ServiceProvider
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html#Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider_
+  commentId: Overload:Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest<TDbContext>.ServiceProvider
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest(Of TDbContext).ServiceProvider
+  nameWithType: DataIntegrationTest<TDbContext>.ServiceProvider
+  nameWithType.vb: DataIntegrationTest(Of TDbContext).ServiceProvider
+- uid: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper
+  name: DbContextServicesRegistrationHelper
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.html
+  commentId: T:Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper
+  nameWithType: DbContextServicesRegistrationHelper
+- uid: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider*
+  name: BuildDbContextAndServiceProvider
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.html#Ploch_Data_EFCore_IntegrationTesting_DbContextServicesRegistrationHelper_BuildDbContextAndServiceProvider_
+  commentId: Overload:Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider
+  nameWithType: DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider
+- uid: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider``1(IServiceCollection,Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  name: BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection, IDbContextConfigurator)
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.html#Ploch_Data_EFCore_IntegrationTesting_DbContextServicesRegistrationHelper_BuildDbContextAndServiceProvider__1_IServiceCollection_Ploch_Common_Data_GenericRepository_EFCore_IntegrationTesting_IDbContextConfigurator_
+  commentId: M:Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider``1(IServiceCollection,Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  name.vb: BuildDbContextAndServiceProvider(Of TDbContext)(IServiceCollection, IDbContextConfigurator)
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection, Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider(Of TDbContext)(IServiceCollection, Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator)
+  nameWithType: DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection, IDbContextConfigurator)
+  nameWithType.vb: DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider(Of TDbContext)(IServiceCollection, IDbContextConfigurator)
+- uid: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider``1(IServiceCollection,System.String)
+  name: BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection, String)
+  href: api/Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.html#Ploch_Data_EFCore_IntegrationTesting_DbContextServicesRegistrationHelper_BuildDbContextAndServiceProvider__1_IServiceCollection_System_String_
+  commentId: M:Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider``1(IServiceCollection,System.String)
+  name.vb: BuildDbContextAndServiceProvider(Of TDbContext)(IServiceCollection, String)
+  fullName: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection, System.String)
+  fullName.vb: Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider(Of TDbContext)(IServiceCollection, System.String)
+  nameWithType: DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection, String)
+  nameWithType.vb: DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider(Of TDbContext)(IServiceCollection, String)
