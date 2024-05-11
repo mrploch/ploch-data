@@ -34,6 +34,6 @@ public record SqLiteConnectionOptions
 
     public static SqLiteConnectionOptions UsingFile(string dbFilePath)
     {
-        return new SqLiteConnectionOptions(false, dbFilePath);
+        return new SqLiteConnectionOptions(dbFilePath: dbFilePath);
     }
 }
