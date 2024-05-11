@@ -8,7 +8,7 @@ using Ploch.Common.Reflection;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
 
-public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : DataIntegrationTest<TestDbContext>
+public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {
     [Theory]
     [AutoMockData]

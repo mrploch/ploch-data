@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Common.Data.Model;
+using Ploch.Data.EFCore.IntegrationTesting;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 
@@ -8,24 +9,18 @@ namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 ///     Base class for integration tests that use EF Core in-memory SQLite database.
 /// </summary>
 /// <typeparam name="TDbContext">The data context type.</typeparam>
-public abstract class DataIntegrationTest<TDbContext> : IDisposable
+public abstract class
+    GenericRepositoryDataIntegrationTest<TDbContext> : DataIntegrationTest<TDbContext> // TODO: Rename to GenericRepositoryIntegrationTest and re-use Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest
     where TDbContext : DbContext
 {
-    protected DataIntegrationTest(string connectionString = "Filename=:memory:")
-    {
-        var serviceCollection = new ServiceCollection();
-
-        ConfigureServices(serviceCollection);
-
-        (ServiceProvider, DbContext) = RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TDbContext>(serviceCollection, connectionString);
-    }
-
-    protected TDbContext DbContext { get; }
-
-    protected IServiceProvider ServiceProvider { get; }
-
-    protected virtual void ConfigureServices(IServiceCollection services)
+    protected GenericRepositoryDataIntegrationTest(IDbContextConfigurator? dbContextConfigurator = null) : base(dbContextConfigurator)
     { }
+
+    protected override void ConfigureServices(IServiceCollection services)
+    {
+        base.ConfigureServices(services);
+        services.AddRepositories<TDbContext>();
+    }
 
     protected IUnitOfWork CreateUnitOfWork()
     {
@@ -54,19 +49,5 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable
         where TEntity : class, IHasId<TId>
     {
         return ServiceProvider.GetRequiredService<IReadWriteRepository<TEntity, TId>>();
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (ServiceProvider is ServiceProvider sp)
-        {
-            sp.Dispose();
-        }
     }
 }

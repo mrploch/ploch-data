@@ -4,7 +4,7 @@ using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
 
-public class ReadWriteRepositoryAsyncTests : DataIntegrationTest<TestDbContext>
+public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {
     private readonly IReadWriteRepositoryAsync<TestEntity, int> _repository;
 
