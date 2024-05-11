@@ -63,6 +63,6 @@ public class ReadRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity>, I
 
     public async Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync(new object?[] { id }, cancellationToken);
+        return await DbSet.FindAsync([id], cancellationToken);
     }
 }

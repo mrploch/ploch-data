@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+using Ploch.Data.EFCore.IntegrationTesting;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
 
@@ -13,9 +14,10 @@ public class ServiceCollectionRegistrationsTests
     {
         var serviceCollection = new ServiceCollection();
 
-        RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TestDbContext>(serviceCollection);
+       // RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TestDbContext>(serviceCollection);
 
-        var serviceProvider = serviceCollection.BuildServiceProvider();
+        serviceCollection.AddRepositories<TestDbContext>();
+        var (serviceProvider, dbContext) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
         serviceProvider.GetRequiredService<IReadRepositoryAsync<Blog, int>>().Should().BeOfType<ReadRepositoryAsync<Blog, int>>();
@@ -37,9 +39,11 @@ public class ServiceCollectionRegistrationsTests
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
-        RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TestDbContext>(serviceCollection);
+       // RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TestDbContext>(serviceCollection);
 
-        var serviceProvider = serviceCollection.BuildServiceProvider();
+       serviceCollection.AddRepositories<TestDbContext>();
+       var (serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+      //  var serviceProvider = serviceCollection.BuildServiceProvider();
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
@@ -71,9 +75,11 @@ public class ServiceCollectionRegistrationsTests
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
-        RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TestDbContext>(serviceCollection);
+       // RepositoryServicesRegistrationHelper.RegisterRepositoryServices<TestDbContext>(serviceCollection);
 
-        var serviceProvider = serviceCollection.BuildServiceProvider();
+        //var serviceProvider = serviceCollection.BuildServiceProvider();
+        serviceCollection.AddRepositories<TestDbContext>();
+        var (serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();

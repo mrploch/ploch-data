@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Ploch.Common.Data.EFCore;
 
+// TODO: Either remove this class or use it somewhere
 public abstract class BaseDbContextFactory<TDbContext> : IDesignTimeDbContextFactory<TDbContext>
     where TDbContext : DbContext
 {
