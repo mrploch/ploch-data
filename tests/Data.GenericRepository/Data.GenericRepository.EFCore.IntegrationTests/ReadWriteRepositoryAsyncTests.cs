@@ -15,6 +15,26 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     }
 
     [Fact]
+    public async Task ApplySqLiteDateTimeOffsetPropertiesFix_should_handle_DateTimeOffset_fields_in_SqLite()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var (_, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadRepositoryAsync<BlogPost, int>();
+        
+        var blogPosts = await repository.GetAllAsync();
+        
+        foreach (var blogPost in blogPosts)
+        {
+            blogPost.CreatedTime.Should().BeBefore(DateTimeOffset.Now).And.BeAfter(DateTimeOffset.Now.Subtract(TimeSpan.FromHours(1)));
+            blogPost.ModifiedTime.Should().BeBefore(DateTimeOffset.Now).And.BeAfter(DateTimeOffset.Now.Subtract(TimeSpan.FromHours(1)));
+        }
+    }
+
+    [Fact]
     public async Task CountAsync_should_return_entity_count()
     {
         using var unitOfWork = CreateUnitOfWork();
@@ -27,6 +47,46 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var count = await repository.CountAsync();
 
         count.Should().Be(2);
+    }
+    
+    [Fact]
+    public async Task GetAllAsync_should_return_entities_with_includes()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var (_, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
+        var blogPosts = await repository.GetAllAsync(query => query.Include(e => e.Tags));
+        blogPosts.Should().HaveCount(2);
+        blogPosts.Should().ContainEquivalentOf(blogPost1);
+        blogPosts.Should().ContainEquivalentOf(blogPost2);
+        foreach (var blogPost in blogPosts)
+        {
+            blogPost.Tags.Should().NotBeEmpty();
+            blogPost.Tags.Should().NotBeEmpty();
+        }
+    }
+
+    [Fact]
+    public async Task GetAllAsync_should_return_entities_without_includes()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var (_, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
+        var blogPosts = await repository.GetAllAsync();
+        blogPosts.Should().HaveCount(2);
+        blogPosts.Should().ContainEquivalentOf(blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags));
+        blogPosts.Should().ContainEquivalentOf(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags));
+
+        // Categories and Tags are not included in the query but they will not be empty because they are already loaded in the context.
+        // This is why I don't check for emptiness here.
     }
 
     [Fact]
@@ -51,6 +111,30 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
             queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
             queriedPost.Categories.Should()
                        .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+        }
+    }
+
+    [Fact]
+    public async Task GetPageAsync_should_return_a_page_of_entities_without_includes()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(unitOfWork.Repository<Blog, int>(), 20);
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadRepositoryAsync<BlogPost, int>();
+        var blogPosts = await repository.GetPageAsync(2, 5);
+
+        blogPosts.Should().HaveCount(5);
+
+        for (var i = 0; i < 5; i++)
+        {
+            var blogPost = posts[i + 5];
+            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
+
+            queriedPost.Categories.Should().BeEmpty();
+            queriedPost.Tags.Should().BeEmpty();
         }
     }
 
@@ -131,7 +215,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var result = await _repository.GetByIdAsync(entity.Id);
         result.Name.Should().Be("Updated");
     }
-    
+
     [Fact]
     public async Task UpdateAsync_should_throw_if_updated_entity_doesnt_exist()
     {
