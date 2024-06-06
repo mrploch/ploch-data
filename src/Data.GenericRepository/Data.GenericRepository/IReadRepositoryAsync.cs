@@ -34,19 +34,23 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// </summary>
     /// <param name="pageNumber">The number of the page to get.</param>
     /// <param name="pageSize">The size of the page to get.</param>
+    /// <param name="onDbSet"></param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result contains a list of entities for the
     ///     specified page.
     /// </returns>
-    Task<IList<TEntity>> GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+    Task<IList<TEntity>> GetPageAsync(int pageNumber,
+                                      int pageSize,
+                                      Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                      CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Asynchronously gets the count of entities in the repository.
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the count of entities.</returns>
-    Task<int> GetCountAsync(CancellationToken cancellationToken = default);
+    Task<int> CountAsync(CancellationToken cancellationToken = default);
 }
 
 /// <summary>

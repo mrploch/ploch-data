@@ -38,13 +38,16 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
     }
 
     /// <inheritdoc />
-    public async Task<IList<TEntity>> GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<IList<TEntity>> GetPageAsync(int pageNumber,
+                                                   int pageSize,
+                                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                                   CancellationToken cancellationToken = default)
     {
-        return await GetPageQuery(pageNumber, pageSize).ToListAsync(cancellationToken);
+        return await GetPageQuery(pageNumber, pageSize, onDbSet).ToListAsync(cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<int> GetCountAsync(CancellationToken cancellationToken = default)
+    public Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
         return Entities.CountAsync(cancellationToken);
     }

@@ -19,22 +19,47 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     {
         using var unitOfWork = CreateUnitOfWork();
 
-        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+        var (_, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
 
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        var count = await repository.GetCountAsync();
+        var count = await repository.CountAsync();
 
         count.Should().Be(2);
     }
-    
+
+    [Fact]
+    public async Task GetPageAsync_should_return_a_page_of_entities_with_includes()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(unitOfWork.Repository<Blog, int>(), 20);
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadRepositoryAsync<BlogPost, int>();
+        var blogPosts = await repository.GetPageAsync(2, 5, query => query.Include(e => e.Tags).Include(e => e.Categories));
+
+        blogPosts.Should().HaveCount(5);
+
+        for (var i = 0; i < 5; i++)
+        {
+            var blogPost = posts[i + 5];
+            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
+            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
+            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
+            queriedPost.Categories.Should()
+                       .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+        }
+    }
+
     [Fact]
     public async Task GetByIdAsync_should_return_entity_with_includes()
     {
         using var unitOfWork = CreateUnitOfWork();
 
-        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+        var (_, _, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
 
         await unitOfWork.CommitAsync();
 
@@ -45,18 +70,18 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     }
 
     [Fact]
-    public async Task Count_should_return_entity_count()
+    public async Task GetByIdAsync_with_object_key_should_return_entity_with_includes()
     {
         using var unitOfWork = CreateUnitOfWork();
 
-        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+        var (_, _, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
 
         await unitOfWork.CommitAsync();
 
-        var repository = CreateReadRepository<BlogPost, int>();
-        var count = repository.Count();
-
-        count.Should().Be(2);
+        var repository = CreateReadRepositoryAsync<BlogPost, int>();
+        var blogPost = await repository.GetByIdAsync([blogPost2.Id]);
+        blogPost.Should().BeEquivalentTo(blogPost2);
+        blogPost.Tags.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -105,5 +130,16 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await _repository.UpdateAsync(entity);
         var result = await _repository.GetByIdAsync(entity.Id);
         result.Name.Should().Be("Updated");
+    }
+    
+    [Fact]
+    public async Task UpdateAsync_should_throw_if_updated_entity_doesnt_exist()
+    {
+        var entity = new TestEntity { Id = 1, Name = "Test" };
+        await _repository.AddAsync(entity);
+
+        var updatedEntity = new TestEntity { Id = 2, Name = "Updated" };
+        var updateAction = async () => await _repository.UpdateAsync(updatedEntity);
+        updateAction.Should().ThrowAsync<InvalidOperationException>().Where(exception => exception.Message.Contains("not found"));
     }
 }

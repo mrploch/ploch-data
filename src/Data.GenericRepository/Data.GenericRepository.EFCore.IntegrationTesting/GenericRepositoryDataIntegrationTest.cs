@@ -39,6 +39,12 @@ public abstract class
         return ServiceProvider.GetRequiredService<IReadRepository<TEntity, TId>>();
     }
 
+    protected IReadWriteRepository<TEntity, TId> CreateReadWriteRepository<TEntity, TId>()
+        where TEntity : class, IHasId<TId>
+    {
+        return ServiceProvider.GetRequiredService<IReadWriteRepository<TEntity, TId>>();
+    }
+
     protected IReadWriteRepositoryAsync<TEntity, TId> CreateReadWriteRepositoryAsync<TEntity, TId>()
         where TEntity : class, IHasId<TId>
     {

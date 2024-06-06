@@ -235,11 +235,4 @@ public static class ServiceCollectionRegistration
 
         return serviceCollection;
     }
-
-    private static IServiceCollection AddCommonRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection serviceCollection,
-                                                                                                           Func<IServiceCollection, Type, Type, IServiceCollection>
-                                                                                                               registrationFunction)
-    {
-        return serviceCollection;
-    }
 }

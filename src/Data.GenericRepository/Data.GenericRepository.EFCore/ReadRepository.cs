@@ -13,11 +13,12 @@ namespace Ploch.Common.Data.GenericRepository.EFCore;
 public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadRepository<TEntity>
     where TEntity : class
 {
-    /// <inheritdoc />
     /// <summary>
-    ///     Initializes a new instance of the <see cref="T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1" /> class.
+    ///     Initializes a new instance of the <see cref="T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1" />
+    ///     class.
     /// </summary>
     /// <param name="dbContext">The <see cref="T:Microsoft.EntityFrameworkCore.DbContext" /> to use for reading entities.</param>
+    // ReSharper disable once InheritdocConsiderUsage - already inherited on root level and this constructor is documented.
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }
 
@@ -34,9 +35,9 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
     }
 
     /// <inheritdoc />
-    public IList<TEntity> GetPage(int pageNumber, int pageSize)
+    public IList<TEntity> GetPage(int pageNumber, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
-        return GetPageQuery(pageNumber, pageSize).ToList();
+        return GetPageQuery(pageNumber, pageSize, onDbSet).ToList();
     }
 
     /// <inheritdoc />

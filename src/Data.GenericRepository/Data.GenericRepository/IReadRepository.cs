@@ -30,8 +30,9 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     /// </summary>
     /// <param name="pageNumber">The number of the page to get.</param>
     /// <param name="pageSize">The size of the page to get.</param>
+    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <returns>A list of entities for the specified page.</returns>
-    IList<TEntity> GetPage(int pageNumber, int pageSize);
+    IList<TEntity> GetPage(int pageNumber, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);
 
     /// <summary>
     ///     Gets the count of entities in the repository.
