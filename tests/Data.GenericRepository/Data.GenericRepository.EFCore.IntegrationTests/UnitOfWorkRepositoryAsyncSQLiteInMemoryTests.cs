@@ -15,9 +15,25 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
     public async Task RepositoryAsync_and_UnitOfWorkAsync_add_and_query_by_id_should_create_entities_and_find_them([Frozen] Blog testBlog)
     {
         using var unitOfWork = CreateUnitOfWork();
-        testBlog.ExecuteOnProperties<IHasIdSettable<int>>(o => o.Id = 0);
+        testBlog.Id = 0;
+        foreach (var testBlogBlogPost in testBlog.BlogPosts)
+        {
+            testBlogBlogPost.Id = 0;
+            foreach (var category in testBlogBlogPost.Categories)
+            {
+                category.Id = 0;
+            }
+            foreach (var blogPostTag in testBlogBlogPost.Tags)
+            {
+                blogPostTag.Id = 0;
+            }
+        }
+       // testBlog.ExecuteOnProperties<IHasIdSettable<int>>(o => o.Id = 0); // There is a bug in ExecuteOnProperties - it doesn't handle DateTimeOffset
+        
         await unitOfWork.Repository<Blog, int>().AddAsync(testBlog);
 
+        DateTimeOffset x;
+        
         var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
 
         var userIdeas = await RepositoryHelper.AddAsyncTestUserIdeasEntitiesAsync(unitOfWork.Repository<UserIdea, int>());

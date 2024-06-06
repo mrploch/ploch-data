@@ -19,14 +19,12 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     {
         using var unitOfWork = CreateUnitOfWork();
 
-        var (_, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        
+
         var blogPosts = await repository.GetAllAsync();
-        
+
         foreach (var blogPost in blogPosts)
         {
             blogPost.CreatedTime.Should().BeBefore(DateTimeOffset.Now).And.BeAfter(DateTimeOffset.Now.Subtract(TimeSpan.FromHours(1)));
@@ -48,7 +46,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
 
         count.Should().Be(2);
     }
-    
+
     [Fact]
     public async Task GetAllAsync_should_return_entities_with_includes()
     {
