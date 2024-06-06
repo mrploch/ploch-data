@@ -3,8 +3,6 @@ using Objectivity.AutoFixture.XUnit2.AutoMoq.Attributes;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
-using Ploch.Common.Data.Model;
-using Ploch.Common.Reflection;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
 
@@ -23,17 +21,17 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
             {
                 category.Id = 0;
             }
+
             foreach (var blogPostTag in testBlogBlogPost.Tags)
             {
                 blogPostTag.Id = 0;
             }
         }
-       // testBlog.ExecuteOnProperties<IHasIdSettable<int>>(o => o.Id = 0); // There is a bug in ExecuteOnProperties - it doesn't handle DateTimeOffset
-        
+
+        // There is a bug in ExecuteOnProperties - it doesn't handle DateTimeOffset: this fails with StackOverflow: testBlog.ExecuteOnProperties<IHasIdSettable<int>>(o => o.Id = 0);
+
         await unitOfWork.Repository<Blog, int>().AddAsync(testBlog);
 
-        DateTimeOffset x;
-        
         var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
 
         var userIdeas = await RepositoryHelper.AddAsyncTestUserIdeasEntitiesAsync(unitOfWork.Repository<UserIdea, int>());
