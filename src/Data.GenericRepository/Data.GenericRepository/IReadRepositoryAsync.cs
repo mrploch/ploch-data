@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ploch.Common.Data.Model;
@@ -22,9 +24,10 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// <summary>
     ///     Asynchronously gets all entities from the repository.
     /// </summary>
+    /// <param name="onDbSet"></param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of all entities.</returns>
-    Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<IList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Asynchronously gets a page of entities from the repository.
@@ -57,7 +60,8 @@ public interface IReadRepositoryAsync<TEntity, in TId> : IReadRepositoryAsync<TE
     ///     Asynchronously gets the entity with the specified identifier.
     /// </summary>
     /// <param name="id">The identifier of the entity to be found.</param>
+    /// <param name="onDbSet">Action to perform on DbSet upon the query, like .Include.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity found, or null.</returns>
-    Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default);
 }

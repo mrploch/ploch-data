@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -23,21 +25,25 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
     public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
     { }
 
+    /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default)
     {
         return await DbSet.FindAsync(keyValues, cancellationToken);
     }
 
-    public async Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<IList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default)
     {
-        return await Entities.ToListAsync(cancellationToken);
+        return onDbSet == null ? await Entities.ToListAsync(cancellationToken) : await onDbSet(Entities).ToListAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<IList<TEntity>> GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
         return await GetPageQuery(pageNumber, pageSize).ToListAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<int> GetCountAsync(CancellationToken cancellationToken = default)
     {
         return Entities.CountAsync(cancellationToken);
@@ -49,6 +55,7 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
 ///     identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <typeparam name="TId">The type of the identifier for the entities in the repository.</typeparam>
+/// <typeparam name="TEntity">The type of entity.</typeparam>
 /// <inheritdoc cref="ReadRepositoryAsync{TEntity}" />
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity, TId}" />
 public class ReadRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity>, IReadRepositoryAsync<TEntity, TId>
@@ -61,8 +68,9 @@ public class ReadRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity>, I
     public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
     { }
 
-    public async Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync([id], cancellationToken);
+        return onDbSet == null ? await DbSet.FindAsync([id], cancellationToken) : await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
     }
 }

@@ -58,7 +58,7 @@ public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntit
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
 
-        var exist = await GetByIdAsync(entity.Id, cancellationToken);
+        var exist = await GetByIdAsync(entity.Id, cancellationToken: cancellationToken);
         if (exist == null)
         {
             throw new InvalidOperationException($"Entity with id {entity.Id} not found");

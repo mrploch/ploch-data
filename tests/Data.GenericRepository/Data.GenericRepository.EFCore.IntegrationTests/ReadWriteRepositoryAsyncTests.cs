@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
@@ -26,6 +27,21 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var count = await repository.GetCountAsync();
 
         count.Should().Be(2);
+    }
+    
+    [Fact]
+    public async Task GetByIdAsync_should_return_entity_with_includes()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadRepositoryAsync<BlogPost, int>();
+        var blogPost = await repository.GetByIdAsync(blogPost2.Id, query => query.Include(e => e.Tags));
+        blogPost.Should().BeEquivalentTo(blogPost2);
+        blogPost.Tags.Should().NotBeEmpty();
     }
 
     [Fact]

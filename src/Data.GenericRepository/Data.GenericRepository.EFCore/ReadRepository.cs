@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Ploch.Common.Data.Model;
@@ -12,28 +13,33 @@ namespace Ploch.Common.Data.GenericRepository.EFCore;
 public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadRepository<TEntity>
     where TEntity : class
 {
+    /// <inheritdoc />
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" /> class.
+    ///     Initializes a new instance of the <see cref="T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1" /> class.
     /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+    /// <param name="dbContext">The <see cref="T:Microsoft.EntityFrameworkCore.DbContext" /> to use for reading entities.</param>
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }
 
+    /// <inheritdoc />
     public TEntity? GetById(object[] keyValues)
     {
         return DbSet.Find(keyValues);
     }
 
-    public IList<TEntity> GetAll()
+    /// <inheritdoc />
+    public IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
-        return Entities.ToList();
+        return onDbSet == null ? Entities.ToList() : onDbSet(Entities).ToList();
     }
 
+    /// <inheritdoc />
     public IList<TEntity> GetPage(int pageNumber, int pageSize)
     {
         return GetPageQuery(pageNumber, pageSize).ToList();
     }
 
+    /// <inheritdoc />
     public int Count()
     {
         return Entities.Count();
@@ -55,13 +61,9 @@ public class ReadRepository<TEntity, TId> : ReadRepository<TEntity>, IReadReposi
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }
 
-    /// <summary>
-    ///     Gets the entity with the specified identifier.
-    /// </summary>
-    /// <param name="id">The identifier of the entity to be found.</param>
-    /// <returns>The entity found, or null.</returns>
-    public TEntity? GetById(TId id)
+    /// <inheritdoc />
+    public TEntity? GetById(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
-        return DbSet.Find(id);
+        return onDbSet == null ? DbSet.Find(id) : onDbSet(DbSet).FirstOrDefault(e => Equals(e.Id, id));
     }
 }
