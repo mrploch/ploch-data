@@ -37,7 +37,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     {
         using var unitOfWork = CreateUnitOfWork();
 
-        var (_, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+        await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
 
         await unitOfWork.CommitAsync();
 
@@ -148,7 +148,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.GetByIdAsync(blogPost2.Id, query => query.Include(e => e.Tags));
         blogPost.Should().BeEquivalentTo(blogPost2);
-        blogPost.Tags.Should().NotBeEmpty();
+        blogPost!.Tags.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -163,7 +163,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.GetByIdAsync([blogPost2.Id]);
         blogPost.Should().BeEquivalentTo(blogPost2);
-        blogPost.Tags.Should().NotBeEmpty();
+        blogPost!.Tags.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -211,7 +211,8 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         entity.Name = "Updated";
         await _repository.UpdateAsync(entity);
         var result = await _repository.GetByIdAsync(entity.Id);
-        result.Name.Should().Be("Updated");
+        result.Should().NotBeNull();
+        result!.Name.Should().Be("Updated");
     }
 
     [Fact]
@@ -222,6 +223,6 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
 
         var updatedEntity = new TestEntity { Id = 2, Name = "Updated" };
         var updateAction = async () => await _repository.UpdateAsync(updatedEntity);
-        updateAction.Should().ThrowAsync<InvalidOperationException>().Where(exception => exception.Message.Contains("not found"));
+        await updateAction.Should().ThrowAsync<InvalidOperationException>().Where(exception => exception.Message.Contains("not found"));
     }
 }
