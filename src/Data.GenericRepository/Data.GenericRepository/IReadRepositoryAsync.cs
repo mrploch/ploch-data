@@ -8,7 +8,7 @@ using Ploch.Common.Data.Model;
 namespace Ploch.Common.Data.GenericRepository;
 
 /// <summary>
-///     Defines a repository that provides asynchronous read operations for a collection of a <see cref="TEntity" />.
+///     Defines a repository that provides asynchronous read operations for a collection of a <typeparamref name="TEntity" />.
 /// </summary>
 /// <inheritdoc />
 public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
@@ -55,7 +55,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
 }
 
 /// <summary>
-///     Defines a repository that provides asynchronous read operations for a collection of <see cref="TEntity" /> with a
+///     Defines a repository that provides asynchronous read operations for a collection of <typeparamref name="TEntity" /> with a
 ///     specified identifier type.
 /// </summary>
 /// <typeparam name="TId">The identifier property type.</typeparam>

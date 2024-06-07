@@ -38,7 +38,7 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
-    /// <returns>An instance of <see cref="IReadWriteRepositoryAsync{TEntity,TId}"/></returns>
+    /// <returns>An instance of a <see cref="IReadWriteRepositoryAsync{TEntity,TId}"/>.</returns>
     [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
     protected IReadRepositoryAsync<TEntity, TId> CreateReadRepositoryAsync<TEntity, TId>()
         where TEntity : class, IHasId<TId>
