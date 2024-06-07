@@ -72,7 +72,5 @@ jobs:
       # Publish all NuGet packages to NuGet.org
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
       # If you retry a failed workflow, already published packages will be skipped without error.
-      - name: Add GitHub Packages source
-        run: dotnet nuget add source --username kploch --password ${{secrets.NUGET_APIKEY}} --store-password-in-clear-text --name nugetorg "https://api.nuget.org/v3/index.json"
       - name: Publish NuGet package
-        run: dotnet nuget push **/*.nupkg --source nugetorg -k ${{secrets.NUGET_APIKEY}} --skip-duplicate
+        run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_APIKEY}} --skip-duplicate
