@@ -6,8 +6,9 @@ using Ploch.Common.Data.Model;
 namespace Ploch.Common.Data.GenericRepository;
 
 /// <summary>
-///     Defines a repository that provides read operations for a collection of <see cref="TEntity" />.
+///     Defines a repository that provides read operations for a collection of a <see cref="TEntity" />.
 /// </summary>
+/// <inheritdoc />
 public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     where TEntity : class
 {
@@ -45,6 +46,7 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
 ///     Defines a repository that provides read operations for a collection of <see cref="TEntity" /> with a specified
 ///     identifier type.
 /// </summary>
+/// <inheritdoc />
 public interface IReadRepository<TEntity, in TId> : IReadRepository<TEntity>
     where TEntity : class, IHasId<TId>
 {

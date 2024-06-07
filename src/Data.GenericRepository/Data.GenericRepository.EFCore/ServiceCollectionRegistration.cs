@@ -37,7 +37,7 @@ public static class ServiceCollectionRegistration
     {
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
 
-        AddRepositories<TDbContext>(serviceCollection, (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
+        AddRepositories<TDbContext>(serviceCollection, static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
 
         return serviceCollection;
     }
@@ -56,25 +56,20 @@ public static class ServiceCollectionRegistration
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
 
-        serviceCollection.AddTransient<DbContext>(provider => provider.GetRequiredService<TDbContext>());
+        serviceCollection.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>());
 
-        // foreach (var repositoryTypeMapping in RepositoryTypeMappings)
-        // {
-        //     registrationFunction!(serviceCollection, repositoryTypeMapping.Key, repositoryTypeMapping.Value);
-        // }
-
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
-        registrationFunction!(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
-        registrationFunction!(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
+        registrationFunction(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
+        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
 
         foreach (var (sourceType, targetType) in RepositoryTypeMappings)
         {
-            registrationFunction!(serviceCollection, sourceType, targetType);
+            registrationFunction(serviceCollection, sourceType, targetType);
         }
 
         foreach (var (sourceType, targetType) in RepositoryAsyncTypeMappings)
         {
-            registrationFunction!(serviceCollection, sourceType, targetType);
+            registrationFunction(serviceCollection, sourceType, targetType);
         }
 
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -144,17 +139,15 @@ public static class ServiceCollectionRegistration
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
 
-        //    registrationFunction!(serviceCollection, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
-
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
-        registrationFunction!(serviceCollection, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));
 
         foreach (var (sourceType, _) in RepositoryAsyncTypeMappings)
         {
-            registrationFunction!(serviceCollection, sourceType.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
+            registrationFunction(serviceCollection, sourceType.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
         }
 
-        registrationFunction!(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
 
         return serviceCollection;
     }
@@ -221,17 +214,17 @@ public static class ServiceCollectionRegistration
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
 
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
 
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
-        registrationFunction!(serviceCollection, typeof(IReadRepository<TEntity>), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IReadRepository<TEntity>), typeof(TRepository));
 
         foreach (var repositoryTypeMapping in RepositoryTypeMappings)
         {
-            registrationFunction!(serviceCollection, repositoryTypeMapping.Key.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
+            registrationFunction(serviceCollection, repositoryTypeMapping.Key.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
         }
 
-        registrationFunction!(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
 
         return serviceCollection;
     }

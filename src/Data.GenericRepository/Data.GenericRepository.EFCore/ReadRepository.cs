@@ -14,10 +14,10 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
     where TEntity : class
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="T:Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`1" />
+    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" />
     ///     class.
     /// </summary>
-    /// <param name="dbContext">The <see cref="T:Microsoft.EntityFrameworkCore.DbContext" /> to use for reading entities.</param>
+    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
     // ReSharper disable once InheritdocConsiderUsage - already inherited on root level and this constructor is documented.
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }

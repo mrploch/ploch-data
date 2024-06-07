@@ -8,8 +8,9 @@ using Ploch.Common.Data.Model;
 namespace Ploch.Common.Data.GenericRepository;
 
 /// <summary>
-///     Defines a repository that provides asynchronous read operations for a collection of <see cref="TEntity" />.
+///     Defines a repository that provides asynchronous read operations for a collection of a <see cref="TEntity" />.
 /// </summary>
+/// <inheritdoc />
 public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     where TEntity : class
 {
@@ -24,7 +25,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// <summary>
     ///     Asynchronously gets all entities from the repository.
     /// </summary>
-    /// <param name="onDbSet"></param>
+    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of all entities.</returns>
     Task<IList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default);
@@ -34,7 +35,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// </summary>
     /// <param name="pageNumber">The number of the page to get.</param>
     /// <param name="pageSize">The size of the page to get.</param>
-    /// <param name="onDbSet"></param>
+    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result contains a list of entities for the
@@ -57,6 +58,8 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
 ///     Defines a repository that provides asynchronous read operations for a collection of <see cref="TEntity" /> with a
 ///     specified identifier type.
 /// </summary>
+/// <typeparam name="TId">The identifier property type.</typeparam>
+/// <inheritdoc />
 public interface IReadRepositoryAsync<TEntity, in TId> : IReadRepositoryAsync<TEntity>
     where TEntity : class, IHasId<TId>
 {

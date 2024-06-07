@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Common.Data.Model;
 using Ploch.Data.EFCore.IntegrationTesting;
@@ -10,7 +11,7 @@ namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 /// </summary>
 /// <typeparam name="TDbContext">The data context type.</typeparam>
 public abstract class
-    GenericRepositoryDataIntegrationTest<TDbContext> : DataIntegrationTest<TDbContext> // TODO: Rename to GenericRepositoryIntegrationTest and re-use Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest
+    GenericRepositoryDataIntegrationTest<TDbContext> : DataIntegrationTest<TDbContext>
     where TDbContext : DbContext
 {
     protected GenericRepositoryDataIntegrationTest(IDbContextConfigurator? dbContextConfigurator = null) : base(dbContextConfigurator)
@@ -27,6 +28,7 @@ public abstract class
         return ServiceProvider.GetRequiredService<IUnitOfWork>();
     }
 
+    [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
     protected IReadRepositoryAsync<TEntity, TId> CreateReadRepositoryAsync<TEntity, TId>()
         where TEntity : class, IHasId<TId>
     {
@@ -45,6 +47,7 @@ public abstract class
         return ServiceProvider.GetRequiredService<IReadWriteRepository<TEntity, TId>>();
     }
 
+    [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
     protected IReadWriteRepositoryAsync<TEntity, TId> CreateReadWriteRepositoryAsync<TEntity, TId>()
         where TEntity : class, IHasId<TId>
     {
