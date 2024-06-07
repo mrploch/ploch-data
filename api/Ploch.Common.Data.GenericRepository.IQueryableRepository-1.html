@@ -73,7 +73,7 @@
   
   <h1 id="Ploch_Common_Data_GenericRepository_IQueryableRepository_1" data-uid="Ploch.Common.Data.GenericRepository.IQueryableRepository`1" class="text-break">Interface IQueryableRepository&lt;TEntity&gt;
   </h1>
-  <div class="markdown level0 summary"><p>Defines a repository that provides queryable access to a collection of <see cref="!:TEntity"></see>.</p>
+  <div class="markdown level0 summary"><p>Defines a repository that provides queryable access to a collection of a <code data-dev-comment-type="typeparamref" class="typeparamref">TEntity</code>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Ploch.Common.Data.GenericRepository.html">Ploch.Common.Data.GenericRepository</a></h6>
@@ -94,7 +94,8 @@
     <tbody>
       <tr>
         <td><span class="parametername">TEntity</span></td>
-        <td></td>
+        <td><p>The entity type for this repository.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -105,7 +106,7 @@
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_IQueryableRepository_1_Entities.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.IQueryableRepository%601.Entities%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository/IQueryableRepository.cs/#L14">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository/IQueryableRepository.cs/#L16">View Source</a>
   </span>
   <a id="Ploch_Common_Data_GenericRepository_IQueryableRepository_1_Entities_" data-uid="Ploch.Common.Data.GenericRepository.IQueryableRepository`1.Entities*"></a>
   <h4 id="Ploch_Common_Data_GenericRepository_IQueryableRepository_1_Entities" data-uid="Ploch.Common.Data.GenericRepository.IQueryableRepository`1.Entities">Entities</h4>
@@ -135,19 +136,19 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.IQueryableRepository%601.GetPageQuery(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.IQueryableRepository%601.GetPageQuery(System.Int32%2CSystem.Int32%2CSystem.Nullable%7BFunc%7BIQueryable%7B%600%7D%2CIQueryable%7B%600%7D%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository/IQueryableRepository.cs/#L22">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository/IQueryableRepository.cs/#L25">View Source</a>
   </span>
   <a id="Ploch_Common_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_" data-uid="Ploch.Common.Data.GenericRepository.IQueryableRepository`1.GetPageQuery*"></a>
-  <h4 id="Ploch_Common_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_" data-uid="Ploch.Common.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32)">GetPageQuery(Int32, Int32)</h4>
+  <h4 id="Ploch_Common_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____" data-uid="Ploch.Common.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})">GetPageQuery(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</h4>
   <div class="markdown level1 summary"><p>Gets a queryable collection of entities for a specific page.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IQueryable&lt;TEntity&gt; GetPageQuery(int pageNumber, int pageSize)</code></pre>
+    <pre><code class="lang-csharp hljs">IQueryable&lt;TEntity&gt; GetPageQuery(int pageNumber, int pageSize, Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;? onDbSet = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -169,6 +170,12 @@
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">pageSize</span></td>
         <td><p>The size of the page to get.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Func</span>&lt;<span class="xref">IQueryable</span>&lt;TEntity&gt;, <span class="xref">IQueryable</span>&lt;TEntity&gt;&gt;&gt;</td>
+        <td><span class="parametername">onDbSet</span></td>
+        <td><p>Action to perform on DbSet on the query - for example, Include.</p>
 </td>
       </tr>
     </tbody>
@@ -200,7 +207,7 @@
                     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_IQueryableRepository_1.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.IQueryableRepository%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository/IQueryableRepository.cs/#L8" class="contribution-link">View Source</a>
+                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository/IQueryableRepository.cs/#L10" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

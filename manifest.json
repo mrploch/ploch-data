@@ -53,23 +53,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.DbTestServices-1.html",
-          "hash": "1iRli+Rn7cwxuTExgsi//lHIaj0P2cvk2dsjGrNb6BU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.yml",
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html",
-          "hash": "q4s9X5rtq2MgEijKGU3duWUfBVGHdEWehaH39u50xJw="
+          "hash": "VxK/O7Lz9svU4IUlXftQ52mxltlTu12Pm9F9jXy+Y2k="
         }
       },
       "is_incremental": false,
@@ -101,6 +89,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDateTimeOffsetPropertiesFix.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDateTimeOffsetPropertiesFix.html",
+          "hash": "0gzbuqw6CRJfCz2sJEw5KHWaZNM32OSTlhrm1Zv1RQg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.yml",
       "output": {
         ".html": {
@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.html",
-          "hash": "+bsnpdArQ8CIFt3OqO3/aw7OtjWNDAFsyFGiB7lCygQ="
+          "hash": "mUkJq6UQy/uRl9cTbuihKl+iaxS2nIfuAHVTk2Z6Ms8="
         }
       },
       "is_incremental": false,
@@ -129,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html",
-          "hash": "C+XFohO4S7gBh1xV6e8GKCli8hn6xPLlvtDcOU5sks0="
+          "hash": "UgHZ5Rld4rrV6iSuieiZsSA/Ux9gjog1Zc6Fa9A3F14="
         }
       },
       "is_incremental": false,
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html",
-          "hash": "K+/S0jF9Cl4PQZi2cg3Y5SCwb2pRvURtRJz3kQC9wSw="
+          "hash": "AWjvlX7/Ddoh6tICf6FOfaush/qBb/iCWH1F321K1SY="
         }
       },
       "is_incremental": false,
@@ -153,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.html",
-          "hash": "cDQi+zKWN3f/kZ+wR6bcCMTKI/uOqZ8kPY1jyz83yb0="
+          "hash": "yl7UHInK3zDWK6E2ePs2bnQWHEiUwvCkitlhpCoB7/E="
         }
       },
       "is_incremental": false,
@@ -165,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html",
-          "hash": "OQsXbqojnvYMWF0Kx5qN+JdZDS1VYaHmhyhLF7/9mBs="
+          "hash": "2yL3sC5PVSsDT97+OMnKxoEqxP/M6bbQsmUxt/R13do="
         }
       },
       "is_incremental": false,
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html",
-          "hash": "Nq5jJEXslvBRhAXptegJRj//G2vzTv6VuJzQL6TuhG0="
+          "hash": "YwPj3UMRDyj6IuDo/SgTigj0Y5akJltCQC9fBbvEDGo="
         }
       },
       "is_incremental": false,
@@ -189,7 +189,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html",
-          "hash": "ShslnEjJkWH9KHuENKpmfXeKjauzbYxt5y3cFv2a86U="
+          "hash": "bsvpMY8IUgOiqnbI0fjEBQyjj9ISQ1ldmEXCMjcT6k8="
         }
       },
       "is_incremental": false,
@@ -201,7 +201,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html",
-          "hash": "5mVk7ScvL1UYb451So+GMBs13ts9ZlRnc+Ark3ifeKs="
+          "hash": "o088e0I66u5dAo4vxl99w2t/Sq5gY9kYntUqMT4HEUo="
         }
       },
       "is_incremental": false,
@@ -213,7 +213,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html",
-          "hash": "IcQMy/TQNSiFbCbw4HSogOoInK7yeLST1Tyw1SSa5LI="
+          "hash": "9kCA/6kZa+BeaMNfnFl0J76/2d570Ap1KOAlt5rDi/s="
         }
       },
       "is_incremental": false,
@@ -225,7 +225,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html",
-          "hash": "wdzwvHfoY1sAjZEmxVB3J3+d4VSuhybjhYnq2pP4jGU="
+          "hash": "yetp2HbgdbfVmNe2B+nAV3/shtQih9FXzyyMnvZd1/A="
         }
       },
       "is_incremental": false,
@@ -249,7 +249,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.html",
-          "hash": "QUt1T4em39REKhGUBmMQQ0FprRaAxZQmXpbJ4GqOAJI="
+          "hash": "RjL7GD+/o33utZUzwtlz9lCNQGZprY5998WN1QEaeQY="
         }
       },
       "is_incremental": false,
@@ -261,7 +261,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html",
-          "hash": "BZ7wYka6gs16PJtNYaKm6D/989H+MCldkzWHRjAV5Lc="
+          "hash": "zNRhd862hDBQnCxSAPti3vN3V9+975WgOW/JJkLeJIU="
         }
       },
       "is_incremental": false,
@@ -273,7 +273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepository-2.html",
-          "hash": "Vc+eNw4tq5+UmYFSz8+nhSAycI18cnbTicOVgDJlQ3U="
+          "hash": "0JCYFT6EwFjX+oNkpDyIhNSCO4iWD2EArs7J6dbCxE8="
         }
       },
       "is_incremental": false,
@@ -285,7 +285,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html",
-          "hash": "hrz/L1ngliEZc6yRSINTskJnlt24Py+3EEDr3wtcT8Y="
+          "hash": "D139DYwTBNW20ja1xCqvtDaU5/Yh1ygk4CarO1jmKF8="
         }
       },
       "is_incremental": false,
@@ -297,7 +297,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-2.html",
-          "hash": "hFyWALOCzqApwhjrUrkAhDjfIWcNfnraPdZcAfFqdkU="
+          "hash": "87cPpLEkjJ7ohnLL5I8q5KqgGIiFJqdSLgbltDbnmOk="
         }
       },
       "is_incremental": false,
@@ -309,7 +309,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadWriteRepository-2.html",
-          "hash": "vH1oTzfE09JUxk1HDtRBwkZ+OuBIP7VV/9GI+y3B5jk="
+          "hash": "K2OlZWfKnx/TrVeRYZ5iaizZNQTBZ7hMzWSWc/HMl/A="
         }
       },
       "is_incremental": false,
@@ -321,7 +321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync-2.html",
-          "hash": "BIG/HUtL9B878wWFet8SF6YIezNa8boZ1tKgGSApI4s="
+          "hash": "+WfjHVWmL6iGWKuEuKk0UBqZHkPzyDdakZDPRFbNrLE="
         }
       },
       "is_incremental": false,
@@ -369,7 +369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.GenericRepository.html",
-          "hash": "L5wZ5Ty5B+rLpn/Q1Fq/mjOLubN/Wcnuf4apRDMnixQ="
+          "hash": "UckCA2uX91GsM9d2L+wdB/A74JU4in4lsDXUB556KPM="
         }
       },
       "is_incremental": false,
@@ -485,6 +485,18 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Common.Data.Model.IHasAuditProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Common.Data.Model.IHasAuditProperties.html",
+          "hash": "+sO3NAQb1evoBDH4bqiuh6+Ye+zch0xZ10zPqdxEiko="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Ploch.Common.Data.Model.IHasAuditTimeProperties.yml",
       "output": {
         ".html": {
@@ -561,7 +573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.Model.IHasId-1.html",
-          "hash": "4edMm1QyjeRutgE70xdZXqOi2YpoijIh2jaeABIuL7w="
+          "hash": "PrsLapLv+k8zoor7BObuN8mOCu4xcF09PtK3UuUikj0="
         }
       },
       "is_incremental": false,
@@ -749,23 +761,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.ITestSomething.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.ITestSomething.html",
-          "hash": "R187FkzjBoUphJr4JC6vb4EvsQsY57LvZwRTE/bG/U8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Ploch.Common.Data.Model.yml",
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Common.Data.Model.html",
-          "hash": "BdBn6PKc9aGg2GnNTf//thwqoAM4pinNF4e29YYd7bs="
+          "hash": "k6oNyqCsmnhyb5brDF9ZvIHP5exmLYy6/bOjRc6k1PI="
         }
       },
       "is_incremental": false,
@@ -825,7 +825,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html",
-          "hash": "0GHhXwknnWJdbylkD1gGAwp3E7LRYbcn5WJUx50v3mY="
+          "hash": "ipG/n7TGNj47twj3a4TQgIG5sBGt3P6uk0X9mgG5hdQ="
         }
       },
       "is_incremental": false,
@@ -873,7 +873,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "D5uKsjyk1tDQmb3BHc6lOvIxniXEUUCOEsD0FFjseZ4="
+          "hash": "G0jzcgAhQcWHKl4KUY680eoYntS/keHIiCm0sUkWZrM="
         }
       },
       "is_incremental": false,

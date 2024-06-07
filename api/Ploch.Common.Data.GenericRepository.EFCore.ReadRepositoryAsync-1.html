@@ -92,16 +92,16 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
+      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_Entities">QueryableRepository&lt;TEntity&gt;.Entities</a>
+    </div>
+    <div>
       <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbContext">QueryableRepository&lt;TEntity&gt;.DbContext</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbSet">QueryableRepository&lt;TEntity&gt;.DbSet</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_Entities">QueryableRepository&lt;TEntity&gt;.Entities</a>
-    </div>
-    <div>
-      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32)</a>
+      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.html">Ploch.Common.Data.GenericRepository.EFCore</a></h6>
@@ -121,7 +121,7 @@
     <tbody>
       <tr>
         <td><span class="parametername">TEntity</span></td>
-        <td><p>The type of the entities in the repository.</p>
+        <td><p>The entity type for this repository.</p>
 </td>
       </tr>
     </tbody>
@@ -166,18 +166,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync%601.GetAllAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_CountAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync%601.CountAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L31">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L48">View Source</a>
   </span>
-  <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync*"></a>
-  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_CancellationToken_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(CancellationToken)">GetAllAsync(CancellationToken)</h4>
+  <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_CountAsync_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.CountAsync*"></a>
+  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_CountAsync_CancellationToken_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.CountAsync(CancellationToken)">CountAsync(CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task&lt;IList&lt;TEntity&gt;&gt; GetAllAsync(CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;int&gt; CountAsync(CancellationToken cancellationToken = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -206,6 +206,58 @@
     </thead>
     <tbody>
       <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync%601.GetAllAsync(System.Nullable%7BFunc%7BIQueryable%7B%600%7D%2CIQueryable%7B%600%7D%7D%7D%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L33">View Source</a>
+  </span>
+  <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync*"></a>
+  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)">GetAllAsync(Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;IList&lt;TEntity&gt;&gt; GetAllAsync(Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;? onDbSet = null, CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Func</span>&lt;<span class="xref">IQueryable</span>&lt;TEntity&gt;, <span class="xref">IQueryable</span>&lt;TEntity&gt;&gt;&gt;</td>
+        <td><span class="parametername">onDbSet</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
         <td><span class="xref">Task</span>&lt;<span class="xref">IList</span>&lt;TEntity&gt;&gt;</td>
         <td></td>
       </tr>
@@ -216,7 +268,7 @@
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetByIdAsync_System_Object___CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync%601.GetByIdAsync(System.Object%5B%5D%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L26">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L27">View Source</a>
   </span>
   <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetByIdAsync_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetByIdAsync*"></a>
   <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetByIdAsync_System_Object___CancellationToken_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetByIdAsync(System.Object[],CancellationToken)">GetByIdAsync(Object[], CancellationToken)</h4>
@@ -265,65 +317,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetCountAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync%601.GetCountAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync%601.GetPageAsync(System.Int32%2CSystem.Int32%2CSystem.Nullable%7BFunc%7BIQueryable%7B%600%7D%2CIQueryable%7B%600%7D%7D%7D%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L41">View Source</a>
-  </span>
-  <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetCountAsync_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetCountAsync*"></a>
-  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetCountAsync_CancellationToken_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetCountAsync(CancellationToken)">GetCountAsync(CancellationToken)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;int&gt; GetCountAsync(CancellationToken cancellationToken = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">CancellationToken</span></td>
-        <td><span class="parametername">cancellationToken</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync%601.GetPageAsync(System.Int32%2CSystem.Int32%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L36">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L39">View Source</a>
   </span>
   <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync*"></a>
-  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_CancellationToken_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,CancellationToken)">GetPageAsync(Int32, Int32, CancellationToken)</h4>
+  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)">GetPageAsync(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task&lt;IList&lt;TEntity&gt;&gt; GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;IList&lt;TEntity&gt;&gt; GetPageAsync(int pageNumber, int pageSize, Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;? onDbSet = null, CancellationToken cancellationToken = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -343,6 +348,11 @@
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">pageSize</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Func</span>&lt;<span class="xref">IQueryable</span>&lt;TEntity&gt;, <span class="xref">IQueryable</span>&lt;TEntity&gt;&gt;&gt;</td>
+        <td><span class="parametername">onDbSet</span></td>
         <td></td>
       </tr>
       <tr>

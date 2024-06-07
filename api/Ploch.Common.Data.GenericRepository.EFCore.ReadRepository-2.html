@@ -97,13 +97,16 @@ from a <see cref="!:DbContext"></see>.</p>
       <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetById_System_Object___">ReadRepository&lt;TEntity&gt;.GetById(Object[])</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetAll">ReadRepository&lt;TEntity&gt;.GetAll()</a>
+      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetAll_System_Nullable_Func_IQueryable__0__IQueryable__0____">ReadRepository&lt;TEntity&gt;.GetAll(Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_System_Int32_System_Int32_">ReadRepository&lt;TEntity&gt;.GetPage(Int32, Int32)</a>
+      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">ReadRepository&lt;TEntity&gt;.GetPage(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_1_Count">ReadRepository&lt;TEntity&gt;.Count()</a>
+    </div>
+    <div>
+      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_Entities">QueryableRepository&lt;TEntity&gt;.Entities</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbContext">QueryableRepository&lt;TEntity&gt;.DbContext</a>
@@ -112,10 +115,7 @@ from a <see cref="!:DbContext"></see>.</p>
       <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_DbSet">QueryableRepository&lt;TEntity&gt;.DbSet</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_Entities">QueryableRepository&lt;TEntity&gt;.Entities</a>
-    </div>
-    <div>
-      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32)</a>
+      <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Common_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Ploch.Common.Data.GenericRepository.EFCore.html">Ploch.Common.Data.GenericRepository.EFCore</a></h6>
@@ -150,7 +150,7 @@ from a <see cref="!:DbContext"></see>.</p>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2__ctor_DbContext_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepository%602.%23ctor(DbContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepository.cs/#L55">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepository.cs/#L62">View Source</a>
   </span>
   <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2__ctor_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.#ctor*"></a>
   <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2__ctor_DbContext_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.#ctor(DbContext)">ReadRepository(DbContext)</h4>
@@ -183,19 +183,18 @@ from a <see cref="!:DbContext"></see>.</p>
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2_GetById__1_.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepository%602.GetById(%601)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2_GetById__1_System_Nullable_Func_IQueryable__0__IQueryable__0____.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepository%602.GetById(%601%2CSystem.Nullable%7BFunc%7BIQueryable%7B%600%7D%2CIQueryable%7B%600%7D%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepository.cs/#L63">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepository.cs/#L66">View Source</a>
   </span>
   <a id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2_GetById_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.GetById*"></a>
-  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2_GetById__1_" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.GetById(`1)">GetById(TId)</h4>
-  <div class="markdown level1 summary"><p>Gets the entity with the specified identifier.</p>
-</div>
+  <h4 id="Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2_GetById__1_System_Nullable_Func_IQueryable__0__IQueryable__0____" data-uid="Ploch.Common.Data.GenericRepository.EFCore.ReadRepository`2.GetById(`1,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})">GetById(TId, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TEntity GetById(TId id)</code></pre>
+    <pre><code class="lang-csharp hljs">public TEntity GetById(TId id, Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;? onDbSet = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -210,8 +209,12 @@ from a <see cref="!:DbContext"></see>.</p>
       <tr>
         <td><span class="xref">TId</span></td>
         <td><span class="parametername">id</span></td>
-        <td><p>The identifier of the entity to be found.</p>
-</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Func</span>&lt;<span class="xref">IQueryable</span>&lt;TEntity&gt;, <span class="xref">IQueryable</span>&lt;TEntity&gt;&gt;&gt;</td>
+        <td><span class="parametername">onDbSet</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -226,8 +229,7 @@ from a <see cref="!:DbContext"></see>.</p>
     <tbody>
       <tr>
         <td><span class="xref">TEntity</span></td>
-        <td><p>The entity found, or null.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -252,7 +254,7 @@ from a <see cref="!:DbContext"></see>.</p>
                     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Common_Data_GenericRepository_EFCore_ReadRepository_2.md&amp;value=---%0Auid%3A%20Ploch.Common.Data.GenericRepository.EFCore.ReadRepository%602%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepository.cs/#L48" class="contribution-link">View Source</a>
+                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepository.cs/#L55" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
