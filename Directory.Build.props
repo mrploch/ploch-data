@@ -23,11 +23,7 @@
         <Version Condition="'$(RELEASEVERSION)' != 'true'">$(VersionPrefix)$(FullVersionSuffix)</Version>
         <!-- Release versions -->
         <Version Condition="'$(RELEASEVERSION)' == 'true'">$(VersionPrefix)</Version>
-        
-<!--        <VersionSuffix>-prerelease</VersionSuffix>-->
-        
-<!--        <FullVersionSuffix>$(VersionSuffix)-$(BuildNumber)</FullVersionSuffix>-->
-<!--        <Version>$(VersionPrefix)$(FullVersionSuffix)</Version>-->
+
         <FileVersion>$(InformationalVersion)</FileVersion>
         <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
         <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
