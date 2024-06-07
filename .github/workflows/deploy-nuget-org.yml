@@ -9,6 +9,7 @@ env:
   SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
   GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
   NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
+  RELEASEVERSION: true
 jobs:
   build:
     runs-on: ubuntu-latest
