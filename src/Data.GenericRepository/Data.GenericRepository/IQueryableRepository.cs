@@ -4,7 +4,7 @@ using System.Linq;
 namespace Ploch.Common.Data.GenericRepository;
 
 /// <summary>
-///     Defines a repository that provides queryable access to a collection of a <see cref="TEntity" />.
+///     Defines a repository that provides queryable access to a collection of a <typeparamref name="TEntity" />.
 /// </summary>
 /// <typeparam name="TEntity">The entity type for this repository.</typeparam>
 public interface IQueryableRepository<TEntity>

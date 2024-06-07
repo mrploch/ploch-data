@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 
 /// <summary>
-///     SqLite model builder extension to apply a workaround for DateTimeOffset properties
+///     SqLite model builder extension to apply a workaround for DateTimeOffset properties.
 /// </summary>
 public static class SqLiteDateTimeOffsetPropertiesFix
 {
