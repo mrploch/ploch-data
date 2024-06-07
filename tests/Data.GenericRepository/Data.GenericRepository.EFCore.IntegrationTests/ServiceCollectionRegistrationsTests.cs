@@ -112,22 +112,17 @@ public class ServiceCollectionRegistrationsTests
             throw new NotImplementedException();
         }
 
-        public IList<Blog> GetAll()
+        public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Blog> GetPage(int pageNumber, int pageSize)
+        public IList<Blog> GetPage(int pageNumber, int pageSize, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
         {
             throw new NotImplementedException();
         }
 
         public int Count()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Blog? GetById(int id)
         {
             throw new NotImplementedException();
         }
@@ -148,6 +143,11 @@ public class ServiceCollectionRegistrationsTests
         }
 
         public void Delete(Blog entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Blog? GetById(int id, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
         {
             throw new NotImplementedException();
         }

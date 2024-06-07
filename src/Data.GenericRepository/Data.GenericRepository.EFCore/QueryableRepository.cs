@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,9 @@ public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
         DbContext = dbContext;
     }
 
+    /// <inheritdoc />
+    public IQueryable<TEntity> Entities => DbSet;
+
     /// <summary>
     ///     Gets the <see cref="DbContext" /> used for querying entities.
     /// </summary>
@@ -31,13 +35,12 @@ public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
     protected DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
     /// <inheritdoc />
-    public IQueryable<TEntity> Entities => DbSet;
-
-    /// <inheritdoc />
-    public IQueryable<TEntity> GetPageQuery(int pageNumber, int pageSize)
+    public IQueryable<TEntity> GetPageQuery(int pageNumber, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         Guard.Argument(pageNumber, nameof(pageNumber)).Positive();
 
-        return DbContext.Set<TEntity>().Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking();
+        var query = onDbSet == null ? Entities : onDbSet(Entities);
+
+        return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking();
     }
 }

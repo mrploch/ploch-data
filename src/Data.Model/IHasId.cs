@@ -2,10 +2,6 @@
 
 namespace Ploch.Common.Data.Model;
 
-public interface ITestSomething
-
-{ }
-
 /// <summary>
 ///     Defines a type that has an identifier.
 /// </summary>

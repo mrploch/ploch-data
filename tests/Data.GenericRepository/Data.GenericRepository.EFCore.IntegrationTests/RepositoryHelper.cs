@@ -33,6 +33,28 @@ public class RepositoryHelper
         return (blog, blogPost1, blogPost2);
     }
 
+    public static async Task<(Blog blog, BlogPost[] blogPosts)> AddAsyncTestBlogEntitiesWithManyPostsAsync(
+        IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
+        int blogPostCount)
+    {
+        var (blog, blogPosts) = EntitiesBuilder.BuildBlogEntityWithManyPosts(blogPostCount);
+
+        await blogReadWriteRepository.AddAsync(blog);
+
+        return (blog, blogPosts);
+    }
+
+    public static async Task<(Blog blog, BlogPost blogPost1, BlogPost blogPost2)> AddAsyncTestBlogEntitiesAsync(
+        IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
+        int blogPostCount)
+    {
+        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
+
+        await blogReadWriteRepository.AddAsync(blog);
+
+        return (blog, blogPost1, blogPost2);
+    }
+
     public static async Task<IEnumerable<UserIdea>> AddAsyncTestUserIdeasEntitiesAsync(IReadWriteRepositoryAsync<UserIdea, int> userIdeasReadWriteRepository)
     {
         var (userIdea1, userIdea2) = EntitiesBuilder.BuildUserIdeaEntities();

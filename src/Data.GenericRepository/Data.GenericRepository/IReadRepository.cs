@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Ploch.Common.Data.Model;
 
 namespace Ploch.Common.Data.GenericRepository;
 
 /// <summary>
-///     Defines a repository that provides read operations for a collection of <see cref="TEntity" />.
+///     Defines a repository that provides read operations for a collection of a <typeparamref name="TEntity" />.
 /// </summary>
+/// <inheritdoc />
 public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     where TEntity : class
 {
@@ -19,16 +22,18 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     /// <summary>
     ///     Gets all entities from the repository.
     /// </summary>
+    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <returns>A list of all entities.</returns>
-    IList<TEntity> GetAll();
+    IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);
 
     /// <summary>
     ///     Gets a page of entities from the repository.
     /// </summary>
     /// <param name="pageNumber">The number of the page to get.</param>
     /// <param name="pageSize">The size of the page to get.</param>
+    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <returns>A list of entities for the specified page.</returns>
-    IList<TEntity> GetPage(int pageNumber, int pageSize);
+    IList<TEntity> GetPage(int pageNumber, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);
 
     /// <summary>
     ///     Gets the count of entities in the repository.
@@ -38,9 +43,10 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
 }
 
 /// <summary>
-///     Defines a repository that provides read operations for a collection of <see cref="TEntity" /> with a specified
+///     Defines a repository that provides read operations for a collection of <typeparamref name="TEntity" /> with a specified
 ///     identifier type.
 /// </summary>
+/// <inheritdoc />
 public interface IReadRepository<TEntity, in TId> : IReadRepository<TEntity>
     where TEntity : class, IHasId<TId>
 {
@@ -48,6 +54,7 @@ public interface IReadRepository<TEntity, in TId> : IReadRepository<TEntity>
     ///     Gets the entity with the specified identifier.
     /// </summary>
     /// <param name="id">The identifier of the entity to be found.</param>
+    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <returns>The entity found, or null.</returns>
-    TEntity? GetById(TId id);
+    TEntity? GetById(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);
 }

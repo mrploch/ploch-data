@@ -13,9 +13,7 @@ namespace Ploch.Common.Data.GenericRepository.EFCore;
 ///     Provides a repository that allows asynchronous reading and writing of entities of type <see cref="TEntity" /> with
 ///     a specified identifier type from a <see cref="DbContext" />.
 /// </summary>
-/// <typeparam name="TEntity">The type of the entities in the repository.</typeparam>
-/// <inheritdoc cref="ReadRepositoryAsync{TEntity,TId}" />
-/// <inheritdoc cref="IReadRepositoryAsync{TEntity, TId}" />
+/// <inheritdoc cref="IReadWriteRepositoryAsync{TEntity,TId}"/>
 public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity, TId>, IReadWriteRepositoryAsync<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
@@ -58,7 +56,7 @@ public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntit
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
 
-        var exist = await GetByIdAsync(entity.Id, cancellationToken);
+        var exist = await GetByIdAsync(entity.Id, cancellationToken: cancellationToken);
         if (exist == null)
         {
             throw new InvalidOperationException($"Entity with id {entity.Id} not found");
