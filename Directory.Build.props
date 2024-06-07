@@ -15,10 +15,19 @@
         <AnalysisLevel>latest-Recommended</AnalysisLevel>
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <VersionPrefix>1.0.0</VersionPrefix>
-        <VersionSuffix>-prerelease</VersionSuffix>
         <BuildNumber>$([System.DateTime]::UtcNow.ToString("yyMMddHHmmss"))</BuildNumber>
-        <FullVersionSuffix>$(VersionSuffix)-$(BuildNumber)</FullVersionSuffix>
-        <Version>$(VersionPrefix)$(FullVersionSuffix)</Version>
+
+        <!-- Development versions -->
+        <VersionSuffix Condition="'$(RELEASEVERSION)' != 'true'">-prerelease</VersionSuffix>
+        <FullVersionSuffix Condition="'$(RELEASEVERSION)' != 'true'">$(VersionSuffix)-$(BuildNumber)</FullVersionSuffix>
+        <Version Condition="'$(RELEASEVERSION)' != 'true'">$(VersionPrefix)$(FullVersionSuffix)</Version>
+        <!-- Release versions -->
+        <Version Condition="'$(RELEASEVERSION)' == 'true'">$(VersionPrefix)</Version>
+        
+<!--        <VersionSuffix>-prerelease</VersionSuffix>-->
+        
+<!--        <FullVersionSuffix>$(VersionSuffix)-$(BuildNumber)</FullVersionSuffix>-->
+<!--        <Version>$(VersionPrefix)$(FullVersionSuffix)</Version>-->
         <FileVersion>$(InformationalVersion)</FileVersion>
         <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
         <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
