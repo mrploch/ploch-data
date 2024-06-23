@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ploch.Common.Data.Model.CommonTypes;
+namespace Ploch.Data.Model.CommonTypes;
 
 /// <summary>
 ///     Typical category model class with the <c>Id</c> property of <see cref="int" /> type.

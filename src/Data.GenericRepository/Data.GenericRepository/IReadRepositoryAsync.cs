@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository;
+namespace Ploch.Data.GenericRepository;
 
 /// <summary>
 ///     Defines a repository that provides asynchronous read operations for a collection of a <typeparamref name="TEntity" />.

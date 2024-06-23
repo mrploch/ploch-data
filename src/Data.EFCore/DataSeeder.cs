@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Ploch.Common.Data.EFCore;
+namespace Ploch.Data.EFCore;
 
 public abstract class DataSeeder<TDbContext>(TDbContext dbContext) where TDbContext: DbContext
 {

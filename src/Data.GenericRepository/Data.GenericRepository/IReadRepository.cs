@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository;
+namespace Ploch.Data.GenericRepository;
 
 /// <summary>
 ///     Defines a repository that provides read operations for a collection of a <typeparamref name="TEntity" />.

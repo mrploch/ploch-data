@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Ploch.Common.Data.Utilities;
+namespace Ploch.Data.Utilities;
 
 public static class DataColumnExtensions
 {

@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Common.Data.Model;
+using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.EFCore.IntegrationTesting;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
 
 /// <summary>
 ///     Base class for integration tests that use EF Core in-memory SQLite database.

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository;
+namespace Ploch.Data.GenericRepository;
 
 /// <summary>
 ///     Defines a repository that provides write operations for <see cref="TEntity" /> with a specified identifier type.

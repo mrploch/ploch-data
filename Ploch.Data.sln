@@ -7,26 +7,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{861A9732-0DD2-43BF-9DA9-6529961C58D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Common.Data.Utilities", "src\Data.Utilities\Ploch.Common.Data.Utilities.csproj", "{46E7BBE3-D06F-42B8-9290-AA50B7D3D866}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Data.Utilities", "src\Data.Utilities\Ploch.Data.Utilities.csproj", "{46E7BBE3-D06F-42B8-9290-AA50B7D3D866}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentationSite", "DocumentationSite\DocumentationSite.csproj", "{C87EB534-C0F5-47B2-886C-76DA955CA131}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Common.Data.GenericRepository", "src\Data.GenericRepository\Data.GenericRepository\Ploch.Common.Data.GenericRepository.csproj", "{41B7DDC2-1AEC-4529-BB17-458CF671A0C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Data.GenericRepository", "src\Data.GenericRepository\Data.GenericRepository\Ploch.Data.GenericRepository.csproj", "{41B7DDC2-1AEC-4529-BB17-458CF671A0C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests", "tests\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTests\Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.csproj", "{9018DB13-DC12-4E78-8BF4-1A13DC4B97C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Data.GenericRepository.EFCore.IntegrationTests", "tests\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTests\Ploch.Data.GenericRepository.EFCore.IntegrationTests.csproj", "{9018DB13-DC12-4E78-8BF4-1A13DC4B97C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Common.Data.GenericRepository.EFCore", "src\Data.GenericRepository\Data.GenericRepository.EFCore\Ploch.Common.Data.GenericRepository.EFCore.csproj", "{3584EAC0-FAF3-4F3B-8279-1694BAC5137F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Data.GenericRepository.EFCore", "src\Data.GenericRepository\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj", "{3584EAC0-FAF3-4F3B-8279-1694BAC5137F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GenericRepository", "GenericRepository", "{2EBC511A-69AC-4175-AD33-E19F5FBAA034}"
 	ProjectSection(SolutionItems) = preProject
 		src\Data.GenericRepository\README.md = src\Data.GenericRepository\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Common.Data.EFCore", "src\Data.EFCore\Ploch.Common.Data.EFCore.csproj", "{AA9CC66F-215B-4412-86A8-CA29B8F8F20B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Data.EFCore", "src\Data.EFCore\Ploch.Data.EFCore.csproj", "{AA9CC66F-215B-4412-86A8-CA29B8F8F20B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GenericRepository", "GenericRepository", "{7C1230FF-8A34-466C-A3FD-F74B7F224AAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting", "src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.csproj", "{F45217F5-17F5-4CB8-9A5E-5587DE9AEB33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Data.GenericRepository.EFCore.IntegrationTesting", "src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj", "{F45217F5-17F5-4CB8-9A5E-5587DE9AEB33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "repository", "repository", "{87F93313-FCDE-4545-A30B-03D05077F647}"
 	ProjectSection(SolutionItems) = preProject
@@ -57,9 +57,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{7341
 		run-sonar-build-test.ps1 = run-sonar-build-test.ps1
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Common.Data.Model", "src\Data.Model\Ploch.Common.Data.Model.csproj", "{A6A6F84D-F859-4D71-9491-7791F56BFD95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ploch.Data.Model", "src\Data.Model\Ploch.Data.Model.csproj", "{A6A6F84D-F859-4D71-9491-7791F56BFD95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Common.Data.StandardDataSets", "src\Data.StandardDataSets\Ploch.Common.Data.StandardDataSets.csproj", "{A5C6761A-9816-4707-A586-E53BF4997BA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.StandardDataSets", "src\Data.StandardDataSets\Ploch.Data.StandardDataSets.csproj", "{A5C6761A-9816-4707-A586-E53BF4997BA1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.StandardDataSets.Tests", "tests\Data.StandardDataSets.Tests\Ploch.Data.StandardDataSets.Tests.csproj", "{B1FFAA80-47D1-421B-91CF-80D46AFE50A6}"
 EndProject
@@ -67,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.Integrati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.SqLite", "src\Data.EFCore.SqLite\Ploch.Data.EFCore.SqLite.csproj", "{9FF93609-9F01-4B1E-A3BD-F02D0F077841}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Common.Data.EFCore.Tests", "tests\Data.EFCore.Tests\Ploch.Common.Data.EFCore.Tests.csproj", "{13983050-AB46-4A2A-AA09-9F9EFAC1320A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.Tests", "tests\Data.EFCore.Tests\Ploch.Data.EFCore.Tests.csproj", "{13983050-AB46-4A2A-AA09-9F9EFAC1320A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

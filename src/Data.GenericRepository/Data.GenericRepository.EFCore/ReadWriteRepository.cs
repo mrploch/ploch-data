@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
 ///     Provides a repository that allows reading and writing entities of type <see cref="TEntity" /> with a specified

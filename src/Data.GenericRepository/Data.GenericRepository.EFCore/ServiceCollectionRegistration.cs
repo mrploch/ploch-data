@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
 ///     Provides extension methods for registering repository types in the <see cref="IServiceCollection" />.

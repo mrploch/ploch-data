@@ -4,6 +4,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Data.Model\Ploch.Common.Data.Model.csproj" />
+        <ProjectReference Include="..\..\Data.Model\Ploch.Data.Model.csproj" />
     </ItemGroup>
 </Project>

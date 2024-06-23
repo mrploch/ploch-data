@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Ploch.Common.Data.GenericRepository;
+namespace Ploch.Data.GenericRepository;
 
 /// <summary>
 ///     Defines a repository that provides queryable access to a collection of a <typeparamref name="TEntity" />.

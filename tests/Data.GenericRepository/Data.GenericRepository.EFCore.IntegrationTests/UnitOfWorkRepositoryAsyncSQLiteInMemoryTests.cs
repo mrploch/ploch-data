@@ -1,8 +1,9 @@
 ﻿using AutoFixture.Xunit2;
 using Objectivity.AutoFixture.XUnit2.AutoMoq.Attributes;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
 

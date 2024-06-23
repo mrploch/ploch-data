@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
 ///     Provides a repository that allows asynchronous reading of entities of type <see cref="TEntity" /> from a
