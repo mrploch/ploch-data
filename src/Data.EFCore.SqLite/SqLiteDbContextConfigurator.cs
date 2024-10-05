@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Ploch.Data.EFCore.SqLite;
 
 namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 

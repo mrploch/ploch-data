@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
+using Ploch.Data.EFCore.SqLite;
 
 namespace Ploch.Data.EFCore.IntegrationTesting;
 

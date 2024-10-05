@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
+namespace Ploch.Data.EFCore.SqLite;
 
 public record SqLiteConnectionOptions
 {
