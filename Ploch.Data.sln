@@ -71,7 +71,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.SqlServer", "src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj", "{F4E56D5C-9669-4069-9592-DF5EF59C30F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.EFCore.SqlServer.Tests", "tests\Data.EFCore.SqlServer.Tests\Data.EFCore.SqlServer.Tests.csproj", "{1CC678AB-A674-444B-A8D4-0CE0B6E1F654}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.SqlServer.Tests", "tests\Data.EFCore.SqlServer.Tests\Ploch.Data.EFCore.SqlServer.Tests.csproj", "{1CC678AB-A674-444B-A8D4-0CE0B6E1F654}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
