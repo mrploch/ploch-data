@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.EFCore.SqLite;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;

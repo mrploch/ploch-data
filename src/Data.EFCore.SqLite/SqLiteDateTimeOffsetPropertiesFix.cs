@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
+namespace Ploch.Data.EFCore.SqLite;
 
 /// <summary>
 ///     SqLite model builder extension to apply a workaround for DateTimeOffset properties.

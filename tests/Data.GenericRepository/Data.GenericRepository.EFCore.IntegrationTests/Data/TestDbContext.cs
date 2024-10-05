@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
-using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
+using Ploch.Data.EFCore.SqLite;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
@@ -8,7 +7,8 @@ namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 public class TestDbContext : DbContext
 {
     public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
-    { }
+    {
+    }
 
     public DbSet<Blog> Blogs { get; set; } = null!;
 
