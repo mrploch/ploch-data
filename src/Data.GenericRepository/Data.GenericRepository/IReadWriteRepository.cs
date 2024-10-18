@@ -1,6 +1,6 @@
-﻿using Ploch.Common.Data.Model;
+﻿using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository;
+namespace Ploch.Data.GenericRepository;
 
 /// <summary>
 ///     Defines a repository that provides both read and write operations for <see cref="TEntity" /> with a specified

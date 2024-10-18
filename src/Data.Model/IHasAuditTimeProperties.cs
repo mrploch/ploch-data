@@ -1,4 +1,4 @@
-﻿namespace Ploch.Common.Data.Model;
+﻿namespace Ploch.Data.Model;
 
 /// <summary>
 ///     Describes a type that has audit time properties.

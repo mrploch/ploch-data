@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ploch.Common.Data.Model;
+namespace Ploch.Data.Model;
 
 /// <summary>
 ///     Defines an entity that has an <c>Id</c> property that has a setter method.

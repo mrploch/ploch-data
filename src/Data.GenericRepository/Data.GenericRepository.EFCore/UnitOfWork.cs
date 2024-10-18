@@ -5,9 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
 ///     Provides a unit of work that allows managing repositories and transactions.

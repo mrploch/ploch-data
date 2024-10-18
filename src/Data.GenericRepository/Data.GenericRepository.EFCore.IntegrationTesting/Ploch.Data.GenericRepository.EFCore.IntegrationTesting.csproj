@@ -8,9 +8,9 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Data.EFCore.IntegrationTesting\Ploch.Data.EFCore.IntegrationTesting.csproj" />
-        <ProjectReference Include="..\..\Data.EFCore\Ploch.Common.Data.EFCore.csproj" />
-        <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Common.Data.GenericRepository.EFCore.csproj" />
-        <ProjectReference Include="..\Data.GenericRepository\Ploch.Common.Data.GenericRepository.csproj" />
+        <ProjectReference Include="..\..\Data.EFCore\Ploch.Data.EFCore.csproj" />
+        <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
+        <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace Ploch.Common.Data.StandardDataSets
+namespace Ploch.Data.StandardDataSets
 {
     public static class Regions
     {

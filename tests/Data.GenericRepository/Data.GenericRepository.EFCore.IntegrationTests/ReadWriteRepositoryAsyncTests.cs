@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
 public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {

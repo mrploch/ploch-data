@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Ploch.Data.EFCore.IntegrationTesting;
 
-namespace Ploch.Common.Data.EFCore.Tests;
+namespace Ploch.Data.EFCore.Tests;
 
 public class DataSeederTests : DataIntegrationTest<TestDbContext>
 {

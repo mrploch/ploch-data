@@ -1,4 +1,4 @@
-namespace Ploch.Common.Data.EFCore.Tests;
+namespace Ploch.Data.EFCore.Tests;
 
 public class TestDataSeeder(TestDbContext dbContext) : DataSeeder<TestDbContext>(dbContext)
 {

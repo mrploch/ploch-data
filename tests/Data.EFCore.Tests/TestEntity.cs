@@ -1,6 +1,6 @@
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.EFCore.Tests;
+namespace Ploch.Data.EFCore.Tests;
 
 public class TestEntity : IHasId<int>, INamed
 {

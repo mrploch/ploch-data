@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository;
+namespace Ploch.Data.GenericRepository;
 
 /// <summary>
 ///     Defines a unit of work, which is a way to combine multiple repository operations into a single atomic operation.
 /// </summary>
+/// <inheritdoc />
 public interface IUnitOfWork : IDisposable
 {
     /// <summary>
-    ///     Gets a repository for entities of type <see cref="TEntity" /> with identifiers of type <see cref="TId" />.
+    ///     Gets a repository for entities of type <typeparamref name="TEntity" /> with identifiers of type <typeparamref name="TId" />.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entities in the repository.</typeparam>
     /// <typeparam name="TId">The type of the identifier for the entities in the repository.</typeparam>
@@ -20,8 +21,8 @@ public interface IUnitOfWork : IDisposable
         where TEntity : class, IHasId<TId>;
 
     /// <summary>
-    ///     Gets a custom repository of type <see cref="TRepository" /> for entities of type <see cref="TEntity" /> with
-    ///     identifiers of type <see cref="TId" />.
+    ///     Gets a custom repository of type <typeparamref name="TRepository" /> for entities of type <typeparamref name="TEntity" /> with
+    ///     identifiers of type <typeparamref name="TId" />.
     /// </summary>
     /// <typeparam name="TRepository">The type of the custom repository.</typeparam>
     /// <typeparam name="TEntity">The type of the entities in the repository.</typeparam>

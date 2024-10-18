@@ -3,7 +3,7 @@ using System.Linq;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
 ///     Provides a repository that allows querying entities of type <see cref="TEntity" /> from a <see cref="DbContext" />.

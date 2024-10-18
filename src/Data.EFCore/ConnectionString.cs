@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 
-namespace Ploch.Common.Data.EFCore;
+namespace Ploch.Data.EFCore;
 
 public static class ConnectionString
 {

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
+namespace Ploch.Data.EFCore;
 
 public interface IDbContextConfigurator
 {

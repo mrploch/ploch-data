@@ -13,6 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Data.GenericRepository\Ploch.Common.Data.GenericRepository.csproj" />
+        <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
     </ItemGroup>
 </Project>

@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
+using Ploch.Data.EFCore.SqLite;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 using Xunit.Abstractions;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
 public class DataContextSqLiteInMemoryTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {

@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Data.StandardDataSets\Ploch.Common.Data.StandardDataSets.csproj" />
+        <ProjectReference Include="..\..\src\Data.StandardDataSets\Ploch.Data.StandardDataSets.csproj" />
     </ItemGroup>
 
 </Project>

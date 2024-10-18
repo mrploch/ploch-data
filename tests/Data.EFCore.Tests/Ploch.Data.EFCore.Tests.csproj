@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Data.EFCore.IntegrationTesting\Ploch.Data.EFCore.IntegrationTesting.csproj" />
-        <ProjectReference Include="..\..\src\Data.Model\Ploch.Common.Data.Model.csproj" />
+        <ProjectReference Include="..\..\src\Data.Model\Ploch.Data.Model.csproj" />
     </ItemGroup>
 
 </Project>
