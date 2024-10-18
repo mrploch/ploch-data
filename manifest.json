@@ -5,11 +5,11 @@
   "files": [
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.yml",
+      "source_relative_path": "api/Ploch.Data.EFCore.BaseDbContextFactory-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Ploch.Common.Data.EFCore.BaseDbContextFactory-1.html",
-          "hash": "7nb2lMvX5Nd+P+rTrVLi/39jOWtnpOs/ccpOQDfXflQ="
+          "relative_path": "api/Ploch.Data.EFCore.BaseDbContextFactory-1.html",
+          "hash": "GDqCROXpJ6OST+8PWb9/PCTY9XtTHAkvwRTFsLhaKvE="
         }
       },
       "is_incremental": false,
@@ -17,11 +17,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.EFCore.ConnectionString.yml",
+      "source_relative_path": "api/Ploch.Data.EFCore.ConnectionString.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Ploch.Common.Data.EFCore.ConnectionString.html",
-          "hash": "5gAcXi+p5pqu24M7Lf1IFpSDJJTbLSW5e2CbEBsrRIE="
+          "relative_path": "api/Ploch.Data.EFCore.ConnectionString.html",
+          "hash": "F9OQM6MzS9o/WjLsApEzn0/PlefeR6s5yJ8RfeJZpqI="
         }
       },
       "is_incremental": false,
@@ -29,11 +29,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.EFCore.DataSeeder-1.yml",
+      "source_relative_path": "api/Ploch.Data.EFCore.DataSeeder-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Ploch.Common.Data.EFCore.DataSeeder-1.html",
-          "hash": "YCAXqroniVDh122qAf/l1goIQHN6U9OJ/1qgZSNy3tw="
+          "relative_path": "api/Ploch.Data.EFCore.DataSeeder-1.html",
+          "hash": "W4CrrdDwmV34j4uNnL5slrkNk9Qrw3wRA4mFLLOYR10="
         }
       },
       "is_incremental": false,
@@ -41,779 +41,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.EFCore.yml",
+      "source_relative_path": "api/Ploch.Data.EFCore.IDbContextConfigurator.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Ploch.Common.Data.EFCore.html",
-          "hash": "fQp0F47TQFc5VNltnsZvu+Ii7Y1vpbiEJS2Jotk8kXE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html",
-          "hash": "VxK/O7Lz9svU4IUlXftQ52mxltlTu12Pm9F9jXy+Y2k="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.IDbContextConfigurator.html",
-          "hash": "0Mo6kEmQclhX5jx4ISZ8pBpXh2JRqKj715todMq+8Eo="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteConnectionOptions.html",
-          "hash": "tA/2XP34StCoAXJqThO5DFRcZfqcbyLwjaHQKJqe8tE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDateTimeOffsetPropertiesFix.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDateTimeOffsetPropertiesFix.html",
-          "hash": "0gzbuqw6CRJfCz2sJEw5KHWaZNM32OSTlhrm1Zv1RQg="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.SqLiteDbContextConfigurator.html",
-          "hash": "n15dYBvdi9dfBr4v7zDLvVjCKpLMfYbUnNhDDd4waKI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.IntegrationTesting.html",
-          "hash": "mUkJq6UQy/uRl9cTbuihKl+iaxS2nIfuAHVTk2Z6Ms8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.QueryableRepository-1.html",
-          "hash": "UgHZ5Rld4rrV6iSuieiZsSA/Ux9gjog1Zc6Fa9A3F14="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-1.html",
-          "hash": "AWjvlX7/Ddoh6tICf6FOfaush/qBb/iCWH1F321K1SY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepository-2.html",
-          "hash": "yl7UHInK3zDWK6E2ePs2bnQWHEiUwvCkitlhpCoB7/E="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html",
-          "hash": "2yL3sC5PVSsDT97+OMnKxoEqxP/M6bbQsmUxt/R13do="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html",
-          "hash": "YwPj3UMRDyj6IuDo/SgTigj0Y5akJltCQC9fBbvEDGo="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepository-2.html",
-          "hash": "bsvpMY8IUgOiqnbI0fjEBQyjj9ISQ1ldmEXCMjcT6k8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html",
-          "hash": "o088e0I66u5dAo4vxl99w2t/Sq5gY9kYntUqMT4HEUo="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html",
-          "hash": "9kCA/6kZa+BeaMNfnFl0J76/2d570Ap1KOAlt5rDi/s="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.UnitOfWork.html",
-          "hash": "yetp2HbgdbfVmNe2B+nAV3/shtQih9FXzyyMnvZd1/A="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.EFCore.html",
-          "hash": "C6Mh4L0vPwMZUfhBNosjyr7mr6FnAfaAvBfuwFyXYws="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IQueryableRepository-1.html",
-          "hash": "RjL7GD+/o33utZUzwtlz9lCNQGZprY5998WN1QEaeQY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepository-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepository-1.html",
-          "hash": "zNRhd862hDBQnCxSAPti3vN3V9+975WgOW/JJkLeJIU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepository-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepository-2.html",
-          "hash": "0JCYFT6EwFjX+oNkpDyIhNSCO4iWD2EArs7J6dbCxE8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-1.html",
-          "hash": "D139DYwTBNW20ja1xCqvtDaU5/Yh1ygk4CarO1jmKF8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadRepositoryAsync-2.html",
-          "hash": "87cPpLEkjJ7ohnLL5I8q5KqgGIiFJqdSLgbltDbnmOk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IReadWriteRepository-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadWriteRepository-2.html",
-          "hash": "K2OlZWfKnx/TrVeRYZ5iaizZNQTBZ7hMzWSWc/HMl/A="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IReadWriteRepositoryAsync-2.html",
-          "hash": "+WfjHVWmL6iGWKuEuKk0UBqZHkPzyDdakZDPRFbNrLE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IUnitOfWork.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IUnitOfWork.html",
-          "hash": "92GcQdWOe1OtlEX/qiENisI5BGb8GxyDWbGHXK4kZQM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IWriteRepository-2.html",
-          "hash": "08ce/vPTeKkbsGxSmdbm+Ph1a9vBWgJw6VbLcfp2DZM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.IWriteRepositoryAsync-2.html",
-          "hash": "LX+Tu7eU5f/dELoHHkcZpSjJu+deXP3B1N/MKb/YFb8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.GenericRepository.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.GenericRepository.html",
-          "hash": "UckCA2uX91GsM9d2L+wdB/A74JU4in4lsDXUB556KPM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Category-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Category-1.html",
-          "hash": "y0xpJR+54Nx1N6FqX6n4mP63MXTX9sYUf8It6O8TRNA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Category-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Category-2.html",
-          "hash": "VdhMiy7ue/DQHitmAwNF8o/+SoUAnSLBsMYQPvLdBsI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Image.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Image.html",
-          "hash": "r+IyxBLxFQlbuGKauX6HY5vucJopp3BM5iLKpRTlw7s="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Tag-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Tag-1.html",
-          "hash": "kHzfF8hJoNSHbmtfZvHgeLuI91BO9wGcvfklTNXCZxA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Tag.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.CommonTypes.Tag.html",
-          "hash": "0UVxhbJPXecNR+87SdItHbq9YA8r71BMMMlQDMzrGsM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.CommonTypes.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.CommonTypes.html",
-          "hash": "BUMBa0d9sm7sNuR8UEhoPB4YTTt5r1g4bo7DgXQzs3I="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IGetOnlyId-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IGetOnlyId-1.html",
-          "hash": "gXcN8Z0abcS4N+3SnA15clbmQVa/17av4y9TbVQ4Bf0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasAccessedBy.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasAccessedBy.html",
-          "hash": "PeZVpA2Qlo+vR9KVkcdLtWlm/Y2pQ7sZ4WM9ed8wTlU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasAccessedTime.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasAccessedTime.html",
-          "hash": "36uf2s52eAy2D7cxO2dnqT+TdQz0IEGom9KfpokmWJw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasAuditProperties.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasAuditProperties.html",
-          "hash": "+sO3NAQb1evoBDH4bqiuh6+Ye+zch0xZ10zPqdxEiko="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasAuditTimeProperties.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasAuditTimeProperties.html",
-          "hash": "MEgnDS3Lk3ueufGoQ8yUF5g7wAbtXjZi1n552b9OdrA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasCategories-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasCategories-1.html",
-          "hash": "Hz8z14pWfTQZm2iupeqSUOiKGs/YGuRhQHsP5au4BYc="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasCategories-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasCategories-2.html",
-          "hash": "vWjp6DAR5hB/lQINPm8glStM6yk4Kk6lcgtzceXaVsQ="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasCreatedBy.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasCreatedBy.html",
-          "hash": "mlbpn7hV6KjXifDS38rOMRWBqGV4bIELlN9RgI5pIjw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasCreatedTime.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasCreatedTime.html",
-          "hash": "j9rra6uiT8I2zBD5Wm0OMAs33m+oZZZseA+rCU71ivU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasDescription.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasDescription.html",
-          "hash": "PjwX5j4tA28GpKxaZnlJ2Cz90NmznBjg1ZG0F6PqR8Y="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasId-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasId-1.html",
-          "hash": "PrsLapLv+k8zoor7BObuN8mOCu4xcF09PtK3UuUikj0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasIdSettable-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasIdSettable-1.html",
-          "hash": "Z/8q+ZBYyK4OmpfPz+9VrlCbwNGmwMFVT7r7fjiYD6g="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasModifiedBy.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasModifiedBy.html",
-          "hash": "4D6HiuzGjr2TE8Pwf76vUC9C4GNNgxvOqm7BlNU9rm8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasModifiedTime.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasModifiedTime.html",
-          "hash": "AmaucNEKbFD3RGB91ltZq2FOBa75jRJjjHXf9i2Kvkk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasParentId-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasParentId-1.html",
-          "hash": "uJHybPLSS7EcAtBpoayHQTEtnnGwZaJeMFjT5ktPo30="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasTags-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasTags-1.html",
-          "hash": "5REVpbDd5HF6el25QBaxWK2JDTxZMRCZ70PAd5C4BWE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasTags-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasTags-2.html",
-          "hash": "r73CfCYzZmFWOmpBAUDeYa/LLpYWJnfPGf5cH0gO/tk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasTitle.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasTitle.html",
-          "hash": "sTBlAj9BqhfEK1lbhYFGJ7F8yqoac0bxvcMwn3Uy6kA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHasValue-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHasValue-1.html",
-          "hash": "84AtiPdQYcqKjQs2eduJRBmVx1X8yDq+ahCDsvxNwwU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHierarchicalParentChildrenComposite-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHierarchicalParentChildrenComposite-1.html",
-          "hash": "0SBhN61DWoANfn5sw+kDXJg/3Zc4KgL1daBXVeuhI28="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithChildren-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithChildren-1.html",
-          "hash": "zfdNUgck5I2zsWelyMnI4IvjWE96uqsBuFiBaeTP3Qc="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithChildrenComposite-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithChildrenComposite-1.html",
-          "hash": "6DeKs5w3MomeXZRX8vbXs/IK1ipznv7VIIBg2ttuHN4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithParent-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithParent-1.html",
-          "hash": "rdwgkHWPX0tnkg4dKbXNyr/lw6uCwbxVQuQivszYIiw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithParentComposite-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IHierarchicalWithParentComposite-1.html",
-          "hash": "vKhGpG475pyX+LHjlwhctqVk0piE/ylNHx+HbYaWRso="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.INamed.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.INamed.html",
-          "hash": "dfNAYBCv9LIwQTGqmKwoi0kOzssUhxgv7oBMECbc18Q="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.IParentChildrenComposite-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.IParentChildrenComposite-2.html",
-          "hash": "0JVz2WmeGJsmU7oqHnzWmHDGMevY5Pvuihsv4ujhXFg="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Model.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Model.html",
-          "hash": "k6oNyqCsmnhyb5brDF9ZvIHP5exmLYy6/bOjRc6k1PI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.StandardDataSets.Regions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.StandardDataSets.Regions.html",
-          "hash": "TEFMVusM754yNrdVlFaUofH8ald6k4LQDQqUFokkr0g="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.StandardDataSets.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.StandardDataSets.html",
-          "hash": "rFgMpdlV+8OTZFFB7XWUNXBOs2Ed5F3S7H1FLWW407M="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Utilities.DataColumnExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Utilities.DataColumnExtensions.html",
-          "hash": "tGH60+Y2VbioSOouEypJndgQTKGo22KD6b0UMCa9RYc="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Ploch.Common.Data.Utilities.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Ploch.Common.Data.Utilities.html",
-          "hash": "Fcq3/SsJwo5g4ZQ5SSfWLzKn1ySQw9xqcfVaeqzr1vM="
+          "relative_path": "api/Ploch.Data.EFCore.IDbContextConfigurator.html",
+          "hash": "XIJx3kTsWXHv2aWXljpTbUIUAD2/tObSkk0FwcVSOSs="
         }
       },
       "is_incremental": false,
@@ -825,7 +57,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html",
-          "hash": "ipG/n7TGNj47twj3a4TQgIG5sBGt3P6uk0X9mgG5hdQ="
+          "hash": "nCUu3zmqK2QVTe7p+CMaNknbq4LUgEVfRNLRla/+noE="
         }
       },
       "is_incremental": false,
@@ -837,7 +69,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Ploch.Data.EFCore.IntegrationTesting.DbContextServicesRegistrationHelper.html",
-          "hash": "YotGdioMhBKr9vJ48pf/C3JeDdt7ZdPAS+oScjswIbI="
+          "hash": "IIyUdnmzhMU1kn5Q5FHht49i/zIoSmYQwusR8A/WZvg="
         }
       },
       "is_incremental": false,
@@ -850,6 +82,822 @@
         ".html": {
           "relative_path": "api/Ploch.Data.EFCore.IntegrationTesting.html",
           "hash": "yzXa/SgxpueLP8fyWikJLKPzdsu6RzdwpYUTol8QqEc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.EFCore.SqLite.SqLiteConnectionOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.EFCore.SqLite.SqLiteConnectionOptions.html",
+          "hash": "9ycfdSbNRu4Z/Wb2ZKgmtqLaHKMLxBdfiUCryP4vRB8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.EFCore.SqLite.SqLiteDateTimeOffsetPropertiesFix.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.EFCore.SqLite.SqLiteDateTimeOffsetPropertiesFix.html",
+          "hash": "low+drhtNpGQOgWp0Hm0gDKpe4GRMDWG90RoMaSLqos="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.EFCore.SqLite.SqLiteDbContextConfigurator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.EFCore.SqLite.SqLiteDbContextConfigurator.html",
+          "hash": "j4fDozQkmDcyYQxV1N3HPbNkXk3AE6cMRwDKdlbV45I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.EFCore.SqLite.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.EFCore.SqLite.html",
+          "hash": "Xw/yvO6117//ugy3+2ZEl8uKQtMJJXXF3byMZ1dOh60="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.html",
+          "hash": "B9O4sfNFTYuHa/a33Dkk9OWtP7FHUvT7gB8t1/fLoEA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.EFCore.SqlServer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.EFCore.SqlServer.html",
+          "hash": "Dop63x2eOQePDDW7KK0tsEjNLqKD4iIOMeGNdzZ959Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.EFCore.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.EFCore.html",
+          "hash": "VoIwMbzQoWm6gaYPlEEdtrNDJ38F3GGeVBmnRV6USuU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.GenericRepositoryDataIntegrationTest-1.html",
+          "hash": "Am068dZKEvSY6ZwpCo5XcGu9x7fSDEf4g7cDMRV8IuE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.html",
+          "hash": "L1e1yEte2C8HYBqCnmt5JnYJJxRfwR7ALqO6XIA7G0I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html",
+          "hash": "nzQj75novR4wxpNMfMMvkQxMv/CJmhlGw57N4vbPkZs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html",
+          "hash": "c+i4qALUwZe8lkrVugSNfKsr5FZFfe4iGufWkiizCuc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepository-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepository-2.html",
+          "hash": "ic3BHLJ0D6jEwfA22xSZ/L55Zg2FAOKjGGLi6cBaEbA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html",
+          "hash": "YEczRgdXn1B8NE2/H798fo+yfY1i4C8x4kifL/Kj5M8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-2.html",
+          "hash": "8zzT9ttMpIBpsz4S+w41WJa/C8SJ1KFXvYu0uRxH/9o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadWriteRepository-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadWriteRepository-2.html",
+          "hash": "WznP4AyN52/uTCtOL+QXU6bcBHqZUI1T3NLixJRp4rg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.ReadWriteRepositoryAsync-2.html",
+          "hash": "k6ZZtmrQX/ydk+hN8nqzsMh72W6FzvI7YmTapC6rLko="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.ServiceCollectionRegistration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.ServiceCollectionRegistration.html",
+          "hash": "IhwN5fP3z0wr9BVqGqJmhk9D3UMEutc+zdgpdVOSJXQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.UnitOfWork.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.UnitOfWork.html",
+          "hash": "xg3PnuPYYR132u9Ymlf+STDQy2g5c9q3ykhXcQ5CYKo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.EFCore.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.EFCore.html",
+          "hash": "btYOhCpY2DZojbXYNNrjYK/70KG/T55gA3N+xFTFn8U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IQueryableRepository-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IQueryableRepository-1.html",
+          "hash": "hTbf6oOF9kxELpR7YI1b7ponjCAQe5tT4zaPY1bBepQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IReadRepository-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IReadRepository-1.html",
+          "hash": "mlJN5ZmzqUm/hAYOAXPKdyXamj5QJ9WpDi/JVkA2YGc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IReadRepository-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IReadRepository-2.html",
+          "hash": "eQviL9L3GhvSvH9MXCH2jyyvlZYC4ZVWrD+PI4k0cug="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html",
+          "hash": "xR4MYiNrBTivdGT20EPwTNXzmjAk9OqhGNXGyC6jLQs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IReadRepositoryAsync-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IReadRepositoryAsync-2.html",
+          "hash": "bn3zmjHDvt97cqVWA9jQaVQkg03D1A+PYJXWovAOPOY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IReadWriteRepository-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IReadWriteRepository-2.html",
+          "hash": "20BTaBY21BFPa3CSibU3SZzdfXJ5v9Vvu9IAMuu0OtQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IReadWriteRepositoryAsync-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IReadWriteRepositoryAsync-2.html",
+          "hash": "NITSvTnyaA2bKuQhwxLCFeWg1Gn0OvBeLnauSGGTOW0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IUnitOfWork.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IUnitOfWork.html",
+          "hash": "Xg6NdyKoVHW4WZOGK64G0etq7BPW98V33Z9rsjCgjRI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IWriteRepository-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IWriteRepository-2.html",
+          "hash": "hBTXX36Vrptl4zZ60wzu7snqP1VtVz5cJXqjYvGKcpk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.IWriteRepositoryAsync-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.IWriteRepositoryAsync-2.html",
+          "hash": "mvqkhXBSWWRI6k+Gf2l+HcIF/uZi0fryMt0mdp0gvHY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.GenericRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.GenericRepository.html",
+          "hash": "6wsEqJ59bIiEs1ERVIdUdUtu3yVN2fKz0oY6aaiU5L8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.CommonTypes.Category-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.CommonTypes.Category-1.html",
+          "hash": "h0njf+1s31j39yZqI8IyIV5rzkivI3+g5zMbwbfIiMQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.CommonTypes.Category-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.CommonTypes.Category-2.html",
+          "hash": "SJNnL64wim8bcB37XwEHsLSb+h4HSLsF3QcCr/NFVdc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.CommonTypes.Image.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.CommonTypes.Image.html",
+          "hash": "KdiaHCkWe4gTm53f91HpRj8NH2cM2xqz6F0WUfbty/8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.CommonTypes.Tag-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.CommonTypes.Tag-1.html",
+          "hash": "6XLG1Dd/L0CrpPCTlryYjJQjAs2wGIoAGIjyi0+5dnE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.CommonTypes.Tag.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.CommonTypes.Tag.html",
+          "hash": "WwNdE4xyOtSkdt3PS4Ns4WvgwtCXL7/3b9oBA7JKOcg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.CommonTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.CommonTypes.html",
+          "hash": "rhCk7Y7EYNcULCNotw5LT24XDTm8iFY/PlBvxKumrFo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IGetOnlyId-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IGetOnlyId-1.html",
+          "hash": "kmztzu38R+++86Zl/vagVqXO/DlhNL+u35Zee7dvYMU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasAccessedBy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasAccessedBy.html",
+          "hash": "d+AQ/Z4gY65IWzYyxljmiV9I1u8Dp8SpZHaL3PnJyHM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasAccessedTime.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasAccessedTime.html",
+          "hash": "GuA8Zk4WYx5csw+hbKzDnN2/0oevvnSCztrR5yIsESg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasAuditProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasAuditProperties.html",
+          "hash": "AwAz30HyEsP0nOyz0wKFaV433L4Ff3U8sZsV2Nutt40="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasAuditTimeProperties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasAuditTimeProperties.html",
+          "hash": "2xfzNC42Gd2HzQiV7nYb7odFDmQS08Lj64aJl8uwMIU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasCategories-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasCategories-1.html",
+          "hash": "afwQuP065evBBEZ7OJW6QDdv5byJHArIDXn7xeOduGc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasCategories-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasCategories-2.html",
+          "hash": "3SyhbxCfKcr+/2ctFhfHNTGfzrRNUn36PV7f/F/DpXw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasContents.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasContents.html",
+          "hash": "J1IQeRnWMxf7FYlOUISd1PQCyyUVYleHVVPIvXiD6jk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasCreatedBy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasCreatedBy.html",
+          "hash": "MCEUHgnwEZkedWUWQ3Rs6Pq9PbYWVuGpqeaPPk4IakQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasCreatedTime.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasCreatedTime.html",
+          "hash": "0+0TYNJshkeH4vvsFoM00OTk9au5xmNxl/6igVNpl8g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasDescription.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasDescription.html",
+          "hash": "GyVafz7b57rdJUxvgsYfqLhbKupYaigTHWijbGwCZqA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasId-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasId-1.html",
+          "hash": "0hFlIN0f1n6XqC/LASnlTg3Jo81SJd4g+iVK9CWzetU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasIdSettable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasIdSettable-1.html",
+          "hash": "1R+rr5fV2aCUGU9iMZlPKZeNrbLKMP49wz15V4iugMQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasModifiedBy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasModifiedBy.html",
+          "hash": "5OTnZzEdaE0wHkrSp0B99NnxSUf6cFzoFlry1xcgSGU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasModifiedTime.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasModifiedTime.html",
+          "hash": "R+qYQXQopM7lA6kRibc7UGcxPiWfTS/N562l6FV30bY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasParentId-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasParentId-1.html",
+          "hash": "T8ekYEgjloOQOXHmxIz/zhrOO3C/0kkW+9WBsY3IUKk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasTags-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasTags-1.html",
+          "hash": "PMJpW5uf5rGxB6hxNhYy+MYDfSokVuoQHdY99KhcqyE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasTags-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasTags-2.html",
+          "hash": "YUu9GUVAbplWAbbiaIHy5LX2MVbkWr/3XlfdADDNRac="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasTitle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasTitle.html",
+          "hash": "+Hr0UXoyXM6ANOSJxbA/x6iWAHbqO7NjuFeUjvNljl4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHasValue-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHasValue-1.html",
+          "hash": "tBvk33WRXv7TdsfOl5dfsG9gEOODQtTx3vfw7LP0s2Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHierarchicalParentChildrenComposite-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHierarchicalParentChildrenComposite-1.html",
+          "hash": "Y+0DotI6PizZukAbHUAfr4fWQW6kGAFbt48hGSX7Rxo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHierarchicalWithChildren-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHierarchicalWithChildren-1.html",
+          "hash": "7apANWVQ1zkPUHEBN9YMHSh97hjCUjC5xIv0DfD7YfU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHierarchicalWithChildrenComposite-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHierarchicalWithChildrenComposite-1.html",
+          "hash": "YVZgY1/1gqIluglsjYCCM1aTW1s9hXC2cn0dSnIkepc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHierarchicalWithParent-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHierarchicalWithParent-1.html",
+          "hash": "E7a3heLefTso/EYpFE4Hiv/EUzLTpHcr+5TmR8E4PoA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IHierarchicalWithParentComposite-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IHierarchicalWithParentComposite-1.html",
+          "hash": "fytRPsIy4zKW+gc9mwux8Y/KyG27KTc2pwJZdoT9hxo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.INamed.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.INamed.html",
+          "hash": "Zy2XBQ78XoL84jo8ZbfZDmrGOFAqIda7ag2T8QyaXuE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.IParentChildrenComposite-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.IParentChildrenComposite-2.html",
+          "hash": "OmHuj0sHGUs9boUKw1ZYdaIty15lIa/VplxfTmv8BN8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Model.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Model.html",
+          "hash": "uRqJRRTI+kXBndEhHhkqrf3V6ZYhrm30q8UvoOMCBEk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.StandardDataSets.Regions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.StandardDataSets.Regions.html",
+          "hash": "ASFMEZmoXjKqb6uqmv9YwxerMPnh6bUAZy3x8DNfjyc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.StandardDataSets.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.StandardDataSets.html",
+          "hash": "n8Vz0WqcneI+6Dat7Vc0T3ahiGHO6CnzpRDNqDqx7bc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Utilities.DataColumnExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Utilities.DataColumnExtensions.html",
+          "hash": "glx30IY/9e/G5BeR0lAr2Q4FI0OjWBk5hg4xavgkME4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Ploch.Data.Utilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Ploch.Data.Utilities.html",
+          "hash": "1ufL1/HhAF+Y+dxNxrjts2BccG2TVyLW/TU94C/Vr4o="
         }
       },
       "is_incremental": false,
@@ -873,7 +921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "G0jzcgAhQcWHKl4KUY680eoYntS/keHIiCm0sUkWZrM="
+          "hash": "A15Uarl4SAlWMB+gPuwtW2luZ8JhHcsr7X34FhQJhzE="
         }
       },
       "is_incremental": false,
@@ -951,7 +999,7 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 71,
+          "total_file_count": 75,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
