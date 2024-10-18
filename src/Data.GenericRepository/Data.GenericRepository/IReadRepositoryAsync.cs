@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Ploch.Data.Model;
@@ -8,7 +9,8 @@ using Ploch.Data.Model;
 namespace Ploch.Data.GenericRepository;
 
 /// <summary>
-///     Defines a repository that provides asynchronous read operations for a collection of a <typeparamref name="TEntity" />.
+///     Defines a repository that provides asynchronous read operations for a collection of a
+///     <typeparamref name="TEntity" />.
 /// </summary>
 /// <inheritdoc />
 public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
@@ -21,6 +23,22 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity found, or null.</returns>
     Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Asynchronously finds the first entity matching the specified query.
+    /// </summary>
+    /// <param name="query">A LINQ expression to filter the entities.</param>
+    /// <param name="onDbSet">
+    ///     An optional function to apply additional LINQ operations on the queryable collection of entities.
+    /// </param>
+    /// <param name="cancellationToken">A token that can be used to cancel the asynchronous operation.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation. The task result contains the first entity found that matches the
+    ///     query, or null if no entity is found.
+    /// </returns>
+    Task<TEntity?> FindFirstAsync(Expression<Func<TEntity, bool>> query,
+                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                  CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Asynchronously gets all entities from the repository.
@@ -55,7 +73,8 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
 }
 
 /// <summary>
-///     Defines a repository that provides asynchronous read operations for a collection of <typeparamref name="TEntity" /> with a
+///     Defines a repository that provides asynchronous read operations for a collection of <typeparamref name="TEntity" />
+///     with a
 ///     specified identifier type.
 /// </summary>
 /// <typeparam name="TId">The identifier property type.</typeparam>

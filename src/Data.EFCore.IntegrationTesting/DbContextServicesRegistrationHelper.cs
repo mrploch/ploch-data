@@ -11,11 +11,11 @@ public static class DbContextServicesRegistrationHelper
         where TDbContext : DbContext
     {
         serviceCollection.AddDbContext<TDbContext>(builder =>
-                                                   {
-                                                       var connection = new SqliteConnection(connectionString);
-                                                       connection.Open();
-                                                       builder.UseSqlite(connection);
-                                                   });
+        {
+            var connection = new SqliteConnection(connectionString);
+            connection.Open();
+            builder.UseSqlite(connection);
+        });
 
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection);
     }
@@ -26,6 +26,7 @@ public static class DbContextServicesRegistrationHelper
     {
         serviceCollection.AddDbContext<TDbContext>(dbContextConfigurator.Configure);
 
+
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection);
     }
 
@@ -33,10 +34,15 @@ public static class DbContextServicesRegistrationHelper
         where TDbContext : DbContext
     {
         var serviceProvider = serviceCollection.BuildServiceProvider();
-        var testDbContext = serviceProvider.GetRequiredService<TDbContext>();
-        testDbContext.Database.OpenConnection();
-        testDbContext.Database.EnsureCreated();
+        var scope = serviceProvider.CreateScope();
+        var testDbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
+        var dbConnection = testDbContext.Database.GetDbConnection();
 
-        return (serviceProvider, testDbContext);
+        testDbContext.Database.OpenConnection();
+
+
+        var ensureCreated = testDbContext.Database.EnsureCreated();
+
+        return (scope.ServiceProvider, testDbContext);
     }
 }

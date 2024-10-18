@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,15 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
     public Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
         return Entities.CountAsync(cancellationToken);
+    }
+
+    public async Task<TEntity?> FindFirstAsync(Expression<Func<TEntity, bool>> query,
+                                               Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                               CancellationToken cancellationToken = default)
+    {
+        var entities = onDbSet != null ? onDbSet(Entities) : Entities;
+
+        return await entities.FirstOrDefaultAsync(query, cancellationToken);
     }
 }
 

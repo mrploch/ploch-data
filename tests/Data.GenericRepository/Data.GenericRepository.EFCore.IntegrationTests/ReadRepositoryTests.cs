@@ -98,7 +98,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
             queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
             queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
             queriedPost.Categories.Should()
-                       .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+                .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
         }
     }
 
@@ -138,6 +138,22 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         var count = repository.Count();
 
         count.Should().Be(20);
+    }
+
+    [Fact]
+    public async Task Find_should_query_repository_for_first_entity_and_return_it()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var testBlogEntities = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadRepository<BlogPost, int>();
+        var blogPost = repository.FindFirst(post => post.Name.Contains("Blog post 1"));
+
+        blogPost.Should().NotBeNull();
+        blogPost.Should().BeEquivalentTo(testBlogEntities.blogPost1);
     }
 
     [Fact]

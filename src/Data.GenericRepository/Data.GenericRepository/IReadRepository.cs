@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository;
@@ -18,6 +20,17 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
     /// <returns>The entity found, or null.</returns>
     TEntity? GetById(object[] keyValues);
+
+    /// <summary>
+    ///     Finds the first entity that matches the specified query.
+    /// </summary>
+    /// <param name="query">The query to filter entities.</param>
+    /// <param name="onDbSet">Optional function to customize the query on the DbSet.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>The first entity that matches the query, or null if none found.</returns>
+    TEntity? FindFirst(Expression<Func<TEntity, bool>> query,
+                       Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                       CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Gets all entities from the repository.
@@ -43,7 +56,8 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
 }
 
 /// <summary>
-///     Defines a repository that provides read operations for a collection of <typeparamref name="TEntity" /> with a specified
+///     Defines a repository that provides read operations for a collection of <typeparamref name="TEntity" /> with a
+///     specified
 ///     identifier type.
 /// </summary>
 /// <inheritdoc />

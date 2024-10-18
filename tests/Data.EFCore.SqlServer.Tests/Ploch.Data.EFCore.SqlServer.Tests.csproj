@@ -22,4 +22,9 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj"/>
+        <ProjectReference Include="..\Data.EFCore.Tests\Ploch.Data.EFCore.Tests.csproj"/>
+    </ItemGroup>
+
 </Project>

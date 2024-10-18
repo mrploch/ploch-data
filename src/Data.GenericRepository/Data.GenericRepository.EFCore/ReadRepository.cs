@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Ploch.Data.Model;
 
@@ -26,6 +28,14 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
     public TEntity? GetById(object[] keyValues)
     {
         return DbSet.Find(keyValues);
+    }
+
+    /// <inheritdoc />
+    public TEntity? FindFirst(Expression<Func<TEntity, bool>> query,
+                              Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                              CancellationToken cancellationToken = default)
+    {
+        return onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
     }
 
     /// <inheritdoc />

@@ -108,7 +108,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
             queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
             queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
             queriedPost.Categories.Should()
-                       .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+                .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
         }
     }
 
@@ -224,5 +224,21 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var updatedEntity = new TestEntity { Id = 2, Name = "Updated" };
         var updateAction = async () => await _repository.UpdateAsync(updatedEntity);
         await updateAction.Should().ThrowAsync<InvalidOperationException>().Where(exception => exception.Message.Contains("not found"));
+    }
+
+    [Fact]
+    public async Task FindFirstAsync_should_execute_query_and_return_the_first_hit()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var testBlogEntities = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
+        var blogPost = await repository.FindFirstAsync(post => post.Name.Contains("Blog post 1"));
+
+        blogPost.Should().NotBeNull();
+        blogPost.Should().BeEquivalentTo(testBlogEntities.blogPost1);
     }
 }
