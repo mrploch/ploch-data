@@ -22,9 +22,9 @@ jobs:
       - run: echo "The branch name is ${{ github.repository }}"
       - uses: actions/checkout@v3
 
-      - name: Start dependencies (docker-compose)
-        run: |
-          docker-compose up -d  
+      - name: Start SqlServer
+        uses: 280780363/sqlserver-action@v1.0
+             
 
       - name: Wait for SQL Server container
         uses: jakejarvis/wait-action@master
