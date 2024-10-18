@@ -8,7 +8,7 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-env: 
+env:
   SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
   SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
   GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
@@ -22,7 +22,7 @@ jobs:
       - run: echo "The branch name is ${{ github.repository }}"
       - uses: actions/checkout@v3
 
-            - name: Start dependencies (docker-compose)
+      - name: Start dependencies (docker-compose)
         run: |
           docker-compose up -d  
 
@@ -62,16 +62,16 @@ jobs:
       - name: SonarScanner End
         shell: pwsh
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
-      # - name: Run codacy-coverage-reporter
-      #  uses: codacy/codacy-coverage-reporter-action@v1
-      #  with:
-      #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          
+          # - name: Run codacy-coverage-reporter
+          #  uses: codacy/codacy-coverage-reporter-action@v1
+          #  with:
+          #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           # or
           # api-token: ${{ secrets.CODACY_API_TOKEN }}
-      #    coverage-reports: '**/CoverageResults/coverage.opencover.xml'
-          # or a comma-separated list for multiple reports
-          # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>      
+          #    coverage-reports: '**/CoverageResults/coverage.opencover.xml'
+        # or a comma-separated list for multiple reports
+        # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>      
       - name: Upload Test Results
         uses: actions/upload-artifact@v3
         if: success() || failure()
