@@ -26,6 +26,7 @@ jobs:
         run: |
           docker-compose up -d  
 
+
       - name: Wait for SQL Server container
         uses: jakejarvis/wait-action@master
         with:
@@ -69,7 +70,7 @@ jobs:
           #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           # or
           # api-token: ${{ secrets.CODACY_API_TOKEN }}
-          #    coverage-reports: '**/CoverageResults/coverage.opencover.xml'
+        #    coverage-reports: '**/CoverageResults/coverage.opencover.xml'
         # or a comma-separated list for multiple reports
         # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>      
       - name: Upload Test Results
