@@ -157,6 +157,25 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
     }
 
     [Fact]
+    public async Task Find_with_OnDbSet_action_should_query_repository_for_first_entity_and_return_it()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var tags = await RepositoryHelper.AddBlogPostTagsAsync(unitOfWork.Repository<BlogPostTag, int>(), 10);
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadRepository<BlogPostTag, int>();
+
+        var blogPostTag = repository.FindFirst(
+            postTag => postTag.Name.Contains(tags[3].Name) || postTag.Name.Contains(tags[4].Name) || postTag.Name.Contains(tags[5].Name),
+            blogPostTags => blogPostTags.Where(tag => tag.Name.Contains(tags[4].Name)));
+
+        blogPostTag.Should().NotBeNull();
+        blogPostTag.Should().BeEquivalentTo(tags[4]);
+    }
+
+    [Fact]
     public void Count_should_return_zero_when_repository_is_empty()
     {
         using var unitOfWork = CreateUnitOfWork();

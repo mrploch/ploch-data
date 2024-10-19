@@ -105,7 +105,7 @@ csharp_style_conditional_delegate_call = true:suggestion
 
 # Modifier preferences
 csharp_prefer_static_local_function = true:suggestion
-csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:silent
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, required, readonly, unsafe, volatile, async, file:silent
 
 # Code-block preferences
 csharp_prefer_braces = true:silent
@@ -200,7 +200,7 @@ dotnet_naming_rule.static_field_should_be_pascal_case.style = pascal_case
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.interface.required_modifiers = 
+dotnet_naming_symbols.interface.required_modifiers =
 
 dotnet_naming_symbols.static_field.applicable_kinds = field
 dotnet_naming_symbols.static_field.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
@@ -208,31 +208,31 @@ dotnet_naming_symbols.static_field.required_modifiers = static
 
 dotnet_naming_symbols.private_or_internal_field.applicable_kinds = field
 dotnet_naming_symbols.private_or_internal_field.applicable_accessibilities = internal, private, private_protected
-dotnet_naming_symbols.private_or_internal_field.required_modifiers = 
+dotnet_naming_symbols.private_or_internal_field.required_modifiers =
 
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.types.required_modifiers = 
+dotnet_naming_symbols.types.required_modifiers =
 
 dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.non_field_members.required_modifiers = 
+dotnet_naming_symbols.non_field_members.required_modifiers =
 
 # Naming styles
 
-dotnet_naming_style.pascal_case.required_prefix = 
-dotnet_naming_style.pascal_case.required_suffix = 
-dotnet_naming_style.pascal_case.word_separator = 
+dotnet_naming_style.pascal_case.required_prefix =
+dotnet_naming_style.pascal_case.required_suffix =
+dotnet_naming_style.pascal_case.word_separator =
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 
 dotnet_naming_style.begins_with_i.required_prefix = I
-dotnet_naming_style.begins_with_i.required_suffix = 
-dotnet_naming_style.begins_with_i.word_separator = 
+dotnet_naming_style.begins_with_i.required_suffix =
+dotnet_naming_style.begins_with_i.word_separator =
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
 dotnet_naming_style.prefixedcamelcase.required_prefix = _
-dotnet_naming_style.prefixedcamelcase.required_suffix = 
-dotnet_naming_style.prefixedcamelcase.word_separator = 
+dotnet_naming_style.prefixedcamelcase.required_suffix =
+dotnet_naming_style.prefixedcamelcase.word_separator =
 dotnet_naming_style.prefixedcamelcase.capitalization = camel_case
 
 # StyleCop
@@ -301,6 +301,9 @@ dotnet_diagnostic.cs8644.severity = error # Type does not implement interface me
 
 resharper_possible_multiple_enumeration = none
 
+# ReSharper inspection severities
+resharper_arrange_modifiers_order_highlighting = hint
+
 # Test projects overrides
 [**/*Tests.cs]
 
@@ -310,6 +313,7 @@ dotnet_diagnostic.ca1851.severity = none # Possible multiple enumerations of IEn
 dotnet_diagnostic.sa1402.severity = none # File may only contain a single type
 dotnet_diagnostic.sa0001.severity = none # XML comment analysis is disabled due to project configuration
 dotnet_diagnostic.s4487.severity = none
+dotnet_diagnostic.sa1206.severity = none # Keyword order (modifiers order) give wrong result for required
 
 resharper_possible_multiple_enumeration_highlighting = none
 resharper_lambda_expression_can_be_made_static_highlighting = none
