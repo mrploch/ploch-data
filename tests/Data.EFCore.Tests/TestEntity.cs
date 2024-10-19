@@ -1,10 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.EFCore.Tests;
 
 public class TestEntity : IHasId<int>, INamed
 {
-    public int Id { get; set; }
+    [Key] public int Id { get; set; }
 
-    public string Name { get; set; } = default!;
+    [Required] public string Name { get; set; } = default!;
 }

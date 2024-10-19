@@ -7,16 +7,18 @@ namespace Ploch.Data.EFCore.SqlServer.Tests;
 public class SqlServerTests : DataIntegrationTest<TestDbContext>
 {
     public SqlServerTests() : base(new SqlServerDbContextConfigurator(builder =>
-                                                                      {
-                                                                          builder.DataSource = "localhost";
-                                                                          builder.InitialCatalog = $"Ploch.Data.Tests.{Guid.NewGuid()}";
-                                                                          builder.UserID = "sa";
-                                                                          builder.Password = "P@ssw0rd";
-                                                                          builder.TrustServerCertificate = true;
-                                                                      },
-                                                                      builder => builder.EnableRetryOnFailure()))
-    {
-    }
+        {
+            builder.DataSource = "localhost,1401";
+            //builder.InitialCatalog = $"Ploch{Guid.NewGuid()}";
+            builder.UserID = "sa";
+            builder.Password = "P@ssw0rd";
+            builder.TrustServerCertificate = true;
+        },
+        builder =>
+        {
+            builder.EnableRetryOnFailure();
+        }))
+    { }
 
     [Fact]
     public void DataContext_should_be_functional()
