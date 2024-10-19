@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Start SqlServer
-        run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server
+        run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server --name sqlserver --network "host"
 
       - name: Wait for SQL Server container
         uses: jakejarvis/wait-action@master
@@ -66,7 +66,7 @@ jobs:
           #  uses: codacy/codacy-coverage-reporter-action@v1
           #  with:
           #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          # or
+        # or
         # api-token: ${{ secrets.CODACY_API_TOKEN }}
         #    coverage-reports: '**/CoverageResults/coverage.opencover.xml'
         # or a comma-separated list for multiple reports
