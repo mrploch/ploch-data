@@ -253,7 +253,7 @@ dotnet_diagnostic.sa1009.severity = none
 dotnet_diagnostic.sa1000.severity = none
 dotnet_diagnostic.sa1633.severity = none
 dotnet_diagnostic.sa1649.severity = warning # File name should match first type name.
-
+dotnet_diagnostic.SA1118.severity = suggestion # 
 # ReSharper properties
 resharper_csharp_empty_block_style = together
 resharper_csharp_max_line_length = 170
