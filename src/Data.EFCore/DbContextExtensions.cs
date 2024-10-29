@@ -14,7 +14,7 @@ public static class DbContextExtensions
     /// </summary>
     /// <param name="context">The DbContext instance.</param>
     /// <param name="entityName">The name of the entity set to retrieve.</param>
-    /// <returns>An <see cref="IQueryable" /> of the specified entity name.</returns>
+    /// <returns>An <see cref="IQueryable{T}" /> of the specified entity name.</returns>
     /// <exception cref="ArgumentNullException">
     ///     Thrown if <paramref name="context" /> or <paramref name="entityName" /> is null.
     /// </exception>
@@ -26,10 +26,10 @@ public static class DbContextExtensions
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(entityName);
 
-        var entityType = context.Model.GetEntityTypes().FirstOrDefault(t => t.ClrType.Name == entityName)?.ClrType;
+        var entityType = FindEntityType(context, entityName);
         if (entityType == null)
         {
-            throw new InvalidOperationException($"Entity type '{entityName}' not found in the context.");
+            throw new InvalidOperationException($"Entity type '{entityName}' was not found in the context.");
         }
 
         return context.Set(entityType);
@@ -52,7 +52,44 @@ public static class DbContextExtensions
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(entityType);
 
-        return (IQueryable<object>)context.GetType().GetMethod("Set")!.MakeGenericMethod(entityType).Invoke(context, null)! ??
-               throw new InvalidOperationException("Failed to get DbSet for type.");
+        if (!context.ContainsEntityType(entityType))
+        {
+            throw new InvalidOperationException($"Entity type '{entityType.Name}' was not found in the context.");
+        }
+
+        var setMethod = typeof(DbContext).GetMethods()
+                                         .First(m => m.Name == "Set" && m.ContainsGenericParameters && m.GetParameters().Length == 0);
+
+        var genericSetMethod = setMethod.MakeGenericMethod(entityType);
+
+        return (IQueryable<object>)genericSetMethod.Invoke(context, null)!;
+    }
+
+    /// <summary>
+    ///     Finds the entity type for the specified entity name in the given DbContext.
+    /// </summary>
+    /// <param name="context">The DbContext instance.</param>
+    /// <param name="entityName">The name of the entity to find.</param>
+    /// <returns>The <see cref="Type" /> of the specified entity name, or null if the entity type is not found.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="context" /> or <paramref name="entityName" /> is null.
+    /// </exception>
+    public static Type? FindEntityType(this DbContext context, string entityName)
+    {
+        return context.Model.GetEntityTypes().FirstOrDefault(t => t.ClrType.Name == entityName)?.ClrType;
+    }
+
+    /// <summary>
+    ///     Determines whether the specified entity type is present in the DbContext.
+    /// </summary>
+    /// <param name="context">The DbContext instance.</param>
+    /// <param name="entityType">The Type of the entity to check for existence.</param>
+    /// <returns>True if the entity type is present in the context; otherwise, false.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="context" /> or <paramref name="entityType" /> is null.
+    /// </exception>
+    public static bool ContainsEntityType(this DbContext context, Type entityType)
+    {
+        return context.Model.GetEntityTypes().FirstOrDefault(t => t.ClrType == entityType) != null;
     }
 }
