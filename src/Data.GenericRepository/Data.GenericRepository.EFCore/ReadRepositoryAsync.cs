@@ -21,6 +21,7 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
     ///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
     { }
 
@@ -31,7 +32,9 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
     }
 
     /// <inheritdoc />
-    public async Task<IList<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default)
+    public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? query = null,
+                                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                                  CancellationToken cancellationToken = default)
     {
         return onDbSet == null ? await Entities.ToListAsync(cancellationToken) : await onDbSet(Entities).ToListAsync(cancellationToken);
     }
@@ -39,10 +42,11 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
     /// <inheritdoc />
     public async Task<IList<TEntity>> GetPageAsync(int pageNumber,
                                                    int pageSize,
+                                                   Expression<Func<TEntity, bool>>? query = null,
                                                    Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                    CancellationToken cancellationToken = default)
     {
-        return await GetPageQuery(pageNumber, pageSize, onDbSet).ToListAsync(cancellationToken);
+        return await GetPageQuery(pageNumber, pageSize, query, onDbSet).ToListAsync(cancellationToken);
     }
 
     /// <inheritdoc />
@@ -51,6 +55,7 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
         return Entities.CountAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public async Task<TEntity?> FindFirstAsync(Expression<Func<TEntity, bool>> query,
                                                Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                CancellationToken cancellationToken = default)
@@ -73,6 +78,7 @@ public class ReadRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity>, I
     ///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity, TId}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
     { }
 

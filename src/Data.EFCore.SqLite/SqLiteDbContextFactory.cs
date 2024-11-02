@@ -15,28 +15,41 @@ public abstract class SqLiteDbContextFactory<TDbContext, TMigrationAssembly> : B
     where TDbContext : DbContext
 {
     /// <summary>
-    ///     Provides a factory for creating DbContext instances with SQLite as the database provider.
+    ///     Initializes a new instance of the <see cref="SqLiteDbContextFactory{TDbContext, TMigrationAssembly}" /> class.
     /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Provides a factory for creating DbContext instances with SQLite as the database provider.
+    ///     </para>
+    ///     <para>
+    ///         This abstract class extends BaseDbContextFactory and provides methods to configure SQLite options
+    ///         for the DbContext instances it creates.
+    ///     </para>
+    /// </remarks>
     /// <typeparam name="TDbContext">The type of DbContext to create.</typeparam>
     /// <typeparam name="TMigrationAssembly">The type of the migration assembly.</typeparam>
-    /// <remarks>
-    ///     This abstract class extends BaseDbContextFactory and provides methods to configure SQLite options
-    ///     for the DbContext instances it creates.
-    /// </remarks>
+    /// <param name="dbContextCreator">Function that creates an instance of <typeparamref name="TDbContext" />.</param>
     protected SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator) : base(dbContextCreator)
     { }
 
     /// <summary>
-    ///     Provides a factory for creating DbContext instances with SQLite as the database provider.
+    ///     Initializes a new instance of the <see cref="SqLiteDbContextFactory{TDbContext, TMigrationAssembly}" /> class.
     /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Provides a factory for creating DbContext instances with SQLite as the database provider.
+    ///     </para>
+    ///     <para>
+    ///         This abstract class extends BaseDbContextFactory and provides methods to configure SQLite options
+    ///         for the DbContext instances it creates.
+    ///     </para>
+    /// </remarks>
     /// <typeparam name="TDbContext">The type of DbContext to create.</typeparam>
     /// <typeparam name="TMigrationAssembly">The type of the migration assembly.</typeparam>
-    /// <remarks>
-    ///     This abstract class extends BaseDbContextFactory and provides methods to configure SQLite options
-    ///     for the DbContext instances it creates.
-    /// </remarks>
+    /// <param name="dbContextCreator">A function that creates an instance of <typeparamref name="TDbContext" />.</param>
+    /// <param name="connectionStringFunc">A function that returns the connection string.</param>
     protected SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc) : base(dbContextCreator,
-        connectionStringFunc)
+                                                                                                                                                connectionStringFunc)
     { }
 
     /// <summary>

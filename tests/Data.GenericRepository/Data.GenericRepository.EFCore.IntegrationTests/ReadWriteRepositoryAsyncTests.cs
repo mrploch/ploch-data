@@ -57,7 +57,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
-        var blogPosts = await repository.GetAllAsync(query => query.Include(e => e.Tags));
+        var blogPosts = await repository.GetAllAsync(onDbSet: query => query.Include(e => e.Tags));
         blogPosts.Should().HaveCount(2);
         blogPosts.Should().ContainEquivalentOf(blogPost1);
         blogPosts.Should().ContainEquivalentOf(blogPost2);
@@ -97,7 +97,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        var blogPosts = await repository.GetPageAsync(2, 5, query => query.Include(e => e.Tags).Include(e => e.Categories));
+        var blogPosts = await repository.GetPageAsync(2, 5, onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(5);
 
@@ -108,7 +108,39 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
             queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
             queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
             queriedPost.Categories.Should()
-                .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+                       .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+        }
+    }
+
+    [Fact]
+    public async Task GetPageAsync_should_return_a_page_of_entities_with_includes_using_query()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(unitOfWork.Repository<Blog, int>(), 20);
+
+        await unitOfWork.CommitAsync();
+
+        var repository = CreateReadRepositoryAsync<BlogPost, int>();
+
+        var blogPosts =
+            await repository.GetPageAsync(2, 3,
+#pragma warning disable SA1117 // Parameters should be placed on the same line
+                                          query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" ||
+                                                   query.Name == "Blog post 8" || query.Name == "Blog post 9" || query.Name == "Blog post 10",
+#pragma warning restore SA1117
+                                          query => query.Include(e => e.Tags).Include(e => e.Categories));
+
+        blogPosts.Should().HaveCount(3);
+
+        for (var i = 7; i <= 9; i++)
+        {
+            var blogPost = posts[i];
+            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
+            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
+            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
+            queriedPost.Categories.Should()
+                       .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
         }
     }
 

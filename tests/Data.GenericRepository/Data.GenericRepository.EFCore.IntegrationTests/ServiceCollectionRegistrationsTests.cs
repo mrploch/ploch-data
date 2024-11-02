@@ -32,8 +32,8 @@ public class ServiceCollectionRegistrationsTests
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCustomReadWriteAsyncRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
-            collection.AddScoped(repositoryInterface,
-                repositoryImpl));
+                                                                                                                        collection.AddScoped(repositoryInterface,
+                                                                                                                                             repositoryImpl));
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
@@ -64,8 +64,8 @@ public class ServiceCollectionRegistrationsTests
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCustomReadWriteRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
-            collection.AddScoped(repositoryInterface,
-                repositoryImpl));
+                                                                                                                   collection.AddScoped(repositoryInterface,
+                                                                                                                                        repositoryImpl));
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
@@ -90,29 +90,16 @@ public class ServiceCollectionRegistrationsTests
         serviceProvider.GetRequiredService<TestCommandReadRepository>().Should().BeOfType<TestCommandReadRepository>();
     }
 
-    private class TestCommandReadRepository
-    {
-        private readonly IReadRepositoryAsync<Blog, int> _blogReadRepository;
-
-        public TestCommandReadRepository(IReadRepositoryAsync<Blog, int> blogReadRepository)
-        {
-            _blogReadRepository = blogReadRepository;
-        }
-    }
-
-    private interface ICustomBlogRepository : IReadWriteRepositoryAsync<Blog, int>, IReadWriteRepository<Blog, int>
+    private class TestCommandReadRepository(IReadRepositoryAsync<Blog, int> blogReadRepository)
     { }
 
-    private class CustomBlogRepository : ReadWriteRepositoryAsync<Blog, int>, ICustomBlogRepository
+#pragma warning disable SA1201 // Elements should appear in the correct order - interface should not follow class - this is just a test.
+    private interface ICustomBlogRepository : IReadWriteRepositoryAsync<Blog, int>, IReadWriteRepository<Blog, int>
+#pragma warning restore SA1201
+    { }
+
+    private class CustomBlogRepository(DbContext dbContext) : ReadWriteRepositoryAsync<Blog, int>(dbContext), ICustomBlogRepository
     {
-        public CustomBlogRepository(DbContext dbContext) : base(dbContext)
-        { }
-
-        public Blog? GetById(object[] keyValues)
-        {
-            throw new NotImplementedException();
-        }
-
         public Blog? FindFirst(Expression<Func<Blog, bool>> query,
                                Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null,
                                CancellationToken cancellationToken = default)
@@ -125,7 +112,7 @@ public class ServiceCollectionRegistrationsTests
             throw new NotImplementedException();
         }
 
-        public IList<Blog> GetPage(int pageNumber, int pageSize, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
+        public IList<Blog> GetPage(int pageNumber, int pageSize, Expression<Func<Blog, bool>>? query = null, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
         {
             throw new NotImplementedException();
         }
@@ -156,6 +143,11 @@ public class ServiceCollectionRegistrationsTests
         }
 
         public Blog? GetById(int id, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Blog? GetById(object[] keyValues)
         {
             throw new NotImplementedException();
         }

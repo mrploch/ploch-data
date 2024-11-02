@@ -16,11 +16,11 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
     where TEntity : class
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" />
-    ///     class.
+    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
     // ReSharper disable once InheritdocConsiderUsage - already inherited on root level and this constructor is documented.
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }
 
@@ -45,9 +45,12 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
     }
 
     /// <inheritdoc />
-    public IList<TEntity> GetPage(int pageNumber, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
+    public IList<TEntity> GetPage(int pageNumber,
+                                  int pageSize,
+                                  Expression<Func<TEntity, bool>>? query = null,
+                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
-        return GetPageQuery(pageNumber, pageSize, onDbSet).ToList();
+        return GetPageQuery(pageNumber, pageSize, query, onDbSet).ToList();
     }
 
     /// <inheritdoc />
@@ -69,6 +72,7 @@ public class ReadRepository<TEntity, TId> : ReadRepository<TEntity>, IReadReposi
     ///     Initializes a new instance of the <see cref="ReadRepository{TEntity, TId}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }
 

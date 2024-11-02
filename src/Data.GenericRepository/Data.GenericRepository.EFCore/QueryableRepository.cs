@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,12 +36,17 @@ public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
     protected DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
     /// <inheritdoc />
-    public IQueryable<TEntity> GetPageQuery(int pageNumber, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
+    public IQueryable<TEntity> GetPageQuery(int pageNumber,
+                                            int pageSize,
+                                            Expression<Func<TEntity, bool>>? query = null,
+                                            Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         Guard.Argument(pageNumber, nameof(pageNumber)).Positive();
 
-        var query = onDbSet == null ? Entities : onDbSet(Entities);
+        var dbSetQuery = onDbSet == null ? Entities : onDbSet(Entities);
 
-        return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking();
+        dbSetQuery = query == null ? dbSetQuery : dbSetQuery.Where(query);
+
+        return dbSetQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking();
     }
 }
