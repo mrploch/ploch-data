@@ -1,11 +1,14 @@
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows querying entities of type <see cref="TEntity" /> from a <see cref="DbContext" />.
+///     Provides a repository that allows querying entities of type <typeparamref name="TEntity" /> from a
+///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc />
 public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
@@ -20,6 +23,9 @@ public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
         DbContext = dbContext;
     }
 
+    /// <inheritdoc />
+    public IQueryable<TEntity> Entities => DbSet;
+
     /// <summary>
     ///     Gets the <see cref="DbContext" /> used for querying entities.
     /// </summary>
@@ -31,13 +37,17 @@ public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
     protected DbSet<TEntity> DbSet => DbContext.Set<TEntity>();
 
     /// <inheritdoc />
-    public IQueryable<TEntity> Entities => DbSet;
-
-    /// <inheritdoc />
-    public IQueryable<TEntity> GetPageQuery(int pageNumber, int pageSize)
+    public IQueryable<TEntity> GetPageQuery(int pageNumber,
+                                            int pageSize,
+                                            Expression<Func<TEntity, bool>>? query = null,
+                                            Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         Guard.Argument(pageNumber, nameof(pageNumber)).Positive();
 
-        return DbContext.Set<TEntity>().Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking();
+        var dbSetQuery = onDbSet == null ? Entities : onDbSet(Entities);
+
+        dbSetQuery = query == null ? dbSetQuery : dbSetQuery.Where(query);
+
+        return dbSetQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking();
     }
 }

@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-using Ploch.Common.Data.Model.CommonTypes;
+using Ploch.Data.Model.CommonTypes;
 
-namespace Ploch.Common.Data.Model;
+namespace Ploch.Data.Model;
 
 /// <summary>
 ///     Represents an object that can have <see cref="Tag" /> entities.

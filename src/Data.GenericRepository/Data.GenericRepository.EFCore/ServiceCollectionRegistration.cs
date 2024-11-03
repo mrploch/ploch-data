@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
 ///     Provides extension methods for registering repository types in the <see cref="IServiceCollection" />.
@@ -37,7 +37,7 @@ public static class ServiceCollectionRegistration
     {
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
 
-        AddRepositories<TDbContext>(serviceCollection, (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
+        AddRepositories<TDbContext>(serviceCollection, static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
 
         return serviceCollection;
     }
@@ -56,25 +56,20 @@ public static class ServiceCollectionRegistration
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
 
-        serviceCollection.AddTransient<DbContext>(provider => provider.GetRequiredService<TDbContext>());
+        serviceCollection.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>());
 
-        // foreach (var repositoryTypeMapping in RepositoryTypeMappings)
-        // {
-        //     registrationFunction!(serviceCollection, repositoryTypeMapping.Key, repositoryTypeMapping.Value);
-        // }
-
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
-        registrationFunction!(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
-        registrationFunction!(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
+        registrationFunction(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
+        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
 
         foreach (var (sourceType, targetType) in RepositoryTypeMappings)
         {
-            registrationFunction!(serviceCollection, sourceType, targetType);
+            registrationFunction(serviceCollection, sourceType, targetType);
         }
-        
+
         foreach (var (sourceType, targetType) in RepositoryAsyncTypeMappings)
         {
-            registrationFunction!(serviceCollection, sourceType, targetType);
+            registrationFunction(serviceCollection, sourceType, targetType);
         }
 
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -135,8 +130,8 @@ public static class ServiceCollectionRegistration
     ///     chaining.
     /// </returns>
     public static IServiceCollection AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection serviceCollection,
-                                                                                                               Func<IServiceCollection, Type, Type, IServiceCollection>
-                                                                                                                   registrationFunction)
+                                                                                                                        Func<IServiceCollection, Type, Type,
+                                                                                                                            IServiceCollection> registrationFunction)
         where TRepositoryInterface : class, IReadWriteRepositoryAsync<TEntity, TId>
         where TRepository : class, TRepositoryInterface, IReadWriteRepositoryAsync<TEntity, TId>
         where TEntity : class, IHasId<TId>
@@ -144,21 +139,19 @@ public static class ServiceCollectionRegistration
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
 
-    //    registrationFunction!(serviceCollection, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
-
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
-        registrationFunction!(serviceCollection, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));
 
         foreach (var (sourceType, _) in RepositoryAsyncTypeMappings)
         {
-            registrationFunction!(serviceCollection, sourceType.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
+            registrationFunction(serviceCollection, sourceType.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
         }
-        
-        registrationFunction!(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
-        
+
+        registrationFunction(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
+
         return serviceCollection;
     }
-    
+
     /// <summary>
     ///     Registers a mapping of read / write async repository interfaces to custom repository type in the service
     ///     collection.
@@ -212,8 +205,8 @@ public static class ServiceCollectionRegistration
     ///     chaining.
     /// </returns>
     public static IServiceCollection AddCustomReadWriteRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection serviceCollection,
-                                                                                                               Func<IServiceCollection, Type, Type, IServiceCollection>
-                                                                                                                   registrationFunction)
+                                                                                                                   Func<IServiceCollection, Type, Type,
+                                                                                                                       IServiceCollection> registrationFunction)
         where TRepositoryInterface : class, IReadWriteRepositoryAsync<TEntity, TId>
         where TRepository : class, TRepositoryInterface, IReadWriteRepositoryAsync<TEntity, TId>
         where TEntity : class, IHasId<TId>
@@ -221,25 +214,18 @@ public static class ServiceCollectionRegistration
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
 
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
 
-        registrationFunction!(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
-        registrationFunction!(serviceCollection, typeof(IReadRepository<TEntity>), typeof(TRepository));
-        
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
+        registrationFunction(serviceCollection, typeof(IReadRepository<TEntity>), typeof(TRepository));
+
         foreach (var repositoryTypeMapping in RepositoryTypeMappings)
         {
-            registrationFunction!(serviceCollection, repositoryTypeMapping.Key.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
+            registrationFunction(serviceCollection, repositoryTypeMapping.Key.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
         }
-        
-        registrationFunction!(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
-        
-        return serviceCollection;
-    }
 
-    private static IServiceCollection AddCommonRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection serviceCollection,
-                                                                                                                    Func<IServiceCollection, Type, Type,
-                                                                                                                        IServiceCollection> registrationFunction)
-    {
+        registrationFunction(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
+
         return serviceCollection;
     }
 }

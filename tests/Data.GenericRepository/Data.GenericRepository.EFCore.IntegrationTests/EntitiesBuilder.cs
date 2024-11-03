@@ -1,7 +1,8 @@
 ﻿using AutoFixture;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+using Ploch.Common.Collections;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
 public static class EntitiesBuilder
 {
@@ -12,7 +13,52 @@ public static class EntitiesBuilder
         return fixture.Build<BlogPostTag>().Without(t => t.BlogPosts).Without(t => t.Id).CreateMany(count).ToArray();
     }
 
-    public static (Blog, BlogPost, BlogPost) BuildBlogEntity()
+    public static (Blog, BlogPost, BlogPost) BuildBlogEntity(int numTags = 3)
+    {
+        var categories = BuildCategories();
+
+        var tags = BuildRandomTags(numTags);
+
+        var blog = new Blog { Name = "Blog 1" };
+
+        var blogPost1 = new BlogPost
+        {
+            Name = "Blog post 1",
+            Contents = "My first blog post!",
+            CreatedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(1)),
+            ModifiedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(1))
+        };
+        blogPost1.Categories.AddMany(categories.TakeRandom(2));
+        blogPost1.Tags.Add(tags[0]);
+        blogPost1.Tags.Add(tags[2]);
+
+        var blogPost2 = new BlogPost
+        {
+            Name = "Blog post 2",
+            Contents = "My second blog post!",
+            CreatedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(2)),
+            ModifiedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(2))
+        };
+        blogPost2.Tags.Add(tags[1]);
+
+        blog.BlogPosts.Add(blogPost1);
+        blog.BlogPosts.Add(blogPost2);
+
+        return (blog, blogPost1, blogPost2);
+    }
+
+    public static (Blog, BlogPost[]) BuildBlogEntityWithManyPosts(int blogPostCount)
+    {
+        var blog = new Blog { Name = "Blog 1" };
+
+        var blogPosts = BuildBlogPosts(blogPostCount);
+
+        blog.BlogPosts.AddMany(blogPosts);
+
+        return (blog, blogPosts.ToArray());
+    }
+
+    public static IEnumerable<BlogPostCategory> BuildCategories()
     {
         var category1 = new BlogPostCategory { Name = "Category 1" };
         var category1_1 = new BlogPostCategory { Name = "Category 1.1", Parent = category1 };
@@ -21,24 +67,48 @@ public static class EntitiesBuilder
 
         var category2 = new BlogPostCategory { Name = "Category 2" };
 
+        return new List<BlogPostCategory>
+        {
+            category1,
+            category1_1,
+            category1_2,
+            category1_2_1,
+            category2
+        };
+    }
+
+    public static IEnumerable<BlogPost> BuildBlogPosts(int count)
+    {
+        var category1 = new BlogPostCategory { Name = "Category 1" };
+        var category1_1 = new BlogPostCategory { Name = "Category 1.1", Parent = category1 };
+        var category1_2 = new BlogPostCategory { Name = "Category 1.2", Parent = category1 };
+        var category1_2_1 = new BlogPostCategory { Name = "Category 1.2.1", Parent = category1_2 };
+
+        var category2 = new BlogPostCategory { Name = "Category 2" };
+
+        var categories = new List<BlogPostCategory>
+        {
+            category1,
+            category1_1,
+            category1_2,
+            category1_2_1,
+            category2
+        };
+
         var tags = BuildRandomTags(3);
 
-        var blog = new Blog { Name = "Blog 1" };
-        var blogPost1 = new BlogPost { Name = "Blog post 1", Contents = "My first blog post!" };
-        blogPost1.Categories.Add(category1_2);
-        blogPost1.Categories.Add(category1);
-        blogPost1.Tags.Add(tags[0]);
-        blogPost1.Tags.Add(tags[2]);
+        var posts = new List<BlogPost>();
 
-        var blogPost2 = new BlogPost { Name = "Blog post 2", Contents = "My second blog post!" };
-        blogPost2.Categories.Add(category1_2_1);
-        blogPost2.Categories.Add(category2);
-        blogPost2.Tags.Add(tags[1]);
+        for (var i = 0; i < count; i++)
+        {
+            var post = new BlogPost { Name = $"Blog post {i + 1}", Contents = $"My blog post {i + 1}" };
+            post.Categories.AddMany(categories.TakeRandom(2));
+            post.Tags.AddMany(tags.TakeRandom(2));
 
-        blog.BlogPosts.Add(blogPost1);
-        blog.BlogPosts.Add(blogPost2);
+            posts.Add(post);
+        }
 
-        return (blog, blogPost1, blogPost2);
+        return posts;
     }
 
     public static (UserIdea, UserIdea) BuildUserIdeaEntities()

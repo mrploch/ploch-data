@@ -1,4 +1,4 @@
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
 public class RepositoryTests
 { }

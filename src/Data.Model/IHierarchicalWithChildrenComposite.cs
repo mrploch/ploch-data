@@ -1,4 +1,4 @@
-﻿namespace Ploch.Common.Data.Model;
+﻿namespace Ploch.Data.Model;
 
 /// <summary>
 ///     An entity with a <c>Children</c> property which have to be of type or a subtype o this entity.
@@ -18,5 +18,6 @@
 ///     </para>
 /// </remarks>
 /// <typeparam name="TChildren">The type of child entities.</typeparam>
-public interface IHierarchicalWithChildrenComposite<TChildren> : IHierarchicalWithChildren<TChildren> where TChildren : IHierarchicalWithChildren<TChildren>
+public interface IHierarchicalWithChildrenComposite<TChildren> : IHierarchicalWithChildren<TChildren>
+    where TChildren : IHierarchicalWithChildren<TChildren>
 { }

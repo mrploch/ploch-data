@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Ploch.Common.Data.Model;
+﻿using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 public class Blog : IHasId<int>, INamed
 {
