@@ -12,7 +12,8 @@ namespace Ploch.Data.GenericRepository;
 public interface IUnitOfWork : IDisposable
 {
     /// <summary>
-    ///     Gets a repository for entities of type <typeparamref name="TEntity" /> with identifiers of type <typeparamref name="TId" />.
+    ///     Gets a repository for entities of type <typeparamref name="TEntity" /> with identifiers of type
+    ///     <typeparamref name="TId" />.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entities in the repository.</typeparam>
     /// <typeparam name="TId">The type of the identifier for the entities in the repository.</typeparam>
@@ -21,7 +22,8 @@ public interface IUnitOfWork : IDisposable
         where TEntity : class, IHasId<TId>;
 
     /// <summary>
-    ///     Gets a custom repository of type <typeparamref name="TRepository" /> for entities of type <typeparamref name="TEntity" /> with
+    ///     Gets a custom repository of type <typeparamref name="TRepository" /> for entities of type
+    ///     <typeparamref name="TEntity" /> with
     ///     identifiers of type <typeparamref name="TId" />.
     /// </summary>
     /// <typeparam name="TRepository">The type of the custom repository.</typeparam>

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D89DED28-8B6B-46D3-AAE0-2764D1DF0094}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-dotnet.yml = .github\workflows\build-dotnet.yml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{861A9732-0DD2-43BF-9DA9-6529961C58D5}"
 EndProject
@@ -33,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "repository", "repository", 
 		README.md = README.md
 		build.ps1 = build.ps1
 		build-dotnet-commands.ps1 = build-dotnet-commands.ps1
+		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{57622815-4765-4DAD-A0F8-DBC204A6E84E}"
@@ -72,6 +76,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.SqlServer", "src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj", "{F4E56D5C-9669-4069-9592-DF5EF59C30F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.SqlServer.Tests", "tests\Data.EFCore.SqlServer.Tests\Ploch.Data.EFCore.SqlServer.Tests.csproj", "{1CC678AB-A674-444B-A8D4-0CE0B6E1F654}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ploch.Data.EFCore.SqLite.Tests", "tests\Data.EFCore.SqLite.Tests\Ploch.Data.EFCore.SqLite.Tests.csproj", "{775FA542-B471-44C8-B7D2-12351ED821A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -387,6 +393,26 @@ Global
 		{1CC678AB-A674-444B-A8D4-0CE0B6E1F654}.Release|x64.Build.0 = Release|Any CPU
 		{1CC678AB-A674-444B-A8D4-0CE0B6E1F654}.Release|x86.ActiveCfg = Release|Any CPU
 		{1CC678AB-A674-444B-A8D4-0CE0B6E1F654}.Release|x86.Build.0 = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|ARM.Build.0 = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|x64.Build.0 = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Debug|x86.Build.0 = Debug|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|ARM.Build.0 = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|ARM64.Build.0 = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|x64.ActiveCfg = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|x64.Build.0 = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|x86.ActiveCfg = Release|Any CPU
+		{775FA542-B471-44C8-B7D2-12351ED821A0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -402,6 +428,7 @@ Global
 		{B1FFAA80-47D1-421B-91CF-80D46AFE50A6} = {861A9732-0DD2-43BF-9DA9-6529961C58D5}
 		{13983050-AB46-4A2A-AA09-9F9EFAC1320A} = {861A9732-0DD2-43BF-9DA9-6529961C58D5}
 		{1CC678AB-A674-444B-A8D4-0CE0B6E1F654} = {861A9732-0DD2-43BF-9DA9-6529961C58D5}
+		{775FA542-B471-44C8-B7D2-12351ED821A0} = {861A9732-0DD2-43BF-9DA9-6529961C58D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A84E1AF7-BEBB-47F9-A917-8373C7F0D39E}

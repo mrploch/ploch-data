@@ -16,7 +16,7 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     where TDbContext : DbContext
 {
     /// <summary>
-    /// Configures the required services for the test.
+    ///     Configures the required services for the test.
     /// </summary>
     /// <param name="services">The service collection.</param>
     protected override void ConfigureServices(IServiceCollection services)
@@ -26,7 +26,7 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     }
 
     /// <summary>
-    ///    Creates a new unit of work.
+    ///     Creates a new unit of work.
     /// </summary>
     /// <returns>The unit of work.</returns>
     protected IUnitOfWork CreateUnitOfWork()
@@ -35,11 +35,11 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     }
 
     /// <summary>
-    ///   Creates an instance of <see cref="IReadRepositoryAsync{TEntity}"/>.
+    ///     Creates an instance of <see cref="IReadRepositoryAsync{TEntity}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
-    /// <returns>An instance of a <see cref="IReadWriteRepositoryAsync{TEntity,TId}"/>.</returns>
+    /// <returns>An instance of a <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.</returns>
     [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
     protected IReadRepositoryAsync<TEntity, TId> CreateReadRepositoryAsync<TEntity, TId>()
         where TEntity : class, IHasId<TId>
@@ -48,11 +48,11 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     }
 
     /// <summary>
-    ///  Creates a <see cref="IReadRepository{TEntity}"/>.
+    ///     Creates a <see cref="IReadRepository{TEntity}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
-    /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}"/>.</returns>
+    /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}" />.</returns>
     protected IReadRepository<TEntity, TId> CreateReadRepository<TEntity, TId>()
         where TEntity : class, IHasId<TId>
     {
@@ -60,11 +60,11 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     }
 
     /// <summary>
-    /// Creates a <see cref="IReadWriteRepository{TEntity,TId}"/>.
+    ///     Creates a <see cref="IReadWriteRepository{TEntity,TId}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
-    /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}"/>.</returns>
+    /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}" />.</returns>
     protected IReadWriteRepository<TEntity, TId> CreateReadWriteRepository<TEntity, TId>()
         where TEntity : class, IHasId<TId>
     {
@@ -72,11 +72,11 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     }
 
     /// <summary>
-    /// Creates a <see cref="IReadWriteRepositoryAsync{TEntity,TId}"/>.
+    ///     Creates a <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
-    /// <returns>An instance of <see cref="IReadWriteRepositoryAsync{TEntity,TId}"/>.</returns>
+    /// <returns>An instance of <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.</returns>
     [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
     protected IReadWriteRepositoryAsync<TEntity, TId> CreateReadWriteRepositoryAsync<TEntity, TId>()
         where TEntity : class, IHasId<TId>

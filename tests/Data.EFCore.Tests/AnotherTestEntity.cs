@@ -3,7 +3,7 @@ using Ploch.Data.Model;
 
 namespace Ploch.Data.EFCore.Tests;
 
-public class TestEntity : IHasId<int>, INamed
+public class AnotherTestEntity : IHasId<int>, INamed
 {
     [Key]
     public int Id { get; set; }

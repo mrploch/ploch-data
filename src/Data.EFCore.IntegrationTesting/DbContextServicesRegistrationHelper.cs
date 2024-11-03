@@ -4,8 +4,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Ploch.Data.EFCore.IntegrationTesting;
 
+/// <summary>
+///     Helper class for registering and configuring DbContext services for integration testing.
+/// </summary>
 public static class DbContextServicesRegistrationHelper
 {
+    /// <summary>
+    ///     Builds a DbContext and IServiceProvider for integration testing.
+    /// </summary>
+    /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
+    /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
+    /// <param name="connectionString">The database connection string. Default is in-memory SQLite database.</param>
+    /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
     public static (IServiceProvider, TDbContext) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
                                                                                               string connectionString = "Filename=:memory:")
         where TDbContext : DbContext
@@ -20,6 +30,13 @@ public static class DbContextServicesRegistrationHelper
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection);
     }
 
+    /// <summary>
+    ///     Builds a DbContext and IServiceProvider for integration testing using a custom DbContext configurator.
+    /// </summary>
+    /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
+    /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
+    /// <param name="dbContextConfigurator">The configurator responsible for setting up the DbContext options.</param>
+    /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
     public static (IServiceProvider, TDbContext) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
                                                                                               IDbContextConfigurator dbContextConfigurator)
         where TDbContext : DbContext
@@ -33,10 +50,16 @@ public static class DbContextServicesRegistrationHelper
         where TDbContext : DbContext
     {
         var serviceProvider = serviceCollection.BuildServiceProvider();
-        var testDbContext = serviceProvider.GetRequiredService<TDbContext>();
+        var scope = serviceProvider.CreateScope();
+        var testDbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
         testDbContext.Database.OpenConnection();
-        testDbContext.Database.EnsureCreated();
 
-        return (serviceProvider, testDbContext);
+        var created = testDbContext.Database.EnsureCreated();
+        if (!created)
+        {
+            throw new InvalidOperationException("Database creation failed.");
+        }
+
+        return (scope.ServiceProvider, testDbContext);
     }
 }
