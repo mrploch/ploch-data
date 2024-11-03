@@ -13,7 +13,7 @@ public class SqLiteDbContextFactoryTests
     public void ConfigureOptions_should_use_Sqlite()
     {
         // Arrange
-        var connectionString = "DataSource=:memory:";
+        var connectionString = SqLiteConnectionOptions.InMemory.BuildConnectionString();
         var dbContextOptionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
         var factory = new TestSqLiteDbContextFactory(options => new TestDbContext(options));
 
@@ -25,23 +25,48 @@ public class SqLiteDbContextFactoryTests
     }
 
     [Fact]
-    public async Task CreateDbContext_should_create_SqLite_connection_with_working_database()
+    public async Task SqLiteConnectionOptions_should_build_read_only_connection()
     {
         // Arrange
-        var connectionString = "DataSource=:memory:";
+        var connectionString = new SqLiteConnectionOptions(builder =>
+                                                           {
+                                                               builder.Mode = SqliteOpenMode.ReadOnly;
+                                                               builder.DataSource = Guid.NewGuid().ToString();
+                                                           }).BuildConnectionString();
         var dbContextCreator = new Func<DbContextOptions<TestDbContext>, TestDbContext>(options => new TestDbContext(options));
         var connectionStringFunc = new Func<string>(() => connectionString);
 
         // Act
         var factory = new TestSqLiteDbContextFactory(dbContextCreator, connectionStringFunc);
 
+        var act = async () => await VerifyDbContextCanReadAndWrite(factory, connectionString);
+
+        await act.Should().ThrowAsync<SqliteException>().WithMessage("*unable to open database file*");
+    }
+
+    [Fact]
+    public async Task CreateDbContext_should_create_SqLite_connection_with_working_database()
+    {
+        // Arrange
+        var connectionString = SqLiteConnectionOptions.UsingFile(Guid.NewGuid().ToString()).BuildConnectionString();
+        var dbContextCreator = new Func<DbContextOptions<TestDbContext>, TestDbContext>(options => new TestDbContext(options));
+        var connectionStringFunc = new Func<string>(() => connectionString);
+
+        // Act
+        var factory = new TestSqLiteDbContextFactory(dbContextCreator, connectionStringFunc);
+
+        await VerifyDbContextCanReadAndWrite(factory, connectionString);
+    }
+
+    private async Task VerifyDbContextCanReadAndWrite(TestSqLiteDbContextFactory factory, string connectionString)
+    {
         var testDbContext = factory.CreateDbContext([]);
 
         await testDbContext.Database.OpenConnectionAsync();
         var ensureCreated = await testDbContext.Database.EnsureCreatedAsync();
         ensureCreated.Should().BeTrue();
 
-        var dbConnection = testDbContext.Database.GetDbConnection();
+        using var dbConnection = testDbContext.Database.GetDbConnection();
         dbConnection.Should().BeOfType<SqliteConnection>();
         dbConnection.ConnectionString.Should().Be(connectionString);
 
@@ -58,7 +83,8 @@ public class SqLiteDbContextFactoryTests
     {
         public int Id { get; set; }
 
-        [MaxLength(100)] public required string Name { get; set; } = null!;
+        [MaxLength(100)]
+        public required string Name { get; set; } = null!;
     }
 
     public class TestDbContext : DbContext
