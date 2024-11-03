@@ -5,9 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
 ///     Provides a unit of work that allows managing repositories and transactions.
@@ -30,13 +30,7 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
-    /// <summary>
-    ///     Gets the repository for the specified entity type and identifier type.
-    /// </summary>
-    /// <typeparam name="TRepository">The type of the repository.</typeparam>
-    /// <typeparam name="TEntity">The type of the entities in the repository.</typeparam>
-    /// <typeparam name="TId">The type of the identifier for the entities in the repository.</typeparam>
-    /// <returns>The repository for the specified entity type and identifier type.</returns>
+    /// <inheritdoc />
     public TRepository Repository<TRepository, TEntity, TId>()
         where TRepository : IReadWriteRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
     {
@@ -45,12 +39,7 @@ public class UnitOfWork : IUnitOfWork
         return (TRepository)_repositories.GetOrAdd(type, _ => _serviceProvider.GetRequiredService<TRepository>());
     }
 
-    /// <summary>
-    ///     Gets the repository for the specified entity type and identifier type.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the entities in the repository.</typeparam>
-    /// <typeparam name="TId">The type of the identifier for the entities in the repository.</typeparam>
-    /// <returns>The repository for the specified entity type and identifier type.</returns>
+    /// <inheritdoc />
     public IReadWriteRepositoryAsync<TEntity, TId> Repository<TEntity, TId>()
         where TEntity : class, IHasId<TId>
     {
@@ -59,24 +48,13 @@ public class UnitOfWork : IUnitOfWork
         return (IReadWriteRepositoryAsync<TEntity, TId>)_repositories.GetOrAdd(type, _ => _serviceProvider.GetRequiredService<IReadWriteRepositoryAsync<TEntity, TId>>());
     }
 
-    /// <summary>
-    ///     Asynchronously commits all changes made in this unit of work to the database.
-    /// </summary>
-    /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation. The task result contains the number of state entries
-    ///     written to the database.
-    /// </returns>
+    /// <inheritdoc />
     public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
     {
         return await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    /// <summary>
-    ///     Asynchronously rolls back all changes made in this unit of work to the database.
-    /// </summary>
-    /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public Task RollbackAsync(CancellationToken cancellationToken = default)
     {
         _dbContext.ChangeTracker.Entries().ToList().ForEach(x => x.Reload());

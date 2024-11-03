@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Data.EFCore.IntegrationTesting\Ploch.Data.EFCore.IntegrationTesting.csproj"/>
+        <ProjectReference Include="..\..\Data.EFCore\Ploch.Data.EFCore.csproj"/>
+        <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj"/>
+        <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Data.Sqlite.Core"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Remove="obj\Debug\net8.0\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.xml"/>
+    </ItemGroup>
+</Project>
