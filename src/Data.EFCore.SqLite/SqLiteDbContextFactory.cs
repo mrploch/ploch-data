@@ -26,8 +26,6 @@ public abstract class SqLiteDbContextFactory<TDbContext, TMigrationAssembly> : B
     ///         for the DbContext instances it creates.
     ///     </para>
     /// </remarks>
-    /// <typeparam name="TDbContext">The type of DbContext to create.</typeparam>
-    /// <typeparam name="TMigrationAssembly">The type of the migration assembly.</typeparam>
     /// <param name="dbContextCreator">Function that creates an instance of <typeparamref name="TDbContext" />.</param>
     protected SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator) : base(dbContextCreator)
     { }
@@ -44,8 +42,6 @@ public abstract class SqLiteDbContextFactory<TDbContext, TMigrationAssembly> : B
     ///         for the DbContext instances it creates.
     ///     </para>
     /// </remarks>
-    /// <typeparam name="TDbContext">The type of DbContext to create.</typeparam>
-    /// <typeparam name="TMigrationAssembly">The type of the migration assembly.</typeparam>
     /// <param name="dbContextCreator">A function that creates an instance of <typeparamref name="TDbContext" />.</param>
     /// <param name="connectionStringFunc">A function that returns the connection string.</param>
     protected SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc) : base(dbContextCreator,

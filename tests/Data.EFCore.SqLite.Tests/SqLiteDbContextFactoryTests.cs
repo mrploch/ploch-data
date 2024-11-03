@@ -39,7 +39,7 @@ public class SqLiteDbContextFactoryTests
         // Act
         var factory = new TestSqLiteDbContextFactory(dbContextCreator, connectionStringFunc);
 
-        var act = async () => await VerifyDbContextCanReadAndWrite(factory, connectionString);
+        var act = async () => await VerifyDbContextCanReadAndWriteAsync(factory, connectionString);
 
         await act.Should().ThrowAsync<SqliteException>().WithMessage("*unable to open database file*");
     }
@@ -55,10 +55,10 @@ public class SqLiteDbContextFactoryTests
         // Act
         var factory = new TestSqLiteDbContextFactory(dbContextCreator, connectionStringFunc);
 
-        await VerifyDbContextCanReadAndWrite(factory, connectionString);
+        await VerifyDbContextCanReadAndWriteAsync(factory, connectionString);
     }
 
-    private async Task VerifyDbContextCanReadAndWrite(TestSqLiteDbContextFactory factory, string connectionString)
+    private static async Task VerifyDbContextCanReadAndWriteAsync(TestSqLiteDbContextFactory factory, string connectionString)
     {
         var testDbContext = factory.CreateDbContext([]);
 
@@ -66,7 +66,7 @@ public class SqLiteDbContextFactoryTests
         var ensureCreated = await testDbContext.Database.EnsureCreatedAsync();
         ensureCreated.Should().BeTrue();
 
-        using var dbConnection = testDbContext.Database.GetDbConnection();
+        await using var dbConnection = testDbContext.Database.GetDbConnection();
         dbConnection.Should().BeOfType<SqliteConnection>();
         dbConnection.ConnectionString.Should().Be(connectionString);
 
@@ -87,15 +87,12 @@ public class SqLiteDbContextFactoryTests
         public required string Name { get; set; } = null!;
     }
 
-    public class TestDbContext : DbContext
+    public class TestDbContext(DbContextOptions options) : DbContext(options)
     {
-        public TestDbContext(DbContextOptions options) : base(options)
-        { }
-
         public DbSet<TestEntity> TestEntities { get; set; } = null!;
     }
 
-    private class TestSqLiteDbContextFactory : SqLiteDbContextFactory<TestDbContext, object>
+    private sealed class TestSqLiteDbContextFactory : SqLiteDbContextFactory<TestDbContext, object>
     {
         public TestSqLiteDbContextFactory(Func<DbContextOptions<TestDbContext>, TestDbContext> dbContextCreator)
             : base(dbContextCreator)

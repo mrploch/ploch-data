@@ -44,7 +44,7 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     /// </summary>
     /// <param name="pageNumber">The number of the page to get.</param>
     /// <param name="pageSize">The size of the page to get.</param>
-    /// <param name="query">A LINQ expression to </param>
+    /// <param name="query">A LINQ expression to filter the entities.</param>
     /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <returns>A list of entities for the specified page.</returns>
     IList<TEntity> GetPage(int pageNumber, int pageSize, Expression<Func<TEntity, bool>>? query = null, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);

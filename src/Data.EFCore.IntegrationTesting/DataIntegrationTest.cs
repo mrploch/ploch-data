@@ -19,7 +19,6 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable
     /// <param name="dbContextConfigurator">
     ///     DbContext configurator to be used by the test. If not provided, then an in-memory SQLite database is used.
     /// </param>
-    /// <typeparam name="TDbContext">The type of database context.</typeparam>
     [SuppressMessage("Critical Code Smell", "S1699:Constructors should only call non-overridable methods", Justification = "It's fine in this context")]
     protected DataIntegrationTest(IDbContextConfigurator? dbContextConfigurator = null)
     {
