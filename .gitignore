@@ -6,9 +6,9 @@
 # User-specific files
 *.rsuser
 *.suo
-*.user
 *.userosscache
 *.sln.docstates
+*.user
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -389,6 +389,8 @@ codestream.xml
 /.idea/**/vcs.xml
 /.idea/**/.idea/dataSources.xml
 /.idea/**/.idea/inspectionProfiles/Project_Default.xml
-/.idea/.idea.Ploch.Common.Data/.idea/vcs.xml
+/.idea/.idea.Ploch.Data/.idea/vcs.xml
+/.idea/.idea.Ploch.Data/.idea/DatabaseToolSources.xml
+/.idea/.idea.Ploch.Data/.idea/git_*.xml
 **/.idea/codestream.xml
 /codacy-test-reporter.jar

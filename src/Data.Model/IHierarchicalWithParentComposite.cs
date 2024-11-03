@@ -1,4 +1,4 @@
-﻿namespace Ploch.Common.Data.Model;
+﻿namespace Ploch.Data.Model;
 
 /// <summary>
 ///     An entity with a <c>TParent</c> property which have to be of type or a subtype o this entity.

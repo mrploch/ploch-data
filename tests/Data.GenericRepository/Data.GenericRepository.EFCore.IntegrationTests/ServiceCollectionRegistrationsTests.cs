@@ -1,10 +1,11 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
 using Ploch.Data.EFCore.IntegrationTesting;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
 public class ServiceCollectionRegistrationsTests
 {
@@ -89,25 +90,19 @@ public class ServiceCollectionRegistrationsTests
         serviceProvider.GetRequiredService<TestCommandReadRepository>().Should().BeOfType<TestCommandReadRepository>();
     }
 
-    private class TestCommandReadRepository
-    {
-        private readonly IReadRepositoryAsync<Blog, int> _blogReadRepository;
-
-        public TestCommandReadRepository(IReadRepositoryAsync<Blog, int> blogReadRepository)
-        {
-            _blogReadRepository = blogReadRepository;
-        }
-    }
-
-    private interface ICustomBlogRepository : IReadWriteRepositoryAsync<Blog, int>, IReadWriteRepository<Blog, int>
+    private class TestCommandReadRepository(IReadRepositoryAsync<Blog, int> blogReadRepository)
     { }
 
-    private class CustomBlogRepository : ReadWriteRepositoryAsync<Blog, int>, ICustomBlogRepository
-    {
-        public CustomBlogRepository(DbContext dbContext) : base(dbContext)
-        { }
+#pragma warning disable SA1201 // Elements should appear in the correct order - interface should not follow class - this is just a test.
+    private interface ICustomBlogRepository : IReadWriteRepositoryAsync<Blog, int>, IReadWriteRepository<Blog, int>
+#pragma warning restore SA1201
+    { }
 
-        public Blog? GetById(object[] keyValues)
+    private class CustomBlogRepository(DbContext dbContext) : ReadWriteRepositoryAsync<Blog, int>(dbContext), ICustomBlogRepository
+    {
+        public Blog? FindFirst(Expression<Func<Blog, bool>> query,
+                               Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null,
+                               CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -117,7 +112,7 @@ public class ServiceCollectionRegistrationsTests
             throw new NotImplementedException();
         }
 
-        public IList<Blog> GetPage(int pageNumber, int pageSize, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
+        public IList<Blog> GetPage(int pageNumber, int pageSize, Expression<Func<Blog, bool>>? query = null, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
         {
             throw new NotImplementedException();
         }
@@ -148,6 +143,11 @@ public class ServiceCollectionRegistrationsTests
         }
 
         public Blog? GetById(int id, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Blog? GetById(object[] keyValues)
         {
             throw new NotImplementedException();
         }

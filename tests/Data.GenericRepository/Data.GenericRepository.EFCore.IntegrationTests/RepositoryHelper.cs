@@ -1,10 +1,10 @@
-﻿using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+﻿using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
-public class RepositoryHelper
+public static class RepositoryHelper
 {
-    public static (Blog, BlogPost, BlogPost) AddTestBlogEntitiesAsync(IReadWriteRepository<Blog, int> blogRepository)
+    public static (Blog, BlogPost, BlogPost) AddTestBlogEntities(IReadWriteRepository<Blog, int> blogRepository)
     {
         var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
 
@@ -13,7 +13,7 @@ public class RepositoryHelper
         return (blog, blogPost1, blogPost2);
     }
 
-    public static IEnumerable<UserIdea> AddTestUserIdeasEntitiesAsync(IReadWriteRepository<UserIdea, int> userIdeasRepository)
+    public static IEnumerable<UserIdea> AddTestUserIdeasEntities(IReadWriteRepository<UserIdea, int> userIdeasRepository)
     {
         var (userIdea1, userIdea2) = EntitiesBuilder.BuildUserIdeaEntities();
 
@@ -23,19 +23,8 @@ public class RepositoryHelper
         return new[] { userIdea1, userIdea2 };
     }
 
-    public static async Task<(Blog blog, BlogPost blogPost1, BlogPost blogPost2)> AddAsyncTestBlogEntitiesAsync(
-        IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository)
-    {
-        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
-
-        await blogReadWriteRepository.AddAsync(blog);
-
-        return (blog, blogPost1, blogPost2);
-    }
-
-    public static async Task<(Blog blog, BlogPost[] blogPosts)> AddAsyncTestBlogEntitiesWithManyPostsAsync(
-        IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
-        int blogPostCount)
+    public static async Task<(Blog blog, BlogPost[] blogPosts)> AddAsyncTestBlogEntitiesWithManyPostsAsync(IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
+                                                                                                           int blogPostCount)
     {
         var (blog, blogPosts) = EntitiesBuilder.BuildBlogEntityWithManyPosts(blogPostCount);
 
@@ -44,11 +33,24 @@ public class RepositoryHelper
         return (blog, blogPosts);
     }
 
+    // ReSharper disable once MethodOverloadWithOptionalParameter - false positive here
     public static async Task<(Blog blog, BlogPost blogPost1, BlogPost blogPost2)> AddAsyncTestBlogEntitiesAsync(
         IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
-        int blogPostCount)
+        int blogPostCount,
+        int numTags = 3)
     {
-        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
+        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity(numTags);
+
+        await blogReadWriteRepository.AddAsync(blog);
+
+        return (blog, blogPost1, blogPost2);
+    }
+
+    public static async Task<(Blog blog, BlogPost blogPost1, BlogPost blogPost2)> AddAsyncTestBlogEntitiesAsync(
+        IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
+        int numTags = 3)
+    {
+        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity(numTags);
 
         await blogReadWriteRepository.AddAsync(blog);
 
@@ -63,5 +65,14 @@ public class RepositoryHelper
         await userIdeasReadWriteRepository.AddAsync(userIdea2);
 
         return new[] { userIdea1, userIdea2 };
+    }
+
+    public static async Task<BlogPostTag[]> AddBlogPostTagsAsync(IReadWriteRepositoryAsync<BlogPostTag, int> repository, int tagCount)
+    {
+        var tags = EntitiesBuilder.BuildRandomTags(tagCount);
+
+        await repository.AddRangeAsync(tags);
+
+        return tags;
     }
 }

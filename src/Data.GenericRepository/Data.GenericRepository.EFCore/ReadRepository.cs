@@ -1,24 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows reading entities of type <see cref="TEntity" /> from a <see cref="DbContext" />.
+///     Provides a repository that allows reading entities of type <typeparamref name="TEntity" /> from a
+///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepository{TEntity}" />
 public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadRepository<TEntity>
     where TEntity : class
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" />
-    ///     class.
+    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
     // ReSharper disable once InheritdocConsiderUsage - already inherited on root level and this constructor is documented.
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }
 
@@ -29,15 +32,26 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
     }
 
     /// <inheritdoc />
+    public TEntity? FindFirst(Expression<Func<TEntity, bool>> query,
+                              Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                              CancellationToken cancellationToken = default)
+    {
+        return onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
+    }
+
+    /// <inheritdoc />
     public IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         return onDbSet == null ? Entities.ToList() : onDbSet(Entities).ToList();
     }
 
     /// <inheritdoc />
-    public IList<TEntity> GetPage(int pageNumber, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
+    public IList<TEntity> GetPage(int pageNumber,
+                                  int pageSize,
+                                  Expression<Func<TEntity, bool>>? query = null,
+                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
-        return GetPageQuery(pageNumber, pageSize, onDbSet).ToList();
+        return GetPageQuery(pageNumber, pageSize, query, onDbSet).ToList();
     }
 
     /// <inheritdoc />
@@ -48,9 +62,11 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
 }
 
 /// <summary>
-///     Provides a repository that allows reading entities of type <see cref="TEntity" /> with a specified identifier type
-///     from a <see cref="DbContext" />.
+///     Provides a repository that allows reading entities of type <typeparamref name="TEntity" />
+///     with a specified identifier type from a <see cref="DbContext" />.
 /// </summary>
+/// <typeparam name="TEntity">The entity type.</typeparam>
+/// <typeparam name="TId">The type of entity identifier.</typeparam>
 /// <inheritdoc cref="ReadRepository{TEntity}" />
 public class ReadRepository<TEntity, TId> : ReadRepository<TEntity>, IReadRepository<TEntity, TId>
     where TEntity : class, IHasId<TId>
@@ -59,6 +75,7 @@ public class ReadRepository<TEntity, TId> : ReadRepository<TEntity>, IReadReposi
     ///     Initializes a new instance of the <see cref="ReadRepository{TEntity, TId}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepository(DbContext dbContext) : base(dbContext)
     { }
 

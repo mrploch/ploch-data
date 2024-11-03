@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Ploch.Common.Data.StandardDataSets;
+using Ploch.Data.StandardDataSets;
 using Xunit;
 
 namespace Ploch.Data.StandardDataSets.Tests;

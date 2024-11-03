@@ -1,8 +1,8 @@
-﻿using Ploch.Common.Data.Model.CommonTypes;
+﻿using Ploch.Data.Model.CommonTypes;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
-public class BlogPostCategory : Category<BlogPostCategory, int>
+public class BlogPostCategory : Category<BlogPostCategory>
 {
     public virtual ICollection<BlogPost> BlogPosts { get; set; } = new List<BlogPost>();
 }

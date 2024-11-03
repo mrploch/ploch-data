@@ -5,15 +5,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member - false/positive, docs already inherited
+
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows asynchronous reading and writing of entities of type <see cref="TEntity" /> with
-///     a specified identifier type from a <see cref="DbContext" />.
+///     Provides a repository that allows asynchronous reading and writing of entities of type
+///     <typeparamref name="TEntity" /> with a specified identifier type from a <see cref="DbContext" />.
 /// </summary>
-/// <inheritdoc cref="IReadWriteRepositoryAsync{TEntity,TId}"/>
+/// <inheritdoc cref="IReadWriteRepositoryAsync{TEntity,TId}" />
 public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity, TId>, IReadWriteRepositoryAsync<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
@@ -21,6 +23,7 @@ public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntit
     ///     Initializes a new instance of the <see cref="ReadWriteRepositoryAsync{TEntity, TId}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadWriteRepositoryAsync(DbContext dbContext) : base(dbContext)
     { }
 
