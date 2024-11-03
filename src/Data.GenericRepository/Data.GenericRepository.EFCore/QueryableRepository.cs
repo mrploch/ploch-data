@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows querying entities of type <see cref="TEntity" /> from a <see cref="DbContext" />.
+///     Provides a repository that allows querying entities of type <typeparamref name="TEntity" /> from a
+///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc />
 public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>

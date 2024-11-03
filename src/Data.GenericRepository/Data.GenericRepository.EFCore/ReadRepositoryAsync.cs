@@ -10,7 +10,7 @@ using Ploch.Data.Model;
 namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows asynchronous reading of entities of type <see cref="TEntity" /> from a
+///     Provides a repository that allows asynchronous reading of entities of type <typeparamref name="TEntity" /> from a
 ///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity}" />
@@ -67,7 +67,8 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
 }
 
 /// <summary>
-///     Provides a repository that allows asynchronous reading of entities of type <see cref="TEntity" /> with a specified
+///     Provides a repository that allows asynchronous reading of entities of type <typeparamref name="TEntity" /> with a
+///     specified
 ///     identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity, TId}" />

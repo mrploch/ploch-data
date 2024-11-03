@@ -83,6 +83,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
 ///     specified identifier type.
 /// </summary>
 /// <typeparam name="TId">The identifier property type.</typeparam>
+/// <typeparam name="TEntity">The entity type.</typeparam>
 /// <inheritdoc />
 public interface IReadRepositoryAsync<TEntity, in TId> : IReadRepositoryAsync<TEntity>
     where TEntity : class, IHasId<TId>

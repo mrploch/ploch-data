@@ -22,7 +22,7 @@ public abstract class BaseDbContextFactory<TDbContext, TMigrationAssembly> : IDe
     ///     Initializes a new instance of the <see cref="BaseDbContextFactory{TDbContext, TMigrationAssembly}" /> class.
     /// </summary>
     /// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
-    protected BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator) : this(dbContextCreator, ConnectionString.FromJsonFile())
+    protected BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator) : this(dbContextCreator, ConnectionString.FromJsonFile()!)
     { }
 
     /// <summary>
@@ -38,10 +38,10 @@ public abstract class BaseDbContextFactory<TDbContext, TMigrationAssembly> : IDe
     }
 
     /// <summary>
-    ///     Creates a new instance of the <see cref="TDbContext" /> class.
+    ///     Creates a new instance of the <typeparamref name="TDbContext" /> class.
     /// </summary>
     /// <param name="args">The arguments provided by the design-time tools.</param>
-    /// <returns>A new instance of the <see cref="TDbContext" /> class configured with the specified options.</returns>
+    /// <returns>A new instance of the <typeparamref name="TDbContext" /> class configured with the specified options.</returns>
     public TDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<TDbContext>();
@@ -63,5 +63,11 @@ public abstract class BaseDbContextFactory<TDbContext, TMigrationAssembly> : IDe
         builder.MigrationsAssembly(assembly.GetName().Name);
     }
 
+    /// <summary>
+    ///     Configures the DbContext options using the specified connection string function and options builder.
+    /// </summary>
+    /// <param name="connectionStringFunc">A function that provides the connection string.</param>
+    /// <param name="optionsBuilder">An options builder for configuring the DbContext options.</param>
+    /// <returns>The configured DbContextOptionsBuilder.</returns>
     protected abstract DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder);
 }

@@ -30,6 +30,19 @@ public abstract class SqlServerDbContextFactory<TDbContext, TMigrationAssembly> 
                                                                                                                                                    connectionStringFunc)
     { }
 
+    /// <summary>
+    ///     Configures the options for the DbContext using the provided connection string function.
+    /// </summary>
+    /// <param name="connectionStringFunc">Function to retrieve the database connection string.</param>
+    /// <param name="optionsBuilder">The options builder to be configured.</param>
+    /// <returns>The configured DbContextOptionsBuilder.</returns>
+    protected override DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder)
+    {
+        ConfigureDbContextAction(connectionStringFunc, ApplyMigrationsAssembly);
+
+        return optionsBuilder;
+    }
+
     // This is left for future use.
     // ReSharper disable once UnusedMethodReturnValue.Local
 #pragma warning disable S3241
@@ -38,12 +51,5 @@ public abstract class SqlServerDbContextFactory<TDbContext, TMigrationAssembly> 
                                                                             Action<SqlServerDbContextOptionsBuilder>? sqlServerOptionsAction = null)
     {
         return optionsBuilder => optionsBuilder.UseSqlServer(connectionStringFunc(), sqlServerOptionsAction);
-    }
-
-    protected override DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder)
-    {
-        ConfigureDbContextAction(connectionStringFunc, ApplyMigrationsAssembly);
-
-        return optionsBuilder;
     }
 }

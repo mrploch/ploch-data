@@ -9,7 +9,8 @@ using Ploch.Data.Model;
 namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows reading entities of type <see cref="TEntity" /> from a <see cref="DbContext" />.
+///     Provides a repository that allows reading entities of type <typeparamref name="TEntity" /> from a
+///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepository{TEntity}" />
 public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadRepository<TEntity>
@@ -61,9 +62,11 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
 }
 
 /// <summary>
-///     Provides a repository that allows reading entities of type <see cref="TEntity" /> with a specified identifier type
-///     from a <see cref="DbContext" />.
+///     Provides a repository that allows reading entities of type <typeparamref name="TEntity" />
+///     with a specified identifier type from a <see cref="DbContext" />.
 /// </summary>
+/// <typeparam name="TEntity">The entity type.</typeparam>
+/// <typeparam name="TId">The type of entity identifier.</typeparam>
 /// <inheritdoc cref="ReadRepository{TEntity}" />
 public class ReadRepository<TEntity, TId> : ReadRepository<TEntity>, IReadRepository<TEntity, TId>
     where TEntity : class, IHasId<TId>

@@ -8,8 +8,8 @@ using Ploch.Data.Model;
 namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows reading and writing entities of type <see cref="TEntity" /> with a specified
-///     identifier type from a <see cref="DbContext" />.
+///     Provides a repository that allows reading and writing entities of type <typeparamref name="TEntity" /> with a
+///     specified identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="ReadRepository{TEntity, TId}" />
 /// <inheritdoc cref="IReadWriteRepository{TEntity,TId}" />
