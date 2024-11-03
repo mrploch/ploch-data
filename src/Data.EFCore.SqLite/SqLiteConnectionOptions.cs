@@ -25,12 +25,12 @@ public record SqLiteConnectionOptions
         connectionStringBuilderAction(_connectionStringBuilder);
     }
 
+    public static SqLiteConnectionOptions InMemory => new(true);
+
     public string BuildConnectionString()
     {
         return _connectionStringBuilder.ToString();
     }
-
-    public static SqLiteConnectionOptions InMemory => new(true);
 
     public static SqLiteConnectionOptions UsingFile(string dbFilePath)
     {

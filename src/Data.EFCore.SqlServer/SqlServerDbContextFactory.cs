@@ -11,19 +11,19 @@ public abstract class SqlServerDbContextFactory<TDbContext, TMigrationAssembly> 
 
     protected SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc) :
         base(dbContextCreator,
-            connectionStringFunc)
+             connectionStringFunc)
     { }
+
+    public static Action<DbContextOptionsBuilder> ConfigureDbContextAction(Func<string> connectionStringFunc,
+                                                                           Action<SqlServerDbContextOptionsBuilder>? sqlServerOptionsAction = null)
+    {
+        return optionsBuilder => optionsBuilder.UseSqlServer(connectionStringFunc(), sqlServerOptionsAction);
+    }
 
     protected override DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder)
     {
         ConfigureDbContextAction(connectionStringFunc, ApplyMigrationsAssembly);
 
         return optionsBuilder;
-    }
-
-    public static Action<DbContextOptionsBuilder> ConfigureDbContextAction(Func<string> connectionStringFunc,
-        Action<SqlServerDbContextOptionsBuilder>? sqlServerOptionsAction = null)
-    {
-        return optionsBuilder => optionsBuilder.UseSqlServer(connectionStringFunc(), sqlServerOptionsAction);
     }
 }
