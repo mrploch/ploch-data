@@ -7,96 +7,123 @@ references:
   commentId: N:Ploch.Data.EFCore
   fullName: Ploch.Data.EFCore
   nameWithType: Ploch.Data.EFCore
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1
-  name: BaseDbContextFactory<TDbContext>
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html
-  commentId: T:Ploch.Data.EFCore.BaseDbContextFactory`1
-  name.vb: BaseDbContextFactory(Of TDbContext)
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext)
-  nameWithType: BaseDbContextFactory<TDbContext>
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext)
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0})
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2
+  name: BaseDbContextFactory<TDbContext, TMigrationAssembly>
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html
+  commentId: T:Ploch.Data.EFCore.BaseDbContextFactory`2
+  name.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly)
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly)
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly)
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0})
   name: BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1__ctor_Func_DbContextOptions__0___0__
-  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0})
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2__ctor_Func_DbContextOptions__0___0__
+  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0})
   name.vb: BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
-  nameWithType: BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
   name: BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1__ctor_Func_DbContextOptions__0___0__Func_System_String__
-  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`1.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2__ctor_Func_DbContextOptions__0___0__Func_System_String__
+  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
   name.vb: BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<System.String>)
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of System.String))
-  nameWithType: BaseDbContextFactory<TDbContext>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.#ctor*
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<System.String>)
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of System.String))
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).BaseDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.#ctor*
   name: BaseDbContextFactory
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1__ctor_
-  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`1.#ctor
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2__ctor_
+  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`2.#ctor
   isSpec: "True"
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.BaseDbContextFactory
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).BaseDbContextFactory
-  nameWithType: BaseDbContextFactory<TDbContext>.BaseDbContextFactory
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).BaseDbContextFactory
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly*
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.BaseDbContextFactory
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).BaseDbContextFactory
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.BaseDbContextFactory
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).BaseDbContextFactory
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.ApplyMigrationsAssembly*
   name: ApplyMigrationsAssembly
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1_ApplyMigrationsAssembly_
-  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2_ApplyMigrationsAssembly_
+  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`2.ApplyMigrationsAssembly
   isSpec: "True"
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly
-  nameWithType: BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly``2(RelationalDbContextOptionsBuilder{``0,``1})
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.ApplyMigrationsAssembly
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ApplyMigrationsAssembly
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.ApplyMigrationsAssembly
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ApplyMigrationsAssembly
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.ApplyMigrationsAssembly``2(RelationalDbContextOptionsBuilder{``0,``1})
   name: ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1_ApplyMigrationsAssembly__2_RelationalDbContextOptionsBuilder___0___1__
-  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`1.ApplyMigrationsAssembly``2(RelationalDbContextOptionsBuilder{``0,``1})
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2_ApplyMigrationsAssembly__2_RelationalDbContextOptionsBuilder___0___1__
+  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`2.ApplyMigrationsAssembly``2(RelationalDbContextOptionsBuilder{``0,``1})
   name.vb: ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
-  nameWithType: BaseDbContextFactory<TDbContext>.ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ApplyMigrationsAssembly(Of TBuilder, TExtension)(RelationalDbContextOptionsBuilder(Of TBuilder, TExtension))
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
   name: ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1_ConfigureOptions_Func_System_String__DbContextOptionsBuilder__0__
-  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2_ConfigureOptions_Func_System_String__DbContextOptionsBuilder__0__
+  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`2.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
   name.vb: ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.ConfigureOptions(Func<System.String>, DbContextOptionsBuilder<TDbContext>)
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).ConfigureOptions(Func(Of System.String), DbContextOptionsBuilder(Of TDbContext))
-  nameWithType: BaseDbContextFactory<TDbContext>.ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions*
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions(Func<System.String>, DbContextOptionsBuilder<TDbContext>)
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions(Func(Of System.String), DbContextOptionsBuilder(Of TDbContext))
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.ConfigureOptions*
   name: ConfigureOptions
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1_ConfigureOptions_
-  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`1.ConfigureOptions
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2_ConfigureOptions_
+  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`2.ConfigureOptions
   isSpec: "True"
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.ConfigureOptions
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).ConfigureOptions
-  nameWithType: BaseDbContextFactory<TDbContext>.ConfigureOptions
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).ConfigureOptions
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.CreateDbContext(System.String[])
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.CreateDbContext(System.String[])
   name: CreateDbContext(String[])
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1_CreateDbContext_System_String___
-  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`1.CreateDbContext(System.String[])
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2_CreateDbContext_System_String___
+  commentId: M:Ploch.Data.EFCore.BaseDbContextFactory`2.CreateDbContext(System.String[])
   name.vb: CreateDbContext(String())
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.CreateDbContext(System.String[])
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).CreateDbContext(System.String())
-  nameWithType: BaseDbContextFactory<TDbContext>.CreateDbContext(String[])
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).CreateDbContext(String())
-- uid: Ploch.Data.EFCore.BaseDbContextFactory`1.CreateDbContext*
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.CreateDbContext(System.String[])
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).CreateDbContext(System.String())
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.CreateDbContext(String[])
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).CreateDbContext(String())
+- uid: Ploch.Data.EFCore.BaseDbContextFactory`2.CreateDbContext*
   name: CreateDbContext
-  href: api/Ploch.Data.EFCore.BaseDbContextFactory-1.html#Ploch_Data_EFCore_BaseDbContextFactory_1_CreateDbContext_
-  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`1.CreateDbContext
+  href: api/Ploch.Data.EFCore.BaseDbContextFactory-2.html#Ploch_Data_EFCore_BaseDbContextFactory_2_CreateDbContext_
+  commentId: Overload:Ploch.Data.EFCore.BaseDbContextFactory`2.CreateDbContext
   isSpec: "True"
-  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext>.CreateDbContext
-  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext).CreateDbContext
-  nameWithType: BaseDbContextFactory<TDbContext>.CreateDbContext
-  nameWithType.vb: BaseDbContextFactory(Of TDbContext).CreateDbContext
+  fullName: Ploch.Data.EFCore.BaseDbContextFactory<TDbContext, TMigrationAssembly>.CreateDbContext
+  fullName.vb: Ploch.Data.EFCore.BaseDbContextFactory(Of TDbContext, TMigrationAssembly).CreateDbContext
+  nameWithType: BaseDbContextFactory<TDbContext, TMigrationAssembly>.CreateDbContext
+  nameWithType.vb: BaseDbContextFactory(Of TDbContext, TMigrationAssembly).CreateDbContext
+- uid: Ploch.Data.EFCore.CollectionStringSplitConverter`1
+  name: CollectionStringSplitConverter<TValue>
+  href: api/Ploch.Data.EFCore.CollectionStringSplitConverter-1.html
+  commentId: T:Ploch.Data.EFCore.CollectionStringSplitConverter`1
+  name.vb: CollectionStringSplitConverter(Of TValue)
+  fullName: Ploch.Data.EFCore.CollectionStringSplitConverter<TValue>
+  fullName.vb: Ploch.Data.EFCore.CollectionStringSplitConverter(Of TValue)
+  nameWithType: CollectionStringSplitConverter<TValue>
+  nameWithType.vb: CollectionStringSplitConverter(Of TValue)
+- uid: Ploch.Data.EFCore.CollectionStringSplitConverter`1.#ctor(System.String,System.Boolean,System.Nullable{ConverterMappingHints})
+  name: CollectionStringSplitConverter(String, Boolean, Nullable<ConverterMappingHints>)
+  href: api/Ploch.Data.EFCore.CollectionStringSplitConverter-1.html#Ploch_Data_EFCore_CollectionStringSplitConverter_1__ctor_System_String_System_Boolean_System_Nullable_ConverterMappingHints__
+  commentId: M:Ploch.Data.EFCore.CollectionStringSplitConverter`1.#ctor(System.String,System.Boolean,System.Nullable{ConverterMappingHints})
+  name.vb: CollectionStringSplitConverter(String, Boolean, Nullable(Of ConverterMappingHints))
+  fullName: Ploch.Data.EFCore.CollectionStringSplitConverter<TValue>.CollectionStringSplitConverter(System.String, System.Boolean, System.Nullable<ConverterMappingHints>)
+  fullName.vb: Ploch.Data.EFCore.CollectionStringSplitConverter(Of TValue).CollectionStringSplitConverter(System.String, System.Boolean, System.Nullable(Of ConverterMappingHints))
+  nameWithType: CollectionStringSplitConverter<TValue>.CollectionStringSplitConverter(String, Boolean, Nullable<ConverterMappingHints>)
+  nameWithType.vb: CollectionStringSplitConverter(Of TValue).CollectionStringSplitConverter(String, Boolean, Nullable(Of ConverterMappingHints))
+- uid: Ploch.Data.EFCore.CollectionStringSplitConverter`1.#ctor*
+  name: CollectionStringSplitConverter
+  href: api/Ploch.Data.EFCore.CollectionStringSplitConverter-1.html#Ploch_Data_EFCore_CollectionStringSplitConverter_1__ctor_
+  commentId: Overload:Ploch.Data.EFCore.CollectionStringSplitConverter`1.#ctor
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.CollectionStringSplitConverter<TValue>.CollectionStringSplitConverter
+  fullName.vb: Ploch.Data.EFCore.CollectionStringSplitConverter(Of TValue).CollectionStringSplitConverter
+  nameWithType: CollectionStringSplitConverter<TValue>.CollectionStringSplitConverter
+  nameWithType.vb: CollectionStringSplitConverter(Of TValue).CollectionStringSplitConverter
 - uid: Ploch.Data.EFCore.ConnectionString
   name: ConnectionString
   href: api/Ploch.Data.EFCore.ConnectionString.html
@@ -131,6 +158,57 @@ references:
   fullName.vb: Ploch.Data.EFCore.DataSeeder(Of TDbContext)
   nameWithType: DataSeeder<TDbContext>
   nameWithType.vb: DataSeeder(Of TDbContext)
+- uid: Ploch.Data.EFCore.DbContextExtensions
+  name: DbContextExtensions
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html
+  commentId: T:Ploch.Data.EFCore.DbContextExtensions
+  fullName: Ploch.Data.EFCore.DbContextExtensions
+  nameWithType: DbContextExtensions
+- uid: Ploch.Data.EFCore.DbContextExtensions.ContainsEntityType(DbContext,Type)
+  name: ContainsEntityType(DbContext, Type)
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html#Ploch_Data_EFCore_DbContextExtensions_ContainsEntityType_DbContext_Type_
+  commentId: M:Ploch.Data.EFCore.DbContextExtensions.ContainsEntityType(DbContext,Type)
+  fullName: Ploch.Data.EFCore.DbContextExtensions.ContainsEntityType(DbContext, Type)
+  nameWithType: DbContextExtensions.ContainsEntityType(DbContext, Type)
+- uid: Ploch.Data.EFCore.DbContextExtensions.ContainsEntityType*
+  name: ContainsEntityType
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html#Ploch_Data_EFCore_DbContextExtensions_ContainsEntityType_
+  commentId: Overload:Ploch.Data.EFCore.DbContextExtensions.ContainsEntityType
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.DbContextExtensions.ContainsEntityType
+  nameWithType: DbContextExtensions.ContainsEntityType
+- uid: Ploch.Data.EFCore.DbContextExtensions.FindEntityType(DbContext,System.String)
+  name: FindEntityType(DbContext, String)
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html#Ploch_Data_EFCore_DbContextExtensions_FindEntityType_DbContext_System_String_
+  commentId: M:Ploch.Data.EFCore.DbContextExtensions.FindEntityType(DbContext,System.String)
+  fullName: Ploch.Data.EFCore.DbContextExtensions.FindEntityType(DbContext, System.String)
+  nameWithType: DbContextExtensions.FindEntityType(DbContext, String)
+- uid: Ploch.Data.EFCore.DbContextExtensions.FindEntityType*
+  name: FindEntityType
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html#Ploch_Data_EFCore_DbContextExtensions_FindEntityType_
+  commentId: Overload:Ploch.Data.EFCore.DbContextExtensions.FindEntityType
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.DbContextExtensions.FindEntityType
+  nameWithType: DbContextExtensions.FindEntityType
+- uid: Ploch.Data.EFCore.DbContextExtensions.Set(DbContext,System.String)
+  name: Set(DbContext, String)
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html#Ploch_Data_EFCore_DbContextExtensions_Set_DbContext_System_String_
+  commentId: M:Ploch.Data.EFCore.DbContextExtensions.Set(DbContext,System.String)
+  fullName: Ploch.Data.EFCore.DbContextExtensions.Set(DbContext, System.String)
+  nameWithType: DbContextExtensions.Set(DbContext, String)
+- uid: Ploch.Data.EFCore.DbContextExtensions.Set(DbContext,Type)
+  name: Set(DbContext, Type)
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html#Ploch_Data_EFCore_DbContextExtensions_Set_DbContext_Type_
+  commentId: M:Ploch.Data.EFCore.DbContextExtensions.Set(DbContext,Type)
+  fullName: Ploch.Data.EFCore.DbContextExtensions.Set(DbContext, Type)
+  nameWithType: DbContextExtensions.Set(DbContext, Type)
+- uid: Ploch.Data.EFCore.DbContextExtensions.Set*
+  name: Set
+  href: api/Ploch.Data.EFCore.DbContextExtensions.html#Ploch_Data_EFCore_DbContextExtensions_Set_
+  commentId: Overload:Ploch.Data.EFCore.DbContextExtensions.Set
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.DbContextExtensions.Set
+  nameWithType: DbContextExtensions.Set
 - uid: Ploch.Data.EFCore.IDbContextConfigurator
   name: IDbContextConfigurator
   href: api/Ploch.Data.EFCore.IDbContextConfigurator.html
@@ -410,6 +488,60 @@ references:
   isSpec: "True"
   fullName: Ploch.Data.EFCore.SqLite.SqLiteDbContextConfigurator.Configure
   nameWithType: SqLiteDbContextConfigurator.Configure
+- uid: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2
+  name: SqLiteDbContextFactory<TDbContext, TMigrationAssembly>
+  href: api/Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory-2.html
+  commentId: T:Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2
+  name.vb: SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly)
+  fullName: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory<TDbContext, TMigrationAssembly>
+  fullName.vb: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly)
+  nameWithType: SqLiteDbContextFactory<TDbContext, TMigrationAssembly>
+  nameWithType.vb: SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly)
+- uid: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0})
+  name: SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  href: api/Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory-2.html#Ploch_Data_EFCore_SqLite_SqLiteDbContextFactory_2__ctor_Func_DbContextOptions__0___0__
+  commentId: M:Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0})
+  name.vb: SqLiteDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+  fullName: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  fullName.vb: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).SqLiteDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+  nameWithType: SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  nameWithType.vb: SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).SqLiteDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+- uid: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  name: SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
+  href: api/Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory-2.html#Ploch_Data_EFCore_SqLite_SqLiteDbContextFactory_2__ctor_Func_DbContextOptions__0___0__Func_System_String__
+  commentId: M:Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  name.vb: SqLiteDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
+  fullName: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<System.String>)
+  fullName.vb: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).SqLiteDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of System.String))
+  nameWithType: SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
+  nameWithType.vb: SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).SqLiteDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
+- uid: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.#ctor*
+  name: SqLiteDbContextFactory
+  href: api/Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory-2.html#Ploch_Data_EFCore_SqLite_SqLiteDbContextFactory_2__ctor_
+  commentId: Overload:Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.#ctor
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.SqLiteDbContextFactory
+  fullName.vb: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).SqLiteDbContextFactory
+  nameWithType: SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.SqLiteDbContextFactory
+  nameWithType.vb: SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).SqLiteDbContextFactory
+- uid: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  name: ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
+  href: api/Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory-2.html#Ploch_Data_EFCore_SqLite_SqLiteDbContextFactory_2_ConfigureOptions_Func_System_String__DbContextOptionsBuilder__0__
+  commentId: M:Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  name.vb: ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
+  fullName: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions(Func<System.String>, DbContextOptionsBuilder<TDbContext>)
+  fullName.vb: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions(Func(Of System.String), DbContextOptionsBuilder(Of TDbContext))
+  nameWithType: SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
+  nameWithType.vb: SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
+- uid: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.ConfigureOptions*
+  name: ConfigureOptions
+  href: api/Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory-2.html#Ploch_Data_EFCore_SqLite_SqLiteDbContextFactory_2_ConfigureOptions_
+  commentId: Overload:Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory`2.ConfigureOptions
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions
+  fullName.vb: Ploch.Data.EFCore.SqLite.SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions
+  nameWithType: SqLiteDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions
+  nameWithType.vb: SqLiteDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions
 - uid: Ploch.Data.EFCore.SqlServer
   name: Ploch.Data.EFCore.SqlServer
   href: api/Ploch.Data.EFCore.SqlServer.html
@@ -422,15 +554,24 @@ references:
   commentId: T:Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator
   fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator
   nameWithType: SqlServerDbContextConfigurator
-- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.#ctor(Action{SqlServerDbContextOptionsBuilder})
-  name: SqlServerDbContextConfigurator(Action<SqlServerDbContextOptionsBuilder>)
-  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextConfigurator__ctor_Action_SqlServerDbContextOptionsBuilder__
-  commentId: M:Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.#ctor(Action{SqlServerDbContextOptionsBuilder})
-  name.vb: SqlServerDbContextConfigurator(Action(Of SqlServerDbContextOptionsBuilder))
-  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action<SqlServerDbContextOptionsBuilder>)
-  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action(Of SqlServerDbContextOptionsBuilder))
-  nameWithType: SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action<SqlServerDbContextOptionsBuilder>)
-  nameWithType.vb: SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action(Of SqlServerDbContextOptionsBuilder))
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.#ctor(Action{SqlConnectionStringBuilder},System.Nullable{Action{SqlServerDbContextOptionsBuilder}})
+  name: SqlServerDbContextConfigurator(Action<SqlConnectionStringBuilder>, Nullable<Action<SqlServerDbContextOptionsBuilder>>)
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextConfigurator__ctor_Action_SqlConnectionStringBuilder__System_Nullable_Action_SqlServerDbContextOptionsBuilder___
+  commentId: M:Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.#ctor(Action{SqlConnectionStringBuilder},System.Nullable{Action{SqlServerDbContextOptionsBuilder}})
+  name.vb: SqlServerDbContextConfigurator(Action(Of SqlConnectionStringBuilder), Nullable(Of Action(Of SqlServerDbContextOptionsBuilder)))
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action<SqlConnectionStringBuilder>, System.Nullable<Action<SqlServerDbContextOptionsBuilder>>)
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action(Of SqlConnectionStringBuilder), System.Nullable(Of Action(Of SqlServerDbContextOptionsBuilder)))
+  nameWithType: SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action<SqlConnectionStringBuilder>, Nullable<Action<SqlServerDbContextOptionsBuilder>>)
+  nameWithType.vb: SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(Action(Of SqlConnectionStringBuilder), Nullable(Of Action(Of SqlServerDbContextOptionsBuilder)))
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.#ctor(System.String,System.Nullable{Action{SqlServerDbContextOptionsBuilder}})
+  name: SqlServerDbContextConfigurator(String, Nullable<Action<SqlServerDbContextOptionsBuilder>>)
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextConfigurator__ctor_System_String_System_Nullable_Action_SqlServerDbContextOptionsBuilder___
+  commentId: M:Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.#ctor(System.String,System.Nullable{Action{SqlServerDbContextOptionsBuilder}})
+  name.vb: SqlServerDbContextConfigurator(String, Nullable(Of Action(Of SqlServerDbContextOptionsBuilder)))
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(System.String, System.Nullable<Action<SqlServerDbContextOptionsBuilder>>)
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(System.String, System.Nullable(Of Action(Of SqlServerDbContextOptionsBuilder)))
+  nameWithType: SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(String, Nullable<Action<SqlServerDbContextOptionsBuilder>>)
+  nameWithType.vb: SqlServerDbContextConfigurator.SqlServerDbContextConfigurator(String, Nullable(Of Action(Of SqlServerDbContextOptionsBuilder)))
 - uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.#ctor*
   name: SqlServerDbContextConfigurator
   href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextConfigurator__ctor_
@@ -451,6 +592,60 @@ references:
   isSpec: "True"
   fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextConfigurator.Configure
   nameWithType: SqlServerDbContextConfigurator.Configure
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2
+  name: SqlServerDbContextFactory<TDbContext, TMigrationAssembly>
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory-2.html
+  commentId: T:Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2
+  name.vb: SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly)
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory<TDbContext, TMigrationAssembly>
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly)
+  nameWithType: SqlServerDbContextFactory<TDbContext, TMigrationAssembly>
+  nameWithType.vb: SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly)
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0})
+  name: SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory-2.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextFactory_2__ctor_Func_DbContextOptions__0___0__
+  commentId: M:Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0})
+  name.vb: SqlServerDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).SqlServerDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+  nameWithType: SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>)
+  nameWithType.vb: SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).SqlServerDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext))
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  name: SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory-2.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextFactory_2__ctor_Func_DbContextOptions__0___0__Func_System_String__
+  commentId: M:Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.#ctor(Func{DbContextOptions{`0},`0},Func{System.String})
+  name.vb: SqlServerDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<System.String>)
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).SqlServerDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of System.String))
+  nameWithType: SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext>, Func<String>)
+  nameWithType.vb: SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).SqlServerDbContextFactory(Func(Of DbContextOptions(Of TDbContext), TDbContext), Func(Of String))
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.#ctor*
+  name: SqlServerDbContextFactory
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory-2.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextFactory_2__ctor_
+  commentId: Overload:Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.#ctor
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.SqlServerDbContextFactory
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).SqlServerDbContextFactory
+  nameWithType: SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.SqlServerDbContextFactory
+  nameWithType.vb: SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).SqlServerDbContextFactory
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  name: ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory-2.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextFactory_2_ConfigureOptions_Func_System_String__DbContextOptionsBuilder__0__
+  commentId: M:Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.ConfigureOptions(Func{System.String},DbContextOptionsBuilder{`0})
+  name.vb: ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions(Func<System.String>, DbContextOptionsBuilder<TDbContext>)
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions(Func(Of System.String), DbContextOptionsBuilder(Of TDbContext))
+  nameWithType: SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions(Func<String>, DbContextOptionsBuilder<TDbContext>)
+  nameWithType.vb: SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions(Func(Of String), DbContextOptionsBuilder(Of TDbContext))
+- uid: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.ConfigureOptions*
+  name: ConfigureOptions
+  href: api/Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory-2.html#Ploch_Data_EFCore_SqlServer_SqlServerDbContextFactory_2_ConfigureOptions_
+  commentId: Overload:Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory`2.ConfigureOptions
+  isSpec: "True"
+  fullName: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions
+  fullName.vb: Ploch.Data.EFCore.SqlServer.SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions
+  nameWithType: SqlServerDbContextFactory<TDbContext, TMigrationAssembly>.ConfigureOptions
+  nameWithType.vb: SqlServerDbContextFactory(Of TDbContext, TMigrationAssembly).ConfigureOptions
 - uid: Ploch.Data.GenericRepository
   name: Ploch.Data.GenericRepository
   href: api/Ploch.Data.GenericRepository.html
@@ -555,15 +750,15 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).Entities
   nameWithType: QueryableRepository<TEntity>.Entities
   nameWithType.vb: QueryableRepository(Of TEntity).Entities
-- uid: Ploch.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name: GetPageQuery(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  href: api/Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____
-  commentId: M:Ploch.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name.vb: GetPageQuery(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  fullName: Ploch.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.GetPageQuery(System.Int32, System.Int32, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  fullName.vb: Ploch.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).GetPageQuery(System.Int32, System.Int32, System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  nameWithType: QueryableRepository<TEntity>.GetPageQuery(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  nameWithType.vb: QueryableRepository(Of TEntity).GetPageQuery(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+- uid: Ploch.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name: GetPageQuery(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  href: api/Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____
+  commentId: M:Ploch.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name.vb: GetPageQuery(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  fullName: Ploch.Data.GenericRepository.EFCore.QueryableRepository<TEntity>.GetPageQuery(System.Int32, System.Int32, System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.QueryableRepository(Of TEntity).GetPageQuery(System.Int32, System.Int32, System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  nameWithType: QueryableRepository<TEntity>.GetPageQuery(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  nameWithType.vb: QueryableRepository(Of TEntity).GetPageQuery(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
 - uid: Ploch.Data.GenericRepository.EFCore.QueryableRepository`1.GetPageQuery*
   name: GetPageQuery
   href: api/Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_
@@ -616,6 +811,24 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).Count
   nameWithType: ReadRepository<TEntity>.Count
   nameWithType.vb: ReadRepository(Of TEntity).Count
+- uid: Ploch.Data.GenericRepository.EFCore.ReadRepository`1.FindFirst(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: FindFirst(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_FindFirst_Expression_Func__0_System_Boolean___System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepository`1.FindFirst(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: FindFirst(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepository<TEntity>.FindFirst(Expression<Func<TEntity, System.Boolean>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).FindFirst(Expression(Of Func(Of TEntity, System.Boolean)), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: ReadRepository<TEntity>.FindFirst(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: ReadRepository(Of TEntity).FindFirst(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.EFCore.ReadRepository`1.FindFirst*
+  name: FindFirst
+  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_FindFirst_
+  commentId: Overload:Ploch.Data.GenericRepository.EFCore.ReadRepository`1.FindFirst
+  isSpec: "True"
+  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepository<TEntity>.FindFirst
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).FindFirst
+  nameWithType: ReadRepository<TEntity>.FindFirst
+  nameWithType.vb: ReadRepository(Of TEntity).FindFirst
 - uid: Ploch.Data.GenericRepository.EFCore.ReadRepository`1.GetAll(System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
   name: GetAll(Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
   href: api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetAll_System_Nullable_Func_IQueryable__0__IQueryable__0____
@@ -652,15 +865,15 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetById
   nameWithType: ReadRepository<TEntity>.GetById
   nameWithType.vb: ReadRepository(Of TEntity).GetById
-- uid: Ploch.Data.GenericRepository.EFCore.ReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name: GetPage(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____
-  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name.vb: GetPage(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetPage(System.Int32, System.Int32, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetPage(System.Int32, System.Int32, System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  nameWithType: ReadRepository<TEntity>.GetPage(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  nameWithType.vb: ReadRepository(Of TEntity).GetPage(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+- uid: Ploch.Data.GenericRepository.EFCore.ReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name: GetPage(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____
+  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name.vb: GetPage(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepository<TEntity>.GetPage(System.Int32, System.Int32, System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepository(Of TEntity).GetPage(System.Int32, System.Int32, System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  nameWithType: ReadRepository<TEntity>.GetPage(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  nameWithType.vb: ReadRepository(Of TEntity).GetPage(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
 - uid: Ploch.Data.GenericRepository.EFCore.ReadRepository`1.GetPage*
   name: GetPage
   href: api/Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_
@@ -757,15 +970,33 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).CountAsync
   nameWithType: ReadRepositoryAsync<TEntity>.CountAsync
   nameWithType.vb: ReadRepositoryAsync(Of TEntity).CountAsync
-- uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name: GetAllAsync(Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
-  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name.vb: GetAllAsync(Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetAllAsync(System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetAllAsync(System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  nameWithType: ReadRepositoryAsync<TEntity>.GetAllAsync(Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetAllAsync(Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.FindFirstAsync(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: FindFirstAsync(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_FindFirstAsync_Expression_Func__0_System_Boolean___System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.FindFirstAsync(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: FindFirstAsync(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.FindFirstAsync(Expression<Func<TEntity, System.Boolean>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).FindFirstAsync(Expression(Of Func(Of TEntity, System.Boolean)), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity>.FindFirstAsync(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).FindFirstAsync(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.FindFirstAsync*
+  name: FindFirstAsync
+  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_FindFirstAsync_
+  commentId: Overload:Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.FindFirstAsync
+  isSpec: "True"
+  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.FindFirstAsync
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).FindFirstAsync
+  nameWithType: ReadRepositoryAsync<TEntity>.FindFirstAsync
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).FindFirstAsync
+- uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: GetAllAsync(Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync(System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: GetAllAsync(Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetAllAsync(System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetAllAsync(System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity>.GetAllAsync(Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetAllAsync(Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
 - uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetAllAsync*
   name: GetAllAsync
   href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_
@@ -793,15 +1024,15 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetByIdAsync
   nameWithType: ReadRepositoryAsync<TEntity>.GetByIdAsync
   nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetByIdAsync
-- uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name: GetPageAsync(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
-  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name.vb: GetPageAsync(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetPageAsync(System.Int32, System.Int32, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetPageAsync(System.Int32, System.Int32, System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  nameWithType: ReadRepositoryAsync<TEntity>.GetPageAsync(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetPageAsync(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: GetPageAsync(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: GetPageAsync(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync<TEntity>.GetPageAsync(System.Int32, System.Int32, System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync(Of TEntity).GetPageAsync(System.Int32, System.Int32, System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: ReadRepositoryAsync<TEntity>.GetPageAsync(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: ReadRepositoryAsync(Of TEntity).GetPageAsync(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
 - uid: Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`1.GetPageAsync*
   name: GetPageAsync
   href: api/Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_
@@ -1223,15 +1454,15 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.IQueryableRepository(Of TEntity).Entities
   nameWithType: IQueryableRepository<TEntity>.Entities
   nameWithType.vb: IQueryableRepository(Of TEntity).Entities
-- uid: Ploch.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name: GetPageQuery(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  href: api/Ploch.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____
-  commentId: M:Ploch.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name.vb: GetPageQuery(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  fullName: Ploch.Data.GenericRepository.IQueryableRepository<TEntity>.GetPageQuery(System.Int32, System.Int32, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  fullName.vb: Ploch.Data.GenericRepository.IQueryableRepository(Of TEntity).GetPageQuery(System.Int32, System.Int32, System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  nameWithType: IQueryableRepository<TEntity>.GetPageQuery(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  nameWithType.vb: IQueryableRepository(Of TEntity).GetPageQuery(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+- uid: Ploch.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name: GetPageQuery(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  href: api/Ploch.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____
+  commentId: M:Ploch.Data.GenericRepository.IQueryableRepository`1.GetPageQuery(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name.vb: GetPageQuery(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  fullName: Ploch.Data.GenericRepository.IQueryableRepository<TEntity>.GetPageQuery(System.Int32, System.Int32, System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  fullName.vb: Ploch.Data.GenericRepository.IQueryableRepository(Of TEntity).GetPageQuery(System.Int32, System.Int32, System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  nameWithType: IQueryableRepository<TEntity>.GetPageQuery(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  nameWithType.vb: IQueryableRepository(Of TEntity).GetPageQuery(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
 - uid: Ploch.Data.GenericRepository.IQueryableRepository`1.GetPageQuery*
   name: GetPageQuery
   href: api/Ploch.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_
@@ -1267,6 +1498,24 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.IReadRepository(Of TEntity).Count
   nameWithType: IReadRepository<TEntity>.Count
   nameWithType.vb: IReadRepository(Of TEntity).Count
+- uid: Ploch.Data.GenericRepository.IReadRepository`1.FindFirst(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: FindFirst(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_FindFirst_Expression_Func__0_System_Boolean___System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.IReadRepository`1.FindFirst(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: FindFirst(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.IReadRepository<TEntity>.FindFirst(Expression<Func<TEntity, System.Boolean>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.IReadRepository(Of TEntity).FindFirst(Expression(Of Func(Of TEntity, System.Boolean)), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: IReadRepository<TEntity>.FindFirst(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: IReadRepository(Of TEntity).FindFirst(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.IReadRepository`1.FindFirst*
+  name: FindFirst
+  href: api/Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_FindFirst_
+  commentId: Overload:Ploch.Data.GenericRepository.IReadRepository`1.FindFirst
+  isSpec: "True"
+  fullName: Ploch.Data.GenericRepository.IReadRepository<TEntity>.FindFirst
+  fullName.vb: Ploch.Data.GenericRepository.IReadRepository(Of TEntity).FindFirst
+  nameWithType: IReadRepository<TEntity>.FindFirst
+  nameWithType.vb: IReadRepository(Of TEntity).FindFirst
 - uid: Ploch.Data.GenericRepository.IReadRepository`1.GetAll(System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
   name: GetAll(Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
   href: api/Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetAll_System_Nullable_Func_IQueryable__0__IQueryable__0____
@@ -1303,15 +1552,15 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.IReadRepository(Of TEntity).GetById
   nameWithType: IReadRepository<TEntity>.GetById
   nameWithType.vb: IReadRepository(Of TEntity).GetById
-- uid: Ploch.Data.GenericRepository.IReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name: GetPage(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  href: api/Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____
-  commentId: M:Ploch.Data.GenericRepository.IReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
-  name.vb: GetPage(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  fullName: Ploch.Data.GenericRepository.IReadRepository<TEntity>.GetPage(System.Int32, System.Int32, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  fullName.vb: Ploch.Data.GenericRepository.IReadRepository(Of TEntity).GetPage(System.Int32, System.Int32, System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
-  nameWithType: IReadRepository<TEntity>.GetPage(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
-  nameWithType.vb: IReadRepository(Of TEntity).GetPage(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+- uid: Ploch.Data.GenericRepository.IReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name: GetPage(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  href: api/Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____
+  commentId: M:Ploch.Data.GenericRepository.IReadRepository`1.GetPage(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}})
+  name.vb: GetPage(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  fullName: Ploch.Data.GenericRepository.IReadRepository<TEntity>.GetPage(System.Int32, System.Int32, System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  fullName.vb: Ploch.Data.GenericRepository.IReadRepository(Of TEntity).GetPage(System.Int32, System.Int32, System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
+  nameWithType: IReadRepository<TEntity>.GetPage(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>)
+  nameWithType.vb: IReadRepository(Of TEntity).GetPage(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))))
 - uid: Ploch.Data.GenericRepository.IReadRepository`1.GetPage*
   name: GetPage
   href: api/Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetPage_
@@ -1374,15 +1623,33 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).CountAsync
   nameWithType: IReadRepositoryAsync<TEntity>.CountAsync
   nameWithType.vb: IReadRepositoryAsync(Of TEntity).CountAsync
-- uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync(System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name: GetAllAsync(Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_GetAllAsync_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
-  commentId: M:Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync(System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name.vb: GetAllAsync(Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  fullName: Ploch.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetAllAsync(System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetAllAsync(System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  nameWithType: IReadRepositoryAsync<TEntity>.GetAllAsync(Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetAllAsync(Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.FindFirstAsync(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: FindFirstAsync(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_FindFirstAsync_Expression_Func__0_System_Boolean___System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.IReadRepositoryAsync`1.FindFirstAsync(Expression{Func{`0,System.Boolean}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: FindFirstAsync(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.IReadRepositoryAsync<TEntity>.FindFirstAsync(Expression<Func<TEntity, System.Boolean>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).FindFirstAsync(Expression(Of Func(Of TEntity, System.Boolean)), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity>.FindFirstAsync(Expression<Func<TEntity, Boolean>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).FindFirstAsync(Expression(Of Func(Of TEntity, Boolean)), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.FindFirstAsync*
+  name: FindFirstAsync
+  href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_FindFirstAsync_
+  commentId: Overload:Ploch.Data.GenericRepository.IReadRepositoryAsync`1.FindFirstAsync
+  isSpec: "True"
+  fullName: Ploch.Data.GenericRepository.IReadRepositoryAsync<TEntity>.FindFirstAsync
+  fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).FindFirstAsync
+  nameWithType: IReadRepositoryAsync<TEntity>.FindFirstAsync
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).FindFirstAsync
+- uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync(System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: GetAllAsync(Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_GetAllAsync_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync(System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: GetAllAsync(Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetAllAsync(System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetAllAsync(System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity>.GetAllAsync(Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetAllAsync(Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
 - uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetAllAsync*
   name: GetAllAsync
   href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_GetAllAsync_
@@ -1410,15 +1677,15 @@ references:
   fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetByIdAsync
   nameWithType: IReadRepositoryAsync<TEntity>.GetByIdAsync
   nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetByIdAsync
-- uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name: GetPageAsync(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
-  commentId: M:Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
-  name.vb: GetPageAsync(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  fullName: Ploch.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetPageAsync(System.Int32, System.Int32, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetPageAsync(System.Int32, System.Int32, System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
-  nameWithType: IReadRepositoryAsync<TEntity>.GetPageAsync(Int32, Int32, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
-  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetPageAsync(Int32, Int32, Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+- uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name: GetPageAsync(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_
+  commentId: M:Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync(System.Int32,System.Int32,System.Nullable{Expression{Func{`0,System.Boolean}}},System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)
+  name.vb: GetPageAsync(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  fullName: Ploch.Data.GenericRepository.IReadRepositoryAsync<TEntity>.GetPageAsync(System.Int32, System.Int32, System.Nullable<Expression<Func<TEntity, System.Boolean>>>, System.Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  fullName.vb: Ploch.Data.GenericRepository.IReadRepositoryAsync(Of TEntity).GetPageAsync(System.Int32, System.Int32, System.Nullable(Of Expression(Of Func(Of TEntity, System.Boolean))), System.Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
+  nameWithType: IReadRepositoryAsync<TEntity>.GetPageAsync(Int32, Int32, Nullable<Expression<Func<TEntity, Boolean>>>, Nullable<Func<IQueryable<TEntity>, IQueryable<TEntity>>>, CancellationToken)
+  nameWithType.vb: IReadRepositoryAsync(Of TEntity).GetPageAsync(Int32, Int32, Nullable(Of Expression(Of Func(Of TEntity, Boolean))), Nullable(Of Func(Of IQueryable(Of TEntity), IQueryable(Of TEntity))), CancellationToken)
 - uid: Ploch.Data.GenericRepository.IReadRepositoryAsync`1.GetPageAsync*
   name: GetPageAsync
   href: api/Ploch.Data.GenericRepository.IReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_IReadRepositoryAsync_1_GetPageAsync_

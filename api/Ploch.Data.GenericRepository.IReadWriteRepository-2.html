@@ -73,8 +73,8 @@
   
   <h1 id="Ploch_Data_GenericRepository_IReadWriteRepository_2" data-uid="Ploch.Data.GenericRepository.IReadWriteRepository`2" class="text-break">Interface IReadWriteRepository&lt;TEntity, TId&gt;
   </h1>
-  <div class="markdown level0 summary"><p>Defines a repository that provides both read and write operations for <see cref="!:TEntity"></see> with a specified
-identifier type.</p>
+  <div class="markdown level0 summary"><p>Defines a repository that provides both read and write operations for <code data-dev-comment-type="typeparamref" class="typeparamref">TEntity</code> with a
+specified identifier type.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritedMembers">
@@ -86,10 +86,13 @@ identifier type.</p>
       <a class="xref" href="Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetById_System_Object___">IReadRepository&lt;TEntity&gt;.GetById(Object[])</a>
     </div>
     <div>
+      <a class="xref" href="Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_FindFirst_Expression_Func__0_System_Boolean___System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_">IReadRepository&lt;TEntity&gt;.FindFirst(Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</a>
+    </div>
+    <div>
       <a class="xref" href="Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetAll_System_Nullable_Func_IQueryable__0__IQueryable__0____">IReadRepository&lt;TEntity&gt;.GetAll(Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">IReadRepository&lt;TEntity&gt;.GetPage(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
+      <a class="xref" href="Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____">IReadRepository&lt;TEntity&gt;.GetPage(Int32, Int32, Nullable&lt;Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Data.GenericRepository.IReadRepository-1.html#Ploch_Data_GenericRepository_IReadRepository_1_Count">IReadRepository&lt;TEntity&gt;.Count()</a>
@@ -98,7 +101,7 @@ identifier type.</p>
       <a class="xref" href="Ploch.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Data_GenericRepository_IQueryableRepository_1_Entities">IQueryableRepository&lt;TEntity&gt;.Entities</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">IQueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
+      <a class="xref" href="Ploch.Data.GenericRepository.IQueryableRepository-1.html#Ploch_Data_GenericRepository_IQueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____">IQueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Data.GenericRepository.IWriteRepository-2.html#Ploch_Data_GenericRepository_IWriteRepository_2_Add__0_">IWriteRepository&lt;TEntity, TId&gt;.Add(TEntity)</a>

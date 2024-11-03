@@ -73,7 +73,9 @@
   
   <h1 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1" class="text-break">Class DataIntegrationTest&lt;TDbContext&gt;
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Abstract base class for integration tests that involve Entity Framework Core.
+Provides initialization and configuration of the database context and services.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -97,7 +99,8 @@
     <tbody>
       <tr>
         <td><span class="parametername">TDbContext</span></td>
-        <td></td>
+        <td><p>The type of database context.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -108,11 +111,12 @@
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_Ploch_Data_EFCore_IDbContextConfigurator_.md&amp;value=---%0Auid%3A%20Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest%601.%23ctor(Ploch.Data.EFCore.IDbContextConfigurator)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L10">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L22">View Source</a>
   </span>
   <a id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor*"></a>
   <h4 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1__ctor_Ploch_Data_EFCore_IDbContextConfigurator_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.#ctor(Ploch.Data.EFCore.IDbContextConfigurator)">DataIntegrationTest(IDbContextConfigurator)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html">DataIntegrationTest&lt;TDbContext&gt;</a> class.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -131,7 +135,8 @@
       <tr>
         <td><a class="xref" href="Ploch.Data.EFCore.IDbContextConfigurator.html">IDbContextConfigurator</a></td>
         <td><span class="parametername">dbContextConfigurator</span></td>
-        <td></td>
+        <td><p>DbContext configurator to be used by the test. If not provided, then an in-memory SQLite database is used.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -142,11 +147,12 @@
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext.md&amp;value=---%0Auid%3A%20Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest%601.DbContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L23">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L41">View Source</a>
   </span>
   <a id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext*"></a>
   <h4 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_DbContext" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.DbContext">DbContext</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the configured instance of the database context.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -172,11 +178,13 @@
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider.md&amp;value=---%0Auid%3A%20Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest%601.ServiceProvider%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L25">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L47">View Source</a>
   </span>
   <a id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider*"></a>
   <h4 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ServiceProvider" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ServiceProvider">ServiceProvider</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Provides access to the configured service provider.
+This is used to resolve dependencies and services required during integration testing.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -204,11 +212,12 @@
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_IServiceCollection_.md&amp;value=---%0Auid%3A%20Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest%601.ConfigureServices(IServiceCollection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L27">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L66">View Source</a>
   </span>
   <a id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices*"></a>
   <h4 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_IServiceCollection_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.ConfigureServices(IServiceCollection)">ConfigureServices(IServiceCollection)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Configures the required services for the test.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -227,20 +236,26 @@
       <tr>
         <td><span class="xref">IServiceCollection</span></td>
         <td><span class="parametername">services</span></td>
-        <td></td>
+        <td><p>The service collection.</p>
+</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_ConfigureServices_IServiceCollection__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method should be overriden in derived classes to configure additional services required for the test.</p>
+</div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose.md&amp;value=---%0Auid%3A%20Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest%601.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L30">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L53">View Source</a>
   </span>
   <a id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose*"></a>
   <h4 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Disposes of the resources used by the current instance of the
+<a class="xref" href="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html">DataIntegrationTest&lt;TDbContext&gt;</a> class.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -251,11 +266,13 @@
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest%601.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L36">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L76">View Source</a>
   </span>
   <a id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose*"></a>
   <h4 id="Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1_Dispose_System_Boolean_" data-uid="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest`1.Dispose(System.Boolean)">Dispose(Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Releases the unmanaged resources used by the <a class="xref" href="Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest-1.html">DataIntegrationTest&lt;TDbContext&gt;</a>
+and optionally releases the managed resources.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -274,7 +291,8 @@
       <tr>
         <td><span class="xref">System.Boolean</span></td>
         <td><span class="parametername">disposing</span></td>
-        <td></td>
+        <td><p>true to release both managed and unmanaged resources; false to release only unmanaged resources.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -289,7 +307,7 @@
                     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_EFCore_IntegrationTesting_DataIntegrationTest_1.md&amp;value=---%0Auid%3A%20Ploch.Data.EFCore.IntegrationTesting.DataIntegrationTest%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L7" class="contribution-link">View Source</a>
+                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.EFCore.IntegrationTesting/DataIntegrationTest.cs/#L13" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

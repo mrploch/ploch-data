@@ -73,7 +73,8 @@
   
   <h1 id="Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2" data-uid="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`2" class="text-break">Class ReadRepositoryAsync&lt;TEntity, TId&gt;
   </h1>
-  <div class="markdown level0 summary"><p>Provides a repository that allows asynchronous reading of entities of type <see cref="!:TEntity"></see> with a specified
+  <div class="markdown level0 summary"><p>Provides a repository that allows asynchronous reading of entities of type <code data-dev-comment-type="typeparamref" class="typeparamref">TEntity</code> with a
+specified
 identifier type from a <see cref="!:DbContext"></see>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
@@ -97,13 +98,16 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetByIdAsync_System_Object___CancellationToken_">ReadRepositoryAsync&lt;TEntity&gt;.GetByIdAsync(Object[], CancellationToken)</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_">ReadRepositoryAsync&lt;TEntity&gt;.GetAllAsync(Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</a>
+      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetAllAsync_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_">ReadRepositoryAsync&lt;TEntity&gt;.GetAllAsync(Nullable&lt;Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_">ReadRepositoryAsync&lt;TEntity&gt;.GetPageAsync(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</a>
+      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_GetPageAsync_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_">ReadRepositoryAsync&lt;TEntity&gt;.GetPageAsync(Int32, Int32, Nullable&lt;Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_CountAsync_CancellationToken_">ReadRepositoryAsync&lt;TEntity&gt;.CountAsync(CancellationToken)</a>
+    </div>
+    <div>
+      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_1_FindFirstAsync_Expression_Func__0_System_Boolean___System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_">ReadRepositoryAsync&lt;TEntity&gt;.FindFirstAsync(Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_Entities">QueryableRepository&lt;TEntity&gt;.Entities</a>
@@ -115,7 +119,7 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_DbSet">QueryableRepository&lt;TEntity&gt;.DbSet</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
+      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Ploch.Data.GenericRepository.EFCore.html">Ploch.Data.GenericRepository.EFCore</a></h6>
@@ -135,7 +139,8 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <tbody>
       <tr>
         <td><span class="parametername">TEntity</span></td>
-        <td></td>
+        <td><p>The entity type.</p>
+</td>
       </tr>
       <tr>
         <td><span class="parametername">TId</span></td>
@@ -151,7 +156,7 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2__ctor_DbContext_.md&amp;value=---%0Auid%3A%20Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync%602.%23ctor(DbContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L66">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L83">View Source</a>
   </span>
   <a id="Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2__ctor_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.#ctor*"></a>
   <h4 id="Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2__ctor_DbContext_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.#ctor(DbContext)">ReadRepositoryAsync(DbContext)</h4>
@@ -187,7 +192,7 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2_GetByIdAsync__1_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_.md&amp;value=---%0Auid%3A%20Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync%602.GetByIdAsync(%601%2CSystem.Nullable%7BFunc%7BIQueryable%7B%600%7D%2CIQueryable%7B%600%7D%7D%7D%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L70">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L87">View Source</a>
   </span>
   <a id="Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2_GetByIdAsync_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.GetByIdAsync*"></a>
   <h4 id="Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2_GetByIdAsync__1_System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync`2.GetByIdAsync(`1,System.Nullable{Func{IQueryable{`0},IQueryable{`0}}},CancellationToken)">GetByIdAsync(TId, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</h4>
@@ -260,7 +265,7 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
                     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_GenericRepository_EFCore_ReadRepositoryAsync_2.md&amp;value=---%0Auid%3A%20Ploch.Data.GenericRepository.EFCore.ReadRepositoryAsync%602%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L59" class="contribution-link">View Source</a>
+                    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadRepositoryAsync.cs/#L75" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

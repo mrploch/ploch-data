@@ -73,8 +73,8 @@
   
   <h1 id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2" class="text-break">Class ReadWriteRepository&lt;TEntity, TId&gt;
   </h1>
-  <div class="markdown level0 summary"><p>Provides a repository that allows reading and writing entities of type <see cref="!:TEntity"></see> with a specified
-identifier type from a <see cref="!:DbContext"></see>.</p>
+  <div class="markdown level0 summary"><p>Provides a repository that allows reading and writing entities of type <code data-dev-comment-type="typeparamref" class="typeparamref">TEntity</code> with a
+specified identifier type from a <see cref="!:DbContext"></see>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -102,10 +102,13 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetById_System_Object___">ReadRepository&lt;TEntity&gt;.GetById(Object[])</a>
     </div>
     <div>
+      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_FindFirst_Expression_Func__0_System_Boolean___System_Nullable_Func_IQueryable__0__IQueryable__0____CancellationToken_">ReadRepository&lt;TEntity&gt;.FindFirst(Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;, CancellationToken)</a>
+    </div>
+    <div>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetAll_System_Nullable_Func_IQueryable__0__IQueryable__0____">ReadRepository&lt;TEntity&gt;.GetAll(Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">ReadRepository&lt;TEntity&gt;.GetPage(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
+      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_GetPage_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____">ReadRepository&lt;TEntity&gt;.GetPage(Int32, Int32, Nullable&lt;Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
     <div>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.ReadRepository-1.html#Ploch_Data_GenericRepository_EFCore_ReadRepository_1_Count">ReadRepository&lt;TEntity&gt;.Count()</a>
@@ -120,7 +123,7 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
       <a class="xref" href="Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_DbSet">QueryableRepository&lt;TEntity&gt;.DbSet</a>
     </div>
     <div>
-      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Func_IQueryable__0__IQueryable__0____">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
+      <a class="xref" href="Ploch.Data.GenericRepository.EFCore.QueryableRepository-1.html#Ploch_Data_GenericRepository_EFCore_QueryableRepository_1_GetPageQuery_System_Int32_System_Int32_System_Nullable_Expression_Func__0_System_Boolean____System_Nullable_Func_IQueryable__0__IQueryable__0____">QueryableRepository&lt;TEntity&gt;.GetPageQuery(Int32, Int32, Nullable&lt;Expression&lt;Func&lt;TEntity, Boolean&gt;&gt;&gt;, Nullable&lt;Func&lt;IQueryable&lt;TEntity&gt;, IQueryable&lt;TEntity&gt;&gt;&gt;)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Ploch.Data.GenericRepository.EFCore.html">Ploch.Data.GenericRepository.EFCore</a></h6>
@@ -140,12 +143,12 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <tbody>
       <tr>
         <td><span class="parametername">TEntity</span></td>
-        <td><p>The type of the entities in the repository.</p>
+        <td><p>The entity type.</p>
 </td>
       </tr>
       <tr>
         <td><span class="parametername">TId</span></td>
-        <td><p>The type of the identifier for the entities in the repository.</p>
+        <td><p>The type of entity identifier.</p>
 </td>
       </tr>
     </tbody>
@@ -193,11 +196,12 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Add__0_.md&amp;value=---%0Auid%3A%20Ploch.Data.GenericRepository.EFCore.ReadWriteRepository%602.Add(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L26">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L27">View Source</a>
   </span>
   <a id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Add_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.Add*"></a>
   <h4 id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Add__0_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.Add(`0)">Add(TEntity)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Adds the specified entity to the repository.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -216,7 +220,8 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
       <tr>
         <td><span class="xref">TEntity</span></td>
         <td><span class="parametername">entity</span></td>
-        <td></td>
+        <td><p>The entity to add.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -231,7 +236,8 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <tbody>
       <tr>
         <td><span class="xref">TEntity</span></td>
-        <td></td>
+        <td><p>The added entity.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -240,7 +246,7 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_AddRange_IEnumerable__0__.md&amp;value=---%0Auid%3A%20Ploch.Data.GenericRepository.EFCore.ReadWriteRepository%602.AddRange(IEnumerable%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L35">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L37">View Source</a>
   </span>
   <a id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_AddRange_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.AddRange*"></a>
   <h4 id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_AddRange_IEnumerable__0__" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.AddRange(IEnumerable{`0})">AddRange(IEnumerable&lt;TEntity&gt;)</h4>
@@ -287,11 +293,12 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Delete__0_.md&amp;value=---%0Auid%3A%20Ploch.Data.GenericRepository.EFCore.ReadWriteRepository%602.Delete(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L45">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L48">View Source</a>
   </span>
   <a id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Delete_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.Delete*"></a>
   <h4 id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Delete__0_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.Delete(`0)">Delete(TEntity)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Deletes the specified entity from the repository.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -310,7 +317,8 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
       <tr>
         <td><span class="xref">TEntity</span></td>
         <td><span class="parametername">entity</span></td>
-        <td></td>
+        <td><p>The entity to delete.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -319,11 +327,12 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
     <a href="https://github.com/mrploch/ploch-data/new/main/apiSpec/new?filename=Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Update__0_.md&amp;value=---%0Auid%3A%20Ploch.Data.GenericRepository.EFCore.ReadWriteRepository%602.Update(%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L52">View Source</a>
+    <a href="https://github.com/mrploch/ploch-data/blob/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/ReadWriteRepository.cs/#L56">View Source</a>
   </span>
   <a id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Update_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.Update*"></a>
   <h4 id="Ploch_Data_GenericRepository_EFCore_ReadWriteRepository_2_Update__0_" data-uid="Ploch.Data.GenericRepository.EFCore.ReadWriteRepository`2.Update(`0)">Update(TEntity)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Updates the specified entity in the repository.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -342,7 +351,8 @@ identifier type from a <see cref="!:DbContext"></see>.</p>
       <tr>
         <td><span class="xref">TEntity</span></td>
         <td><span class="parametername">entity</span></td>
-        <td></td>
+        <td><p>The entity to update.</p>
+</td>
       </tr>
     </tbody>
   </table>

@@ -94,11 +94,35 @@
     <div><a class="xref" href="Ploch.Data.Model.IHierarchicalWithChildrenComposite-1.html">IHierarchicalWithChildrenComposite</a>&lt;TCategory&gt;</div>
     <div><a class="xref" href="Ploch.Data.Model.IHierarchicalWithChildren-1.html">IHierarchicalWithChildren</a>&lt;TCategory&gt;</div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Ploch.Data.Model.CommonTypes.html">Ploch.Data.Model.CommonTypes</a></h6>
   <h6><strong>Assembly</strong>: Ploch.Data.Model.dll</h6>
   <h5 id="Ploch_Data_Model_CommonTypes_Category_2_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Category&lt;TCategory, TId&gt; : object, IHasId&lt;TId&gt;, IGetOnlyId&lt;TId&gt;, INamed, IHierarchicalParentChildrenComposite&lt;TCategory&gt;, IParentChildrenComposite&lt;TCategory, TCategory&gt;, IHierarchicalWithParentComposite&lt;TCategory&gt;, IHierarchicalWithParent&lt;TCategory&gt;, IHierarchicalWithChildrenComposite&lt;TCategory&gt;, IHierarchicalWithChildren&lt;TCategory&gt; where TCategory : Category&lt;TCategory, TId&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class Category&lt;TCategory, TId&gt; : IHasId&lt;TId&gt;, IGetOnlyId&lt;TId&gt;, INamed, IHierarchicalParentChildrenComposite&lt;TCategory&gt;, IParentChildrenComposite&lt;TCategory, TCategory&gt;, IHierarchicalWithParentComposite&lt;TCategory&gt;, IHierarchicalWithParent&lt;TCategory&gt;, IHierarchicalWithChildrenComposite&lt;TCategory&gt;, IHierarchicalWithChildren&lt;TCategory&gt; where TCategory : Category&lt;TCategory, TId&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -178,7 +202,8 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TId Id { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">[Key]
+public TId Id { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -209,7 +234,8 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string Name { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">[MaxLength(128)]
+public string Name { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
