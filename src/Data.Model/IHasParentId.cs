@@ -1,4 +1,4 @@
-﻿namespace Ploch.Common.Data.Model;
+﻿namespace Ploch.Data.Model;
 
 /// <summary>
 ///     Defines a type that has a parent identifier.

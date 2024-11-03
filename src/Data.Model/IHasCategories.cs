@@ -1,6 +1,6 @@
-using Ploch.Common.Data.Model.CommonTypes;
+using Ploch.Data.Model.CommonTypes;
 
-namespace Ploch.Common.Data.Model;
+namespace Ploch.Data.Model;
 
 /// <summary>
 ///     Describes a type that has a collection of <see cref="Category{TCategory}" />.

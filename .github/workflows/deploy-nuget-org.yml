@@ -1,0 +1,76 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Build, test and deploy to nuget.org
+on:
+  workflow_dispatch:
+env:
+  SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
+  SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
+  GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+  NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
+  RELEASEVERSION: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "The branch name is ${{ github.repository }}"
+      - uses: actions/checkout@v3
+      - name: Copy documentation files
+        run: cp ./README.md ./DocumentationSite/index.md
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        shell: pwsh
+        run: dotnet restore ./Ploch.Data.sln
+      - name: Install SonarCloud Scanner
+        shell: pwsh
+        run: dotnet tool install --global dotnet-sonarscanner
+      - name: Install dotnet-coverage
+        shell: pwsh
+        run: dotnet tool install --global dotnet-coverage
+      - name: SonarScanner Begin
+        shell: pwsh
+        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
+      - name: Build
+        shell: pwsh
+        run: dotnet build ./Ploch.Data.sln --no-restore
+      - name: Test Coverage
+        shell: pwsh
+        run: dotnet test ./Ploch.Data.sln --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+      - name: SonarScanner End
+        shell: pwsh
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: test-results
+          path: |
+            **/TestResults/*.xml
+            **/TestResults/*.trx
+      - name: Upload Coverage Results
+        uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: code-coverage
+          path: |
+            **/CoverageResults/*.xml        
+
+      - name: Deploy GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./DocumentationSite/_site
+      # Publish all NuGet packages to NuGet.org
+      # Use --skip-duplicate to prevent errors if a package with the same version already exists.
+      # If you retry a failed workflow, already published packages will be skipped without error.
+      - name: Publish NuGet package
+        run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_APIKEY}} --skip-duplicate

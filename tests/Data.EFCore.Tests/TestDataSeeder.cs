@@ -1,10 +1,7 @@
-namespace Ploch.Common.Data.EFCore.Tests;
+namespace Ploch.Data.EFCore.Tests;
 
-public class TestDataSeeder : DataSeeder<TestDbContext>
+public class TestDataSeeder(TestDbContext dbContext) : DataSeeder<TestDbContext>(dbContext)
 {
-    public TestDataSeeder(TestDbContext dbContext) : base(dbContext)
-    { }
-
     protected override void InitializeData()
     {
         DbContext.TestEntities.Add(new TestEntity { Name = "Test1" });

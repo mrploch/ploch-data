@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows asynchronous reading of entities of type <see cref="TEntity" /> from a
+///     Provides a repository that allows asynchronous reading of entities of type <typeparamref name="TEntity" /> from a
 ///     <see cref="DbContext" />.
 /// </summary>
-/// <typeparam name="TEntity">The type of the entities in the repository.</typeparam>
-/// <inheritdoc cref="IReadRepository{TEntity}" />
-/// <inheritdoc cref="QueryableRepository{TEntity}" />
+/// <inheritdoc cref="IReadRepositoryAsync{TEntity}" />
 public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadRepositoryAsync<TEntity>
     where TEntity : class
 {
@@ -20,36 +21,56 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
     ///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
     { }
 
+    /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default)
     {
         return await DbSet.FindAsync(keyValues, cancellationToken);
     }
 
-    public async Task<IList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? query = null,
+                                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                                  CancellationToken cancellationToken = default)
     {
-        return await Entities.ToListAsync(cancellationToken);
+        return onDbSet == null ? await Entities.ToListAsync(cancellationToken) : await onDbSet(Entities).ToListAsync(cancellationToken);
     }
 
-    public async Task<IList<TEntity>> GetPageAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<IList<TEntity>> GetPageAsync(int pageNumber,
+                                                   int pageSize,
+                                                   Expression<Func<TEntity, bool>>? query = null,
+                                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                                   CancellationToken cancellationToken = default)
     {
-        return await GetPageQuery(pageNumber, pageSize).ToListAsync(cancellationToken);
+        return await GetPageQuery(pageNumber, pageSize, query, onDbSet).ToListAsync(cancellationToken);
     }
 
-    public Task<int> GetCountAsync(CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
         return Entities.CountAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<TEntity?> FindFirstAsync(Expression<Func<TEntity, bool>> query,
+                                               Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                               CancellationToken cancellationToken = default)
+    {
+        var entities = onDbSet != null ? onDbSet(Entities) : Entities;
+
+        return await entities.FirstOrDefaultAsync(query, cancellationToken);
     }
 }
 
 /// <summary>
-///     Provides a repository that allows asynchronous reading of entities of type <see cref="TEntity" /> with a specified
+///     Provides a repository that allows asynchronous reading of entities of type <typeparamref name="TEntity" /> with a
+///     specified
 ///     identifier type from a <see cref="DbContext" />.
 /// </summary>
-/// <typeparam name="TId">The type of the identifier for the entities in the repository.</typeparam>
-/// <inheritdoc cref="ReadRepositoryAsync{TEntity}" />
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity, TId}" />
 public class ReadRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity>, IReadRepositoryAsync<TEntity, TId>
     where TEntity : class, IHasId<TId>
@@ -58,11 +79,13 @@ public class ReadRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity>, I
     ///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity, TId}" /> class.
     /// </summary>
     /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+    // ReSharper disable once MemberCanBeProtected.Global
     public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
     { }
 
-    public async Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public async Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync([id], cancellationToken);
+        return onDbSet == null ? await DbSet.FindAsync([id], cancellationToken) : await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
     }
 }

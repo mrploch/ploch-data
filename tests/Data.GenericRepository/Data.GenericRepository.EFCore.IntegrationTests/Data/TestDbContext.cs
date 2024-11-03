@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Model;
+using Ploch.Data.EFCore.SqLite;
+using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore.IntegrationTests.Data;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 
 public class TestDbContext : DbContext
 {
     public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
-    { }
+    {
+    }
 
     public DbSet<Blog> Blogs { get; set; } = null!;
 
@@ -30,5 +32,7 @@ public class TestDbContext : DbContext
         modelBuilder.Entity<BlogPostCategory>().HasMany(static c => c.Children).WithOne(c => c.Parent).OnDelete(DeleteBehavior.ClientCascade);
         modelBuilder.Entity<BlogPostTag>().HasKey(static bpt => bpt.Id);
         modelBuilder.Entity<UserIdea>().HasKey(static ui => ui.Id);
+
+        modelBuilder.ApplySqLiteDateTimeOffsetPropertiesFix(Database);
     }
 }

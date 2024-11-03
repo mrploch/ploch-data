@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ploch.Common.Data.Model.CommonTypes;
+namespace Ploch.Data.Model.CommonTypes;
 
 /// <summary>
 ///     Represents a tag with an Id, Name, and Description.

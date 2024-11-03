@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Data.EFCore\Ploch.Common.Data.EFCore.csproj" />
+      <ProjectReference Include="..\Data.EFCore\Ploch.Data.EFCore.csproj" />
     </ItemGroup>
 
 </Project>

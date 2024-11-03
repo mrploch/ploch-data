@@ -1,10 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ploch.Common.Data.Model;
-
-public interface ITestSomething
-
-{ }
+namespace Ploch.Data.Model;
 
 /// <summary>
 ///     Defines a type that has an identifier.

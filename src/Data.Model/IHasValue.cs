@@ -1,4 +1,4 @@
-﻿namespace Ploch.Common.Data.Model;
+﻿namespace Ploch.Data.Model;
 
 /// <summary>
 ///     An entity with a non-nullable <c>Value</c> property.

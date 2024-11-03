@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.Data.Model;
+using Ploch.Data.Model;
 
-namespace Ploch.Common.Data.GenericRepository.EFCore;
+namespace Ploch.Data.GenericRepository.EFCore;
 
 /// <summary>
-///     Provides a repository that allows reading and writing entities of type <see cref="TEntity" /> with a specified
-///     identifier type from a <see cref="DbContext" />.
+///     Provides a repository that allows reading and writing entities of type <typeparamref name="TEntity" /> with a
+///     specified identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="ReadRepository{TEntity, TId}" />
 /// <inheritdoc cref="IReadWriteRepository{TEntity,TId}" />
@@ -23,6 +23,7 @@ public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, I
     public ReadWriteRepository(DbContext dbContext) : base(dbContext)
     { }
 
+    /// <inheritdoc />
     public TEntity Add(TEntity entity)
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
@@ -32,6 +33,7 @@ public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, I
         return entity;
     }
 
+    /// <inheritdoc />
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = "Guard does not enumerate items.")]
     public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
     {
@@ -42,6 +44,7 @@ public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, I
         return entities;
     }
 
+    /// <inheritdoc />
     public void Delete(TEntity entity)
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
@@ -49,6 +52,7 @@ public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, I
         DbContext.Set<TEntity>().Remove(entity);
     }
 
+    /// <inheritdoc />
     public void Update(TEntity entity)
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
