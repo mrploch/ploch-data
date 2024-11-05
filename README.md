@@ -1,7 +1,7 @@
 [![Build, Test and Analyze .NET](https://github.com/mrploch/ploch-data/actions/workflows/build-dotnet.yml/badge.svg)](https://github.com/mrploch/ploch-data/actions/workflows/build-dotnet.yml)
 [![pages-build-deployment](https://github.com/mrploch/ploch-data/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/mrploch/ploch-data/actions/workflows/pages/pages-build-deployment)
 [![Qodana](https://github.com/mrploch/ploch-data/actions/workflows/code_quality.yml/badge.svg)](https://github.com/mrploch/ploch-data/actions/workflows/code_quality.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=alert_status&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=coverage)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
 
 # Ploch Data Utilities
