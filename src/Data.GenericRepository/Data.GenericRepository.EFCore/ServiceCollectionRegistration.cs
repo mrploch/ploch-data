@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ploch.Common.AppServices;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore;
@@ -30,34 +32,40 @@ public static class ServiceCollectionRegistration
     ///     Registers the repository types in the service collection using <c>AddScoped</c> method.
     /// </summary>
     /// <param name="serviceCollection">The service collection.</param>
+    /// <param name="configuration">The configuration.</param>
     /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
     /// <returns>The same service collection.</returns>
-    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection)
+    /// r
+    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection, IConfiguration? configuration = null)
         where TDbContext : DbContext
     {
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
+        configuration ??= new ConfigurationBuilder().Build();
 
-        AddRepositories<TDbContext>(serviceCollection, static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
-
-        return serviceCollection;
+        return AddRepositories<TDbContext>(serviceCollection, configuration, static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
     }
 
     /// <summary>
     ///     Registers the repository types in the service collection.
     /// </summary>
     /// <param name="serviceCollection">The service collection.</param>
+    /// <param name="configuration">The configuration.</param>
     /// <param name="registrationFunction">The <see cref="IServiceCollection" /> method used for registration.</param>
     /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
     /// <returns>The same service collection.</returns>
-    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection,
-                                                                 Func<IServiceCollection, Type, Type, IServiceCollection> registrationFunction)
+    private static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection,
+                                                                  IConfiguration configuration,
+                                                                  Func<IServiceCollection, Type, Type, IServiceCollection> registrationFunction)
         where TDbContext : DbContext
     {
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
 
-        serviceCollection.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>());
+        serviceCollection.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>())
+                         .AddSingleton<IAuditEntityHandler, AuditEntityHandler>()
+                         .AddSingleton<IUserInfoProvider, NullUserInfoProvider>();
 
+        serviceCollection.Configure<RepositoriesConfiguration>(configuration.GetSection(nameof(RepositoriesConfiguration)));
         registrationFunction(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
         registrationFunction(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
         registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));

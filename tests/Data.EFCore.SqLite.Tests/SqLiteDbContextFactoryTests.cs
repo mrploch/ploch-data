@@ -92,7 +92,7 @@ public class SqLiteDbContextFactoryTests
         public DbSet<TestEntity> TestEntities { get; set; } = null!;
     }
 
-    private sealed class TestSqLiteDbContextFactory : SqLiteDbContextFactory<TestDbContext, object>
+    private sealed class TestSqLiteDbContextFactory : SqLiteDbContextFactory<TestDbContext, TestSqLiteDbContextFactory>
     {
         public TestSqLiteDbContextFactory(Func<DbContextOptions<TestDbContext>, TestDbContext> dbContextCreator)
             : base(dbContextCreator)
@@ -102,9 +102,7 @@ public class SqLiteDbContextFactoryTests
             : base(dbContextCreator, connectionStringFunc)
         { }
 
-        public DbContextOptionsBuilder<TestDbContext> TestConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TestDbContext> optionsBuilder)
-        {
-            return ConfigureOptions(connectionStringFunc, optionsBuilder);
-        }
+        public DbContextOptionsBuilder<TestDbContext> TestConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TestDbContext> optionsBuilder) =>
+            ConfigureOptions(connectionStringFunc, optionsBuilder);
     }
 }

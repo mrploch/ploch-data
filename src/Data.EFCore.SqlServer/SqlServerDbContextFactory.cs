@@ -8,10 +8,9 @@ namespace Ploch.Data.EFCore.SqlServer;
 ///     This abstract class provides methods to configure the DbContext using a connection string and optional additional
 ///     SQL Server-specific configuration.
 /// </summary>
-/// <typeparam name="TDbContext">The type of the DbContext to be created.</typeparam>
-/// <typeparam name="TMigrationAssembly">The type used to locate the migration assemblies.</typeparam>
-public abstract class SqlServerDbContextFactory<TDbContext, TMigrationAssembly> : BaseDbContextFactory<TDbContext, TMigrationAssembly>
-    where TDbContext : DbContext
+/// <inheritdoc />
+public abstract class SqlServerDbContextFactory<TDbContext, TFactory> : BaseDbContextFactory<TDbContext, TFactory>
+    where TDbContext : DbContext where TFactory : BaseDbContextFactory<TDbContext, TFactory>
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="SqlServerDbContextFactory{TDbContext, TMigrationAssembly}" /> class.

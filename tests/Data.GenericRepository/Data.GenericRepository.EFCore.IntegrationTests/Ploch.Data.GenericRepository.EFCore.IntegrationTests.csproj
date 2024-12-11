@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -19,34 +19,34 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="xunit"/>
-        <PackageReference Include="xunit.analyzers"/>
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.analyzers" />
         <PackageReference Include="xunit.runner.visualstudio">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-        <PackageReference Include="AutoFixture"/>
-        <PackageReference Include="AutoFixture.Xunit2"/>
-        <PackageReference Include="FluentAssertions"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="AutoFixture" />
+        <PackageReference Include="AutoFixture.Xunit2" />
+        <PackageReference Include="FluentAssertions" />
         <PackageReference Include="FluentAssertions.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="FluentAssertions.Microsoft.Extensions.DependencyInjection"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
-        <PackageReference Include="Moq"/>
+        <PackageReference Include="FluentAssertions.Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+        <PackageReference Include="Moq" />
         <PackageReference Include="Moq.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Objectivity.AutoFixture.XUnit2.AutoMoq"/>
-        <PackageReference Include="Ploch.Common"/>
+        <PackageReference Include="Objectivity.AutoFixture.XUnit2.AutoMoq" />
+        <PackageReference Include="Ploch.Common" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj"/>
-        <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository\Ploch.Data.GenericRepository.csproj"/>
-        <ProjectReference Include="..\..\..\src\Data.Model\Ploch.Data.Model.csproj"/>
+        <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
+        <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
+        <ProjectReference Include="..\..\..\src\Data.Model\Ploch.Data.Model.csproj" />
     </ItemGroup>
 </Project>

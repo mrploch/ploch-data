@@ -14,29 +14,28 @@ namespace Ploch.Data.GenericRepository.EFCore;
 ///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity}" />
-public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadRepositoryAsync<TEntity>
+public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
+    : QueryableRepository<TEntity>(dbContext), IReadRepositoryAsync<TEntity>
     where TEntity : class
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity}" /> class.
-    /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
-    // ReSharper disable once MemberCanBeProtected.Global
-    public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
-    { }
-
     /// <inheritdoc />
-    public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default)
-    {
-        return await DbSet.FindAsync(keyValues, cancellationToken);
-    }
+    public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default) => await DbSet.FindAsync(keyValues, cancellationToken);
 
     /// <inheritdoc />
     public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? query = null,
                                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                   CancellationToken cancellationToken = default)
     {
-        return onDbSet == null ? await Entities.ToListAsync(cancellationToken) : await onDbSet(Entities).ToListAsync(cancellationToken);
+        var result = onDbSet == null
+            ? await Entities.ToListAsync(cancellationToken)
+            : await onDbSet(Entities).ToListAsync(cancellationToken);
+
+        foreach (var entity in result)
+        {
+            auditEntityHandler.HandleAccess(entity);
+        }
+
+        return result;
     }
 
     /// <inheritdoc />
@@ -44,16 +43,11 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
                                                    int pageSize,
                                                    Expression<Func<TEntity, bool>>? query = null,
                                                    Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
-                                                   CancellationToken cancellationToken = default)
-    {
-        return await GetPageQuery(pageNumber, pageSize, query, onDbSet).ToListAsync(cancellationToken);
-    }
+                                                   CancellationToken cancellationToken = default) =>
+        await GetPageQuery(pageNumber, pageSize, query, onDbSet).ToListAsync(cancellationToken);
 
     /// <inheritdoc />
-    public Task<int> CountAsync(CancellationToken cancellationToken = default)
-    {
-        return Entities.CountAsync(cancellationToken);
-    }
+    public Task<int> CountAsync(CancellationToken cancellationToken = default) => Entities.CountAsync(cancellationToken);
 
     /// <inheritdoc />
     public async Task<TEntity?> FindFirstAsync(Expression<Func<TEntity, bool>> query,
@@ -72,20 +66,19 @@ public class ReadRepositoryAsync<TEntity> : QueryableRepository<TEntity>, IReadR
 ///     identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity, TId}" />
-public class ReadRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity>, IReadRepositoryAsync<TEntity, TId>
+public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
+    : ReadRepositoryAsync<TEntity>(dbContext, auditEntityHandler), IReadRepositoryAsync<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity, TId}" /> class.
-    /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
-    // ReSharper disable once MemberCanBeProtected.Global
-    public ReadRepositoryAsync(DbContext dbContext) : base(dbContext)
-    { }
-
     /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default)
     {
-        return onDbSet == null ? await DbSet.FindAsync([id], cancellationToken) : await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
+        var result = onDbSet == null
+            ? await DbSet.FindAsync([id], cancellationToken)
+            : await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
+
+        auditEntityHandler.HandleAccess(result);
+
+        return result;
     }
 }

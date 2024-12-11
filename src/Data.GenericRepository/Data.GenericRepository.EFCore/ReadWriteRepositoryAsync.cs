@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,22 +15,20 @@ namespace Ploch.Data.GenericRepository.EFCore;
 ///     <typeparamref name="TEntity" /> with a specified identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadWriteRepositoryAsync{TEntity,TId}" />
-public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntity, TId>, IReadWriteRepositoryAsync<TEntity, TId>
+/// <remarks>
+///     Initializes a new instance of the <see cref="ReadWriteRepositoryAsync{TEntity, TId}" /> class.
+/// </remarks>
+/// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
+public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
+    : ReadRepositoryAsync<TEntity, TId>(dbContext, auditEntityHandler), IReadWriteRepositoryAsync<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadWriteRepositoryAsync{TEntity, TId}" /> class.
-    /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
-    // ReSharper disable once MemberCanBeProtected.Global
-    public ReadWriteRepositoryAsync(DbContext dbContext) : base(dbContext)
-    { }
-
     public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
 
-        await DbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
+        auditEntityHandler.HandleCreation(entity);
+        await DbSet.AddAsync(entity, cancellationToken);
 
         return entity;
     }
@@ -41,7 +38,12 @@ public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntit
     {
         Guard.Argument(entities, nameof(entities)).NotNull();
 
-        await DbContext.AddRangeAsync(entities, cancellationToken);
+        foreach (var entity in entities)
+        {
+            auditEntityHandler.HandleCreation(entity);
+        }
+
+        await DbSet.AddRangeAsync(entities, cancellationToken);
 
         return entities;
     }
@@ -50,9 +52,21 @@ public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntit
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
 
-        DbContext.Set<TEntity>().Remove(entity);
+        DbSet.Remove(entity);
 
         return Task.CompletedTask;
+    }
+
+    public async Task DeleteAsync(TId id, CancellationToken cancellationToken = default)
+    {
+        var entity = await GetByIdAsync(id, cancellationToken: cancellationToken);
+
+        if (entity == null)
+        {
+            throw EntityNotFoundException.Create<TEntity, TId>(id);
+        }
+
+        await DeleteAsync(entity, cancellationToken);
     }
 
     public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -62,9 +76,10 @@ public class ReadWriteRepositoryAsync<TEntity, TId> : ReadRepositoryAsync<TEntit
         var exist = await GetByIdAsync(entity.Id, cancellationToken: cancellationToken);
         if (exist == null)
         {
-            throw new InvalidOperationException($"Entity with id {entity.Id} not found");
+            throw EntityNotFoundException.Create<TEntity, TId>(entity.Id);
         }
 
+        auditEntityHandler.HandleModification(entity);
         DbContext.Entry(exist).CurrentValues.SetValues(entity);
     }
 }

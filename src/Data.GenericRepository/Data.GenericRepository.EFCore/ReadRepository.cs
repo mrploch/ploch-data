@@ -13,52 +13,32 @@ namespace Ploch.Data.GenericRepository.EFCore;
 ///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepository{TEntity}" />
-public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadRepository<TEntity>
+/// <remarks>
+///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" /> class.
+/// </remarks>
+/// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+public class ReadRepository<TEntity>(DbContext dbContext) : QueryableRepository<TEntity>(dbContext), IReadRepository<TEntity>
     where TEntity : class
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity}" /> class.
-    /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
-    // ReSharper disable once InheritdocConsiderUsage - already inherited on root level and this constructor is documented.
-    // ReSharper disable once MemberCanBeProtected.Global
-    public ReadRepository(DbContext dbContext) : base(dbContext)
-    { }
-
     /// <inheritdoc />
-    public TEntity? GetById(object[] keyValues)
-    {
-        return DbSet.Find(keyValues);
-    }
+    public TEntity? GetById(object[] keyValues) => DbSet.Find(keyValues);
 
     /// <inheritdoc />
     public TEntity? FindFirst(Expression<Func<TEntity, bool>> query,
                               Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
-                              CancellationToken cancellationToken = default)
-    {
-        return onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
-    }
+                              CancellationToken cancellationToken = default) => onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
 
     /// <inheritdoc />
-    public IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
-    {
-        return onDbSet == null ? Entities.ToList() : onDbSet(Entities).ToList();
-    }
+    public IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) => onDbSet == null ? [.. Entities] : onDbSet(Entities).ToList();
 
     /// <inheritdoc />
     public IList<TEntity> GetPage(int pageNumber,
                                   int pageSize,
                                   Expression<Func<TEntity, bool>>? query = null,
-                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
-    {
-        return GetPageQuery(pageNumber, pageSize, query, onDbSet).ToList();
-    }
+                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) => [.. GetPageQuery(pageNumber, pageSize, query, onDbSet)];
 
     /// <inheritdoc />
-    public int Count()
-    {
-        return Entities.Count();
-    }
+    public int Count() => Entities.Count();
 }
 
 /// <summary>
@@ -68,17 +48,13 @@ public class ReadRepository<TEntity> : QueryableRepository<TEntity>, IReadReposi
 /// <typeparam name="TEntity">The entity type.</typeparam>
 /// <typeparam name="TId">The type of entity identifier.</typeparam>
 /// <inheritdoc cref="ReadRepository{TEntity}" />
-public class ReadRepository<TEntity, TId> : ReadRepository<TEntity>, IReadRepository<TEntity, TId>
+/// <remarks>
+///     Initializes a new instance of the <see cref="ReadRepository{TEntity, TId}" /> class.
+/// </remarks>
+/// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+public class ReadRepository<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler) : ReadRepository<TEntity>(dbContext), IReadRepository<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadRepository{TEntity, TId}" /> class.
-    /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
-    // ReSharper disable once MemberCanBeProtected.Global
-    public ReadRepository(DbContext dbContext) : base(dbContext)
-    { }
-
     /// <inheritdoc />
     public TEntity? GetById(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
