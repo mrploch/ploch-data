@@ -35,14 +35,15 @@ public class ReadRepository<TEntity>(DbContext dbContext) : QueryableRepository<
     public IList<TEntity> GetPage(int pageNumber,
                                   int pageSize,
                                   Expression<Func<TEntity, bool>>? query = null,
-                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) => [.. GetPageQuery(pageNumber, pageSize, query, onDbSet)];
+                                  Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) =>
+        [.. GetPageQuery(pageNumber, pageSize, query: query, onDbSet: onDbSet)];
 
     /// <inheritdoc />
     public int Count() => Entities.Count();
 }
 
 /// <summary>
-///     Provides a repository that allows reading entities of type <typeparamref name="TEntity" />
+///     Provides a! repository that allows reading entities of type <typeparamref name="TEntity" />
 ///     with a specified identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <typeparam name="TEntity">The entity type.</typeparam>
@@ -52,7 +53,7 @@ public class ReadRepository<TEntity>(DbContext dbContext) : QueryableRepository<
 ///     Initializes a new instance of the <see cref="ReadRepository{TEntity, TId}" /> class.
 /// </remarks>
 /// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
-public class ReadRepository<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler) : ReadRepository<TEntity>(dbContext), IReadRepository<TEntity, TId>
+public class ReadRepository<TEntity, TId>(DbContext dbContext) : ReadRepository<TEntity>(dbContext), IReadRepository<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />

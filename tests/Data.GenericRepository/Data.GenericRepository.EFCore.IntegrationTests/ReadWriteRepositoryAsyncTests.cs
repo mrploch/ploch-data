@@ -124,12 +124,13 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
 
         var blogPosts =
-            await repository.GetPageAsync(2, 3,
+            await repository.GetPageAsync(2,
+                                          3,
 #pragma warning disable SA1117 // Parameters should be placed on the same line
                                           query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" ||
                                                    query.Name == "Blog post 8" || query.Name == "Blog post 9" || query.Name == "Blog post 10",
 #pragma warning restore SA1117
-                                          query => query.Include(e => e.Tags).Include(e => e.Categories));
+                                          onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(3);
 

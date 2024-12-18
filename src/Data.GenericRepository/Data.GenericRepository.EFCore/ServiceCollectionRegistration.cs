@@ -139,13 +139,16 @@ public static class ServiceCollectionRegistration
     /// </returns>
     public static IServiceCollection AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection serviceCollection,
                                                                                                                         Func<IServiceCollection, Type, Type,
-                                                                                                                            IServiceCollection> registrationFunction)
+                                                                                                                                IServiceCollection>?
+                                                                                                                            registrationFunction =
+                                                                                                                            null)
         where TRepositoryInterface : class, IReadWriteRepositoryAsync<TEntity, TId>
         where TRepository : class, TRepositoryInterface, IReadWriteRepositoryAsync<TEntity, TId>
         where TEntity : class, IHasId<TId>
     {
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
-        Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
+
+        registrationFunction ??= static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType);
 
         registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
         registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));

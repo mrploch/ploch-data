@@ -41,10 +41,11 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
     /// <inheritdoc />
     public async Task<IList<TEntity>> GetPageAsync(int pageNumber,
                                                    int pageSize,
+                                                   Func<TEntity, object>? sortBy = null,
                                                    Expression<Func<TEntity, bool>>? query = null,
                                                    Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
-                                                   CancellationToken cancellationToken = default) =>
-        await GetPageQuery(pageNumber, pageSize, query, onDbSet).ToListAsync(cancellationToken);
+                                                   CancellationToken cancellationToken = default) => await GetPageQuery(pageNumber, pageSize, sortBy, query, onDbSet)
+        .ToListAsync(cancellationToken);
 
     /// <inheritdoc />
     public Task<int> CountAsync(CancellationToken cancellationToken = default) => Entities.CountAsync(cancellationToken);

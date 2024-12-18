@@ -34,12 +34,14 @@ public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepos
     /// <inheritdoc />
     public IQueryable<TEntity> GetPageQuery(int pageNumber,
                                             int pageSize,
+                                            Func<TEntity, object>? sortBy = null,
                                             Expression<Func<TEntity, bool>>? query = null,
                                             Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         Guard.Argument(pageNumber, nameof(pageNumber)).Positive();
+        var orderedEnumerable = sortBy != null ? Entities.OrderBy(sortBy).AsQueryable() : Entities;
 
-        var dbSetQuery = onDbSet == null ? Entities : onDbSet(Entities);
+        var dbSetQuery = onDbSet == null ? orderedEnumerable : onDbSet(orderedEnumerable);
 
         dbSetQuery = query == null ? dbSetQuery : dbSetQuery.Where(query);
 

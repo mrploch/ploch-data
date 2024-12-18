@@ -17,7 +17,7 @@ namespace Ploch.Data.GenericRepository.EFCore;
 /// </remarks>
 /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
 public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : ReadRepository<TEntity, TId>(dbContext, auditEntityHandler), IReadWriteRepository<TEntity, TId>
+    : ReadRepository<TEntity, TId>(dbContext), IReadWriteRepository<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />
