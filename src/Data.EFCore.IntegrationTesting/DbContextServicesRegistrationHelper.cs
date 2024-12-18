@@ -54,11 +54,7 @@ public static class DbContextServicesRegistrationHelper
         var testDbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
         testDbContext.Database.OpenConnection();
 
-        var created = testDbContext.Database.EnsureCreated();
-        if (!created)
-        {
-            throw new InvalidOperationException("Database creation failed.");
-        }
+        testDbContext.Database.EnsureCreated();
 
         return (scope.ServiceProvider, testDbContext);
     }

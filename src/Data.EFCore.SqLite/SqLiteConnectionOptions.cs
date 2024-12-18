@@ -41,18 +41,12 @@ public record SqLiteConnectionOptions
     ///     Builds and returns the SQLite connection string based on the configured options.
     /// </summary>
     /// <returns>The SQLite connection string.</returns>
-    public string BuildConnectionString()
-    {
-        return _connectionStringBuilder.ToString();
-    }
+    public string BuildConnectionString() => _connectionStringBuilder.ToString();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="SqLiteConnectionOptions" /> class using the specified file path.
     /// </summary>
     /// <param name="dbFilePath">The file path to the SQLite database.</param>
     /// <returns>A new instance of <see cref="SqLiteConnectionOptions" /> configured to use the specified database file.</returns>
-    public static SqLiteConnectionOptions UsingFile(string dbFilePath)
-    {
-        return new SqLiteConnectionOptions(dbFilePath: dbFilePath);
-    }
+    public static SqLiteConnectionOptions UsingFile(string dbFilePath) => new(dbFilePath: dbFilePath);
 }

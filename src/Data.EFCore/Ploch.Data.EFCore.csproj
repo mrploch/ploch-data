@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,6 +9,10 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
         <PackageReference Include="Microsoft.Extensions.Configuration" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Data.Model\Ploch.Data.Model.csproj" />
     </ItemGroup>
 
 </Project>
