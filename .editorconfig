@@ -16,7 +16,7 @@ tab_width = 4
 
 # New line preferences
 end_of_line = crlf
-insert_final_newline = false
+insert_final_newline = true
 
 #### .NET Coding Conventions ####
 
@@ -60,6 +60,8 @@ dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggesti
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_prefer_simplified_interpolation = true:suggestion
 
+# IDE0160: Convert to file-scoped namespace
+csharp_style_namespace_declarations = file_scoped:error
 
 # Field preferences
 dotnet_style_readonly_field = true:suggestion
@@ -79,11 +81,11 @@ csharp_style_var_when_type_is_apparent = true:silent
 
 # Expression-bodied members
 csharp_style_expression_bodied_accessors = true:silent
-csharp_style_expression_bodied_constructors = false:silent
+csharp_style_expression_bodied_constructors = true:silent
 csharp_style_expression_bodied_indexers = true:silent
 csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
-csharp_style_expression_bodied_methods = false:silent
+csharp_style_expression_bodied_methods = true:silent
 csharp_style_expression_bodied_operators = false:silent
 csharp_style_expression_bodied_properties = true:silent
 
@@ -242,7 +244,7 @@ dotnet_diagnostic.sa1127.severity = none
 dotnet_diagnostic.sa1200.severity = none
 dotnet_diagnostic.sa1128.severity = none
 dotnet_diagnostic.sa1133.severity = none
-dotnet_diagnostic.sa1502.severity = none
+dotnet_diagnostic.sa1502.severity = none # element containing opening and closing braces is written completely on a single line.
 
 dotnet_diagnostic.sa1600.severity = none
 dotnet_diagnostic.sa1623.severity = none
@@ -251,6 +253,8 @@ dotnet_diagnostic.sa1640.severity = none
 dotnet_diagnostic.sa1649.severity = warning # File name should match first type name.
 dotnet_diagnostic.sa1206.severity = none # Required modifier should appear before public - this is wrong.
 dotnet_diagnostic.nu1507.severity = none
+dotnet_diagnostic.sa1106.severity = warning
+dotnet_diagnostic.sa1010.severity = none
 
 # ReSharper properties
 resharper_blank_lines_around_single_line_auto_property = 1
@@ -266,6 +270,7 @@ resharper_keep_existing_enum_arrangement = false
 resharper_keep_existing_expr_member_arrangement = false
 resharper_keep_existing_invocation_parens_arrangement = false
 resharper_keep_existing_property_patterns_arrangement = false
+resharper_method_or_operator_body = expression_body
 resharper_place_accessorholder_attribute_on_same_line = false
 resharper_align_linq_query = true
 resharper_align_multiline_argument = true
@@ -282,6 +287,8 @@ resharper_align_tuple_components = true
 resharper_csharp_align_first_arg_by_paren = true
 resharper_csharp_allow_far_alignment = true
 resharper_indent_anonymous_method_block = true
+resharper_place_expr_method_on_single_line = true
+resharper_use_heuristics_for_body_style = true
 resharper_wrap_chained_method_calls = chop_if_long
 resharper_align_multiline_binary_patterns = true
 resharper_align_multiline_calls_chain = true
@@ -290,6 +297,7 @@ resharper_indent_primary_constructor_decl_pars = outside_and_inside
 resharper_max_formal_parameters_on_line = 10
 resharper_max_primary_constructor_parameters_on_line = 10
 resharper_place_type_constraints_on_same_line = true
+resharper_blank_lines_before_control_transfer_statements = 1
 
 # Checks
 dotnet_diagnostic.ca1001.severity = warning

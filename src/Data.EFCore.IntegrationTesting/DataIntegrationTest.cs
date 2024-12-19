@@ -20,9 +20,9 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable
     ///     DbContext configurator to be used by the test. If not provided, then an in-memory SQLite database is used.
     /// </param>
     [SuppressMessage("Critical Code Smell", "S1699:Constructors should only call non-overridable methods", Justification = "It's fine in this context")]
-    protected DataIntegrationTest(IDbContextConfigurator? dbContextConfigurator = null)
+    protected DataIntegrationTest(IDbContextConfigurator? dbContextConfigurator = null, IServiceCollection? services = null)
     {
-        var serviceCollection = new ServiceCollection();
+        var serviceCollection = services ?? new ServiceCollection();
 
         // ReSharper disable once VirtualMemberCallInConstructor - this is not a problem here
         ConfigureServices(serviceCollection);
