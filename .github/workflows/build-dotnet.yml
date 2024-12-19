@@ -36,8 +36,6 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
-
-
       - name: Install mono
         run: |
           sudo apt install ca-certificates gnupg
