@@ -36,6 +36,11 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '17'
+      - name: Install mono
+        run: sudo apt install ca-certificates gnupg \
+          sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+          echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list \
+          sudo apt update
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -64,8 +69,8 @@ jobs:
       - name: SonarScanner End
         shell: pwsh
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          
-          # - name: Run codacy-coverage-reporter
+        
+        # - name: Run codacy-coverage-reporter
         #  uses: codacy/codacy-coverage-reporter-action@v1
         #  with:
         #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
