@@ -34,7 +34,7 @@ public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepos
     /// <inheritdoc />
     public IQueryable<TEntity> GetPageQuery(int pageNumber,
                                             int pageSize,
-                                            Func<TEntity, object>? sortBy = null,
+                                            Expression<Func<TEntity, object>>? sortBy = null,
                                             Expression<Func<TEntity, bool>>? query = null,
                                             Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {

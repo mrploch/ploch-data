@@ -27,7 +27,7 @@ public interface IQueryableRepository<TEntity>
     /// <returns>A queryable collection of entities for the specified page.</returns>
     IQueryable<TEntity> GetPageQuery(int pageNumber,
                                      int pageSize,
-                                     Func<TEntity, object>? sortBy = null,
+                                     Expression<Func<TEntity, object>>? sortBy = null,
                                      Expression<Func<TEntity, bool>>? query = null,
                                      Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);
 }

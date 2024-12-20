@@ -66,7 +66,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// </returns>
     Task<IList<TEntity>> GetPageAsync(int pageNumber,
                                       int pageSize,
-                                      Func<TEntity, object>? sortBy = null,
+                                      Expression<Func<TEntity, object>>? sortBy = null,
                                       Expression<Func<TEntity, bool>>? query = null,
                                       Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                       CancellationToken cancellationToken = default);

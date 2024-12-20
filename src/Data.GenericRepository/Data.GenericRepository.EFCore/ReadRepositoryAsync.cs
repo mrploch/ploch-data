@@ -41,7 +41,7 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
     /// <inheritdoc />
     public async Task<IList<TEntity>> GetPageAsync(int pageNumber,
                                                    int pageSize,
-                                                   Func<TEntity, object>? sortBy = null,
+                                                   Expression<Func<TEntity, object>>? sortBy = null,
                                                    Expression<Func<TEntity, bool>>? query = null,
                                                    Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                    CancellationToken cancellationToken = default) => await GetPageQuery(pageNumber, pageSize, sortBy, query, onDbSet)

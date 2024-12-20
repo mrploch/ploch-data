@@ -57,6 +57,6 @@ public class ReadWriteRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
 
         var updatedEntity = new TestEntity { Id = 2, Name = "Updated" };
         var updateAction = () => _repository.Update(updatedEntity);
-        updateAction.Should().Throw<InvalidOperationException>().Where(exception => exception.Message.Contains("not found"));
+        updateAction.Should().Throw<EntityNotFoundException>().Where(exception => exception.Message.Contains("not found"));
     }
 }
