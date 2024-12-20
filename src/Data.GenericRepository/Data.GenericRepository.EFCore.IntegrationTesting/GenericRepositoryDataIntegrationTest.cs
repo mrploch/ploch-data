@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Data.EFCore;
 using Ploch.Data.EFCore.IntegrationTesting;
@@ -22,17 +23,16 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     protected override void ConfigureServices(IServiceCollection services)
     {
         base.ConfigureServices(services);
-        services.AddRepositories<TDbContext>();
+        var configurationBuilder = new ConfigurationBuilder();
+        var configuration = configurationBuilder.AddInMemoryCollection().Build();
+        services.AddRepositories<TDbContext>(configuration);
     }
 
     /// <summary>
     ///     Creates a new unit of work.
     /// </summary>
     /// <returns>The unit of work.</returns>
-    protected IUnitOfWork CreateUnitOfWork()
-    {
-        return ServiceProvider.GetRequiredService<IUnitOfWork>();
-    }
+    protected IUnitOfWork CreateUnitOfWork() => ServiceProvider.GetRequiredService<IUnitOfWork>();
 
     /// <summary>
     ///     Creates an instance of <see cref="IReadRepositoryAsync{TEntity}" />.
@@ -42,10 +42,7 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     /// <returns>An instance of a <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.</returns>
     [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
     protected IReadRepositoryAsync<TEntity, TId> CreateReadRepositoryAsync<TEntity, TId>()
-        where TEntity : class, IHasId<TId>
-    {
-        return ServiceProvider.GetRequiredService<IReadRepositoryAsync<TEntity, TId>>();
-    }
+        where TEntity : class, IHasId<TId> => ServiceProvider.GetRequiredService<IReadRepositoryAsync<TEntity, TId>>();
 
     /// <summary>
     ///     Creates a <see cref="IReadRepository{TEntity}" />.
@@ -54,10 +51,7 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     /// <typeparam name="TId">The identifier type.</typeparam>
     /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}" />.</returns>
     protected IReadRepository<TEntity, TId> CreateReadRepository<TEntity, TId>()
-        where TEntity : class, IHasId<TId>
-    {
-        return ServiceProvider.GetRequiredService<IReadRepository<TEntity, TId>>();
-    }
+        where TEntity : class, IHasId<TId> => ServiceProvider.GetRequiredService<IReadRepository<TEntity, TId>>();
 
     /// <summary>
     ///     Creates a <see cref="IReadWriteRepository{TEntity,TId}" />.
@@ -66,10 +60,7 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     /// <typeparam name="TId">The identifier type.</typeparam>
     /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}" />.</returns>
     protected IReadWriteRepository<TEntity, TId> CreateReadWriteRepository<TEntity, TId>()
-        where TEntity : class, IHasId<TId>
-    {
-        return ServiceProvider.GetRequiredService<IReadWriteRepository<TEntity, TId>>();
-    }
+        where TEntity : class, IHasId<TId> => ServiceProvider.GetRequiredService<IReadWriteRepository<TEntity, TId>>();
 
     /// <summary>
     ///     Creates a <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.
@@ -79,8 +70,5 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     /// <returns>An instance of <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.</returns>
     [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
     protected IReadWriteRepositoryAsync<TEntity, TId> CreateReadWriteRepositoryAsync<TEntity, TId>()
-        where TEntity : class, IHasId<TId>
-    {
-        return ServiceProvider.GetRequiredService<IReadWriteRepositoryAsync<TEntity, TId>>();
-    }
+        where TEntity : class, IHasId<TId> => ServiceProvider.GetRequiredService<IReadWriteRepositoryAsync<TEntity, TId>>();
 }

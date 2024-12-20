@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +12,20 @@ namespace Ploch.Data.GenericRepository.EFCore;
 /// </summary>
 /// <inheritdoc cref="ReadRepository{TEntity, TId}" />
 /// <inheritdoc cref="IReadWriteRepository{TEntity,TId}" />
-public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, IReadWriteRepository<TEntity, TId>
+/// <remarks>
+///     Initializes a new instance of the <see cref="ReadWriteRepository{TEntity, TId}" /> class.
+/// </remarks>
+/// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
+public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
+    : ReadRepository<TEntity, TId>(dbContext), IReadWriteRepository<TEntity, TId>
     where TEntity : class, IHasId<TId>
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ReadWriteRepository{TEntity, TId}" /> class.
-    /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
-    public ReadWriteRepository(DbContext dbContext) : base(dbContext)
-    { }
-
     /// <inheritdoc />
     public TEntity Add(TEntity entity)
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
 
+        auditEntityHandler.HandleCreation(entity);
         DbContext.Set<TEntity>().Add(entity);
 
         return entity;
@@ -38,6 +36,11 @@ public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, I
     public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
     {
         Guard.Argument(entities, nameof(entities)).NotNull();
+
+        foreach (var entity in entities)
+        {
+            auditEntityHandler.HandleCreation(entity);
+        }
 
         DbContext.AddRange(entities);
 
@@ -53,6 +56,17 @@ public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, I
     }
 
     /// <inheritdoc />
+    public void Delete(TId id)
+    {
+        var entity = GetById(id);
+
+        if (entity == null)
+        {
+            throw EntityNotFoundException.Create<TEntity, TId>(id);
+        }
+    }
+
+    /// <inheritdoc />
     public void Update(TEntity entity)
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
@@ -60,8 +74,10 @@ public class ReadWriteRepository<TEntity, TId> : ReadRepository<TEntity, TId>, I
         var exist = GetById(entity.Id);
         if (exist == null)
         {
-            throw new InvalidOperationException($"Entity with id {entity.Id} not found");
+            throw EntityNotFoundException.Create<TEntity, TId>(entity.Id);
         }
+
+        auditEntityHandler.HandleModification(entity);
 
         DbContext.Entry(exist).CurrentValues.SetValues(entity);
     }

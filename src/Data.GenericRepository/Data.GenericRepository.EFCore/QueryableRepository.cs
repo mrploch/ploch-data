@@ -11,25 +11,20 @@ namespace Ploch.Data.GenericRepository.EFCore;
 ///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc />
-public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
+/// <remarks>
+///     Initializes a new instance of the <see cref="QueryableRepository{TEntity}" /> class.
+/// </remarks>
+/// <param name="dbContext">The <see cref="DbContext" /> to use for querying entities.</param>
+public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepository<TEntity>
     where TEntity : class
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="QueryableRepository{TEntity}" /> class.
-    /// </summary>
-    /// <param name="dbContext">The <see cref="DbContext" /> to use for querying entities.</param>
-    public QueryableRepository(DbContext dbContext)
-    {
-        DbContext = dbContext;
-    }
-
     /// <inheritdoc />
     public IQueryable<TEntity> Entities => DbSet;
 
     /// <summary>
     ///     Gets the <see cref="DbContext" /> used for querying entities.
     /// </summary>
-    protected DbContext DbContext { get; }
+    protected DbContext DbContext { get; } = dbContext;
 
     /// <summary>
     ///     Gets the <see cref="DbSet{TEntity}" /> used for querying entities.
@@ -39,12 +34,14 @@ public class QueryableRepository<TEntity> : IQueryableRepository<TEntity>
     /// <inheritdoc />
     public IQueryable<TEntity> GetPageQuery(int pageNumber,
                                             int pageSize,
+                                            Expression<Func<TEntity, object>>? sortBy = null,
                                             Expression<Func<TEntity, bool>>? query = null,
                                             Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         Guard.Argument(pageNumber, nameof(pageNumber)).Positive();
+        var orderedEnumerable = sortBy != null ? Entities.OrderBy(sortBy).AsQueryable() : Entities;
 
-        var dbSetQuery = onDbSet == null ? Entities : onDbSet(Entities);
+        var dbSetQuery = onDbSet == null ? orderedEnumerable : onDbSet(orderedEnumerable);
 
         dbSetQuery = query == null ? dbSetQuery : dbSetQuery.Where(query);
 

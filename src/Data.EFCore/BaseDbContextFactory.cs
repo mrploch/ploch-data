@@ -10,10 +10,29 @@ namespace Ploch.Data.EFCore;
 ///     This abstract class is designed to be inherited by specific factory implementations for different database
 ///     providers.
 /// </summary>
-/// <typeparam name="TDbContext">The type of the <see cref="DbContext" /> being created.</typeparam>
-/// <typeparam name="TMigrationAssembly">The type used to locate the assembly containing the EF Core migrations.</typeparam>
-public abstract class BaseDbContextFactory<TDbContext, TMigrationAssembly> : IDesignTimeDbContextFactory<TDbContext>
-    where TDbContext : DbContext
+/// <typeparam name="TDbContext">The type of the <see cref="DbContext" /> this factory is created for.</typeparam>
+/// <typeparam name="TFactory">
+///     The type of <see cref="BaseDbContextFactory{TDbContext,TFactory}" /> you are implementing,
+///     see remarks for details.
+/// </typeparam>
+/// <remarks>
+///     This abstract class extends BaseDbContextFactory and provides methods to configure SQLite options
+///     for the DbContext instances it creates.
+///     The <typeparamref name="TFactory" /> should be the type being implemented, for example:
+///     <code>
+///         public class MySqListDbCon
+/// 
+///         public class SampleAppDbContextFactory : BaseDbContextFactory&lt;SampleAppDbContext,
+///                      SampleAppDbContextFactory&gt;, IDbContextFactory&lt;SampleAppDbContext&gt;
+///         {
+///             public SampleAppDbContextFactory() : base(options => new SampleAppDbContext(options))
+///             { }
+///             ...
+///         }
+///     </code>
+/// </remarks>
+public abstract class BaseDbContextFactory<TDbContext, TFactory> : IDesignTimeDbContextFactory<TDbContext>
+    where TDbContext : DbContext where TFactory : BaseDbContextFactory<TDbContext, TFactory>
 {
     private readonly Func<string> _connectionStringFunc;
     private readonly Func<DbContextOptions<TDbContext>, TDbContext> _dbContextCreator;
@@ -58,8 +77,9 @@ public abstract class BaseDbContextFactory<TDbContext, TMigrationAssembly> : IDe
     protected static void ApplyMigrationsAssembly<TBuilder, TExtension>(RelationalDbContextOptionsBuilder<TBuilder, TExtension> builder)
         where TBuilder : RelationalDbContextOptionsBuilder<TBuilder, TExtension> where TExtension : RelationalOptionsExtension, new()
     {
-        var assembly = typeof(TMigrationAssembly).Assembly;
+        var assembly = typeof(TFactory).Assembly;
         Console.WriteLine($"Applying migrations assembly: {assembly}");
+
         builder.MigrationsAssembly(assembly.GetName().Name);
     }
 

@@ -56,6 +56,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// </summary>
     /// <param name="pageNumber">The number of the page to get starting from 1.</param>
     /// <param name="pageSize">The size of the page to get.</param>
+    /// <param name="sortBy"></param>
     /// <param name="query">A LINQ expression to filter the entities.</param>
     /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
@@ -65,6 +66,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// </returns>
     Task<IList<TEntity>> GetPageAsync(int pageNumber,
                                       int pageSize,
+                                      Expression<Func<TEntity, object>>? sortBy = null,
                                       Expression<Func<TEntity, bool>>? query = null,
                                       Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                       CancellationToken cancellationToken = default);

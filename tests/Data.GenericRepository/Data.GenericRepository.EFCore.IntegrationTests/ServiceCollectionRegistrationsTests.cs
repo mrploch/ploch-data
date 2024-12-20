@@ -98,58 +98,32 @@ public class ServiceCollectionRegistrationsTests
 #pragma warning restore SA1201
     { }
 
-    private class CustomBlogRepository(DbContext dbContext) : ReadWriteRepositoryAsync<Blog, int>(dbContext), ICustomBlogRepository
+    private class CustomBlogRepository(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
+        : ReadWriteRepositoryAsync<Blog, int>(dbContext, auditEntityHandler), ICustomBlogRepository
     {
         public Blog? FindFirst(Expression<Func<Blog, bool>> query,
                                Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null,
-                               CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+                               CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
-        public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
-        {
-            throw new NotImplementedException();
-        }
+        public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
 
-        public IList<Blog> GetPage(int pageNumber, int pageSize, Expression<Func<Blog, bool>>? query = null, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
-        {
+        public IList<Blog> GetPage(int pageNumber, int pageSize, Expression<Func<Blog, bool>>? query = null, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) =>
             throw new NotImplementedException();
-        }
 
-        public int Count()
-        {
-            throw new NotImplementedException();
-        }
+        public int Count() => throw new NotImplementedException();
 
-        public Blog Add(Blog entity)
-        {
-            throw new NotImplementedException();
-        }
+        public Blog Add(Blog entity) => throw new NotImplementedException();
 
-        public IEnumerable<Blog> AddRange(IEnumerable<Blog> entities)
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Blog> AddRange(IEnumerable<Blog> entities) => throw new NotImplementedException();
 
-        public void Update(Blog entity)
-        {
-            throw new NotImplementedException();
-        }
+        public void Update(Blog entity) => throw new NotImplementedException();
 
-        public void Delete(Blog entity)
-        {
-            throw new NotImplementedException();
-        }
+        public void Delete(Blog entity) => throw new NotImplementedException();
 
-        public Blog? GetById(int id, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null)
-        {
-            throw new NotImplementedException();
-        }
+        public void Delete(int id) => throw new NotImplementedException();
 
-        public Blog? GetById(object[] keyValues)
-        {
-            throw new NotImplementedException();
-        }
+        public Blog? GetById(int id, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
+
+        public Blog? GetById(object[] keyValues) => throw new NotImplementedException();
     }
 }

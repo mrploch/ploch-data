@@ -9,10 +9,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
 {
     private readonly IReadWriteRepositoryAsync<TestEntity, int> _repository;
 
-    public ReadWriteRepositoryAsyncTests()
-    {
-        _repository = CreateReadWriteRepositoryAsync<TestEntity, int>();
-    }
+    public ReadWriteRepositoryAsyncTests() => _repository = CreateReadWriteRepositoryAsync<TestEntity, int>();
 
     [Fact]
     public async Task ApplySqLiteDateTimeOffsetPropertiesFix_should_handle_DateTimeOffset_fields_in_SqLite()
@@ -124,12 +121,13 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
 
         var blogPosts =
-            await repository.GetPageAsync(2, 3,
+            await repository.GetPageAsync(2,
+                                          3,
 #pragma warning disable SA1117 // Parameters should be placed on the same line
-                                          query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" ||
-                                                   query.Name == "Blog post 8" || query.Name == "Blog post 9" || query.Name == "Blog post 10",
+                                          query: query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" ||
+                                                          query.Name == "Blog post 8" || query.Name == "Blog post 9" || query.Name == "Blog post 10",
 #pragma warning restore SA1117
-                                          query => query.Include(e => e.Tags).Include(e => e.Categories));
+                                          onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(3);
 
@@ -255,7 +253,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
 
         var updatedEntity = new TestEntity { Id = 2, Name = "Updated" };
         var updateAction = async () => await _repository.UpdateAsync(updatedEntity);
-        await updateAction.Should().ThrowAsync<InvalidOperationException>().Where(exception => exception.Message.Contains("not found"));
+        await updateAction.Should().ThrowAsync<EntityNotFoundException>().Where(exception => exception.Message.Contains("not found"));
     }
 
     [Fact]
