@@ -4,14 +4,12 @@ using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
+// TODO: Fix those tests - use UnitOfWork and test against the real data
 public class ReadWriteRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {
     private readonly IReadWriteRepository<TestEntity, int> _repository;
 
-    public ReadWriteRepositoryTests()
-    {
-        _repository = CreateReadWriteRepository<TestEntity, int>();
-    }
+    public ReadWriteRepositoryTests() => _repository = CreateReadWriteRepository<TestEntity, int>();
 
     [Fact]
     public void AddAsync_ShouldAddEntity()
@@ -59,6 +57,6 @@ public class ReadWriteRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
 
         var updatedEntity = new TestEntity { Id = 2, Name = "Updated" };
         var updateAction = () => _repository.Update(updatedEntity);
-        updateAction.Should().Throw<InvalidOperationException>().Where(exception => exception.Message.Contains("not found"));
+        updateAction.Should().Throw<EntityNotFoundException>().Where(exception => exception.Message.Contains("not found"));
     }
 }

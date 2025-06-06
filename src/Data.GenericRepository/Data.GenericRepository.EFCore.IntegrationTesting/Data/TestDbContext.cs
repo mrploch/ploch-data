@@ -7,8 +7,7 @@ namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 public class TestDbContext : DbContext
 {
     public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
-    {
-    }
+    { }
 
     public DbSet<Blog> Blogs { get; set; } = null!;
 

@@ -39,7 +39,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
+      - name: Install mono
+        run: |
+          sudo apt install ca-certificates gnupg
+          sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+          sudo apt update
+          sudo apt install mono-devel
+      - name: Add GitHub Packages Source
+        shell: pwsh
+        run: dotnet nuget add source --username kploch --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
       - name: Restore dependencies
         shell: pwsh
         run: dotnet restore ./Ploch.Data.sln
@@ -61,11 +71,11 @@ jobs:
       - name: SonarScanner End
         shell: pwsh
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          
-          # - name: Run codacy-coverage-reporter
-          #  uses: codacy/codacy-coverage-reporter-action@v1
-          #  with:
-          #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        
+        # - name: Run codacy-coverage-reporter
+        #  uses: codacy/codacy-coverage-reporter-action@v1
+        #  with:
+        #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
         # or
         # api-token: ${{ secrets.CODACY_API_TOKEN }}
         #    coverage-reports: '**/CoverageResults/coverage.opencover.xml'
