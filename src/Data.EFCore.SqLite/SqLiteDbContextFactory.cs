@@ -49,6 +49,10 @@ public abstract class SqLiteDbContextFactory<TDbContext, TFactory> : BaseDbConte
     /// <param name="connectionStringFunc">A function that returns the connection string.</param>
     /// <param name="optionsBuilder">The DbContextOptionsBuilder used to configure the context.</param>
     /// <returns>The configured DbContextOptionsBuilder instance.</returns>
-    protected override DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder) =>
-        optionsBuilder.UseSqlite(connectionStringFunc(), ApplyMigrationsAssembly);
+    protected override DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(connectionStringFunc);
+
+        return optionsBuilder.UseSqlite(connectionStringFunc(), ApplyMigrationsAssembly);
+    }
 }

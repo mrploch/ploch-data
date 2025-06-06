@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Ploch.Data.GenericRepository.Exceptions;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore;
@@ -51,7 +52,18 @@ public class UnitOfWork : IUnitOfWork
     /// <inheritdoc />
     public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new DataUpdateConcurrencyException("A concurrency violation is encountered while saving to the database.", ex);
+        }
+        catch (DbUpdateException ex)
+        {
+            throw new DataUpdateException("Failed to save changes to the underlying data context.", ex);
+        }
     }
 
     /// <inheritdoc />

@@ -19,16 +19,20 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
     where TEntity : class
 {
     /// <inheritdoc />
-    public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default) => await DbSet.FindAsync(keyValues, cancellationToken);
+    public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default) =>
+        await DbSet.FindAsync(keyValues, cancellationToken).ConfigureAwait(false);
 
     /// <inheritdoc />
+    /// <exception cref="ArgumentNullException">When source is null.</exception>
+    /// <exception cref="OperationCanceledException">When operation is cancelled.</exception>
+    /// <exception cref="Exception">A delegate callback throws an exception.</exception>
     public async Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? query = null,
                                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                   CancellationToken cancellationToken = default)
     {
-        var result = onDbSet == null
-            ? await Entities.ToListAsync(cancellationToken)
-            : await onDbSet(Entities).ToListAsync(cancellationToken);
+        var result = onDbSet == null ?
+                         await Entities.ToListAsync(cancellationToken).ConfigureAwait(false) :
+                         await onDbSet(Entities).ToListAsync(cancellationToken).ConfigureAwait(false);
 
         foreach (var entity in result)
         {
@@ -45,10 +49,12 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
                                                    Expression<Func<TEntity, bool>>? query = null,
                                                    Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                    CancellationToken cancellationToken = default) => await GetPageQuery(pageNumber, pageSize, sortBy, query, onDbSet)
-        .ToListAsync(cancellationToken);
+                                                                                                           .ToListAsync(cancellationToken)
+                                                                                                           .ConfigureAwait(false);
 
     /// <inheritdoc />
-    public Task<int> CountAsync(CancellationToken cancellationToken = default) => Entities.CountAsync(cancellationToken);
+    public Task<int> CountAsync(Expression<Func<TEntity, bool>>? query = null, CancellationToken cancellationToken = default) =>
+        query == null ? Entities.CountAsync(cancellationToken) : Entities.Where(query).CountAsync(cancellationToken);
 
     /// <inheritdoc />
     public async Task<TEntity?> FindFirstAsync(Expression<Func<TEntity, bool>> query,
@@ -57,7 +63,7 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
     {
         var entities = onDbSet != null ? onDbSet(Entities) : Entities;
 
-        return await entities.FirstOrDefaultAsync(query, cancellationToken);
+        return await entities.FirstOrDefaultAsync(query, cancellationToken).ConfigureAwait(false);
     }
 }
 
@@ -74,9 +80,9 @@ public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntity
     /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default)
     {
-        var result = onDbSet == null
-            ? await DbSet.FindAsync([id], cancellationToken)
-            : await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
+        var result = onDbSet == null ?
+                         await DbSet.FindAsync([id], cancellationToken) :
+                         await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
 
         auditEntityHandler.HandleAccess(result);
 
