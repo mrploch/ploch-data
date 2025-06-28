@@ -247,6 +247,9 @@ dotnet_diagnostic.cs8825.severity = error # Return value must be non-null becaus
 dotnet_diagnostic.cs8847.severity = error # The switch expression does not handle some null inputs (it is not exhaustive). However, a pattern with a 'when' clause might successfully match this value.
 dotnet_diagnostic.cs9264.severity = warning # Non-nullable property must contain a non-null value when exiting constructor. Consider adding the 'required' modifier, or declaring the property as nullable, or adding '[field: MaybeNull, AllowNull]' attributes.*
 
+## Properties: 'dotnet_diagnostic.rcs' - Roslynator
+dotnet_diagnostic.rcs1194.severity = suggestion # Implement standard Exception constructors
+
 ## Properties: 'dotnet_diagnostic.faa'
 dotnet_diagnostic.faa0002.severity = warning
 
