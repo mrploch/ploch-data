@@ -1,40 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+  <PropertyGroup>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
 
-        <IsPackable>false</IsPackable>
-        <IsTestProject>true</IsTestProject>
-    </PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="coverlet.collector">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.msbuild">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="xunit" />
-        <PackageReference Include="xunit.analyzers" />
-        <PackageReference Include="xunit.runner.visualstudio">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="FluentAssertions" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <Using Include="Xunit" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj" />
-        <ProjectReference Include="..\Data.EFCore.Tests\Ploch.Data.EFCore.Tests.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ploch-common\src\TestingSupport.XUnit3.Dependencies\Ploch.TestingSupport.XUnit3.Dependencies.csproj" />
+    <ProjectReference Include="..\..\src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj" />
+    <ProjectReference Include="..\Data.EFCore.Tests\Ploch.Data.EFCore.Tests.csproj" />
+  </ItemGroup>
 
 </Project>

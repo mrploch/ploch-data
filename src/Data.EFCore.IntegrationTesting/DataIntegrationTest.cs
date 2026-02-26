@@ -10,8 +10,7 @@ namespace Ploch.Data.EFCore.IntegrationTesting;
 ///     Provides initialization and configuration of the database context and services.
 /// </summary>
 /// <typeparam name="TDbContext">The type of database context.</typeparam>
-public abstract class DataIntegrationTest<TDbContext> : IDisposable
-    where TDbContext : DbContext
+public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbContext : DbContext
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="DataIntegrationTest{TDbContext}" /> class.
@@ -19,6 +18,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable
     /// <param name="dbContextConfigurator">
     ///     DbContext configurator to be used by the test. If not provided, then an in-memory SQLite database is used.
     /// </param>
+    /// <param name="services">The service collection.</param>
     [SuppressMessage("Critical Code Smell", "S1699:Constructors should only call non-overridable methods", Justification = "It's fine in this context")]
     protected DataIntegrationTest(IDbContextConfigurator? dbContextConfigurator = null, IServiceCollection? services = null)
     {
@@ -37,7 +37,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable
     /// </summary>
     /// <typeparamref name="TDbContext" />
     /// represents the type of the database context.
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global - it is expected to be used in derived classes
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Part of the public API.")]
     protected TDbContext DbContext { get; }
 
     /// <summary>
@@ -64,7 +64,8 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable
     /// </remarks>
     /// <param name="services">The service collection.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
-    { }
+    {
+    }
 
     /// <summary>
     ///     Releases the unmanaged resources used by the <see cref="DataIntegrationTest{TDbContext}" />

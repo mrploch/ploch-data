@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -13,14 +14,11 @@
 	<ItemGroup>
     <PackageReference Include="Ardalis.Specification" />
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageVersion Update="SonarAnalyzer.CSharp" Version="10.9.0.115408" />
   </ItemGroup>
 
   <ItemGroup>

@@ -395,3 +395,5 @@ codestream.xml
 **/.idea/codestream.xml
 /codacy-test-reporter.jar
 /.idea/**/AndroidProjectSystem.xml
+/.idea/.idea.Ploch.Data/.idea/copilot.data.migration.edit.xml
+/.idea/.idea.Ploch.Data/.idea/db-forest-config.xml

@@ -28,6 +28,7 @@
     <FileVersion>$(InformationalVersion)</FileVersion>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
+    <TargetFrameworkVersion>net9.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
@@ -39,7 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(IsTestProject)">
@@ -47,7 +48,7 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition="!$(IsTestProject)">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

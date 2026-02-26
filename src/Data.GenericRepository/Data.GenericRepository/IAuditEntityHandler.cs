@@ -52,7 +52,7 @@ public interface IAuditEntityHandler
     ///     <para>
     ///         It is called by the repository when an entity is accessed, such as when it is read from the database.
     ///         It informs the repository whether the entity has been modified as a result of this operation so that the entity
-    ///         can be updated in the data source
+    ///         can be updated in the data source.
     ///     </para>
     /// </remarks>
     bool HandleAccess(object entity);

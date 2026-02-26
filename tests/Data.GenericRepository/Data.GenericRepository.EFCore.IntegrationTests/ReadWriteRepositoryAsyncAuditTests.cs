@@ -21,6 +21,7 @@ public class ReadWriteRepositoryAsyncAuditTests : GenericRepositoryDataIntegrati
         await unitOfWork.CommitAsync();
 
         var updateBlog = await unitOfWork.Repository<Blog, int>().GetByIdAsync(blog.Id);
+        updateBlog.Should().NotBeNull();
         updateBlog.ModifiedTime.Should().NotBeNull().And.BeAfter(modifiedTime);
     }
 
@@ -33,6 +34,7 @@ public class ReadWriteRepositoryAsyncAuditTests : GenericRepositoryDataIntegrati
         await unitOfWork.CommitAsync();
 
         var createdBlog = await unitOfWork.Repository<Blog, int>().GetByIdAsync(blog.Id);
+        createdBlog.Should().NotBeNull();
         createdBlog.CreatedTime.Should().NotBeNull().And.BeAfter(createdTime);
     }
 }

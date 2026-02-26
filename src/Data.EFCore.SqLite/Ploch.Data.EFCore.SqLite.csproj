@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,13 +12,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   </ItemGroup>
- 
-  <ItemGroup>
-    <ProjectReference Include="..\Data.EFCore\Ploch.Data.EFCore.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
-    <PackageVersion Update="SonarAnalyzer.CSharp" Version="10.9.0.115408" />
+    <ProjectReference Include="..\Data.EFCore\Ploch.Data.EFCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +22,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Ploch.Data.EFCore.SqLite.csproj.DotSettings" />
   </ItemGroup>
 
 </Project>

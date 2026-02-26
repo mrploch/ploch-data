@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Ploch.Common.AppServices;
+using Ploch.Common.AppServices.Security;
 
 namespace Ploch.Data.GenericRepository.EFCore;
 
@@ -12,7 +12,7 @@ public class NullUserInfoProvider : IUserInfoProvider
     ///     Returns <c>null</c> for the current user info.
     /// </summary>
     /// <returns>
-    ///     <c>null</c>
+    ///     <c>null</c> for the current user info.
     /// </returns>
     public ClaimsPrincipal? GetCurrentUserInfo() => null;
 }

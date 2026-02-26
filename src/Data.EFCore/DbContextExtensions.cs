@@ -35,6 +35,16 @@ public static class DbContextExtensions
         return context.Set(entityType);
     }
 
+    public static TValue? GetStaticPropertyValue<TValue>(this Type type, string propertyName)
+    {
+        var valueObj = new object(); // GetStaticPropertyValue(type, propertyName);
+
+        return valueObj switch
+               { null => default,
+                 TValue value => value,
+                 _ => throw new InvalidOperationException($"Static property {propertyName} in {type} is not of {typeof(TValue)} type") };
+    }
+
     /// <summary>
     ///     Retrieves an entity set dynamically for the specified entity type.
     /// </summary>
@@ -57,8 +67,7 @@ public static class DbContextExtensions
             throw new InvalidOperationException($"Entity type '{entityType.Name}' was not found in the context.");
         }
 
-        var setMethod = typeof(DbContext).GetMethods()
-                                         .First(m => m.Name == "Set" && m.ContainsGenericParameters && m.GetParameters().Length == 0);
+        var setMethod = typeof(DbContext).GetMethods().First(m => m.Name == "Set" && m.ContainsGenericParameters && m.GetParameters().Length == 0);
 
         var genericSetMethod = setMethod.MakeGenericMethod(entityType);
 

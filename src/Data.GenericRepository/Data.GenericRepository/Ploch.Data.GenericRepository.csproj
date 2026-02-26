@@ -1,28 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-    </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\Data.Model\Ploch.Data.Model.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\" />
-        <None Include="obj\Debug\net8.0\Ploch.Data.GenericRepository.xml" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" />
-        <PackageReference Include="Microsoft.Extensions.Options" />
-        <PackageReference Include="ploch.common.appservices.web" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageVersion Update="SonarAnalyzer.CSharp" Version="9.32.0.97167" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Update="SonarAnalyzer.CSharp">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <ItemGroup>
+    <!-- TODO: Ploch.Common reference -->
+    <ProjectReference Include="..\..\..\..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj" />
+    <ProjectReference Include="..\..\..\..\ploch-common\src\Common\Ploch.Common.csproj" />
+    <ProjectReference Include="..\..\Data.Model\Ploch.Data.Model.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
 </Project>

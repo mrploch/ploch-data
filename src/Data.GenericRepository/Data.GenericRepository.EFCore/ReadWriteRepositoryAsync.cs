@@ -20,14 +20,15 @@ namespace Ploch.Data.GenericRepository.EFCore;
 /// </remarks>
 /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
 public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : ReadRepositoryAsync<TEntity, TId>(dbContext, auditEntityHandler), IReadWriteRepositoryAsync<TEntity, TId>
-    where TEntity : class, IHasId<TId>
+    : ReadRepositoryAsync<TEntity, TId>(dbContext, auditEntityHandler), IReadWriteRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
 {
+    private readonly IAuditEntityHandler _auditEntityHandler = auditEntityHandler;
+
     public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         Guard.Argument(entity, nameof(entity)).NotNull();
 
-        auditEntityHandler.HandleCreation(entity);
+        _auditEntityHandler.HandleCreation(entity);
         await DbSet.AddAsync(entity, cancellationToken);
 
         return entity;
@@ -40,7 +41,7 @@ public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditE
 
         foreach (var entity in entities)
         {
-            auditEntityHandler.HandleCreation(entity);
+            _auditEntityHandler.HandleCreation(entity);
         }
 
         await DbSet.AddRangeAsync(entities, cancellationToken);
@@ -79,7 +80,7 @@ public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditE
             throw EntityNotFoundException.Create<TEntity, TId>(entity.Id);
         }
 
-        auditEntityHandler.HandleModification(entity);
+        _auditEntityHandler.HandleModification(entity);
         DbContext.Entry(exist).CurrentValues.SetValues(entity);
     }
 }

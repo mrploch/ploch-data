@@ -21,7 +21,7 @@ namespace Ploch.Data.EFCore;
 ///     The <typeparamref name="TFactory" /> should be the type being implemented, for example:
 ///     <code>
 ///         public class MySqListDbCon
-/// 
+///
 ///         public class SampleAppDbContextFactory : BaseDbContextFactory&lt;SampleAppDbContext,
 ///                      SampleAppDbContextFactory&gt;, IDbContextFactory&lt;SampleAppDbContext&gt;
 ///         {
@@ -31,29 +31,22 @@ namespace Ploch.Data.EFCore;
 ///         }
 ///     </code>
 /// </remarks>
-public abstract class BaseDbContextFactory<TDbContext, TFactory> : IDesignTimeDbContextFactory<TDbContext>
-    where TDbContext : DbContext where TFactory : BaseDbContextFactory<TDbContext, TFactory>
+/// <remarks>
+///     Initializes a new instance of the <see cref="BaseDbContextFactory{TDbContext, TMigrationAssembly}" />
+///     class.
+/// </remarks>
+/// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
+/// <param name="connectionStringFunc">Function to return the connection string.</param>
+public abstract class BaseDbContextFactory<TDbContext, TFactory>(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator,
+                                                                 Func<string> connectionStringFunc)
+    : IDesignTimeDbContextFactory<TDbContext> where TDbContext : DbContext where TFactory : BaseDbContextFactory<TDbContext, TFactory>
 {
-    private readonly Func<string> _connectionStringFunc;
-    private readonly Func<DbContextOptions<TDbContext>, TDbContext> _dbContextCreator;
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="BaseDbContextFactory{TDbContext, TMigrationAssembly}" /> class.
     /// </summary>
     /// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
     protected BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator) : this(dbContextCreator, ConnectionString.FromJsonFile()!)
-    { }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="BaseDbContextFactory{TDbContext, TMigrationAssembly}" />
-    ///     class.
-    /// </summary>
-    /// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
-    /// <param name="connectionStringFunc">Function to return the connection string.</param>
-    protected BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc)
     {
-        _dbContextCreator = dbContextCreator;
-        _connectionStringFunc = connectionStringFunc;
     }
 
     /// <summary>
@@ -65,7 +58,7 @@ public abstract class BaseDbContextFactory<TDbContext, TFactory> : IDesignTimeDb
     {
         var optionsBuilder = new DbContextOptionsBuilder<TDbContext>();
 
-        return _dbContextCreator(ConfigureOptions(_connectionStringFunc, optionsBuilder).Options);
+        return dbContextCreator(ConfigureOptions(connectionStringFunc, optionsBuilder).Options);
     }
 
     /// <summary>
@@ -89,5 +82,6 @@ public abstract class BaseDbContextFactory<TDbContext, TFactory> : IDesignTimeDb
     /// <param name="connectionStringFunc">A function that provides the connection string.</param>
     /// <param name="optionsBuilder">An options builder for configuring the DbContext options.</param>
     /// <returns>The configured DbContextOptionsBuilder.</returns>
-    protected abstract DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder);
+    protected abstract DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc,
+                                                                            DbContextOptionsBuilder<TDbContext> optionsBuilder);
 }

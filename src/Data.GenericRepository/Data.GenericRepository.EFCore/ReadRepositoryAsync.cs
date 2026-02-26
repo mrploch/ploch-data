@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Ploch.Common.ArgumentChecking;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore;
@@ -15,8 +16,7 @@ namespace Ploch.Data.GenericRepository.EFCore;
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity}" />
 public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : QueryableRepository<TEntity>(dbContext), IReadRepositoryAsync<TEntity>
-    where TEntity : class
+    : QueryableRepository<TEntity>(dbContext), IReadRepositoryAsync<TEntity> where TEntity : class
 {
     /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default) =>
@@ -30,9 +30,10 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
                                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                   CancellationToken cancellationToken = default)
     {
-        var result = onDbSet == null ?
-                         await Entities.ToListAsync(cancellationToken).ConfigureAwait(false) :
-                         await onDbSet(Entities).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var result =
+            onDbSet == null ?
+                await Entities.ToListAsync(cancellationToken).ConfigureAwait(false) :
+                await onDbSet(Entities).ToListAsync(cancellationToken).ConfigureAwait(false);
 
         foreach (var entity in result)
         {
@@ -48,9 +49,8 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
                                                    Expression<Func<TEntity, object>>? sortBy = null,
                                                    Expression<Func<TEntity, bool>>? query = null,
                                                    Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
-                                                   CancellationToken cancellationToken = default) => await GetPageQuery(pageNumber, pageSize, sortBy, query, onDbSet)
-                                                                                                           .ToListAsync(cancellationToken)
-                                                                                                           .ConfigureAwait(false);
+                                                   CancellationToken cancellationToken = default) =>
+        await GetPageQuery(pageNumber, pageSize, sortBy, query, onDbSet).ToListAsync(cancellationToken).ConfigureAwait(false);
 
     /// <inheritdoc />
     public Task<int> CountAsync(Expression<Func<TEntity, bool>>? query = null, CancellationToken cancellationToken = default) =>
@@ -74,17 +74,19 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity, TId}" />
 public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : ReadRepositoryAsync<TEntity>(dbContext, auditEntityHandler), IReadRepositoryAsync<TEntity, TId>
-    where TEntity : class, IHasId<TId>
+    : ReadRepositoryAsync<TEntity>(dbContext, auditEntityHandler), IReadRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />
-    public async Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default)
+    public async Task<TEntity?> GetByIdAsync(TId id,
+                                             Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
+                                             CancellationToken cancellationToken = default)
     {
-        var result = onDbSet == null ?
-                         await DbSet.FindAsync([id], cancellationToken) :
-                         await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
+        var result =
+            onDbSet == null ?
+                await DbSet.FindAsync([id], cancellationToken) :
+                await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
 
-        auditEntityHandler.HandleAccess(result);
+        auditEntityHandler.HandleAccess(result.RequiredNotNull());
 
         return result;
     }

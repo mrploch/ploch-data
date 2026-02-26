@@ -4,7 +4,8 @@
     <Description>Generic repository for Entity Framework Core</Description>
     <PackageTags>efcore;dotnetcore</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
   </ItemGroup>
- 
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj" />
     <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
@@ -25,4 +26,5 @@
     <None Include="..\README.md" Pack="true" PackagePath="\" />
     <None Remove="obj\Debug\net8.0\Ploch.Data.GenericRepository.EFCore.xml" />
   </ItemGroup>
+
 </Project>
