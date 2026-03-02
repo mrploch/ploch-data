@@ -4,10 +4,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>12</LangVersion>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="System.ComponentModel.Annotations"/>
     </ItemGroup>
-
+    <ItemGroup>
+        <None Include=".\README.md" Pack="true" PackagePath="\"/>
+        <None Remove="obj\Debug\net8.0\Ploch.Data.Model.xml"/>
+    </ItemGroup>
 </Project>

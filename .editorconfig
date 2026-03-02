@@ -322,7 +322,7 @@ dotnet_diagnostic.cs8625.severity = error # Cannot convert null literal to non-n
 dotnet_diagnostic.cs8629.severity = error # Nullable value type may be null.
 dotnet_diagnostic.cs8643.severity = error # Nullability of reference types in explicit interface specifier doesn't match interface implemented by the type.
 dotnet_diagnostic.cs8644.severity = error # Type does not implement interface member. Nullability of reference types in interface implemented by the base type doesn't match.
-
+dotnet_diagnostic.cs8643.severity = error # Nullability of reference types in explicit interface specifier doesn't match interface implemented by the type.
 resharper_possible_multiple_enumeration = none
 
 # Test projects overrides
