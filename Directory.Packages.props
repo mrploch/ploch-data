@@ -16,7 +16,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageVersion>
-        <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="8.0.10"/>
+        <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.3"/>
         <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10"/>
         <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2"/>
         <PackageVersion Include="Ploch.Common" Version="2.0.1"/>
