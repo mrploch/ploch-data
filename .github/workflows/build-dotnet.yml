@@ -66,7 +66,7 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
       - name: SonarScanner Begin
         id: sonar-begin
-        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
+        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
         continue-on-error: true
 
       # Build and Test (always runs regardless of SonarCloud status)
@@ -78,7 +78,7 @@ jobs:
       # SonarCloud end (runs even after test failures, only if begin succeeded)
       - name: SonarScanner End
         if: always() && steps.sonar-begin.outcome == 'success'
-        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         continue-on-error: true
 
       - name: Upload Test Results
