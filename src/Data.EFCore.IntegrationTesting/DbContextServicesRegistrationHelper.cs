@@ -17,8 +17,7 @@ public static class DbContextServicesRegistrationHelper
     /// <param name="connectionString">The database connection string. Default is in-memory SQLite database.</param>
     /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
     public static (IServiceProvider, TDbContext) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
-                                                                                              string connectionString = "Filename=test.db")
-        where TDbContext : DbContext
+                                                                                              string connectionString = "Data Source=:memory:") where TDbContext : DbContext
     {
         // Create the connection once and share it across all DbContext instances.
         // This is critical for SQLite in-memory databases: each new connection to :memory:
@@ -26,6 +25,7 @@ public static class DbContextServicesRegistrationHelper
         var connection = new SqliteConnection(connectionString);
         connection.Open();
 
+        serviceCollection.AddSingleton(connection);
         serviceCollection.AddDbContext<TDbContext>(builder => builder.UseSqlite(connection));
 
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection);

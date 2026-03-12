@@ -22,6 +22,7 @@ public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
 {
     private readonly Action<SqliteDbContextOptionsBuilder>? _dbContextOptionsAction;
     private readonly SqLiteConnectionOptions _options;
+    private readonly object _connectionLock = new();
     private SqliteConnection? _sharedConnection;
     private bool _disposed;
 
@@ -49,7 +50,11 @@ public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
             // For in-memory databases, share a single connection across all DbContext instances.
             // Each new SQLite connection to :memory: creates a separate empty database, so sharing
             // ensures that schema and data are visible to all consumers (repositories, unit of work, etc.).
-            _sharedConnection ??= CreateAndOpenConnection(connectionString);
+            lock (_connectionLock)
+            {
+                _sharedConnection ??= CreateAndOpenConnection(connectionString);
+            }
+
             optionsBuilder.UseSqlite(_sharedConnection, _dbContextOptionsAction);
         }
         else

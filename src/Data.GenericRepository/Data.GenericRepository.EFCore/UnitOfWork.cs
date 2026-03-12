@@ -74,11 +74,12 @@ public class UnitOfWork<TDbContext> : IUnitOfWork, IAsyncDisposable where TDbCon
     }
 
     /// <inheritdoc />
-    public Task RollbackAsync(CancellationToken cancellationToken = default)
+    public async Task RollbackAsync(CancellationToken cancellationToken = default)
     {
-        _dbContext.ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
-
-        return Task.CompletedTask;
+        foreach (var entry in _dbContext.ChangeTracker.Entries().ToList())
+        {
+            await entry.ReloadAsync(cancellationToken);
+        }
     }
 
     /// <summary>

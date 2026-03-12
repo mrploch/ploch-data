@@ -4,7 +4,6 @@ root = true
 indent_style = space
 insert_final_newline = true
 max_line_length = 160
-max_line_lengtheditorconfig = 160
 trim_trailing_whitespace = true
 end_of_line = crlf
 
@@ -123,7 +122,6 @@ csharp_style_expression_bodied_indexers = when_on_single_line:silent
 csharp_style_expression_bodied_lambdas = when_on_single_line:silent
 csharp_style_expression_bodied_local_functions = when_on_single_line:silent
 csharp_style_expression_bodied_methods = when_on_single_line:silent
-csharp_style_expression_bodied_operators = true:when_on_single_line
 csharp_style_expression_bodied_operators = when_on_single_line:silent
 csharp_style_expression_bodied_properties = when_on_single_line:silent
 
@@ -209,7 +207,8 @@ dotnet_diagnostic.cc0022.severity = none # Object should be disposed - gives fal
 dotnet_diagnostic.cc0031.severity = none # Verify delegate is not null - gives false positives
 dotnet_diagnostic.cc0091.severity = none # Make method static - gives false positives and marks methods that use instance members
 dotnet_diagnostic.cc0108.severity = warning
-
+dotnet_diagnostic.cc0057.severity = none # Unused parameter - gives false positives
+dotnet_diagnostic.cc0072.severity = none #
 ## Properties: 'dotnet_diagnostic.cs'
 ### Nullability
 dotnet_diagnostic.cs1591.severity = warning # Missing XML comment for publicly visible type or member 'Type_or_Member'
@@ -267,9 +266,7 @@ dotnet_diagnostic.cs8825.severity = error # Return value must be non-null becaus
 dotnet_diagnostic.cs8847.severity = error # The switch expression does not handle some null inputs (it is not exhaustive). However, a pattern with a 'when' clause might successfully match this value.
 dotnet_diagnostic.cs9264.severity = warning # Non-nullable property must contain a non-null value when exiting constructor. Consider adding the 'required' modifier, or declaring the property as nullable, or adding '[field: MaybeNull, AllowNull]' attributes.*
 
-dotnet_diagnostic.cs8763.severity = error # A method marked [DoesNotReturn] should not return.
-dotnet_diagnostic.cs8770.severity = error # Method lacks [DoesNotReturn] annotation to match implemented or overridden member.
-
+dotnet_diagnostic.cs7036.severity = none
 ## Properties: 'dotnet_diagnostic.faa'
 dotnet_diagnostic.faa0002.severity = warning
 
@@ -284,9 +281,18 @@ dotnet_diagnostic.nu1507.severity = none # Use nameof operator
 ## Properties: 'dotnet_diagnostic.rcs' - Roslynator
 dotnet_diagnostic.rcs1169.severity = suggestion # Make field read-only
 dotnet_diagnostic.rcs1194.severity = suggestion # Implement standard Exception constructors
+dotnet_diagnostic.rcs1251.severity = none # Remove unnecessary braces
+roslynator_block_braces_style = single_line_when_empty
+# Format accessor's braces on single line or multiple lines
+# Default value is multi_line
+roslynator_accessor_braces_style = single_line_when_expression_is_on_single_line
+dotnet_diagnostic.rcs0023.severity = warning # Add parentheses to make the order of operations explicit in conditional expressions.
+dotnet_diagnostic.rcs0022 = false # Add parentheses according to operator precedence.
 
 ## Properties: 'dotnet_diagnostic.s'
+dotnet_diagnostic.s1309.severity = none
 dotnet_diagnostic.s1451.severity = none
+dotnet_diagnostic.s3236.severity = none # Caller information arguments should not be provided explicitly - gives false positives for use of .net standard version of the Guard class
 dotnet_diagnostic.s4487.severity = none
 
 ## Properties: 'dotnet_diagnostic.sa'
@@ -307,8 +313,22 @@ dotnet_diagnostic.sa1309.severity = none # Field names should not begin with und
 dotnet_diagnostic.sa1313.severity = none # Parameter names should begin with lower-case letter
 dotnet_diagnostic.sa1402.severity = none # File may only contain a single type
 dotnet_diagnostic.sa1413.severity = none # Use trailing comma
-dotnet_diagnostic.sa1500.severity = none # Braces for multi-line statements must not share line
-dotnet_diagnostic.sa1502.severity = none # element containing opening and closing braces is written completely on a single line.
+dotnet_diagnostic.sa1500.severity = none # this one controls braces on the same line
+dotnet_diagnostic.sa1501.severity = warning # Statement should not be on a single line.
+dotnet_diagnostic.sa1502.severity = none # Element must not be on a single line - allow single-line empty bodies.
+dotnet_diagnostic.sa1503.severity = warning #  Braces should not be omitted.
+dotnet_diagnostic.sa1504.severity = warning # All accessors must be single-line or multi-line.
+dotnet_diagnostic.sa1505.severity = warning # Opening braces should not be followed by blank lines.
+dotnet_diagnostic.sa1506.severity = warning # Element documentation headers should not be followed by blank lines.
+dotnet_diagnostic.sa1507.severity = warning # Code should not contain multiple blank lines in a row.
+dotnet_diagnostic.sa1508.severity = warning # A closing brace must not be preceded by blank lines.
+dotnet_diagnostic.sa1509.severity = warning # The opening brace must not be preceded by blank lines.
+dotnet_diagnostic.sa1510.severity = warning # Chained statement blocks should not be preceded by blank lines.
+dotnet_diagnostic.sa1511.severity = warning # While-do footer should not be preceded by blank lines
+dotnet_diagnostic.sa1512.severity = warning # Single-line comments should not be followed by blank lines.
+dotnet_diagnostic.sa1513.severity = warning # Closing brace should be followed by a blank line.
+dotnet_diagnostic.sa1514.severity = warning # Element documentation header should be preceded by a blank line.
+dotnet_diagnostic.sa1515.severity = warning # Single-line comment should be preceded by a blank line.
 dotnet_diagnostic.sa1600.severity = none # Elements should be documented
 dotnet_diagnostic.sa1623.severity = none # Property summary documentation should match accessors
 dotnet_diagnostic.sa1633.severity = none # File should have header
@@ -381,7 +401,7 @@ dotnet_naming_rule.private_static_readonly_rule.resharper_description = Static r
 dotnet_naming_rule.private_static_readonly_rule.resharper_guid = 15b5b1f1-457c-4ca6-b278-5615aedc07d3
 dotnet_naming_rule.private_static_readonly_rule.resharper_style = _ + aaBb, AaBb
 dotnet_naming_rule.private_static_readonly_rule.severity = warning
-dotnet_naming_rule.private_static_readonly_rule.style = lower_camel_case_style
+dotnet_naming_rule.private_static_readonly_rule.style = upper_camel_case_style
 dotnet_naming_rule.private_static_readonly_rule.symbols = private_static_readonly_symbols
 dotnet_naming_rule.static_field_should_be_pascal_case_rule.import_to_resharper = True
 dotnet_naming_rule.static_field_should_be_pascal_case_rule.resharper_description = static_field_should_be_pascal_case
@@ -411,20 +431,20 @@ dotnet_naming_rule.types_should_be_pascal_case.symbols = types
 # Properties: 'dotnet_naming_style'
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 dotnet_naming_style.begins_with_i.required_prefix = I
-dotnet_naming_style.begins_with_i.required_suffix =
-dotnet_naming_style.begins_with_i.word_separator =
+dotnet_naming_style.begins_with_i.required_suffix = 
+dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.i_upper_camel_case_style.capitalization = pascal_case
 dotnet_naming_style.i_upper_camel_case_style.required_prefix = I
 dotnet_naming_style.lower_camel_case_style.capitalization = camel_case
 dotnet_naming_style.lower_camel_case_style.required_prefix = _
 dotnet_naming_style.pascal_case.capitalization = pascal_case
-dotnet_naming_style.pascal_case.required_prefix =
-dotnet_naming_style.pascal_case.required_suffix =
-dotnet_naming_style.pascal_case.word_separator =
+dotnet_naming_style.pascal_case.required_prefix = 
+dotnet_naming_style.pascal_case.required_suffix = 
+dotnet_naming_style.pascal_case.word_separator = 
 dotnet_naming_style.prefixedcamelcase.capitalization = camel_case
 dotnet_naming_style.prefixedcamelcase.required_prefix = _
-dotnet_naming_style.prefixedcamelcase.required_suffix =
-dotnet_naming_style.prefixedcamelcase.word_separator =
+dotnet_naming_style.prefixedcamelcase.required_suffix = 
+dotnet_naming_style.prefixedcamelcase.word_separator = 
 dotnet_naming_style.t_upper_camel_case_style.capitalization = pascal_case
 dotnet_naming_style.t_upper_camel_case_style.required_prefix = T
 dotnet_naming_style.upper_camel_case_style.capitalization = pascal_case
@@ -436,7 +456,7 @@ dotnet_naming_symbols.interface_should_be_begins_with_i_symbols.resharper_applic
 dotnet_naming_symbols.interface_should_be_begins_with_i_symbols.resharper_required_modifiers = any
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.interface.applicable_kinds = interface
-dotnet_naming_symbols.interface.required_modifiers =
+dotnet_naming_symbols.interface.required_modifiers = 
 dotnet_naming_symbols.interfaces_symbols.applicable_accessibilities = *
 dotnet_naming_symbols.interfaces_symbols.applicable_kinds = interface
 dotnet_naming_symbols.interfaces_symbols.resharper_applicable_kinds = interface
@@ -447,7 +467,7 @@ dotnet_naming_symbols.non_field_members_should_be_pascal_case_symbols.resharper_
 dotnet_naming_symbols.non_field_members_should_be_pascal_case_symbols.resharper_required_modifiers = any
 dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
-dotnet_naming_symbols.non_field_members.required_modifiers =
+dotnet_naming_symbols.non_field_members.required_modifiers = 
 dotnet_naming_symbols.private_constants_symbols.applicable_accessibilities = private
 dotnet_naming_symbols.private_constants_symbols.applicable_kinds = field
 dotnet_naming_symbols.private_constants_symbols.required_modifiers = const
@@ -466,7 +486,7 @@ dotnet_naming_symbols.private_or_internal_field_should_be_prefixedcamelcase_symb
 dotnet_naming_symbols.private_or_internal_field_should_be_prefixedcamelcase_symbols.resharper_required_modifiers = any
 dotnet_naming_symbols.private_or_internal_field.applicable_accessibilities = internal, private, private_protected
 dotnet_naming_symbols.private_or_internal_field.applicable_kinds = field
-dotnet_naming_symbols.private_or_internal_field.required_modifiers =
+dotnet_naming_symbols.private_or_internal_field.required_modifiers = 
 dotnet_naming_symbols.private_static_fields_symbols.applicable_accessibilities = private
 dotnet_naming_symbols.private_static_fields_symbols.applicable_kinds = field
 dotnet_naming_symbols.private_static_fields_symbols.required_modifiers = static
@@ -495,7 +515,7 @@ dotnet_naming_symbols.types_should_be_pascal_case_symbols.resharper_applicable_k
 dotnet_naming_symbols.types_should_be_pascal_case_symbols.resharper_required_modifiers = any
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
-dotnet_naming_symbols.types.required_modifiers =
+dotnet_naming_symbols.types.required_modifiers = 
 
 # Various settings
 dotnet_remove_unnecessary_suppression_exclusions = none
@@ -672,3 +692,9 @@ resharper_parameter_type_can_be_enumerable_global_highlighting = suggestion
 resharper_csharp_outdent_commas = true
 
 resharper_class_with_virtual_members_never_inherited_global_highlighting = hint
+# ReSharper properties
+resharper_csharp_wrap_before_first_type_parameter_constraint = false
+resharper_wrap_multiple_type_parameter_constraints_style = chop_if_long
+# ReSharper properties
+resharper_csharp_wrap_multiple_type_parameter_constraints_style = chop_if_long
+resharper_wrap_before_first_type_parameter_constraint = false

@@ -81,9 +81,9 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         {
             DbContext.Dispose();
 
-            if (ServiceProvider is ServiceProvider sp)
+            if (ServiceProvider is IDisposable disposableProvider)
             {
-                sp.Dispose();
+                disposableProvider.Dispose();
             }
 
             if (_dbContextConfigurator is IDisposable disposableConfigurator)

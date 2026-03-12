@@ -52,7 +52,7 @@ jobs:
           sudo apt update
           sudo apt install -y mono-devel
       - name: Add GitHub Packages Source
-        run: dotnet nuget add source --username kploch --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
 
       # Restore
       - name: Restore dependencies

@@ -8,13 +8,6 @@ if (-not (Get-Module -ListAvailable -Name posh-git)) {
     Update-Module posh-git -Force
 }
 
-# Ensure git-posh module is installed (for repo operations)
-if (-not (Get-Module -ListAvailable -Name git-posh)) {
-    Write-Host "git-posh module not found. Installing..."
-    Install-Module git-posh -Scope CurrentUser -Force
-} else {
-    Write-Host "git-posh module is already installed."
-}
 
 # Get current script directory
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -29,7 +22,7 @@ if (-not (Test-Path $devFolder -PathType Container)) {
         Write-Error "Git is not installed or not in PATH."
         exit 1
     }
-    Import-Module git-posh -ErrorAction SilentlyContinue
+    Import-Module posh-git -ErrorAction SilentlyContinue
     git clone https://github.com/mrploch/mrploch-development.git mrploch-development
 } else {
     Write-Host "'mrploch-development' folder exists. Pulling latest changes..."
@@ -38,7 +31,7 @@ if (-not (Test-Path $devFolder -PathType Container)) {
         Write-Error "Git is not installed or not in PATH."
         exit 1
     }
-    Import-Module git-posh -ErrorAction SilentlyContinue
+    Import-Module posh-git -ErrorAction SilentlyContinue
     git pull
 }
 Set-Location $loc
