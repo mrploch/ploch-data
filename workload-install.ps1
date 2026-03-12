@@ -63,6 +63,8 @@ $LatestVersionMap = [ordered]@{
 }
 
 function New-TemporaryDirectory {
+    [CmdletBinding(SupportsShouldProcess)]
+    param()
     $parent = [System.IO.Path]::GetTempPath()
     $name = [System.IO.Path]::GetRandomFileName()
     New-Item -ItemType Directory -Path (Join-Path $parent $name)
@@ -167,7 +169,9 @@ function Install-Pack([string]$Id, [string]$Version, [string]$Kind) {
     }
 }
 
-function Remove-Pack([string]$Id, [string]$Version, [string]$Kind) {
+function Remove-Pack {
+    [CmdletBinding(SupportsShouldProcess)]
+    param([string]$Id, [string]$Version, [string]$Kind)
     switch ($Kind) {
         "manifest" {
             Remove-Item -Path $TizenManifestDir -Recurse -Force
