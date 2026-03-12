@@ -38,7 +38,7 @@ jobs:
         run: cp ./README.md ./DocumentationSite/index.md
       - uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
+          distribution: 'zulu'
           java-version: '17'
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -52,41 +52,46 @@ jobs:
           sudo apt update
           sudo apt install -y mono-devel
       - name: Add GitHub Packages Source
-        shell: pwsh
         run: dotnet nuget add source --username kploch --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+
+      # Restore
       - name: Restore dependencies
-        shell: pwsh
         run: dotnet restore ./Ploch.Data.slnx
+
+      # SonarCloud setup (non-blocking)
       - name: Install SonarCloud Scanner
-        shell: pwsh
         run: dotnet tool install --global dotnet-sonarscanner
+        continue-on-error: true
       - name: Install dotnet-coverage
-        shell: pwsh
         run: dotnet tool install --global dotnet-coverage
       - name: SonarScanner Begin
-        shell: pwsh
-        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
+        id: sonar-begin
+        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
+        continue-on-error: true
+
+      # Build and Test (always runs regardless of SonarCloud status)
       - name: Build
-        shell: pwsh
         run: dotnet build ./Ploch.Data.slnx --no-restore
       - name: Test Coverage
-        shell: pwsh
         run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+
+      # SonarCloud end (runs even after test failures, only if begin succeeded)
       - name: SonarScanner End
-        shell: pwsh
-        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        if: always() && steps.sonar-begin.outcome == 'success'
+        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        continue-on-error: true
 
       - name: Upload Test Results
+        if: always()
         uses: actions/upload-artifact@v4
-        if: success() || failure()
         with:
           name: test-results
           path: |
             **/TestResults/*.xml
             **/TestResults/*.trx
       - name: Upload Coverage Results
+        if: always()
         uses: actions/upload-artifact@v4
-        if: success() || failure()
         with:
           name: code-coverage
           path: |
