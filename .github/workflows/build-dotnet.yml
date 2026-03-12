@@ -52,7 +52,7 @@ jobs:
         run: dotnet nuget add source --username kploch --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
       - name: Restore dependencies
         shell: pwsh
-        run: dotnet restore ./Ploch.Data.sln
+        run: dotnet restore ./Ploch.Data.slnx
       - name: Install SonarCloud Scanner
         shell: pwsh
         run: dotnet tool install --global dotnet-sonarscanner
@@ -64,10 +64,10 @@ jobs:
         run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
       - name: Build
         shell: pwsh
-        run: dotnet build ./Ploch.Data.sln --no-restore
+        run: dotnet build ./Ploch.Data.slnx --no-restore
       - name: Test Coverage
         shell: pwsh
-        run: dotnet test ./Ploch.Data.sln --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
       - name: SonarScanner End
         shell: pwsh
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
