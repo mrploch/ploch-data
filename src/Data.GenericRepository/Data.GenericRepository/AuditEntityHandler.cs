@@ -23,7 +23,7 @@ public class AuditEntityHandler(IUserInfoProvider userInfoProvider, IOptions<Rep
         {
             if (entity is IHasCreatedTime createdTimeEntity)
             {
-                createdTimeEntity.CreatedTime = DateTime.UtcNow;
+                createdTimeEntity.CreatedTime = DateTimeOffset.UtcNow;
             }
 
             if (entity is IHasCreatedBy createdByEntity)
@@ -43,7 +43,7 @@ public class AuditEntityHandler(IUserInfoProvider userInfoProvider, IOptions<Rep
         {
             if (entity is IHasModifiedTime modifiedTimeEntity)
             {
-                modifiedTimeEntity.ModifiedTime = DateTime.UtcNow;
+                modifiedTimeEntity.ModifiedTime = DateTimeOffset.UtcNow;
             }
 
             if (entity is IHasModifiedBy modifiedByEntity)

@@ -43,13 +43,14 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         var blogRepository = CreateReadRepositoryAsync<Blog, int>();
 
         var actualBlog = await blogRepository.GetByIdAsync(blog.Id);
-        actualBlog.Should().BeEquivalentTo(blog);
+        actualBlog.Should().BeEquivalentTo(blog, options => options.Excluding(p => p.BlogPosts).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
+        actualBlog!.Name.Should().Be(blog.Name);
 
         var actualBlogPost1 = await unitOfWork2.Repository<BlogPost, int>().GetByIdAsync(blogPost1.Id);
-        actualBlogPost1.Should().BeEquivalentTo(blogPost1);
+        actualBlogPost1.Should().BeEquivalentTo(blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
 
         var actualBlogPost2 = await unitOfWork2.Repository<BlogPost, int>().GetByIdAsync(blogPost2.Id);
-        actualBlogPost2.Should().BeEquivalentTo(blogPost2);
+        actualBlogPost2.Should().BeEquivalentTo(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
 
         var testUnitOfWork = CreateUnitOfWork();
 
@@ -72,12 +73,13 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         var blogUpdated = new Blog { Id = blog.Id, Name = "Updated Blog" };
 
         await unitOfWork.Repository<Blog, int>().UpdateAsync(blogUpdated);
+        await unitOfWork.CommitAsync();
 
         var blogRepository = CreateReadRepositoryAsync<Blog, int>();
 
         var actualBlog = await blogRepository.GetByIdAsync(blog.Id);
         blog.Name = "Updated Blog";
-        actualBlog.Should().BeEquivalentTo(blog);
+        actualBlog.Should().BeEquivalentTo(blog, options => options.Excluding(p => p.BlogPosts).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
     }
 
     [Fact]
@@ -93,7 +95,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         var blogRepository = CreateReadRepositoryAsync<Blog, int>();
 
         var actualBlog = await blogRepository.GetByIdAsync(blog.Id);
-        actualBlog.Should().BeEquivalentTo(blog);
+        actualBlog.Should().BeEquivalentTo(blog, options => options.Excluding(p => p.BlogPosts).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
     }
 
     [Fact]

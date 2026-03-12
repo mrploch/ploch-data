@@ -20,8 +20,6 @@ namespace Ploch.Data.EFCore;
 ///     for the DbContext instances it creates.
 ///     The <typeparamref name="TFactory" /> should be the type being implemented, for example:
 ///     <code>
-///         public class MySqListDbCon
-///
 ///         public class SampleAppDbContextFactory : BaseDbContextFactory&lt;SampleAppDbContext,
 ///                      SampleAppDbContextFactory&gt;, IDbContextFactory&lt;SampleAppDbContext&gt;
 ///         {
@@ -32,7 +30,7 @@ namespace Ploch.Data.EFCore;
 ///     </code>
 /// </remarks>
 /// <remarks>
-///     Initializes a new instance of the <see cref="BaseDbContextFactory{TDbContext, TMigrationAssembly}" />
+///     Initializes a new instance of the <see cref="BaseDbContextFactory{TDbContext, TFactory}" />
 ///     class.
 /// </remarks>
 /// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
@@ -71,7 +69,6 @@ public abstract class BaseDbContextFactory<TDbContext, TFactory>(Func<DbContextO
         where TBuilder : RelationalDbContextOptionsBuilder<TBuilder, TExtension> where TExtension : RelationalOptionsExtension, new()
     {
         var assembly = typeof(TFactory).Assembly;
-        Console.WriteLine($"Applying migrations assembly: {assembly}");
 
         builder.MigrationsAssembly(assembly.GetName().Name);
     }

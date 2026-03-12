@@ -17,15 +17,16 @@ public static class DbContextServicesRegistrationHelper
     /// <param name="connectionString">The database connection string. Default is in-memory SQLite database.</param>
     /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
     public static (IServiceProvider, TDbContext) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
-                                                                                              string connectionString = "Filename=:memory:")
+                                                                                              string connectionString = "Filename=test.db")
         where TDbContext : DbContext
     {
-        serviceCollection.AddDbContext<TDbContext>(builder =>
-                                                   {
-                                                       var connection = new SqliteConnection(connectionString);
-                                                       connection.Open();
-                                                       builder.UseSqlite(connection);
-                                                   });
+        // Create the connection once and share it across all DbContext instances.
+        // This is critical for SQLite in-memory databases: each new connection to :memory:
+        // creates a separate empty database, so all consumers must share a single connection.
+        var connection = new SqliteConnection(connectionString);
+        connection.Open();
+
+        serviceCollection.AddDbContext<TDbContext>(builder => builder.UseSqlite(connection));
 
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection);
     }
@@ -53,9 +54,12 @@ public static class DbContextServicesRegistrationHelper
         var scope = serviceProvider.CreateScope();
         var testDbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
         testDbContext.Database.OpenConnection();
-
         testDbContext.Database.EnsureCreated();
 
+        // Return the scoped service provider so that repositories resolved by tests
+        // share the same DbContext instance (and its change tracker).
+        // The shared connection in SqLiteDbContextConfigurator ensures all DbContext instances
+        // (including those in UnitOfWork child scopes) access the same in-memory database.
         return (scope.ServiceProvider, testDbContext);
     }
 }

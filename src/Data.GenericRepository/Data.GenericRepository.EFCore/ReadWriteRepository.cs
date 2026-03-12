@@ -64,6 +64,8 @@ public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntity
         {
             throw EntityNotFoundException.Create<TEntity, TId>(id);
         }
+
+        DbContext.Set<TEntity>().Remove(entity);
     }
 
     /// <inheritdoc />

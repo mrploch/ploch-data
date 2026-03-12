@@ -12,6 +12,8 @@ namespace Ploch.Data.EFCore.IntegrationTesting;
 /// <typeparam name="TDbContext">The type of database context.</typeparam>
 public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbContext : DbContext
 {
+    private readonly IDbContextConfigurator? _dbContextConfigurator;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="DataIntegrationTest{TDbContext}" /> class.
     /// </summary>
@@ -26,7 +28,9 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
 
         // ReSharper disable once VirtualMemberCallInConstructor - this is not a problem here
         ConfigureServices(serviceCollection);
+
         dbContextConfigurator ??= new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory);
+        _dbContextConfigurator = dbContextConfigurator;
 
         (ServiceProvider, DbContext) =
             DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(serviceCollection, dbContextConfigurator);
@@ -35,8 +39,6 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     /// <summary>
     ///     Gets the configured instance of the database context.
     /// </summary>
-    /// <typeparamref name="TDbContext" />
-    /// represents the type of the database context.
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Part of the public API.")]
     protected TDbContext DbContext { get; }
 
@@ -60,12 +62,11 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     Configures the required services for the test.
     /// </summary>
     /// <remarks>
-    ///     This method should be overriden in derived classes to configure additional services required for the test.
+    ///     This method should be overridden in derived classes to configure additional services required for the test.
     /// </remarks>
     /// <param name="services">The service collection.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
-    {
-    }
+    { }
 
     /// <summary>
     ///     Releases the unmanaged resources used by the <see cref="DataIntegrationTest{TDbContext}" />
@@ -76,9 +77,19 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     /// </param>
     protected virtual void Dispose(bool disposing)
     {
-        if (ServiceProvider is ServiceProvider sp)
+        if (disposing)
         {
-            sp.Dispose();
+            DbContext.Dispose();
+
+            if (ServiceProvider is ServiceProvider sp)
+            {
+                sp.Dispose();
+            }
+
+            if (_dbContextConfigurator is IDisposable disposableConfigurator)
+            {
+                disposableConfigurator.Dispose();
+            }
         }
     }
 }

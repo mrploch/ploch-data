@@ -16,7 +16,7 @@
     <AnalysisLevel>latest-Recommended</AnalysisLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <VersionPrefix>2.1.0</VersionPrefix>
-    <BuildNumber>$([System.DateTime]::UtcNow.ToString("yyMMddHHmm"))</BuildNumber>
+    <BuildNumber>260307</BuildNumber>
     <!--<RELEASEVERSION>true</RELEASEVERSION>-->
     <!-- Development versions -->
     <VersionSuffix Condition="'$(RELEASEVERSION)' != 'true'">-prerelease</VersionSuffix>
@@ -25,7 +25,7 @@
     <!-- Release versions -->
     <Version Condition="'$(RELEASEVERSION)' == 'true'">$(VersionPrefix)</Version>
 
-    <FileVersion>$(InformationalVersion)</FileVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
     <TargetFrameworkVersion>net9.0</TargetFrameworkVersion>

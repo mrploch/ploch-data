@@ -37,7 +37,14 @@ public static class DbContextExtensions
 
     public static TValue? GetStaticPropertyValue<TValue>(this Type type, string propertyName)
     {
-        var valueObj = new object(); // GetStaticPropertyValue(type, propertyName);
+        var property = type.GetProperty(propertyName, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+
+        if (property == null)
+        {
+            throw new InvalidOperationException($"Static property '{propertyName}' was not found on type '{type}'.");
+        }
+
+        var valueObj = property.GetValue(null);
 
         return valueObj switch
                { null => default,

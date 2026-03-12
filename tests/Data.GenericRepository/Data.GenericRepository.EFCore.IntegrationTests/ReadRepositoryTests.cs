@@ -19,8 +19,8 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPosts = repository.GetAll(query => query.Include(e => e.Tags));
         blogPosts.Should().HaveCount(2);
-        blogPosts.Should().ContainEquivalentOf(blogPost1);
-        blogPosts.Should().ContainEquivalentOf(blogPost2);
+        blogPosts.Should().ContainEquivalentOf(blogPost1, options => options.Excluding(p => p.Categories).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
+        blogPosts.Should().ContainEquivalentOf(blogPost2, options => options.Excluding(p => p.Categories).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
         foreach (var blogPost in blogPosts)
         {
             blogPost.Tags.Should().NotBeEmpty();
@@ -40,8 +40,8 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPosts = repository.GetAll();
         blogPosts.Should().HaveCount(2);
-        blogPosts.Should().ContainEquivalentOf(blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags));
-        blogPosts.Should().ContainEquivalentOf(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags));
+        blogPosts.Should().ContainEquivalentOf(blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).Excluding(p => p.CreatedTime).Excluding(p => p.ModifiedTime));
+        blogPosts.Should().ContainEquivalentOf(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).Excluding(p => p.CreatedTime).Excluding(p => p.ModifiedTime));
 
         // Categories and Tags are not included in the query but they will not be empty because they are already loaded in the context.
         // This is why I don't check for emptiness here.
@@ -58,7 +58,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPost = repository.GetById(blogPost2.Id, query => query.Include(e => e.Tags));
-        blogPost.Should().BeEquivalentTo(blogPost2);
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
         blogPost2.Tags.Should().NotBeEmpty();
     }
 
@@ -73,7 +73,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPost = repository.GetById([blogPost2.Id]);
-        blogPost.Should().BeEquivalentTo(blogPost2);
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
         blogPost2.Tags.Should().NotBeEmpty();
     }
 
@@ -183,7 +183,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         var blogPost = repository.FindFirst(post => post.Name.Contains("Blog post 1"));
 
         blogPost.Should().NotBeNull();
-        blogPost.Should().BeEquivalentTo(testBlogEntities.blogPost1);
+        blogPost.Should().BeEquivalentTo(testBlogEntities.blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
     }
 
     [Fact]

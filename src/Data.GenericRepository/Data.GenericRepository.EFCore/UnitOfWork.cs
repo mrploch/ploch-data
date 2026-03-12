@@ -39,17 +39,17 @@ public class UnitOfWork<TDbContext> : IUnitOfWork, IAsyncDisposable where TDbCon
     /// <inheritdoc />
     public TRepository Repository<TRepository, TEntity, TId>() where TRepository : IReadWriteRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
     {
-        var type = typeof(TEntity).Name;
+        var cacheKey = $"{typeof(TRepository).FullName}_{typeof(TEntity).FullName}_{typeof(TId).FullName}";
 
-        return (TRepository)_repositories.GetOrAdd(type, _ => _asyncServiceScope.ServiceProvider.GetRequiredService<TRepository>());
+        return (TRepository)_repositories.GetOrAdd(cacheKey, _ => _asyncServiceScope.ServiceProvider.GetRequiredService<TRepository>());
     }
 
     /// <inheritdoc />
     public IReadWriteRepositoryAsync<TEntity, TId> Repository<TEntity, TId>() where TEntity : class, IHasId<TId>
     {
-        var type = typeof(TEntity).Name;
+        var cacheKey = $"{typeof(IReadWriteRepositoryAsync<TEntity, TId>).FullName}";
 
-        return (IReadWriteRepositoryAsync<TEntity, TId>)_repositories.GetOrAdd(type,
+        return (IReadWriteRepositoryAsync<TEntity, TId>)_repositories.GetOrAdd(cacheKey,
                                                                                _ =>
                                                                                    _asyncServiceScope.ServiceProvider
                                                                                                      .GetRequiredService<
@@ -117,7 +117,7 @@ public class UnitOfWork<TDbContext> : IUnitOfWork, IAsyncDisposable where TDbCon
     /// </remarks>
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if (!_disposed && disposing)
         {
             _dbContext.Dispose();
             _asyncServiceScope.Dispose();

@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Ploch.Common.ArgumentChecking;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore;
@@ -30,10 +29,14 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
                                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                                   CancellationToken cancellationToken = default)
     {
-        var result =
-            onDbSet == null ?
-                await Entities.ToListAsync(cancellationToken).ConfigureAwait(false) :
-                await onDbSet(Entities).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var queryable = onDbSet != null ? onDbSet(Entities) : Entities;
+
+        if (query != null)
+        {
+            queryable = queryable.Where(query);
+        }
+
+        var result = await queryable.ToListAsync(cancellationToken).ConfigureAwait(false);
 
         foreach (var entity in result)
         {
@@ -86,7 +89,10 @@ public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntity
                 await DbSet.FindAsync([id], cancellationToken) :
                 await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
 
-        auditEntityHandler.HandleAccess(result.RequiredNotNull());
+        if (result != null)
+        {
+            auditEntityHandler.HandleAccess(result);
+        }
 
         return result;
     }

@@ -38,7 +38,6 @@ public static class ServiceCollectionRegistration
     /// <param name="configuration">The configuration.</param>
     /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
     /// <returns>The same service collection.</returns>
-    /// r
     public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection, IConfiguration? configuration = null)
         where TDbContext : DbContext
     {

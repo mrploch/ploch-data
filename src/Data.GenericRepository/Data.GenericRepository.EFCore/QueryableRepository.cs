@@ -39,11 +39,18 @@ public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepos
                                             Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         Guard.Argument(pageNumber, nameof(pageNumber)).Positive();
-        var orderedEnumerable = sortBy != null ? Entities.OrderBy(sortBy).AsQueryable() : Entities;
 
-        var dbSetQuery = onDbSet == null ? orderedEnumerable : onDbSet(orderedEnumerable);
+        var dbSetQuery = onDbSet != null ? onDbSet(Entities) : Entities;
 
-        dbSetQuery = query == null ? dbSetQuery : dbSetQuery.Where(query);
+        if (query != null)
+        {
+            dbSetQuery = dbSetQuery.Where(query);
+        }
+
+        if (sortBy != null)
+        {
+            dbSetQuery = dbSetQuery.OrderBy(sortBy);
+        }
 
         return dbSetQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsNoTracking();
     }
