@@ -21,6 +21,10 @@ jobs:
     steps:
       - run: echo "The branch name is ${{ github.repository }}"
       - uses: actions/checkout@v4
+      - name: Clone mrploch-development (shared build config)
+        run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
+      - name: Clone ploch-common (project references)
+        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
 
       - name: Start SqlServer
         run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server --name sqlserver --network "host"
@@ -94,10 +98,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./DocumentationSite/_site
-      # Publish all NuGet packages to NuGet.org
+      # Publish all NuGet packages to GitHub Packages
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
-      # If you retry a failed workflow, already published packages will be skipped without error.
-      - name: Add GitHub Packages source
-        run: dotnet nuget add source --username kploch --password ${{secrets.GH_PACKAGES_TOKEN}} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
       - name: Publish NuGet package
-        run: dotnet nuget push **/*.nupkg --source github -k ${{secrets.GH_PACKAGES_TOKEN}}
+        run: dotnet nuget push **/*.nupkg --skip-duplicate --source github -k ${{secrets.GH_PACKAGES_TOKEN}}
