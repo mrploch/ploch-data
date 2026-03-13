@@ -10,10 +10,6 @@
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.3" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
-  <ItemGroup>
-    <!-- Coverage -->
-    <PackageVersion Include="coverlet.msbuild" Version="8.0.0" />
-  </ItemGroup>
   <Import Project="../mrploch-development/dependencies/Common.Packages.props" />
   <Import Project="../mrploch-development/dependencies/Testing.Packages.props" />
   <Import Project="../mrploch-development/dependencies/Analyzers.Global.Packages.props" />

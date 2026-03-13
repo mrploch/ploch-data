@@ -33,19 +33,6 @@ public static class RepositoryHelper
         return (blog, blogPosts);
     }
 
-    // ReSharper disable once MethodOverloadWithOptionalParameter - false positive here
-    public static async Task<(Blog blog, BlogPost blogPost1, BlogPost blogPost2)> AddAsyncTestBlogEntitiesAsync(
-        IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
-        int blogPostCount,
-        int numTags = 3)
-    {
-        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity(numTags);
-
-        await blogReadWriteRepository.AddAsync(blog);
-
-        return (blog, blogPost1, blogPost2);
-    }
-
     public static async Task<(Blog blog, BlogPost blogPost1, BlogPost blogPost2)> AddAsyncTestBlogEntitiesAsync(
         IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
         int numTags = 3)

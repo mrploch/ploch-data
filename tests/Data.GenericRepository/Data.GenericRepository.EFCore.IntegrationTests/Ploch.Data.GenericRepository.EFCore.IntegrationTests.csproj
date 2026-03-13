@@ -9,11 +9,8 @@
     <IsTestProject>true</IsTestProject>
     <SonarQubeExclude>true</SonarQubeExclude>
     <OutputType>Exe</OutputType>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- VSTHRD200: Async suffix not conventional for xUnit test methods -->
+    <NoWarn>$(NoWarn);VSTHRD200</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,9 +18,5 @@
     <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
     <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\src\Data.Model\Ploch.Data.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   </ItemGroup>
 </Project>

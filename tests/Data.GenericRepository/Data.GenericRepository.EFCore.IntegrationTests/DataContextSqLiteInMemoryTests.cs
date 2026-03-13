@@ -5,15 +5,8 @@ using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
-public class DataContextSqLiteInMemoryTests : GenericRepositoryDataIntegrationTest<TestDbContext>
+public class DataContextSqLiteInMemoryTests(ITestOutputHelper output) : GenericRepositoryDataIntegrationTest<TestDbContext>(new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory))
 {
-    private readonly ITestOutputHelper _output;
-
-    public DataContextSqLiteInMemoryTests(ITestOutputHelper output) : base(new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory))
-    {
-        _output = output;
-    }
-
     [Fact]
     public void DataContext_add_and_query_by_id_should_create_entities_and_find_them()
     {
@@ -47,6 +40,6 @@ public class DataContextSqLiteInMemoryTests : GenericRepositoryDataIntegrationTe
         stopWatch.Stop();
 
         var elapsed = stopWatch.Elapsed;
-        _output.WriteLine($"Elapsed: {elapsed}");
+        output.WriteLine($"Elapsed: {elapsed}");
     }
 }

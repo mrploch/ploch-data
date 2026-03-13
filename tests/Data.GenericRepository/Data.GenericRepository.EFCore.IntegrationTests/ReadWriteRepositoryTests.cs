@@ -4,7 +4,6 @@ using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
-// TODO: Fix those tests - use UnitOfWork and test against the real data
 public class ReadWriteRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {
     private readonly IReadWriteRepository<TestEntity, int> _repository;

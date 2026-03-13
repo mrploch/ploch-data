@@ -28,8 +28,6 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
             }
         }
 
-        // There is a bug in ExecuteOnProperties - it doesn't handle DateTimeOffset: this fails with StackOverflow: testBlog.ExecuteOnProperties<IHasIdSettable<int>>(o => o.Id = 0);
-
         await unitOfWork.Repository<Blog, int>().AddAsync(testBlog);
 
         var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
@@ -66,7 +64,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
     {
         using var unitOfWork = CreateUnitOfWork();
 
-        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
+        var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
 
         await unitOfWork.CommitAsync();
 
@@ -88,7 +86,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         using var unitOfWork = CreateUnitOfWork();
 
         var repository = unitOfWork.Repository<Blog, int>();
-        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(repository);
+        var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(repository);
 
         await unitOfWork.CommitAsync();
 

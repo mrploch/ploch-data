@@ -90,7 +90,9 @@ public class ServiceCollectionRegistrationsTests
         serviceProvider.GetRequiredService<TestCommandReadRepository>().Should().BeOfType<TestCommandReadRepository>();
     }
 
-    private class TestCommandReadRepository(IReadRepositoryAsync<Blog, int> blogReadRepository)
+#pragma warning disable CS9113 // Parameter is unread - exists to verify DI resolution
+    private sealed class TestCommandReadRepository(IReadRepositoryAsync<Blog, int> blogReadRepository)
+#pragma warning restore CS9113
     { }
 
 #pragma warning disable SA1201 // Elements should appear in the correct order - interface should not follow class - this is just a test.
@@ -98,7 +100,7 @@ public class ServiceCollectionRegistrationsTests
 #pragma warning restore SA1201
     { }
 
-    private class CustomBlogRepository(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
+    private sealed class CustomBlogRepository(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
         : ReadWriteRepositoryAsync<Blog, int>(dbContext, auditEntityHandler), ICustomBlogRepository
     {
         public Blog? FindFirst(Expression<Func<Blog, bool>> query,
