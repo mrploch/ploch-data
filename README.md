@@ -7,10 +7,10 @@
 
 | Package | Version | Downloads |
 |---------|---------|-----------|
-| Ploch.Data.Model | [![][model-v]][model] | [![][model-d]][model] |
-| Ploch.Data.GenericRepository | [![][gr-v]][gr] | [![][gr-d]][gr] |
-| Ploch.Data.GenericRepository.EFCore | [![][gref-v]][gref] | [![][gref-d]][gref] |
-| Ploch.Data.EFCore | [![][ef-v]][ef] | [![][ef-d]][ef] |
+| Ploch.Data.Model | [![version][model-v]][model] | [![downloads][model-d]][model] |
+| Ploch.Data.GenericRepository | [![version][gr-v]][gr] | [![downloads][gr-d]][gr] |
+| Ploch.Data.GenericRepository.EFCore | [![version][gref-v]][gref] | [![downloads][gref-d]][gref] |
+| Ploch.Data.EFCore | [![version][ef-v]][ef] | [![downloads][ef-d]][ef] |
 
 [model]: https://www.nuget.org/packages/Ploch.Data.Model/
 [model-v]: https://img.shields.io/nuget/v/Ploch.Data.Model.svg
