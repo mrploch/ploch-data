@@ -24,7 +24,7 @@ jobs:
       - name: Clone mrploch-development (shared build config)
         run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
       - name: Clone ploch-common (project references)
-        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
+        run: git clone https://github.com/mrploch/ploch-common.git ../ploch-common
 
       - name: Start SqlServer
         run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server --name sqlserver --network "host"
