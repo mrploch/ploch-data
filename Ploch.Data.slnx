@@ -13,7 +13,7 @@
     <File Path="src/Data.GenericRepository/README.md" />
   </Folder>
   <Folder Name="/ploch-common/">
-    <Project Path="..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj" Type="C#">
+    <Project Path="..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -23,7 +23,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\Common\Ploch.Common.csproj" Type="C#">
+    <Project Path="..\ploch-common\src\Common\Ploch.Common.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -33,7 +33,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\TestingSupport.XUnit3.AutoMoq\Ploch.TestingSupport.XUnit3.AutoMoq.csproj" Type="C#">
+    <Project Path="..\ploch-common\src\TestingSupport.XUnit3.AutoMoq\Ploch.TestingSupport.XUnit3.AutoMoq.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -43,7 +43,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\TestingSupport.XUnit3.Dependencies\Ploch.TestingSupport.XUnit3.Dependencies.csproj" Type="C#">
+    <Project Path="..\ploch-common\src\TestingSupport.XUnit3.Dependencies\Ploch.TestingSupport.XUnit3.Dependencies.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -53,7 +53,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\TestingSupport.XUnit3\Ploch.TestingSupport.XUnit3.csproj" Type="C#">
+    <Project Path="..\ploch-common\src\TestingSupport.XUnit3\Ploch.TestingSupport.XUnit3.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -69,6 +69,7 @@
     <File Path="build.ps1" />
     <File Path="docker-compose.yml" />
     <File Path="README.md" />
+    <File Path="TODO.md" />
   </Folder>
   <Folder Name="/repository/config/">
     <File Path=".codacy.yml" />
