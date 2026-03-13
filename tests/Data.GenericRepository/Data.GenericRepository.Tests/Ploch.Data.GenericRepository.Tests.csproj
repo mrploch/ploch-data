@@ -7,6 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <SonarQubeExclude>true</SonarQubeExclude>
     <OutputType>Exe</OutputType>
     <!-- VSTHRD200: Async suffix not conventional for xUnit test methods -->
     <!-- NU1507: Package source mapping requires solution-wide config change -->
