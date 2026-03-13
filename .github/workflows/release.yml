@@ -42,13 +42,33 @@ jobs:
             fi
           fi
 
-      # GH_TOKEN (a PAT) is used instead of github.token because the default
-      # GITHUB_TOKEN cannot trigger subsequent workflows when pushing commits.
+      # Validate GH_TOKEN early — it is needed later for pushing commits and tags.
+      # The default GITHUB_TOKEN cannot trigger subsequent workflows, so a PAT is required.
+      - name: Validate GH_TOKEN secret
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::GH_TOKEN secret is not set. A Personal Access Token with 'repo' and 'workflow' scopes is required."
+            exit 1
+          fi
+          # Verify the token is valid by calling the GitHub API
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }})
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "::error::GH_TOKEN is invalid or expired (HTTP $HTTP_STATUS). Please regenerate the PAT and update the repository secret."
+            exit 1
+          fi
+          echo "GH_TOKEN is valid"
+
+      # Use the default GITHUB_TOKEN for checkout — it always works and has read access.
+      # GH_TOKEN (PAT) is configured separately before push steps, because it is the
+      # only token that can trigger subsequent workflows when pushing commits.
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
 
       - name: Clone mrploch-development (shared build config)
         run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
@@ -78,9 +98,13 @@ jobs:
         run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
 
       - name: Configure git
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Configure the remote to use GH_TOKEN for push operations
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
 
       - name: Set release version
         run: |
