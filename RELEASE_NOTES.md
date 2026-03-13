@@ -4,7 +4,9 @@
 
 ### Overview
 
-This release introduces automated versioning via Nerdbank.GitVersioning (NBGV) and a fully automated release pipeline for publishing packages to NuGet.org.
+This release introduces automated versioning via Nerdbank.GitVersioning
+(NBGV) and a fully automated release pipeline for publishing packages
+to NuGet.org.
 
 ### What's New
 
