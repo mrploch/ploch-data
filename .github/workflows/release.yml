@@ -57,7 +57,7 @@ jobs:
         run: git clone https://github.com/mrploch/ploch-common.git ../ploch-common
 
       - name: Start SqlServer
-        run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server --name sqlserver --network "host"
+        run: docker run --name sqlserver -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server
 
       - name: Wait for SQL Server container
         uses: jakejarvis/wait-action@master
