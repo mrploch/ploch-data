@@ -1,0 +1,250 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Version to release (e.g. 3.0, 2.1). The patch version is computed automatically by NBGV.'
+        required: true
+        type: string
+      next_version:
+        description: 'Next development version after release (e.g. 3.1). Leave empty to auto-increment the minor version.'
+        required: false
+        type: string
+
+env:
+  DOTNET_VERSION: '9.0.x'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    # Pass workflow inputs via env vars to avoid script injection (githubactions:S7635)
+    env:
+      RELEASE_VERSION: ${{ inputs.release_version }}
+      NEXT_VERSION_INPUT: ${{ inputs.next_version }}
+
+    steps:
+      - name: Validate inputs
+        run: |
+          if [[ ! "$RELEASE_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::release_version must be in major.minor format (e.g. 3.0) without leading zeros"
+            exit 1
+          fi
+          if [ -n "$NEXT_VERSION_INPUT" ]; then
+            if [[ ! "$NEXT_VERSION_INPUT" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+              echo "::error::next_version must be in major.minor format (e.g. 3.1) without leading zeros"
+              exit 1
+            fi
+          fi
+
+      # GH_TOKEN (a PAT) is used instead of github.token because the default
+      # GITHUB_TOKEN cannot trigger subsequent workflows when pushing commits.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Clone mrploch-development (shared build config)
+        run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
+
+      - name: Clone ploch-common (project references)
+        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
+
+      - name: Start SqlServer
+        run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server --name sqlserver --network "host"
+
+      - name: Wait for SQL Server container
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '5s'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install NBGV tool
+        run: dotnet tool restore
+
+      - name: Add GitHub Packages Source
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Set release version
+        run: |
+          dotnet nbgv set-version "$RELEASE_VERSION"
+          echo "Release version set to $RELEASE_VERSION"
+
+      # Idempotent commit: only commit if version.json actually changed
+      - name: Commit release version
+        run: |
+          git add version.json
+          git diff --cached --quiet && echo "version.json unchanged, skipping commit" || \
+            git commit -m "chore(release): Set version to $RELEASE_VERSION"
+
+      - name: Get computed NuGet version
+        id: version
+        run: |
+          NUGET_VERSION=$(dotnet nbgv get-version --variable NuGetPackageVersion)
+          echo "nuget_version=$NUGET_VERSION" >> $GITHUB_OUTPUT
+          echo "NuGet package version: $NUGET_VERSION"
+
+      - name: Restore dependencies
+        run: dotnet restore ./Ploch.Data.slnx
+
+      - name: Build (Release)
+        run: dotnet build ./Ploch.Data.slnx --no-restore -c Release
+
+      - name: Test
+        run: dotnet test ./Ploch.Data.slnx --no-build -c Release --verbosity normal --logger "trx;LogFileName=TestOutputResults.trx" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-test-results
+          path: |
+            **/TestResults/*.xml
+            **/TestResults/*.trx
+
+      # Tag is created BEFORE publishing packages intentionally.
+      # Rationale: orphaned packages on NuGet.org cannot be deleted (only unlisted),
+      # while tags can be deleted and re-created easily. Tag-first is the safer default.
+      # Retry-safe: re-uses existing tag if it already points at HEAD.
+      - name: Create and push tag
+        id: tag
+        if: success()
+        run: |
+          NUGET_VERSION="${{ steps.version.outputs.nuget_version }}"
+          TAG="v${NUGET_VERSION}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists, verifying it points to HEAD"
+            EXISTING=$(git rev-parse "$TAG^{}")
+            CURRENT=$(git rev-parse HEAD)
+            if [ "$EXISTING" != "$CURRENT" ]; then
+              echo "::error::Tag $TAG exists but points to a different commit. Delete it manually to retry."
+              exit 1
+            fi
+            echo "Tag $TAG already points to HEAD, reusing it"
+          else
+            git tag -a "$TAG" -m "Release ${NUGET_VERSION}"
+            git push origin "$TAG"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Publish NuGet packages to NuGet.org
+        if: success()
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          PKGS=$(find . -name '*.nupkg' -not -path '*/test*' -not -path '*/Test*')
+          if [ -z "$PKGS" ]; then
+            echo "::error::No .nupkg files were produced by the build."
+            exit 1
+          fi
+          echo "$PKGS" | while read pkg; do
+            echo "Publishing $pkg"
+            dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json --skip-duplicate -k "$NUGET_API_KEY"
+          done
+
+      - name: Publish symbol packages to NuGet.org
+        if: success()
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          find . -name '*.snupkg' -not -path '*/test*' -not -path '*/Test*' | while read pkg; do
+            echo "Publishing symbols $pkg"
+            dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json --skip-duplicate -k "$NUGET_API_KEY"
+          done
+
+      # Generate release notes BEFORE archiving change-log entries,
+      # so only the current release's entries are included.
+      - name: Generate release notes
+        id: release-notes
+        if: success()
+        env:
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          NOTES=""
+          if [ -d "change-log" ] && [ "$(ls -A change-log/*.md 2>/dev/null)" ]; then
+            NOTES=$(cat change-log/*.md)
+          fi
+          if [ -z "$NOTES" ]; then
+            NOTES="Release ${NUGET_VERSION}"
+          fi
+          cat > /tmp/release-notes.md <<ENDOFNOTES
+          $NOTES
+
+          ---
+
+          ## NuGet Packages
+
+          All packages are available on [NuGet.org](https://www.nuget.org/profiles/mrploch) with version \`${NUGET_VERSION}\`.
+
+          Install via:
+          \`\`\`bash
+          dotnet add package Ploch.Data.GenericRepository.EFCore --version ${NUGET_VERSION}
+          \`\`\`
+          ENDOFNOTES
+
+      - name: Compute next development version
+        id: next
+        if: success()
+        run: |
+          NEXT="$NEXT_VERSION_INPUT"
+          if [ -z "$NEXT" ]; then
+            MAJOR=$(echo "$RELEASE_VERSION" | cut -d. -f1)
+            MINOR=$(echo "$RELEASE_VERSION" | cut -d. -f2)
+            NEXT="$MAJOR.$((MINOR + 1))"
+          fi
+          echo "next_version=$NEXT" >> $GITHUB_OUTPUT
+          echo "Next development version: $NEXT-prerelease"
+
+      - name: Set next development version
+        if: success()
+        env:
+          NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
+        run: |
+          dotnet nbgv set-version "${NEXT_DEV_VERSION}-prerelease"
+
+      - name: Archive consumed change-log entries
+        if: success()
+        run: |
+          if [ -d "change-log" ] && [ "$(ls -A change-log/*.md 2>/dev/null)" ]; then
+            mkdir -p change-log/archive
+            mv change-log/*.md change-log/archive/ 2>/dev/null || true
+          fi
+
+      # Idempotent commit: only commit if there are staged changes
+      - name: Commit and push next development version
+        if: success()
+        env:
+          NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
+        run: |
+          git add version.json
+          git add change-log/ || true
+          git diff --cached --quiet && echo "No changes to commit" || \
+            git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development"
+          git push origin main
+
+      - name: Create GitHub Release
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Release ${{ steps.version.outputs.nuget_version }}"
+          body_path: /tmp/release-notes.md
+          draft: false
+          prerelease: false

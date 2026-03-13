@@ -5,6 +5,13 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=alert_status&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=coverage&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
 
+| Package | NuGet |
+|---------|-------|
+| Ploch.Data.Model | [![NuGet](https://img.shields.io/nuget/v/Ploch.Data.Model.svg)](https://www.nuget.org/packages/Ploch.Data.Model/) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ploch.Data.Model.svg)](https://www.nuget.org/packages/Ploch.Data.Model/) |
+| Ploch.Data.GenericRepository | [![NuGet](https://img.shields.io/nuget/v/Ploch.Data.GenericRepository.svg)](https://www.nuget.org/packages/Ploch.Data.GenericRepository/) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ploch.Data.GenericRepository.svg)](https://www.nuget.org/packages/Ploch.Data.GenericRepository/) |
+| Ploch.Data.GenericRepository.EFCore | [![NuGet](https://img.shields.io/nuget/v/Ploch.Data.GenericRepository.EFCore.svg)](https://www.nuget.org/packages/Ploch.Data.GenericRepository.EFCore/) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ploch.Data.GenericRepository.EFCore.svg)](https://www.nuget.org/packages/Ploch.Data.GenericRepository.EFCore/) |
+| Ploch.Data.EFCore | [![NuGet](https://img.shields.io/nuget/v/Ploch.Data.EFCore.svg)](https://www.nuget.org/packages/Ploch.Data.EFCore/) [![NuGet Downloads](https://img.shields.io/nuget/dt/Ploch.Data.EFCore.svg)](https://www.nuget.org/packages/Ploch.Data.EFCore/) |
+
 # Ploch.Data Libraries
 
 ## Overview
