@@ -28,7 +28,7 @@
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
-    <TargetFrameworkVersion>net9.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>net10.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug'">
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
