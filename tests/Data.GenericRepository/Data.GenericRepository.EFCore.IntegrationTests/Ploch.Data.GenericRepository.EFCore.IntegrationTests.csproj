@@ -10,7 +10,8 @@
     <SonarQubeExclude>true</SonarQubeExclude>
     <OutputType>Exe</OutputType>
     <!-- VSTHRD200: Async suffix not conventional for xUnit test methods -->
-    <NoWarn>$(NoWarn);VSTHRD200</NoWarn>
+    <!-- NU1507: Package source mapping requires solution-wide config change -->
+    <NoWarn>$(NoWarn);VSTHRD200;NU1507</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
