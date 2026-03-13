@@ -117,4 +117,4 @@ jobs:
       # Publish all NuGet packages to GitHub Packages
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
       - name: Publish NuGet package
-        run: dotnet nuget push **/*.nupkg --skip-duplicate --source github -k ${{secrets.GH_PACKAGES_TOKEN}}
+        run: dotnet nuget push ./**/*.nupkg --skip-duplicate --source github -k ${{secrets.GH_PACKAGES_TOKEN}}
