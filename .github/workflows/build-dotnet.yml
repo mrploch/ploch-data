@@ -21,6 +21,8 @@ jobs:
     steps:
       - run: echo "The branch name is ${{ github.repository }}"
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Clone mrploch-development (shared build config)
         run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
       - name: Clone ploch-common (project references)
@@ -66,7 +68,16 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
       - name: SonarScanner Begin
         id: sonar-begin
-        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="**/*.ps1,**/*.Tests/**,**/*.Tests.csproj,**/*.IntegrationTests/**"
+        run: >
+          dotnet sonarscanner begin
+          /k:"${{ env.SONAR_PROJECT_KEY }}"
+          /o:"${{ env.SONAR_ORGANIZATION }}"
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          /d:sonar.host.url="https://sonarcloud.io"
+          /d:sonar.projectBaseDir="${{ github.workspace }}"
+          /d:sonar.scm.provider=git
+          /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml
+          /d:sonar.coverage.exclusions="**/*.ps1,**/*.Tests/**,**/*.Tests.csproj,**/*.IntegrationTests/**"
         continue-on-error: true
 
       # Build and Test (always runs regardless of SonarCloud status)
