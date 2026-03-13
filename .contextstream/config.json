@@ -1,0 +1,18 @@
+{
+  "workspace_id": "57db5f34-e7f0-42c0-86c4-bb981f96c880",
+  "workspace_name": "MrPloch",
+  "associated_at": "2026-02-18T22:25:09.532Z",
+  "version": "0.4.62",
+  "configured_editors": [
+    "codex",
+    "claude",
+    "cursor",
+    "antigravity"
+  ],
+  "context_pack": false,
+  "api_url": "https://api.contextstream.io",
+  "updated_at": "2026-02-18T22:25:17.262Z",
+  "indexing_enabled": true,
+  "project_id": "5e6349c2-6dec-474f-b040-b0b0de429feb",
+  "project_name": "ploch-data"
+}

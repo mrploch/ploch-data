@@ -7,8 +7,7 @@ namespace Ploch.Data.Model;
 /// </summary>
 /// <typeparam name="TTag">The type of tags.</typeparam>
 /// <typeparam name="TTagId">The type of tag IDs.</typeparam>
-public interface IHasTags<TTag, TTagId>
-    where TTag : Tag<TTagId>
+public interface IHasTags<TTag, TTagId> where TTag : Tag<TTagId>
 {
     /// <summary>
     ///     Gets or sets the collection of tags.
@@ -24,6 +23,6 @@ public interface IHasTags<TTag, TTagId>
 /// <remarks>
 ///     This interface inherits from <see cref="IHasTags{TTag,TId}" /> with a default id type of <see cref="int" />.
 /// </remarks>
-public interface IHasTags<TTag> : IHasTags<TTag, int>
-    where TTag : Tag<int>
-{ }
+public interface IHasTags<TTag> : IHasTags<TTag, int> where TTag : Tag<int>
+{
+}

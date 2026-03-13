@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Dawn;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ploch.Common.AppServices.Security;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore;
@@ -23,58 +25,28 @@ public static class ServiceCollectionRegistration
                                                                                  {
                                                                                      { typeof(IReadRepositoryAsync<,>), typeof(ReadRepositoryAsync<,>) },
                                                                                      { typeof(IWriteRepositoryAsync<,>), typeof(ReadWriteRepositoryAsync<,>) },
-                                                                                     { typeof(IReadWriteRepositoryAsync<,>), typeof(ReadWriteRepositoryAsync<,>) }
+                                                                                     {
+                                                                                         typeof(IReadWriteRepositoryAsync<,>),
+                                                                                         typeof(ReadWriteRepositoryAsync<,>)
+                                                                                     }
                                                                                  };
 
     /// <summary>
     ///     Registers the repository types in the service collection using <c>AddScoped</c> method.
     /// </summary>
     /// <param name="serviceCollection">The service collection.</param>
+    /// <param name="configuration">The configuration.</param>
     /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
     /// <returns>The same service collection.</returns>
-    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection, IConfiguration? configuration = null)
         where TDbContext : DbContext
     {
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
+        configuration ??= new ConfigurationBuilder().Build();
 
-        AddRepositories<TDbContext>(serviceCollection, static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
-
-        return serviceCollection;
-    }
-
-    /// <summary>
-    ///     Registers the repository types in the service collection.
-    /// </summary>
-    /// <param name="serviceCollection">The service collection.</param>
-    /// <param name="registrationFunction">The <see cref="IServiceCollection" /> method used for registration.</param>
-    /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
-    /// <returns>The same service collection.</returns>
-    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection,
-                                                                 Func<IServiceCollection, Type, Type, IServiceCollection> registrationFunction)
-        where TDbContext : DbContext
-    {
-        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
-        Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
-
-        serviceCollection.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>());
-
-        registrationFunction(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
-        registrationFunction(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
-        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
-
-        foreach (var (sourceType, targetType) in RepositoryTypeMappings)
-        {
-            registrationFunction(serviceCollection, sourceType, targetType);
-        }
-
-        foreach (var (sourceType, targetType) in RepositoryAsyncTypeMappings)
-        {
-            registrationFunction(serviceCollection, sourceType, targetType);
-        }
-
-        serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        return serviceCollection;
+        return AddRepositories<TDbContext>(serviceCollection,
+                                           configuration,
+                                           static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
     }
 
     /// <summary>
@@ -129,15 +101,16 @@ public static class ServiceCollectionRegistration
     ///     The same <see cref="IServiceCollection" /> passed in <paramref name="serviceCollection" /> used for method
     ///     chaining.
     /// </returns>
-    public static IServiceCollection AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection serviceCollection,
-                                                                                                                        Func<IServiceCollection, Type, Type,
-                                                                                                                            IServiceCollection> registrationFunction)
+    public static IServiceCollection AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(
+        this IServiceCollection serviceCollection,
+        Func<IServiceCollection, Type, Type, IServiceCollection>? registrationFunction = null)
         where TRepositoryInterface : class, IReadWriteRepositoryAsync<TEntity, TId>
         where TRepository : class, TRepositoryInterface, IReadWriteRepositoryAsync<TEntity, TId>
         where TEntity : class, IHasId<TId>
     {
         Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
-        Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
+
+        registrationFunction ??= static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType);
 
         registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
         registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));
@@ -225,6 +198,46 @@ public static class ServiceCollectionRegistration
         }
 
         registrationFunction(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
+
+        return serviceCollection;
+    }
+
+    /// <summary>
+    ///     Registers the repository types in the service collection.
+    /// </summary>
+    /// <param name="serviceCollection">The service collection.</param>
+    /// <param name="configuration">The configuration.</param>
+    /// <param name="registrationFunction">The <see cref="IServiceCollection" /> method used for registration.</param>
+    /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
+    /// <returns>The same service collection.</returns>
+    private static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection,
+                                                                  IConfiguration configuration,
+                                                                  Func<IServiceCollection, Type, Type, IServiceCollection> registrationFunction)
+        where TDbContext : DbContext
+    {
+        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
+        Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
+
+        serviceCollection.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>())
+                         .AddSingleton<IAuditEntityHandler, AuditEntityHandler>()
+                         .AddSingleton<IUserInfoProvider, NullUserInfoProvider>();
+
+        serviceCollection.Configure<RepositoriesConfiguration>(configuration.GetSection(nameof(RepositoriesConfiguration)));
+        registrationFunction(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
+        registrationFunction(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
+        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
+
+        foreach (var (sourceType, targetType) in RepositoryTypeMappings)
+        {
+            registrationFunction(serviceCollection, sourceType, targetType);
+        }
+
+        foreach (var (sourceType, targetType) in RepositoryAsyncTypeMappings)
+        {
+            registrationFunction(serviceCollection, sourceType, targetType);
+        }
+
+        serviceCollection.AddScoped<IUnitOfWork, UnitOfWork<TDbContext>>();
 
         return serviceCollection;
     }

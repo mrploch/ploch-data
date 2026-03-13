@@ -13,6 +13,18 @@ public static class EntitiesBuilder
         return fixture.Build<BlogPostTag>().Without(t => t.BlogPosts).Without(t => t.Id).CreateMany(count).ToArray();
     }
 
+    public static BlogPostTag[] BuildTags(int count)
+    {
+        var tags = new List<BlogPostTag>();
+
+        for (var i = 0; i < count; i++)
+        {
+            tags.Add(new BlogPostTag { Name = $"Tag {i + 1}" });
+        }
+
+        return tags.ToArray();
+    }
+
     public static (Blog, BlogPost, BlogPost) BuildBlogEntity(int numTags = 3)
     {
         var categories = BuildCategories();
@@ -21,24 +33,27 @@ public static class EntitiesBuilder
 
         var blog = new Blog { Name = "Blog 1" };
 
-        var blogPost1 = new BlogPost
-        {
-            Name = "Blog post 1",
-            Contents = "My first blog post!",
-            CreatedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(1)),
-            ModifiedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(1))
-        };
+        var blogPost1 =
+            new BlogPost
+            {
+                Name = "Blog post 1",
+                Contents = "My first blog post!",
+                CreatedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(1)),
+                ModifiedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(1))
+            };
+
         blogPost1.Categories.AddMany(categories.TakeRandom(2));
         blogPost1.Tags.Add(tags[0]);
         blogPost1.Tags.Add(tags[2]);
 
-        var blogPost2 = new BlogPost
-        {
-            Name = "Blog post 2",
-            Contents = "My second blog post!",
-            CreatedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(2)),
-            ModifiedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(2))
-        };
+        var blogPost2 =
+            new BlogPost
+            {
+                Name = "Blog post 2",
+                Contents = "My second blog post!",
+                CreatedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(2)),
+                ModifiedTime = DateTimeOffset.Now.Subtract(TimeSpan.FromMinutes(2))
+            };
         blogPost2.Tags.Add(tags[1]);
 
         blog.BlogPosts.Add(blogPost1);
@@ -68,13 +83,13 @@ public static class EntitiesBuilder
         var category2 = new BlogPostCategory { Name = "Category 2" };
 
         return new List<BlogPostCategory>
-        {
-            category1,
-            category1_1,
-            category1_2,
-            category1_2_1,
-            category2
-        };
+               {
+                   category1,
+                   category1_1,
+                   category1_2,
+                   category1_2_1,
+                   category2
+               };
     }
 
     public static IEnumerable<BlogPost> BuildBlogPosts(int count)
@@ -86,14 +101,15 @@ public static class EntitiesBuilder
 
         var category2 = new BlogPostCategory { Name = "Category 2" };
 
-        var categories = new List<BlogPostCategory>
-        {
-            category1,
-            category1_1,
-            category1_2,
-            category1_2_1,
-            category2
-        };
+        var categories =
+            new List<BlogPostCategory>
+            {
+                category1,
+                category1_1,
+                category1_2,
+                category1_2_1,
+                category2
+            };
 
         var tags = BuildRandomTags(3);
 
@@ -102,6 +118,7 @@ public static class EntitiesBuilder
         for (var i = 0; i < count; i++)
         {
             var post = new BlogPost { Name = $"Blog post {i + 1}", Contents = $"My blog post {i + 1}" };
+
             post.Categories.AddMany(categories.TakeRandom(2));
             post.Tags.AddMany(tags.TakeRandom(2));
 

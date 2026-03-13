@@ -20,7 +20,13 @@ jobs:
 
     steps:
       - run: echo "The branch name is ${{ github.repository }}"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Clone mrploch-development (shared build config)
+        run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
+      - name: Clone ploch-common (project references)
+        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
 
       - name: Start SqlServer
         run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server --name sqlserver --network "host"
@@ -34,69 +40,82 @@ jobs:
         run: cp ./README.md ./DocumentationSite/index.md
       - uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
+          distribution: 'zulu'
           java-version: '17'
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
+      - name: Install mono
+        run: |
+          sudo apt install -y ca-certificates gnupg
+          sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+          sudo apt update
+          sudo apt install -y mono-devel
+      - name: Add GitHub Packages Source
+        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+
+      # Restore
       - name: Restore dependencies
-        shell: pwsh
-        run: dotnet restore ./Ploch.Data.sln
+        run: dotnet restore ./Ploch.Data.slnx
+
+      # SonarCloud setup (non-blocking)
       - name: Install SonarCloud Scanner
-        shell: pwsh
         run: dotnet tool install --global dotnet-sonarscanner
+        continue-on-error: true
       - name: Install dotnet-coverage
-        shell: pwsh
         run: dotnet tool install --global dotnet-coverage
       - name: SonarScanner Begin
-        shell: pwsh
-        run: dotnet sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml /d:sonar.host.url="https://sonarcloud.io"
+        id: sonar-begin
+        run: >
+          dotnet sonarscanner begin
+          /k:"${{ env.SONAR_PROJECT_KEY }}"
+          /o:"${{ env.SONAR_ORGANIZATION }}"
+          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          /d:sonar.host.url="https://sonarcloud.io"
+          /d:sonar.projectBaseDir="${{ github.workspace }}"
+          /d:sonar.scm.provider=git
+          /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml
+          /d:sonar.coverage.exclusions="**/*.ps1,**/*.Tests/**,**/*.Tests.csproj,**/*.IntegrationTests/**,**/*.IntegrationTesting/**"
+          /d:sonar.exclusions="**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/workload-install.ps1,**/prepare-repo.ps1,**/.github/**,**/*.yml,**/*.yaml"
+        continue-on-error: true
+
+      # Build and Test (always runs regardless of SonarCloud status)
       - name: Build
-        shell: pwsh
-        run: dotnet build ./Ploch.Data.sln --no-restore
+        run: dotnet build ./Ploch.Data.slnx --no-restore
       - name: Test Coverage
-        shell: pwsh
-        run: dotnet test ./Ploch.Data.sln --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+
+      # SonarCloud end (runs even after test failures, only if begin succeeded)
       - name: SonarScanner End
-        shell: pwsh
+        if: always() && steps.sonar-begin.outcome == 'success'
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-          
-          # - name: Run codacy-coverage-reporter
-          #  uses: codacy/codacy-coverage-reporter-action@v1
-          #  with:
-          #    project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        # or
-        # api-token: ${{ secrets.CODACY_API_TOKEN }}
-        #    coverage-reports: '**/CoverageResults/coverage.opencover.xml'
-        # or a comma-separated list for multiple reports
-        # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>      
+        continue-on-error: true
+
       - name: Upload Test Results
-        uses: actions/upload-artifact@v3
-        if: success() || failure()
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: |
             **/TestResults/*.xml
             **/TestResults/*.trx
       - name: Upload Coverage Results
-        uses: actions/upload-artifact@v3
-        if: success() || failure()
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage
           path: |
-            **/CoverageResults/*.xml        
+            **/CoverageResults/*.xml
 
       - name: Deploy GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./DocumentationSite/_site
-      # Publish all NuGet packages to NuGet.org
+      # Publish all NuGet packages to GitHub Packages
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
-      # If you retry a failed workflow, already published packages will be skipped without error.
-      - name: Add GitHub Packages source
-        run: dotnet nuget add source --username kploch --password ${{secrets.GH_PACKAGES_TOKEN}} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
       - name: Publish NuGet package
-        run: dotnet nuget push **/*.nupkg --source github -k ${{secrets.GH_PACKAGES_TOKEN}}
+        run: dotnet nuget push ./**/*.nupkg --skip-duplicate --source github -k ${{secrets.GH_PACKAGES_TOKEN}}

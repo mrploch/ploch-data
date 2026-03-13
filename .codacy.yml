@@ -5,3 +5,14 @@ engines:
       - "src/**Tests/**"
   markdownlint:
     line_length: 120
+exclude_paths:
+  - "AGENTS.md"
+  - "GEMINI.md"
+  - "CLAUDE.md"
+  - ".junie/**"
+  - ".claude/**"
+  - ".contextstream/**"
+  - ".cursorrules"
+  - "workload-install.ps1"
+  - "docs/**"
+  - ".syncignore"

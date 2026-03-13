@@ -1,26 +1,41 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\Data.EFCore.IntegrationTesting\Ploch.Data.EFCore.IntegrationTesting.csproj"/>
-        <ProjectReference Include="..\..\Data.EFCore\Ploch.Data.EFCore.csproj"/>
-        <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj"/>
-        <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj"/>
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+  <!--
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Data.Sqlite.Core"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+      <ProjectReference Include="..\..\Data.EFCore.IntegrationTesting\Ploch.Data.EFCore.IntegrationTesting.csproj" />
+      <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
     </ItemGroup>
+  -->
 
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-        <None Remove="obj\Debug\net8.0\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.xml"/>
-    </ItemGroup>
+  <ItemGroup><!--<PackageReference Include="AutoFixture" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />-->
+    <!-- TODO: Ploch.Common reference -->
+
+    <PackageReference Include="AutoFixture" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ploch-common\src\Common\Ploch.Common.csproj" />
+    <ProjectReference Include="..\..\Data.EFCore.IntegrationTesting\Ploch.Data.EFCore.IntegrationTesting.csproj" />
+    <ProjectReference Include="..\..\Data.EFCore.SqLite\Ploch.Data.EFCore.SqLite.csproj" />
+    <ProjectReference Include="..\..\Data.Model\Ploch.Data.Model.csproj" />
+    <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
+    <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
+  </ItemGroup>
 </Project>

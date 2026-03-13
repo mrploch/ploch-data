@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <SonarQubeExclude>true</SonarQubeExclude>
+    <OutputType>Exe</OutputType>
+    <!-- VSTHRD200: Async suffix not conventional for xUnit test methods -->
+    <!-- NU1507: Package source mapping requires solution-wide config change -->
+    <NoWarn>$(NoWarn);VSTHRD200;NU1507</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ploch-common\src\TestingSupport.XUnit3.AutoMoq\Ploch.TestingSupport.XUnit3.AutoMoq.csproj" />
+    <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
+    <ProjectReference Include="..\..\..\src\Data.Model\Ploch.Data.Model.csproj" />
+  </ItemGroup>
+</Project>

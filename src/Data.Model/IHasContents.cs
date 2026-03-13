@@ -8,5 +8,5 @@ public interface IHasContents
     /// <summary>
     ///     Gets or sets the textual contents associated with the entity.
     /// </summary>
-    public string? Contents { get; set; }
+    string? Contents { get; set; }
 }

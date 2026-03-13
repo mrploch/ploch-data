@@ -1,0 +1,50 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Edit(*)",
+      "Write(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Fetch(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "TodoWrite(*)",
+      "NotebookEdit(*)",
+      "EnterPlanMode(*)",
+      "ExitPlanMode(*)",
+      "AskUserQuestion(*)",
+      "Task(*)",
+      "Skill(*)",
+      "EnterWorktree(*)",
+      "mcp__contextstream__*",
+      "mcp__ide__*",
+      "mcp__claude_ai_Microsoft_Learn__*",
+      "mcp__claude_ai_Context7__*",
+      "mcp__claude_ai_Notion__*",
+      "mcp__windows-mcp__*",
+      "mcp__github__*",
+      "mcp__magic__*",
+      "mcp__plugin_context7_context7__*",
+      "mcp__plugin_github_github__*",
+      "mcp__plugin_playwright_playwright__*"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/gcloud/**)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "contextstream"
+  ]
+}

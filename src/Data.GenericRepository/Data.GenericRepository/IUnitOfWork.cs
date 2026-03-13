@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Ploch.Data.GenericRepository.Exceptions;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository;
@@ -41,6 +42,12 @@ public interface IUnitOfWork : IDisposable
     ///     A task that represents the asynchronous operation. The task result contains the number of state entries
     ///     written to the database.
     /// </returns>
+    /// <exception cref="DataUpdateException">If saving of changes fails.</exception>
+    /// <exception cref="DataUpdateConcurrencyException">
+    ///     A concurrency violation error is encountered while saving to the
+    ///     datasource.
+    /// </exception>
+    /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
     Task<int> CommitAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
