@@ -45,7 +45,8 @@ public class SampleAppDbContext : DbContext
     private void SetAuditTimestamps()
     {
         var now = DateTimeOffset.UtcNow;
-        foreach (var entry in ChangeTracker.Entries<IHasAuditTimeProperties>())
+        foreach (var entry in ChangeTracker.Entries<IHasAuditTimeProperties>()
+                     .Where(e => e.State is EntityState.Added or EntityState.Modified))
         {
             switch (entry.State)
             {

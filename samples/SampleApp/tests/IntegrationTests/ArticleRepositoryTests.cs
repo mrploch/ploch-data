@@ -60,7 +60,9 @@ public class ArticleRepositoryTests : GenericRepositoryDataIntegrationTest<Sampl
 
         saved.Should().NotBeNull();
         saved!.Categories.Should().HaveCount(1);
+        saved.Categories.First().Name.Should().Be("Test Category");
         saved.Tags.Should().HaveCount(1);
+        saved.Tags.First().Name.Should().Be("Test Tag");
     }
 
     [Fact]
@@ -120,6 +122,7 @@ public class ArticleRepositoryTests : GenericRepositoryDataIntegrationTest<Sampl
         saved.Should().NotBeNull();
         saved!.Properties.Should().HaveCount(2);
         saved.Properties.Should().Contain(p => p.Name == "ReadingTime" && p.Value == "5 minutes");
+        saved.Properties.Should().Contain(p => p.Name == "Difficulty" && p.Value == "Easy");
     }
 
     [Fact]
