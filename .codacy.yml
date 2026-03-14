@@ -4,7 +4,7 @@ engines:
     exclude_paths:
       - "src/**Tests/**"
   markdownlint:
-    line_length: 120
+    enabled: true
 exclude_paths:
   - "AGENTS.md"
   - "GEMINI.md"

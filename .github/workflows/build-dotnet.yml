@@ -11,8 +11,6 @@ on:
 env:
   SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
   SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
-  GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-  NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
 jobs:
   build:
 
@@ -26,10 +24,10 @@ jobs:
       - name: Clone mrploch-development (shared build config)
         run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
       - name: Clone ploch-common (project references)
-        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
+        run: git clone https://github.com/mrploch/ploch-common.git ../ploch-common
 
       - name: Start SqlServer
-        run: docker run -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server --name sqlserver --network "host"
+        run: docker run --name sqlserver -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server
 
       - name: Wait for SQL Server container
         uses: jakejarvis/wait-action@master
@@ -46,6 +44,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
+
+      - name: Restore .NET tools
+        run: dotnet tool restore
+
       - name: Install mono
         run: |
           sudo apt install -y ca-certificates gnupg
@@ -54,7 +56,9 @@ jobs:
           sudo apt update
           sudo apt install -y mono-devel
       - name: Add GitHub Packages Source
-        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
 
       # Restore
       - name: Restore dependencies
@@ -68,11 +72,13 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
       - name: SonarScanner Begin
         id: sonar-begin
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
           dotnet sonarscanner begin
           /k:"${{ env.SONAR_PROJECT_KEY }}"
           /o:"${{ env.SONAR_ORGANIZATION }}"
-          /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          /d:sonar.login="$SONAR_TOKEN"
           /d:sonar.host.url="https://sonarcloud.io"
           /d:sonar.projectBaseDir="${{ github.workspace }}"
           /d:sonar.scm.provider=git
@@ -90,7 +96,9 @@ jobs:
       # SonarCloud end (runs even after test failures, only if begin succeeded)
       - name: SonarScanner End
         if: always() && steps.sonar-begin.outcome == 'success'
-        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
         continue-on-error: true
 
       - name: Upload Test Results
@@ -115,7 +123,12 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./DocumentationSite/_site
-      # Publish all NuGet packages to GitHub Packages
-      # Use --skip-duplicate to prevent errors if a package with the same version already exists.
-      - name: Publish NuGet package
-        run: dotnet nuget push ./**/*.nupkg --skip-duplicate --source github -k ${{secrets.GH_PACKAGES_TOKEN}}
+      # Publish prerelease NuGet packages to GitHub Packages
+      # Release packages are published to nuget.org via the release workflow
+      - name: Publish NuGet packages to GitHub Packages
+        if: always()
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: |
+          dotnet nuget push ./**/*.nupkg --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN"
+          dotnet nuget push ./**/*.snupkg --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN" || true

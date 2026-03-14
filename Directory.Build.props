@@ -15,32 +15,20 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest-Recommended</AnalysisLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <VersionPrefix>2.1.0</VersionPrefix>
-    <BuildNumber>260307</BuildNumber>
-    <!--<RELEASEVERSION>true</RELEASEVERSION>-->
-    <!-- Development versions -->
-    <VersionSuffix Condition="'$(RELEASEVERSION)' != 'true'">-prerelease</VersionSuffix>
-    <FullVersionSuffix Condition="'$(RELEASEVERSION)' != 'true'">$(VersionSuffix)-$(BuildNumber)</FullVersionSuffix>
-    <Version Condition="'$(RELEASEVERSION)' != 'true'">$(VersionPrefix)$(FullVersionSuffix)</Version>
-    <!-- Release versions -->
-    <Version Condition="'$(RELEASEVERSION)' == 'true'">$(VersionPrefix)</Version>
-
-    <FileVersion>$(VersionPrefix).0</FileVersion>
-    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <!-- Versioning is handled by Nerdbank.GitVersioning (version.json) -->
+    <!-- SourceLink: enables source debugging for consumers -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- Deterministic builds for CI -->
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
     <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
     <TargetFrameworkVersion>net10.0</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="$(Configuration) == 'Debug'">
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Label="ProjectType">
-    <IsReleaseBuild>false</IsReleaseBuild>
-    <IsReleaseBuild Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">true</IsReleaseBuild>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>embedded</DebugType>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(IsTestProject)">
@@ -82,4 +70,9 @@
     <Nullable>enable</Nullable>
     <LangVersion>default</LangVersion>
   </PropertyGroup>
+  <!-- Nerdbank.GitVersioning and SourceLink for all projects -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
+  </ItemGroup>
 </Project>
