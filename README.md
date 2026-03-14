@@ -116,6 +116,7 @@ A fully working [Sample Application](samples/SampleApp/) demonstrates entity mod
 ### [Common Data Model](src/Data.Model/)
 
 A set of interfaces and base types for standardising entity models:
+
 - Core interfaces: `IHasId<TId>`, `INamed`, `IHasTitle`, `IHasDescription`, `IHasContents`, `IHasNotes`, `IHasValue<TValue>`
 - Audit interfaces: `IHasAuditProperties`, `IHasAuditTimeProperties` (and individual timestamp/user interfaces)
 - Hierarchical interfaces: `IHierarchicalParentChildrenComposite<T>` for tree structures
@@ -125,6 +126,7 @@ A set of interfaces and base types for standardising entity models:
 ### [Generic Repository and Unit of Work](src/Data.GenericRepository/)
 
 A generic repository and unit of work pattern implementation for Entity Framework Core:
+
 - Layered repository interfaces: `IQueryableRepository`, `IReadRepositoryAsync`, `IReadWriteRepositoryAsync`
 - Unit of Work: `IUnitOfWork` with `CommitAsync()` and `RollbackAsync()`
 - One-line DI registration: `services.AddRepositories<MyDbContext>()`
