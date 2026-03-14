@@ -259,8 +259,11 @@ jobs:
             mv change-log/*.md change-log/archive/ 2>/dev/null || true
           fi
 
-      # Idempotent commit: only commit if there are staged changes
+      # Idempotent commit: only commit if there are staged changes.
+      # Push may fail if branch protection requires PRs — this is non-fatal.
+      # If push fails, a warning is emitted and the version bump must be done manually via PR.
       - name: Commit and push next development version
+        id: version-bump
         if: success()
         env:
           NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
@@ -269,10 +272,13 @@ jobs:
           git add change-log/ || true
           git diff --cached --quiet && echo "No changes to commit" || \
             git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development"
-          git push origin main
+          if ! git push origin main 2>&1; then
+            echo "::warning::Could not push version bump directly to main (branch protection). Create a PR to bump version.json to ${NEXT_DEV_VERSION}-prerelease manually."
+            echo "push_failed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create GitHub Release
-        if: success()
+        if: success() || steps.version-bump.outputs.push_failed == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
