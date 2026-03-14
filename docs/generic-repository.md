@@ -237,7 +237,7 @@ A single call registers all repository interfaces and `IUnitOfWork`:
 
 ````csharp
 services.AddDbContext<MyDbContext>(options => options.UseSqlite(connectionString));
-services.AddRepositories<MyDbContext>();
+services.AddRepositories<MyDbContext>(configuration);
 ````
 
 This registers:

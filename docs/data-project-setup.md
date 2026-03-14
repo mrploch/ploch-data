@@ -80,7 +80,7 @@ public class Article : IHasId<int>, IHasTitle, IHasDescription,
 
 public class ArticleCategory : Category<ArticleCategory> { }
 
-public class ArticleTag : Tag<int> { }
+public class ArticleTag : Tag { }
 
 public class Author : IHasId<int>, INamed, IHasDescription
 {
@@ -137,6 +137,7 @@ public class SampleAppDbContext : DbContext
     public DbSet<Article> Articles { get; set; } = null!;
     public DbSet<ArticleCategory> ArticleCategories { get; set; } = null!;
     public DbSet<ArticleTag> ArticleTags { get; set; } = null!;
+    public DbSet<ArticleProperty> ArticleProperties { get; set; } = null!;
     public DbSet<Author> Authors { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

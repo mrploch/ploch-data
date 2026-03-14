@@ -1,16 +1,17 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ploch.Data.SampleApp.Model;
 
 namespace Ploch.Data.SampleApp.Data.Configurations;
 
-internal class AuthorConfiguration : IEntityTypeConfiguration<Author>
+/// <summary>
+/// Author entity configuration.
+/// The Author-Article relationship is configured in <see cref="ArticleConfiguration"/>.
+/// </summary>
+internal class AuthorConfiguration : Microsoft.EntityFrameworkCore.IEntityTypeConfiguration<Author>
 {
     public void Configure(EntityTypeBuilder<Author> builder)
     {
-        builder.HasMany(a => a.Articles)
-               .WithOne(a => a.Author)
-               .HasForeignKey(a => a.AuthorId)
-               .OnDelete(DeleteBehavior.SetNull);
+        // Author-Article relationship is configured from the Article side in ArticleConfiguration.
+        // No additional configuration needed here beyond what Data Annotations provide.
     }
 }

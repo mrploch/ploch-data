@@ -4,5 +4,8 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <IsPackable>false</IsPackable>
+    <!-- SA1106: False positive on primary constructor syntax (class Foo() : Base(); is valid C# 12) -->
+    <!-- SA1516: False positive on top-level statements (elements separated by blank line) -->
+    <NoWarn>$(NoWarn);SA1106;SA1516</NoWarn>
   </PropertyGroup>
 </Project>

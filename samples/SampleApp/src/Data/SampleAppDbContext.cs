@@ -7,10 +7,10 @@ namespace Ploch.Data.SampleApp.Data;
 
 public class SampleAppDbContext : DbContext
 {
-    protected SampleAppDbContext()
+    public SampleAppDbContext(DbContextOptions<SampleAppDbContext> options) : base(options)
     { }
 
-    public SampleAppDbContext(DbContextOptions<SampleAppDbContext> options) : base(options)
+    protected SampleAppDbContext()
     { }
 
     public DbSet<Article> Articles { get; set; } = null!;
@@ -23,13 +23,6 @@ public class SampleAppDbContext : DbContext
 
     public DbSet<Author> Authors { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SampleAppDbContext).Assembly);
-        modelBuilder.ApplySqLiteDateTimeOffsetPropertiesFix(Database);
-        base.OnModelCreating(modelBuilder);
-    }
-
     public override int SaveChanges()
     {
         SetAuditTimestamps();
@@ -40,6 +33,13 @@ public class SampleAppDbContext : DbContext
     {
         SetAuditTimestamps();
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SampleAppDbContext).Assembly);
+        modelBuilder.ApplySqLiteDateTimeOffsetPropertiesFix(Database);
+        base.OnModelCreating(modelBuilder);
     }
 
     private void SetAuditTimestamps()

@@ -114,7 +114,7 @@ var services = new ServiceCollection();
 services.AddDbContext<MyAppDbContext>(
     options => options.UseSqlite("Data Source=myapp.db"));
 
-services.AddRepositories<MyAppDbContext>();
+services.AddRepositories<MyAppDbContext>(configuration);
 ````
 
 `AddRepositories<TDbContext>()` registers all repository interfaces (`IReadRepositoryAsync`, `IReadWriteRepositoryAsync`, etc.) and `IUnitOfWork` as scoped services.

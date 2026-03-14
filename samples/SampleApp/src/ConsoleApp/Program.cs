@@ -129,6 +129,7 @@ Console.WriteLine();
 
 // 7. Demonstrate Pagination
 Console.WriteLine("--- Pagination ---");
+
 // Add more articles for pagination demo
 for (var i = 3; i <= 12; i++)
 {
@@ -140,6 +141,7 @@ for (var i = 3; i <= 12; i++)
         Author = author
     });
 }
+
 await unitOfWork.CommitAsync();
 
 var totalCount = await articleRepo.CountAsync();
@@ -160,6 +162,7 @@ foreach (var article in allArticles)
 {
     Console.WriteLine($"  - {article.Title}");
 }
+
 Console.WriteLine();
 
 // 9. Demonstrate direct repository injection (read-only)
