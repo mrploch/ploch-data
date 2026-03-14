@@ -74,7 +74,7 @@ public class Article : IHasId<int>, IHasTitle, IHasDescription,
 
     public int? AuthorId { get; set; }
     public virtual Author? Author { get; set; }
-    public virtual ICollection<ArticleCategory>? Categories { get; set; }
+    public virtual ICollection<ArticleCategory>? Categories { get; set; } = new List<ArticleCategory>();
     public virtual ICollection<ArticleTag> Tags { get; set; } = new List<ArticleTag>();
 }
 

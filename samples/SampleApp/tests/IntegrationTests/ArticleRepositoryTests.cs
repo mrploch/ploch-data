@@ -85,11 +85,14 @@ public class ArticleRepositoryTests : GenericRepositoryDataIntegrationTest<Sampl
 
         var savedParent = await categoryRepo.GetByIdAsync(
             parent.Id,
-            onDbSet: q => q.Include(c => c.Children!));
+            onDbSet: q => q.Include(c => c.Children!)
+                           .ThenInclude(c => c.Children!));
 
         savedParent.Should().NotBeNull();
         savedParent!.Children.Should().HaveCount(1);
         savedParent.Children!.First().Name.Should().Be("Child");
+        savedParent.Children!.First().Children.Should().HaveCount(1);
+        savedParent.Children!.First().Children!.First().Name.Should().Be("Grandchild");
     }
 
     [Fact]

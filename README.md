@@ -25,7 +25,7 @@ public class Product : IHasId<int>, IHasTitle, IHasDescription, IHasAuditTimePro
 
 // 2. Register in DI
 services.AddDbContext<MyDbContext>(options => options.UseSqlite(connectionString));
-services.AddRepositories<MyDbContext>();
+services.AddRepositories<MyDbContext>(configuration);
 
 // 3. Inject and use repositories
 public class ProductService(IReadWriteRepositoryAsync<Product, int> repository)
