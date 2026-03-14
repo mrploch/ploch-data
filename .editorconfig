@@ -15,6 +15,9 @@ resharper_formatter_tags_enabled = true
 [{*.har,*.jsb2,*.jsb3,*.jsonc,*.postman_collection,*.postman_collection.json,*.postman_environment,*.postman_environment.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,.ws-context,jest.config}]
 indent_size = 2
 
+[*.md]
+max_line_length = off
+
 [{*.yaml,*.yml}]
 indent_size = 2
 
