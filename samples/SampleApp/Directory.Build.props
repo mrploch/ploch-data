@@ -6,6 +6,9 @@
     <IsPackable>false</IsPackable>
     <!-- SA1106: False positive on primary constructor syntax (class Foo() : Base(); is valid C# 12) -->
     <!-- SA1516: False positive on top-level statements (elements separated by blank line) -->
-    <NoWarn>$(NoWarn);SA1106;SA1516</NoWarn>
+    <!-- NU1603: Transitive Ploch package dependencies reference NBGV prerelease versions
+         with specific commit hashes that may not exist on the feed. The resolved versions
+         are compatible; the exact lower-bound version simply was never published. -->
+    <NoWarn>$(NoWarn);SA1106;SA1516;NU1603</NoWarn>
   </PropertyGroup>
 </Project>
