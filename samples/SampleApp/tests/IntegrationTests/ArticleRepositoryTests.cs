@@ -143,7 +143,7 @@ public class ArticleRepositoryTests : GenericRepositoryDataIntegrationTest<Sampl
     }
 
     [Fact]
-    public async Task GetAllAsync_with_predicate_should_filter_results()
+    public async Task GetAllAsync_with_filter_should_return_matching_results()
     {
         var repository = CreateReadWriteRepositoryAsync<Article, int>();
 
@@ -152,8 +152,10 @@ public class ArticleRepositoryTests : GenericRepositoryDataIntegrationTest<Sampl
         await repository.AddAsync(new Article { Title = "C# Advanced" });
         await DbContext.SaveChangesAsync();
 
-        var csharpArticles = await repository.GetAllAsync(a => a.Title.Contains("C#"));
+        var csharpArticles = await repository.GetAllAsync(
+            onDbSet: q => q.Where(a => a.Title.Contains("C#")));
 
         csharpArticles.Should().HaveCount(2);
+        csharpArticles.Should().OnlyContain(a => a.Title.Contains("C#"));
     }
 }
