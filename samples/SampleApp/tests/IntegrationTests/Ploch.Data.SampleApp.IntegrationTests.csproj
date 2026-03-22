@@ -19,9 +19,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ploch.Data.GenericRepository.EFCore.IntegrationTesting" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="../../../../src/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTesting/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
     <ProjectReference Include="..\..\src\Data\Ploch.Data.SampleApp.Data.csproj" />
     <ProjectReference Include="..\..\src\Model\Ploch.Data.SampleApp.Model.csproj" />
   </ItemGroup>

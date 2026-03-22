@@ -1,8 +1,3 @@
 <Project>
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Packages.props', '$(MSBuildThisFileDirectory)../'))" />
-  <ItemGroup>
-    <!-- Override Ploch package versions to match what is actually published on the feed.
-         The shared Ploch.Packages.props may reference versions that do not exist yet. -->
-    <PackageVersion Update="Ploch.Data.GenericRepository.EFCore.IntegrationTesting" Version="3.0.1" />
-  </ItemGroup>
 </Project>
