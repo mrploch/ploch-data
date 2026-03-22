@@ -8,7 +8,8 @@ using Ploch.Data.SampleApp.Model;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddSampleAppDataServices(
-    options => options.UseSqlite("Data Source=sampleapp.db"));
+    options => options.UseSqlite("Data Source=sampleapp.db"),
+    builder.Configuration);
 
 using var host = builder.Build();
 
