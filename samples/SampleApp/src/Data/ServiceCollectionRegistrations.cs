@@ -8,10 +8,11 @@ public static class ServiceCollectionRegistrations
 {
     public static IServiceCollection AddSampleAppDataServices(
         this IServiceCollection services,
-        Action<DbContextOptionsBuilder> configureOptions)
-    {
-        return services
-            .AddDbContext<SampleAppDbContext>(configureOptions)
-            .AddRepositories<SampleAppDbContext>();
+        Action<DbContextOptionsBuilder> configureOptions,
+                Microsoft.Extensions.Configuration.IConfiguration configuration)
+        {
+            return services
+                .AddDbContext<SampleAppDbContext>(configureOptions)
+                .AddRepositories<SampleAppDbContext>(configuration);
     }
 }
