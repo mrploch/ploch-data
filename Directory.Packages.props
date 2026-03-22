@@ -14,14 +14,6 @@
   <Import Project="../mrploch-development/dependencies/Testing.Packages.props" />
   <Import Project="../mrploch-development/dependencies/Analyzers.Global.Packages.props" />
   <ItemGroup>
-    <PackageVersion Update="coverlet.collector" Version="8.0.0" />
-    <PackageVersion Update="coverlet.msbuild" Version="8.0.0" />
-    <PackageVersion Update="Microsoft.Data.Sqlite.Core" Version="10.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <GlobalPackageReference Update="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.103" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.115" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
   </ItemGroup>
