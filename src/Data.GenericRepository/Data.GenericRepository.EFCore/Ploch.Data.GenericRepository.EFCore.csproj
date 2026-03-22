@@ -4,7 +4,7 @@
     <Description>Generic repository for Entity Framework Core</Description>
     <PackageTags>efcore;dotnetcore</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
@@ -17,8 +17,16 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- Debug: ProjectReference to ploch-common for easier debugging -->
+  <ItemGroup Condition="'$(UseProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj" />
+  </ItemGroup>
+  <!-- Release: PackageReference (versions from Directory.Packages.props) -->
+  <ItemGroup Condition="'$(UseProjectReferences)' != 'true'">
+    <PackageReference Include="Ploch.Common.AppServices" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
   </ItemGroup>
 

@@ -13,7 +13,7 @@
     <File Path="src/Data.GenericRepository/README.md" />
   </Folder>
   <Folder Name="/ploch-common/">
-    <Project Path="..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj">
+    <Project Path="../ploch-common/src/Common.AppServices/Ploch.Common.AppServices.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -23,7 +23,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\Common\Ploch.Common.csproj">
+    <Project Path="../ploch-common/src/Common/Ploch.Common.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -33,7 +33,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\TestingSupport.XUnit3.AutoMoq\Ploch.TestingSupport.XUnit3.AutoMoq.csproj">
+    <Project Path="../ploch-common/src/TestingSupport.XUnit3.AutoMoq/Ploch.TestingSupport.XUnit3.AutoMoq.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -43,7 +43,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\TestingSupport.XUnit3.Dependencies\Ploch.TestingSupport.XUnit3.Dependencies.csproj">
+    <Project Path="../ploch-common/src/TestingSupport.XUnit3.Dependencies/Ploch.TestingSupport.XUnit3.Dependencies.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -53,7 +53,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
-    <Project Path="..\ploch-common\src\TestingSupport.XUnit3\Ploch.TestingSupport.XUnit3.csproj">
+    <Project Path="../ploch-common/src/TestingSupport.XUnit3/Ploch.TestingSupport.XUnit3.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
@@ -68,6 +68,7 @@
     <File Path="build-dotnet-commands.ps1" />
     <File Path="build.ps1" />
     <File Path="docker-compose.yml" />
+    <File Path="NuGet.Config" />
     <File Path="README.md" />
     <File Path="TODO.md" />
   </Folder>
@@ -78,27 +79,29 @@
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
-    <File Path="Directory.Packages.props" />
     <File Path="global.json" />
     <File Path="NuGet.Config" />
     <File Path="Ploch.Common.nuspec" />
     <File Path="qodana.sarif.json" />
     <File Path="qodana.yaml" />
+    <File Path="../mrploch-development/dependencies/Serilog.Logging.Packages.props" />
+  </Folder>
+  <Folder Name="/repository/dependencies/">
     <File Path="../mrploch-development/dependencies/Common.Packages.props" />
     <File Path="../mrploch-development/dependencies/Ploch.Packages.props" />
-    <File Path="..\mrploch-development\dependencies\Analyzers.Global.Packages.props" />
-    <File Path="..\mrploch-development\dependencies\MicrosoftExtensions.Net9.Packages.props" />
-    <File Path="..\mrploch-development\dependencies\Serilog.Logging.Packages.props" />
-    <File Path="..\mrploch-development\dependencies\Testing.Packages.props" />
+    <File Path="../mrploch-development/dependencies/Analyzers.Global.Packages.props" />
+    <File Path="../mrploch-development/dependencies/MicrosoftExtensions.Net9.Packages.props" />
+    <File Path="../mrploch-development/dependencies/Testing.Packages.props" />
+    <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/repository/scripts/">
     <File Path="Clean-DocFx.ps1" />
     <File Path="run-sonar-build-test.ps1" />
   </Folder>
   <Folder Name="/repository/shared/">
-    <File Path="..\mrploch-development\dependencies\Analyzers.Global.Packages.props" />
-    <File Path="..\mrploch-development\dependencies\MicrosoftExtensions.Net9.Packages.props" />
-    <File Path="..\mrploch-development\dependencies\Testing.Packages.props" />
+    <File Path="../mrploch-development/dependencies/Analyzers.Global.Packages.props" />
+    <File Path="../mrploch-development/dependencies/MicrosoftExtensions.Net9.Packages.props" />
+    <File Path="../mrploch-development/dependencies/Testing.Packages.props" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/build-dotnet.yml" />
@@ -113,7 +116,9 @@
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTests/Ploch.Data.GenericRepository.EFCore.IntegrationTests.csproj" />
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.Tests/Ploch.Data.GenericRepository.Tests.csproj" />
   </Folder>
-  <Project Path="DocumentationSite/DocumentationSite.csproj" />
+  <!-- DocumentationSite excluded: docfx.console 2.59.4 is incompatible with .NET 10.
+       Upgrade to modern docfx dotnet tool to re-enable. -->
+  <!-- <Project Path="DocumentationSite/DocumentationSite.csproj" /> -->
   <Project Path="src/Data.EFCore.IntegrationTesting/Ploch.Data.EFCore.IntegrationTesting.csproj" />
   <Project Path="src/Data.EFCore.SqLite/Ploch.Data.EFCore.SqLite.csproj" />
   <Project Path="src/Data.EFCore.SqlServer/Ploch.Data.EFCore.SqlServer.csproj" />

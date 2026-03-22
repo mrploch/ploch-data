@@ -1,21 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <!-- TODO: Ploch.Common reference -->
+  <!-- Debug: ProjectReference to ploch-common for easier debugging -->
+  <ItemGroup Condition="'$(UseProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj" />
     <ProjectReference Include="..\..\..\..\ploch-common\src\Common\Ploch.Common.csproj" />
+  </ItemGroup>
+  <!-- Release: PackageReference (versions from Directory.Packages.props) -->
+  <ItemGroup Condition="'$(UseProjectReferences)' != 'true'">
+    <PackageReference Include="Ploch.Common.AppServices" />
+    <PackageReference Include="Ploch.Common" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Data.Model\Ploch.Data.Model.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Options" />
   </ItemGroup>
 

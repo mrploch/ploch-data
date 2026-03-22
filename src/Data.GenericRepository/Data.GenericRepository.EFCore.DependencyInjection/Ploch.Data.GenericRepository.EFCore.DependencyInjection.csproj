@@ -1,14 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!-- Debug: ProjectReference to ploch-common for easier debugging -->
+  <ItemGroup Condition="'$(UseProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\ploch-common\src\Common.DependencyInjection\Ploch.Common.DependencyInjection.csproj" />
+  </ItemGroup>
+  <!-- Release: PackageReference (versions from Directory.Packages.props) -->
+  <ItemGroup Condition="'$(UseProjectReferences)' != 'true'">
+    <PackageReference Include="Ploch.Common.DependencyInjection" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
   </ItemGroup>
 
