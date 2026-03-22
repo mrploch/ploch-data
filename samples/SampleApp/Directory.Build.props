@@ -1,14 +1,20 @@
 <Project>
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  <!-- This SampleApp is a standalone project that demonstrates how external consumers
+       use the Ploch.Data libraries. It must NOT import parent Directory.Build.props
+       or reference any files outside samples/SampleApp/. -->
   <PropertyGroup>
+    <TargetFrameworkVersion>net9.0</TargetFrameworkVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <IsPackable>false</IsPackable>
+    <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
     <!-- SA1106: False positive on primary constructor syntax (class Foo() : Base(); is valid C# 12) -->
     <!-- SA1516: False positive on top-level statements (elements separated by blank line) -->
-    <!-- NU1603: Transitive Ploch package dependencies reference NBGV prerelease versions
-         with specific commit hashes that may not exist on the feed. The resolved versions
-         are compatible; the exact lower-bound version simply was never published. -->
-    <NoWarn>$(NoWarn);SA1106;SA1516;NU1603</NoWarn>
+    <NoWarn>$(NoWarn);SA1106;SA1516</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(IsTestProject)">
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 </Project>

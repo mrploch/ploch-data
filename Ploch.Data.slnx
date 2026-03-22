@@ -100,15 +100,10 @@
     <File Path="..\mrploch-development\dependencies\MicrosoftExtensions.Net9.Packages.props" />
     <File Path="..\mrploch-development\dependencies\Testing.Packages.props" />
   </Folder>
-  <Folder Name="/samples/" />
-  <Folder Name="/samples/SampleApp/">
-    <Project Path="samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.ConsoleApp.csproj" />
-    <Project Path="samples/SampleApp/src/Data.SQLite/Ploch.Data.SampleApp.Data.SQLite.csproj" />
-    <Project Path="samples/SampleApp/src/Data.SqlServer/Ploch.Data.SampleApp.Data.SqlServer.csproj" />
-    <Project Path="samples/SampleApp/src/Data/Ploch.Data.SampleApp.Data.csproj" />
-    <Project Path="samples/SampleApp/src/Model/Ploch.Data.SampleApp.Model.csproj" />
-    <Project Path="samples/SampleApp/tests/IntegrationTests/Ploch.Data.SampleApp.IntegrationTests.csproj" />
-  </Folder>
+  <!-- The SampleApp lives in samples/SampleApp/ with its own solution file
+       (Ploch.Data.SampleApp.slnx). It uses PackageReference for Ploch.Data
+       packages to demonstrate external consumer usage and is NOT part of this
+       solution or its CI build. See .claude/rules/sample-app.md for details. -->
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/build-dotnet.yml" />
   </Folder>

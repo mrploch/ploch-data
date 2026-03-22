@@ -5,8 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../../../../src/Data.EFCore.SqLite/Ploch.Data.EFCore.SqLite.csproj" />
-    <ProjectReference Include="../../../../src/Data.EFCore/Ploch.Data.EFCore.csproj" />
+    <PackageReference Include="Ploch.Data.EFCore.SqLite" />
+    <PackageReference Include="Ploch.Data.EFCore" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Data\Ploch.Data.SampleApp.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
