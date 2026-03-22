@@ -60,14 +60,14 @@ jobs:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
 
-      # Restore
+      # Restore (UsePlochProjectReferences switches SampleApp from PackageReference to ProjectReference)
       - name: Restore dependencies
-        run: dotnet restore ./Ploch.Data.slnx
+        run: dotnet restore ./Ploch.Data.slnx -p:UsePlochProjectReferences=true
 
       # SonarCloud setup (non-blocking)
-      - name: Install SonarCloud Scanner
-        run: dotnet tool install --global dotnet-sonarscanner
-        continue-on-error: true
+#      - name: Install SonarCloud Scanner
+#        run: dotnet tool install --global dotnet-sonarscanner
+#        continue-on-error: true
       - name: Install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
       - name: SonarScanner Begin
@@ -84,14 +84,14 @@ jobs:
           /d:sonar.scm.provider=git
           /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml
           /d:sonar.coverage.exclusions="**/*.ps1,**/*.Tests/**,**/*.Tests.csproj,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/samples/**"
-          /d:sonar.exclusions="**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/workload-install.ps1,**/prepare-repo.ps1,**/.github/**,**/*.yml,**/*.yaml,**/samples/**"
+          /d:sonar.exclusions="**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/workload-install.ps1,**/prepare-repo.ps1,**/.github/**,**/*.yml,**/*.yaml"
         continue-on-error: true
 
       # Build and Test (always runs regardless of SonarCloud status)
       - name: Build
-        run: dotnet build ./Ploch.Data.slnx --no-restore
+        run: dotnet build ./Ploch.Data.slnx --no-restore -p:UsePlochProjectReferences=true
       - name: Test Coverage
-        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
 
       # SonarCloud end (runs even after test failures, only if begin succeeded)
       - name: SonarScanner End

@@ -3,7 +3,7 @@
        use the Ploch.Data libraries. It must NOT import parent Directory.Build.props
        or reference any files outside samples/SampleApp/. -->
   <PropertyGroup>
-    <TargetFrameworkVersion>net9.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>net10.0</TargetFrameworkVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
@@ -17,4 +17,10 @@
   <PropertyGroup Condition="$(IsTestProject)">
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
+
+  <!-- When building as part of the main Ploch.Data solution, switch from
+       PackageReference to ProjectReference for Ploch.Data packages.
+       Usage: dotnet build -p:UsePlochProjectReferences=true -->
+  <Import Project="ProjectReferences.props"
+          Condition="'$(UsePlochProjectReferences)' == 'true'" />
 </Project>

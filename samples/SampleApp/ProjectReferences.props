@@ -1,0 +1,29 @@
+<Project>
+  <!-- This file is imported ONLY when building the SampleApp as part of the main
+       Ploch.Data solution, to validate that sample code compiles against the current
+       library source. It replaces Ploch.Data NuGet PackageReferences with ProjectReferences.
+
+       Triggered by: dotnet build -p:UsePlochProjectReferences=true
+       See .claude/rules/sample-app.md for details. -->
+
+  <!-- Remove all Ploch.Data PackageReferences (they will be replaced by ProjectReferences) -->
+  <ItemGroup>
+    <PackageReference Remove="Ploch.Data.Model" />
+    <PackageReference Remove="Ploch.Data.EFCore" />
+    <PackageReference Remove="Ploch.Data.EFCore.SqLite" />
+    <PackageReference Remove="Ploch.Data.EFCore.SqlServer" />
+    <PackageReference Remove="Ploch.Data.GenericRepository.EFCore" />
+    <PackageReference Remove="Ploch.Data.GenericRepository.EFCore.IntegrationTesting" />
+  </ItemGroup>
+
+  <!-- Add ProjectReferences to the library source projects.
+       Paths are anchored to this file's location (samples/SampleApp/) via MSBuildThisFileDirectory. -->
+  <ItemGroup>
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.Model\Ploch.Data.Model.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.EFCore\Ploch.Data.EFCore.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.EFCore.SqLite\Ploch.Data.EFCore.SqLite.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
+  </ItemGroup>
+</Project>
