@@ -83,8 +83,8 @@ jobs:
           /d:sonar.projectBaseDir="${{ github.workspace }}"
           /d:sonar.scm.provider=git
           /d:sonar.cs.opencover.reportsPaths=**/CoverageResults/coverage.opencover.xml
-          /d:sonar.coverage.exclusions="**/*.ps1,**/*.Tests/**,**/*.Tests.csproj,**/*.IntegrationTests/**,**/*.IntegrationTesting/**"
-          /d:sonar.exclusions="**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/workload-install.ps1,**/prepare-repo.ps1,**/.github/**,**/*.yml,**/*.yaml"
+          /d:sonar.coverage.exclusions="**/*.ps1,**/*.Tests/**,**/*.Tests.csproj,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/samples/**"
+          /d:sonar.exclusions="**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/workload-install.ps1,**/prepare-repo.ps1,**/.github/**,**/*.yml,**/*.yaml,**/samples/**"
         continue-on-error: true
 
       # Build and Test (always runs regardless of SonarCloud status)
