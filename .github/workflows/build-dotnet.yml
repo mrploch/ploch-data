@@ -65,9 +65,9 @@ jobs:
         run: dotnet restore ./Ploch.Data.slnx -p:UsePlochProjectReferences=true
 
       # SonarCloud setup (non-blocking)
-#      - name: Install SonarCloud Scanner
-#        run: dotnet tool install --global dotnet-sonarscanner
-#        continue-on-error: true
+      - name: Install SonarCloud Scanner
+        run: dotnet tool install --global dotnet-sonarscanner
+        continue-on-error: true
       - name: Install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
       - name: SonarScanner Begin
