@@ -1,0 +1,46 @@
+<Project>
+  <!-- This SampleApp is a standalone project that demonstrates how external consumers
+       use the Ploch.Data libraries. It must NOT import parent Directory.Packages.props.
+       All package versions are defined here, exactly as an external consumer would. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Set this to the latest published version of the Ploch.Data packages.
+         These are only used in standalone mode (PackageReference).
+         When UsePlochProjectReferences=true, ProjectReferences.props removes
+         these PackageReferences and replaces them with ProjectReferences. -->
+    <PlochDataPackagesVersion>3.0.1</PlochDataPackagesVersion>
+  </PropertyGroup>
+
+  <ItemGroup Label="Ploch.Data packages (from NuGet / GitHub Packages feed)">
+    <PackageVersion Include="Ploch.Data.Model" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.EFCore" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.EFCore.SqLite" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.EFCore.SqlServer" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.IntegrationTesting" Version="$(PlochDataPackagesVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Label="Entity Framework Core">
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup Label="Microsoft Extensions">
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup Label="Testing">
+    <PackageVersion Include="AutoFixture" Version="4.18.1" />
+    <PackageVersion Include="AutoFixture.Xunit3" Version="4.19.0" />
+    <PackageVersion Include="FluentAssertions" Version="8.8.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+</Project>

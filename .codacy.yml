@@ -5,6 +5,8 @@ engines:
       - "src/**Tests/**"
   markdownlint:
     enabled: true
+    exclude_paths:
+      - "**/README.md"
 exclude_paths:
   - "AGENTS.md"
   - "GEMINI.md"

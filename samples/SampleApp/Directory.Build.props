@@ -1,0 +1,26 @@
+<Project>
+  <!-- This SampleApp is a standalone project that demonstrates how external consumers
+       use the Ploch.Data libraries. It must NOT import parent Directory.Build.props
+       or reference any files outside samples/SampleApp/. -->
+  <PropertyGroup>
+    <TargetFrameworkVersion>net10.0</TargetFrameworkVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>$(MSBuildProjectName.EndsWith('Tests'))</IsTestProject>
+    <!-- SA1106: False positive on primary constructor syntax (class Foo() : Base(); is valid C# 12) -->
+    <!-- SA1516: False positive on top-level statements (elements separated by blank line) -->
+    <NoWarn>$(NoWarn);SA1106;SA1516</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(IsTestProject)">
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <!-- When building as part of the main Ploch.Data solution, switch from
+       PackageReference to ProjectReference for Ploch.Data packages.
+       Usage: dotnet build -p:UsePlochProjectReferences=true -->
+  <Import Project="ProjectReferences.props"
+          Condition="'$(UsePlochProjectReferences)' == 'true'" />
+</Project>

@@ -226,3 +226,19 @@ dotnet test .\tests\Storage\Storage.File.Tests\Ploch.Tools.SystemProfiles.Storag
 - Use `AutoMockData` when SUT has dependencies.
 - Assertions are clear and test only one behavior per test.
 - No reliance on global state or time unless explicitly controlled.
+
+---
+
+### Sample Application Rules
+
+The `samples/SampleApp/` directory demonstrates how an **external consumer** uses Ploch.Data via NuGet packages. Two build modes:
+
+- **Standalone**: `dotnet build Ploch.Data.SampleApp.slnx` — uses PackageReference
+- **Solution mode**: `dotnet build Ploch.Data.slnx -p:UsePlochProjectReferences=true` — auto-switches to ProjectReference via `ProjectReferences.props`
+
+#### Critical constraints
+
+- **Never manually swap references in csproj** — `ProjectReferences.props` handles it automatically.
+- **Standalone build config** — `Directory.Build.props` / `Directory.Packages.props` are self-contained, no parent imports.
+- **Update `PlochDataPackagesVersion`** in `Directory.Packages.props` after publishing new package versions.
+- **Update `ProjectReferences.props`** when adding new Ploch.Data library packages.
