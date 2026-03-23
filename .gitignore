@@ -405,3 +405,4 @@ codestream.xml
 **/.idea/**/copilot.data.migration.ask2agent.xml
 **/.idea/**/GitLink.xml
 **/.idea/**/markdown.xml
+**/.idea/**/sonarlint.xml

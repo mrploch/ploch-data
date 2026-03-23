@@ -35,7 +35,12 @@ jobs:
           time: '5s'
 
       - name: Copy documentation files
-        run: cp ./README.md ./DocumentationSite/index.md
+        run: |
+          if [ -d "./DocumentationSite" ]; then
+            cp ./README.md ./DocumentationSite/index.md
+          else
+            echo "DocumentationSite directory not found, skipping"
+          fi
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -43,10 +48,42 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: |
+            8.0.x
+            10.0.x
 
       - name: Restore .NET tools
         run: dotnet tool restore
+
+      # For PR builds, embed the PR number and branch name in the prerelease tag
+      # so packages are clearly identifiable (e.g. 3.1.1-pr.42.fix-serialization)
+      - name: Configure PR package version
+        if: github.event_name == 'pull_request'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          # Sanitize branch name for NuGet SemVer2 prerelease identifiers [a-zA-Z0-9-]
+          SANITIZED=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9-]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//' | cut -c1-20 | sed 's/-$//')
+          # Guard against empty or purely-numeric identifiers (invalid in SemVer2)
+          if [ -z "$SANITIZED" ]; then
+            SANITIZED="branch"
+          fi
+          if echo "$SANITIZED" | grep -Eq '^[0-9]+$'; then
+            SANITIZED="b-${SANITIZED}"
+          fi
+          # Read current major.minor from NBGV
+          CURRENT_VERSION=$(dotnet nbgv get-version --variable SimpleVersion)
+          BASE=$(echo "$CURRENT_VERSION" | cut -d. -f1-2)
+          # Override the prerelease tag to include PR number and branch name
+          dotnet nbgv set-version "${BASE}-pr.${PR_NUMBER}.${SANITIZED}"
+          # NBGV reads version.json from the committed git state, so we must
+          # commit the change for it to take effect. This ephemeral commit is
+          # never pushed — it only exists on the CI runner.
+          git add version.json
+          git -c user.name="ci" -c user.email="ci@ci" commit -m "ci: PR version" --no-verify
+          COMPUTED=$(dotnet nbgv get-version --variable NuGetPackageVersion)
+          echo "PR NuGet package version: $COMPUTED"
 
       - name: Install mono
         run: |
@@ -89,9 +126,9 @@ jobs:
 
       # Build and Test (always runs regardless of SonarCloud status)
       - name: Build
-        run: dotnet build ./Ploch.Data.slnx --no-restore -p:UsePlochProjectReferences=true
+        run: dotnet build ./Ploch.Data.slnx --no-restore -c Release -p:UsePlochProjectReferences=true
       - name: Test Coverage
-        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build -c Release --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
 
       # SonarCloud end (runs even after test failures, only if begin succeeded)
       - name: SonarScanner End
@@ -117,18 +154,35 @@ jobs:
           path: |
             **/CoverageResults/*.xml
 
+      # DocumentationSite is currently excluded from the solution (docfx incompatible with .NET 10).
+      # Only deploy GitHub Pages if the _site output was actually produced.
       - name: Deploy GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' && hashFiles('DocumentationSite/_site/**') != '' }}
+        continue-on-error: true
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./DocumentationSite/_site
       # Publish prerelease NuGet packages to GitHub Packages (main branch only)
       # Release packages are published to nuget.org via the release workflow
       - name: Publish NuGet packages to GitHub Packages
-        if: success() && github.ref == 'refs/heads/main'
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: |
+          dotnet nuget push ./**/*.nupkg --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN"
+          dotnet nuget push ./**/*.snupkg --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN" || true
+
+      # Publish PR packages to GitHub Packages for testing/validation
+      # PR packages include branch name in the prerelease tag (configured above)
+      - name: Publish PR packages to GitHub Packages
+        if: success() && github.event_name == 'pull_request'
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: |
+          if [ -z "$GH_PACKAGES_TOKEN" ]; then
+            echo "::warning::GH_PACKAGES_TOKEN not available, skipping PR package publish"
+            exit 0
+          fi
           dotnet nuget push ./**/*.nupkg --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN"
           dotnet nuget push ./**/*.snupkg --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN" || true
