@@ -4,7 +4,7 @@
 # Workspace ID: 57db5f34-e7f0-42c0-86c4-bb981f96c880
 
 # ContextStream Rules
-**MANDATORY STARTUP:** On the first message of EVERY session call `init(...)` then `context(user_message="...")`. On subsequent messages, call `context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run.
+**MANDATORY STARTUP:** If ContextStream tools are available, on the first message of every session call `init(...)` then `context(user_message="...")`. On subsequent messages, call `context(user_message="...")` first by default. If ContextStream tools are unavailable, proceed with the platform's available tools.
 
 ## Quick Rules
 <contextstream_rules>
@@ -12,7 +12,7 @@
 |---------|----------|
 | **First message in session** | `init(...)` → `context(user_message="...")` BEFORE any other tool |
 | **Subsequent messages (default)** | `context(user_message="...")` FIRST, then other tools (narrow read-only bypass allowed when context is fresh + state is unchanged) |
-| **Before file search** | `search(mode="...", query="...")` BEFORE Glob/Grep/Read |
+| **Before file search** | Use `search(mode="...", query="...")` when available; otherwise use available local tools (Glob/Grep/Read) directly |
 </contextstream_rules>
 
 ## Detailed Rules
@@ -65,7 +65,7 @@ If the `instruct` tool is available, run `instruct(action="get", session_id="...
 - ContextStream search results contain **real file paths, line numbers, and code content** — they ARE code results
 - **NEVER** dismiss ContextStream results as "non-code" — use the returned file paths to `read_file` the relevant code
 - Use `search(include_content=true)` to get inline code snippets in results
-- Only fall back to local tools (Grep/Glob/Read) if ContextStream search returns **exactly 0 results**
+- Fall back to local tools (Grep/Glob/Read) if ContextStream search is unavailable, fails, times out, or returns 0 results
 
 ### Memory: Use ContextStream, Not Local Files
 - **Do NOT** write decisions/notes/implementation details to local files
