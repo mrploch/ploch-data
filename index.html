@@ -98,19 +98,176 @@
 </tbody>
 </table>
 <h1 id="plochdata-libraries">Ploch.Data Libraries</h1>
-<h2 id="overview">Overview</h2>
-<p>This repository contains various projects for working with data in .NET.</p>
+<p>A set of .NET libraries for building data access layers using standardised entity models, the Generic Repository and Unit of Work patterns, and Entity Framework Core.</p>
+<h2 id="quick-start">Quick Start</h2>
+<pre><code class="lang-csharp">// 1. Define entities using Ploch.Data.Model interfaces
+public class Product : IHasId&lt;int&gt;, IHasTitle, IHasDescription, IHasAuditTimeProperties
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = null!;
+    public string? Description { get; set; }
+    public DateTimeOffset? CreatedTime { get; set; }
+    public DateTimeOffset? ModifiedTime { get; set; }
+    public DateTimeOffset? AccessedTime { get; set; }
+}
+
+// 2. Register in DI
+services.AddDbContext&lt;MyDbContext&gt;(options =&gt; options.UseSqlite(connectionString));
+services.AddRepositories&lt;MyDbContext&gt;(configuration);
+
+// 3. Inject and use repositories
+public class ProductService(IReadWriteRepositoryAsync&lt;Product, int&gt; repository)
+{
+    public Task&lt;Product?&gt; GetAsync(int id) =&gt; repository.GetByIdAsync(id);
+    public Task&lt;IList&lt;Product&gt;&gt; SearchAsync(string term)
+        =&gt; repository.GetAllAsync(p =&gt; p.Title.Contains(term));
+}
+</code></pre>
+<h2 id="documentation">Documentation</h2>
+<p>Full documentation is available in the <a href="docs/">docs/</a> folder:</p>
+<ul>
+<li><a href="docs/getting-started.md">Getting Started</a> -- quick start guides for common use cases</li>
+<li><a href="docs/data-model.md">Data Model Guide</a> -- complete reference for <code>Ploch.Data.Model</code> interfaces</li>
+<li><a href="docs/generic-repository.md">Generic Repository Guide</a> -- repository operations, Unit of Work, DI registration, specifications</li>
+<li><a href="docs/data-project-setup.md">Data Project Setup</a> -- step-by-step guide for creating Data and provider projects</li>
+<li><a href="docs/integration-testing.md">Integration Testing</a> -- testing with in-memory SQLite, base test classes</li>
+<li><a href="docs/extending.md">Extending the Libraries</a> -- custom repositories, new providers, extensibility</li>
+<li><a href="docs/architecture.md">Architecture Overview</a> -- package dependencies and design</li>
+</ul>
+<h2 id="sample-application">Sample Application</h2>
+<p>A fully working <a href="samples/SampleApp/">Sample Application</a> demonstrates entity modelling, repository operations, Unit of Work, pagination, eager loading, and integration testing.</p>
+<h2 id="packages">Packages</h2>
+<h3 id="core">Core</h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="src/Data.Model/">Ploch.Data.Model</a></td>
+<td>Standardised entity interfaces (<code>IHasId</code>, <code>INamed</code>, <code>IHasTitle</code>, <code>IHasAuditProperties</code>, etc.) and common base types (<code>Category</code>, <code>Tag</code>, <code>Property</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="entity-framework-core">Entity Framework Core</h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="src/Data.EFCore/">Ploch.Data.EFCore</a></td>
+<td>Design-time factory base classes, <code>IDbContextConfigurator</code>, data seeding, value converters</td>
+</tr>
+<tr>
+<td><a href="src/Data.EFCore.SqLite/">Ploch.Data.EFCore.SqLite</a></td>
+<td>SQLite provider: factory, configurator, <code>DateTimeOffset</code> workaround</td>
+</tr>
+<tr>
+<td><a href="src/Data.EFCore.SqlServer/">Ploch.Data.EFCore.SqlServer</a></td>
+<td>SQL Server provider: factory, configurator</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generic-repository">Generic Repository</h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="src/Data.GenericRepository/Data.GenericRepository/">Ploch.Data.GenericRepository</a></td>
+<td>Provider-agnostic repository and Unit of Work interfaces</td>
+</tr>
+<tr>
+<td><a href="src/Data.GenericRepository/Data.GenericRepository.EFCore/">Ploch.Data.GenericRepository.EFCore</a></td>
+<td>EF Core implementations, DI registration via <code>AddRepositories&lt;TDbContext&gt;()</code></td>
+</tr>
+<tr>
+<td><a href="src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection/">Ploch.Data.GenericRepository.EFCore.DependencyInjection</a></td>
+<td><code>ServicesBundle</code> integration for Ploch.Common</td>
+</tr>
+<tr>
+<td><a href="src/Data.GenericRepository/Data.GenericRepository.EFCore.Specification/">Ploch.Data.GenericRepository.EFCore.Specification</a></td>
+<td>Ardalis.Specification integration</td>
+</tr>
+</tbody>
+</table>
+<h3 id="testing">Testing</h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="src/Data.EFCore.IntegrationTesting/">Ploch.Data.EFCore.IntegrationTesting</a></td>
+<td><code>DataIntegrationTest&lt;TDbContext&gt;</code> base class for EF Core tests</td>
+</tr>
+<tr>
+<td><a href="src/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTesting/">Ploch.Data.GenericRepository.EFCore.IntegrationTesting</a></td>
+<td><code>GenericRepositoryDataIntegrationTest&lt;TDbContext&gt;</code> with repository/UoW helpers</td>
+</tr>
+</tbody>
+</table>
+<h3 id="utilities">Utilities</h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="src/Data.Utilities/">Ploch.Data.Utilities</a></td>
+<td>Various utility types for working with data</td>
+</tr>
+<tr>
+<td><a href="src/Data.StandardDataSets/">Ploch.Data.StandardDataSets</a></td>
+<td>Common datasets (country lists, regions, etc.)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="features">Features</h2>
-<h3 id="generic-repository-and-unit-of-work"><a href="src/Data.GenericRepository/README.md">Generic Repository and Unit of Work</a></h3>
-<p>A generic repository and unit of work pattern implementation for Entity Framework Core.</p>
-<h3 id="common-data-model"><a href="src/Data.Model/README.md">Common Data Model</a></h3>
-<p>A set of common interfaces and classes for building a domain data model.</p>
-<h3 id="data-utilities"><a href="src/Data.Utilities/README.md">Data Utilities</a></h3>
+<h3 id="common-data-model"><a href="src/Data.Model/">Common Data Model</a></h3>
+<p>A set of interfaces and base types for standardising entity models:</p>
+<ul>
+<li>Core interfaces: <code>IHasId&lt;TId&gt;</code>, <code>INamed</code>, <code>IHasTitle</code>, <code>IHasDescription</code>, <code>IHasContents</code>, <code>IHasNotes</code>, <code>IHasValue&lt;TValue&gt;</code></li>
+<li>Audit interfaces: <code>IHasAuditProperties</code>, <code>IHasAuditTimeProperties</code> (and individual timestamp/user interfaces)</li>
+<li>Hierarchical interfaces: <code>IHierarchicalParentChildrenComposite&lt;T&gt;</code> for tree structures</li>
+<li>Categorisation: <code>IHasCategories&lt;TCategory&gt;</code>, <code>IHasTags&lt;TTag&gt;</code></li>
+<li>Common types: <code>Category&lt;T&gt;</code>, <code>Tag</code>, <code>Property&lt;TValue&gt;</code>, <code>StringProperty</code>, <code>IntProperty</code>, <code>Image</code></li>
+</ul>
+<h3 id="generic-repository-and-unit-of-work"><a href="src/Data.GenericRepository/">Generic Repository and Unit of Work</a></h3>
+<p>A generic repository and unit of work pattern implementation for Entity Framework Core:</p>
+<ul>
+<li>Layered repository interfaces: <code>IQueryableRepository</code>, <code>IReadRepositoryAsync</code>, <code>IReadWriteRepositoryAsync</code></li>
+<li>Unit of Work: <code>IUnitOfWork</code> with <code>CommitAsync()</code> and <code>RollbackAsync()</code></li>
+<li>One-line DI registration: <code>services.AddRepositories&lt;MyDbContext&gt;()</code></li>
+<li>Custom repository support with full interface registration</li>
+<li>Specification pattern integration via Ardalis.Specification</li>
+<li>Automatic audit property handling</li>
+</ul>
+<h3 id="entity-framework-core-utilities"><a href="src/Data.EFCore/">Entity Framework Core Utilities</a></h3>
+<p>Utility classes for EF Core including design-time DbContext factory base classes, runtime configurators for SQLite and SQL Server, and the SQLite <code>DateTimeOffset</code> workaround.</p>
+<h3 id="integration-testing"><a href="src/Data.EFCore.IntegrationTesting/">Integration Testing</a></h3>
+<p>Base classes for integration tests using in-memory SQLite databases with automatic schema creation, repository helpers, and Unit of Work support.</p>
+<h3 id="common-datasets"><a href="src/Data.StandardDataSets/">Common Datasets</a></h3>
+<p>Common data sets like country lists and regions.</p>
+<h3 id="data-utilities"><a href="src/Data.Utilities/">Data Utilities</a></h3>
 <p>Various utilities for working with data.</p>
-<h3 id="entity-framework-core-utilities"><a href="src/Data.EFCore">Entity Framework Core Utilities</a></h3>
-<p>Utility classes for working with Entity Framework Core.</p>
-<h3 id="common-datasets"><a href="src/Data.StandardDataSets">Common Datasets</a></h3>
-<p>Common data sets like a list of regions, countries, etc.</p>
 </article>
           </div>
           
