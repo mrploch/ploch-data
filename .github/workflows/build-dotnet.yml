@@ -126,9 +126,9 @@ jobs:
 
       # Build and Test (always runs regardless of SonarCloud status)
       - name: Build
-        run: dotnet build ./Ploch.Data.slnx --no-restore -c Release -p:UsePlochProjectReferences=true
+        run: dotnet build ./Ploch.Data.slnx --no-restore -p:UsePlochProjectReferences=true
       - name: Test Coverage
-        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build -c Release --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
 
       # SonarCloud end (runs even after test failures, only if begin succeeded)
       - name: SonarScanner End
