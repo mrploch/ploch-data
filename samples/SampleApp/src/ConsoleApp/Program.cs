@@ -148,10 +148,10 @@ await unitOfWork.CommitAsync();
 var totalCount = await articleRepo.CountAsync();
 Console.WriteLine($"Total articles: {totalCount}");
 
-var page1 = await readArticleRepo.GetPageAsync(1, 5);
+var page1 = await readArticleRepo.GetPageAsync(1, 5, sortBy: a => a.Id);
 Console.WriteLine($"Page 1 (5 per page): {string.Join(", ", page1.Select(a => a.Title))}");
 
-var page2 = await readArticleRepo.GetPageAsync(2, 5);
+var page2 = await readArticleRepo.GetPageAsync(2, 5, sortBy: a => a.Id);
 Console.WriteLine($"Page 2 (5 per page): {string.Join(", ", page2.Select(a => a.Title))}");
 Console.WriteLine();
 
