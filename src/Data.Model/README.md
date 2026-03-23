@@ -1,46 +1,42 @@
-# Ploch.Common.Data.Model
+# Ploch.Data.Model
 
-## Overview
+Standardised entity interfaces and common base types for .NET domain models.
 
-Library provides a set of interfaces and classes that can be used to standardize the entity model.
+## Key Features
 
-## Motivation
+- **Core property interfaces** -- `IHasId<TId>`, `INamed`, `IHasTitle`, `IHasDescription`, `IHasContents`, `IHasNotes`, `IHasValue<TValue>`
+- **Audit interfaces** -- `IHasAuditProperties`, `IHasAuditTimeProperties`, and individual timestamp/user interfaces
+- **Hierarchical interfaces** -- `IHierarchicalParentChildrenComposite<T>` for tree structures
+- **Categorisation and tagging** -- `IHasCategories<TCategory>`, `IHasTags<TTag>`
+- **Common base types** -- `Category<T>`, `Tag`, `Property<TValue>`, `StringProperty`, `IntProperty`, `Image`
+- **netstandard2.0** target for maximum compatibility
 
-In many database-driven apps, we need similar or even the same model types.
+## Installation
 
-Entities usually have an `Id` property.
-Lots of them have audit properties like `CreatedTime`, `ModifiedTime` or `AccessedTime`.
-The same goes for `Name` or `Title` properties.
+```xml
+<PackageReference Include="Ploch.Data.Model" />
+```
 
-This project tries to bring some standardization to those types, which brings many benefits.
-To name a few:
+## Quick Start
 
-- Audit properties can be handled automatically, without the need to implement them in every entity
-- It makes it possible to re-use components and UI elements between projects
-- Common styling can be implemented, especially in strongly typed UIs like XAML or Blazor
-- UI components can be created that can be used to edit any entity that implements a common interface
+```csharp
+using Ploch.Data.Model;
+using Ploch.Data.Model.CommonTypes;
 
-## Interfaces
+public class Product : IHasId<int>, IHasTitle, IHasDescription, IHasAuditTimeProperties
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = null!;
+    public string? Description { get; set; }
+    public DateTimeOffset? CreatedTime { get; set; }
+    public DateTimeOffset? ModifiedTime { get; set; }
+    public DateTimeOffset? AccessedTime { get; set; }
+}
 
-Most of the types in this library have self-explanatory names, for example:
+public class ProductCategory : Category<ProductCategory> { }
+public class ProductTag : Tag<int> { }
+```
 
-- [`IHasId`](./IHasId.cs) - an entity that has an `Id` property
-- [`IHasName`](./IHasName.cs) - an entity that has a `Name` property
-- [`IHasTitle`](./IHasTitle.cs) - an entity that has a `Title` property
+## Documentation
 
-### Auditable Entities Interfaces
-
-Library has a set of interfaces for created, modified and accessed date/time and account properites.
-Those are usually used in audit trails. Having those properties in a common interface makes it possible to implement
-a centralized logic for handling of them.
-
-- [`IHasCreatedTime`](./IHasCreatedTime.cs) - an entity that has a `CreatedTime` property
-- [`IHasCreatedBy`](./IHasCreatedBy.cs) - an entity that has a `CreatedBy` property
-- [`IHasModifiedTime`](./IHasModifiedTime.cs) - an entity that has a `ModifiedTime` property
-- [`IHasModifiedBy`](./IHasModifiedBy.cs) - an entity that has a `ModifiedBy` property
-- [`IHasAccessedTime`](./IHasAccessedTime.cs) - an entity that has a `AccessedTime` property
-- [`IHasAccessedBy`](./IHasAccessedBy.cs) - an entity that has a `AccessedBy` property
-- [`IHasAudit`](./IHasAudit.cs) - an entity that has all of the above properties
-
-The full list of interfaces is available in the
-[API documentation](https://github.ploch.dev/ploch-common/api/Ploch.Common.Data.Model.html).
+See the [Data Model Guide](../../docs/data-model.md) for the complete reference including interface hierarchy diagrams, audit patterns, and usage examples.

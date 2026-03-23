@@ -71,6 +71,26 @@
     <File Path="README.md" />
     <File Path="TODO.md" />
   </Folder>
+  <Folder Name="/repository/ai/">
+    <File Path=".cursorrules" />
+    <File Path="AGENTS.md" />
+  </Folder>
+  <Folder Name="/repository/ai/claude/">
+    <File Path=".claude/settings.local.json" />
+    <File Path="CLAUDE.md" />
+  </Folder>
+  <Folder Name="/repository/ai/claude/rules/">
+    <File Path=".claude/rules/sample-app.md" />
+  </Folder>
+  <Folder Name="/repository/ai/copilot/">
+    <File Path=".github/copilot-instructions.md" />
+  </Folder>
+  <Folder Name="/repository/ai/gemini/">
+    <File Path="GEMINI.md" />
+  </Folder>
+  <Folder Name="/repository/ai/junie/">
+    <File Path=".junie/guidelines.md" />
+  </Folder>
   <Folder Name="/repository/config/">
     <File Path=".codacy.yml" />
     <File Path=".dockerignore" />
@@ -99,6 +119,19 @@
     <File Path="..\mrploch-development\dependencies\Analyzers.Global.Packages.props" />
     <File Path="..\mrploch-development\dependencies\MicrosoftExtensions.Net9.Packages.props" />
     <File Path="..\mrploch-development\dependencies\Testing.Packages.props" />
+  </Folder>
+  <Folder Name="/samples/" />
+  <Folder Name="/samples/SampleApp/">
+    <File Path="samples/SampleApp/Directory.Build.props" />
+    <File Path="samples/SampleApp/Directory.Packages.props" />
+    <File Path="samples/SampleApp/ProjectReferences.props" />
+    <File Path="samples/SampleApp/README.md" />
+    <Project Path="samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.ConsoleApp.csproj" />
+    <Project Path="samples/SampleApp/src/Data.SQLite/Ploch.Data.SampleApp.Data.SQLite.csproj" />
+    <Project Path="samples/SampleApp/src/Data.SqlServer/Ploch.Data.SampleApp.Data.SqlServer.csproj" />
+    <Project Path="samples/SampleApp/src/Data/Ploch.Data.SampleApp.Data.csproj" />
+    <Project Path="samples/SampleApp/src/Model/Ploch.Data.SampleApp.Model.csproj" />
+    <Project Path="samples/SampleApp/tests/IntegrationTests/Ploch.Data.SampleApp.IntegrationTests.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/build-dotnet.yml" />

@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
 # User-specific files
 *.rsuser
 *.suo
@@ -397,3 +402,6 @@ codestream.xml
 /.idea/**/AndroidProjectSystem.xml
 /.idea/.idea.Ploch.Data/.idea/copilot.data.migration.edit.xml
 /.idea/.idea.Ploch.Data/.idea/db-forest-config.xml
+**/.idea/**/copilot.data.migration.ask2agent.xml
+**/.idea/**/GitLink.xml
+**/.idea/**/markdown.xml
