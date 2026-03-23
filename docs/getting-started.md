@@ -163,7 +163,7 @@ public class OrderService(IUnitOfWork unitOfWork)
 
         foreach (var item in items)
         {
-            item.OrderId = order.Id;
+            item.Order = order;
             await itemRepo.AddAsync(item);
         }
 

@@ -45,4 +45,4 @@ public class OrderService(IUnitOfWork unitOfWork)
 
 ## Documentation
 
-See the [Generic Repository Guide](../../../docs/generic-repository.md) for the complete reference including DI registration, eager loading, specifications, and error handling.
+See the [Generic Repository Guide](https://github.com/mrploch/ploch-data/blob/main/docs/generic-repository.md) for the complete reference including DI registration, eager loading, specifications, and error handling.

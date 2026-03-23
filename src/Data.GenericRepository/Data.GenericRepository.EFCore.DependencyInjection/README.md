@@ -14,6 +14,9 @@ Integration with the Ploch.Common `ServicesBundle` pattern for registering Gener
 
 ## Quick Start
 
+> **Note:** The example below uses SQLite (`UseSqlite`). Replace with your chosen EF Core provider
+> (e.g. `UseSqlServer`, `UseNpgsql`) and its corresponding NuGet package.
+
 ```csharp
 using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
 
@@ -33,4 +36,4 @@ services.AddServicesBundle(new MyDataBundle(), configuration);
 
 ## Documentation
 
-See the [Generic Repository Guide](../../../docs/generic-repository.md) for DI registration patterns.
+See the [Generic Repository Guide](https://github.com/mrploch/ploch-data/blob/main/docs/generic-repository.md) for DI registration patterns.
