@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -30,8 +30,15 @@
 
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- Debug: ProjectReference to ploch-common for easier debugging -->
+  <ItemGroup Condition="'$(UseProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\ploch-common\src\Common\Ploch.Common.csproj" />
+  </ItemGroup>
+  <!-- Release: PackageReference (versions from Directory.Packages.props) -->
+  <ItemGroup Condition="'$(UseProjectReferences)' != 'true'">
+    <PackageReference Include="Ploch.Common" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Data.EFCore.IntegrationTesting\Ploch.Data.EFCore.IntegrationTesting.csproj" />
     <ProjectReference Include="..\..\Data.EFCore.SqLite\Ploch.Data.EFCore.SqLite.csproj" />
     <ProjectReference Include="..\..\Data.Model\Ploch.Data.Model.csproj" />

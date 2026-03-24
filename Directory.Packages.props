@@ -12,6 +12,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.5" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
+  <Import Project="../mrploch-development/dependencies/Ploch.Packages.props" />
   <Import Project="../mrploch-development/dependencies/Common.Packages.props" />
   <Import Project="../mrploch-development/dependencies/Testing.Packages.props" />
   <Import Project="../mrploch-development/dependencies/Analyzers.Global.Packages.props" />
@@ -19,5 +20,17 @@
   <ItemGroup>
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.115" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- EF Core packages are version-locked per .NET major version.
+       Override to 8.0.x when building for net8.0 (the shared props file defines 10.0.x). -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageVersion Update="Microsoft.EntityFrameworkCore" Version="8.0.25" />
+    <PackageVersion Update="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.25" />
+    <PackageVersion Update="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.25" />
+    <PackageVersion Update="Microsoft.EntityFrameworkCore.Relational" Version="8.0.25" />
+    <PackageVersion Update="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.25" />
+    <PackageVersion Update="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.25" />
+    <PackageVersion Update="Microsoft.Data.Sqlite.Core" Version="8.0.25" />
   </ItemGroup>
 </Project>

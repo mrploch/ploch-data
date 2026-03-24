@@ -119,9 +119,13 @@ jobs:
           dotnet nbgv set-version "$RELEASE_VERSION"
           echo "Release version set to $RELEASE_VERSION"
 
-      # Idempotent commit: only commit if version.json actually changed
+      # Use the current HEAD commit timestamp so reruns recreate the same
+      # release commit SHA until the release branch state changes.
       - name: Commit release version
         run: |
+          RELEASE_COMMIT_TIMESTAMP=$(git show -s --format=%cI HEAD)
+          export GIT_AUTHOR_DATE="$RELEASE_COMMIT_TIMESTAMP"
+          export GIT_COMMITTER_DATE="$RELEASE_COMMIT_TIMESTAMP"
           git add version.json
           git diff --cached --quiet && echo "version.json unchanged, skipping commit" || \
             git commit -m "chore(release): Set version to $RELEASE_VERSION"
@@ -231,6 +235,16 @@ jobs:
           \`\`\`
           ENDOFNOTES
 
+      - name: Create GitHub Release
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Release ${{ steps.version.outputs.nuget_version }}"
+          body_path: /tmp/release-notes.md
+          draft: false
+          prerelease: false
+
       - name: Compute next development version
         id: next
         if: success()
@@ -276,13 +290,3 @@ jobs:
             echo "::warning::Could not push version bump directly to main (branch protection). Create a PR to bump version.json to ${NEXT_DEV_VERSION}-prerelease manually."
             echo "push_failed=true" >> $GITHUB_OUTPUT
           fi
-
-      - name: Create GitHub Release
-        if: success() || steps.version-bump.outputs.push_failed == 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.tag.outputs.tag }}
-          name: "Release ${{ steps.version.outputs.nuget_version }}"
-          body_path: /tmp/release-notes.md
-          draft: false
-          prerelease: false
