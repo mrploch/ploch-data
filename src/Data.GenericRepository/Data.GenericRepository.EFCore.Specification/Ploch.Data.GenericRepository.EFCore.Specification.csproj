@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<ItemGroup>
+    <PackageReference Include="Ardalis.Specification" />
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="SonarAnalyzer.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

@@ -2,23 +2,26 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Objectivity.AutoFixture.XUnit2.AutoMoq.Attributes;
 using Ploch.Data.EFCore.IntegrationTesting;
 using Ploch.Data.Model;
+using Ploch.TestingSupport.XUnit3.AutoMoq;
 
 namespace Ploch.Data.EFCore.Tests;
 
 public class CollectionStringSplitConverterTests : DataIntegrationTest<ConverterTestDbContext>
 {
-    public static IEnumerable<object[]> Data =>
-        new List<object[]> { new object[] { 1, 2, 3 }, new object[] { -4, -6, -10 }, new object[] { -2, 2, 0 }, new object[] { int.MinValue, -1, int.MaxValue } };
+    public static IEnumerable<object[]> Data => new List<object[]>
+                                                { new object[] { 1, 2, 3 },
+                                                  new object[] { -4, -6, -10 },
+                                                  new object[] { -2, 2, 0 },
+                                                  new object[] { int.MinValue, -1, int.MaxValue } };
 
     [Theory]
     [AutoMockData]
     public void CollectionStringSplitConverter_should_convert_to_and_from_string_list(List<string> firstList, List<string> secondList)
     {
-        DbContext.TestEntities.Add(new ConverterTestEntity { StringCollection = firstList });
-        DbContext.TestEntities.Add(new ConverterTestEntity { StringCollection = secondList });
+        DbContext.TestEntities.Add(new() { StringCollection = firstList });
+        DbContext.TestEntities.Add(new() { StringCollection = secondList });
         DbContext.SaveChanges();
 
         var entity = DbContext.TestEntities.Skip(1).First();
@@ -91,15 +94,9 @@ public class ConverterTestDbContext(DbContextOptions<ConverterTestDbContext> opt
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<ConverterTestEntity>()
-               .Property(e => e.StringCollection)
-               .HasConversion(new CollectionStringSplitConverter<string>());
-        builder.Entity<ConverterTestEntity>()
-               .Property(e => e.IntCollection)
-               .HasConversion(new CollectionStringSplitConverter<int>());
-        builder.Entity<ConverterTestEntity>()
-               .Property(e => e.DatesCollection)
-               .HasConversion(new CollectionStringSplitConverter<DateTime>());
+        builder.Entity<ConverterTestEntity>().Property(e => e.StringCollection).HasConversion(new CollectionStringSplitConverter<string>());
+        builder.Entity<ConverterTestEntity>().Property(e => e.IntCollection).HasConversion(new CollectionStringSplitConverter<int>());
+        builder.Entity<ConverterTestEntity>().Property(e => e.DatesCollection).HasConversion(new CollectionStringSplitConverter<DateTime>());
         base.OnModelCreating(builder);
     }
 }

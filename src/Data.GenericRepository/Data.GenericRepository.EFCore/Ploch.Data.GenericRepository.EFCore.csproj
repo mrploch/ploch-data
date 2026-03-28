@@ -1,24 +1,38 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Description>Generic repository for Entity Framework Core</Description>
-        <PackageTags>efcore;dotnetcore</PackageTags>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-    </PropertyGroup>
+  <PropertyGroup>
+    <Description>Generic repository for Entity Framework Core</Description>
+    <PackageTags>efcore;dotnetcore</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Dawn.Guard"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Dawn.Guard" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj"/>
-    </ItemGroup>
+  <!-- Debug: ProjectReference to ploch-common for easier debugging -->
+  <ItemGroup Condition="'$(UseProjectReferences)' == 'true'">
+    <ProjectReference Include="..\..\..\..\ploch-common\src\Common.AppServices\Ploch.Common.AppServices.csproj" />
+  </ItemGroup>
+  <!-- Release: PackageReference (versions from Directory.Packages.props) -->
+  <ItemGroup Condition="'$(UseProjectReferences)' != 'true'">
+    <PackageReference Include="Ploch.Common.AppServices" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-        <None Remove="obj\Debug\net8.0\Ploch.Data.GenericRepository.EFCore.xml"/>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+
+  </ItemGroup>
+
 </Project>

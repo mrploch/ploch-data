@@ -37,4 +37,10 @@ public interface IWriteRepository<TEntity, in TId>
     /// </summary>
     /// <param name="entity">The entity to delete.</param>
     void Delete(TEntity entity);
+
+    /// <summary>
+    ///     Deletes the entity with specified id from the repository.
+    /// </summary>
+    /// <param name="id">The entity id to delete.</param>
+    void Delete(TId id);
 }

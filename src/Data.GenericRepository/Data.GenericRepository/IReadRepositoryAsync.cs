@@ -22,6 +22,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity found, or null.</returns>
+    /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
     Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -36,6 +37,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     ///     A task that represents the asynchronous operation. The task result contains the first entity found that matches the
     ///     query, or null if no entity is found.
     /// </returns>
+    /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
     Task<TEntity?> FindFirstAsync(Expression<Func<TEntity, bool>> query,
                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                   CancellationToken cancellationToken = default);
@@ -47,6 +49,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of all entities.</returns>
+    /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
     Task<IList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? query = null,
                                      Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                      CancellationToken cancellationToken = default);
@@ -56,6 +59,7 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// </summary>
     /// <param name="pageNumber">The number of the page to get starting from 1.</param>
     /// <param name="pageSize">The size of the page to get.</param>
+    /// <param name="sortBy">A Sort By expression.</param>
     /// <param name="query">A LINQ expression to filter the entities.</param>
     /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
@@ -63,8 +67,10 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     ///     A task that represents the asynchronous operation. The task result contains a list of entities for the
     ///     specified page.
     /// </returns>
+    /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
     Task<IList<TEntity>> GetPageAsync(int pageNumber,
                                       int pageSize,
+                                      Expression<Func<TEntity, object>>? sortBy = null,
                                       Expression<Func<TEntity, bool>>? query = null,
                                       Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                       CancellationToken cancellationToken = default);
@@ -72,9 +78,10 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// <summary>
     ///     Asynchronously gets the count of entities in the repository.
     /// </summary>
+    /// <param name="query">A LINQ expression to filter the entities.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the count of entities.</returns>
-    Task<int> CountAsync(CancellationToken cancellationToken = default);
+    Task<int> CountAsync(Expression<Func<TEntity, bool>>? query = null, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -95,5 +102,6 @@ public interface IReadRepositoryAsync<TEntity, in TId> : IReadRepositoryAsync<TE
     /// <param name="onDbSet">Action to perform on DbSet upon the query, like .Include.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity found, or null.</returns>
+    /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
     Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default);
 }

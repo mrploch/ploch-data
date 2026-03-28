@@ -46,4 +46,12 @@ public interface IWriteRepositoryAsync<TEntity, in TId>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Asynchronously deletes the entity with specified id from the repository.
+    /// </summary>
+    /// <param name="id">The entity id to delete.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task DeleteAsync(TId id, CancellationToken cancellationToken = default);
 }

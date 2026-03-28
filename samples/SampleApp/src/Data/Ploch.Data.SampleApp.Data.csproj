@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Ploch.Data.EFCore.SqLite" />
+    <PackageReference Include="Ploch.Data.GenericRepository.EFCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Ploch.Data.SampleApp.Model.csproj" />
+  </ItemGroup>
+</Project>
