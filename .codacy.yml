@@ -11,6 +11,8 @@ exclude_paths:
   - "AGENTS.md"
   - "GEMINI.md"
   - "CLAUDE.md"
+  - "TODO-archive.md"
+  - "change-log/**"
   - ".junie/**"
   - ".claude/**"
   - ".contextstream/**"
