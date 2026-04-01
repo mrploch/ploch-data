@@ -41,5 +41,6 @@ public class SqLiteDbContextCreationLifecycle : IDbContextCreationLifecycle
     /// <inheritdoc />
     public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        // No-op: SQLite requires no special options configuration beyond what UseSqlite() provides.
     }
 }

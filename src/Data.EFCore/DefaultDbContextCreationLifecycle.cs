@@ -17,10 +17,12 @@ public class DefaultDbContextCreationLifecycle : IDbContextCreationLifecycle
     /// <inheritdoc />
     public void OnModelCreating(ModelBuilder modelBuilder, DatabaseFacade database)
     {
+        // No-op: the default lifecycle does not apply any provider-specific model configuration.
     }
 
     /// <inheritdoc />
     public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        // No-op: the default lifecycle does not apply any provider-specific options configuration.
     }
 }
