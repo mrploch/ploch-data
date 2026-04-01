@@ -1,0 +1,96 @@
+using System.ComponentModel.DataAnnotations;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Ploch.Data.EFCore;
+using Ploch.Data.EFCore.SqlServer;
+using Ploch.Data.GenericRepository;
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
+using Ploch.Data.Model;
+
+namespace Ploch.Data.EFCore.SqlServer.Tests;
+
+public class SqlServerDependencyInjectionTests
+{
+    [Fact]
+    public void AddDbContextWithRepositories_should_register_lifecycle_DbContext_and_repositories()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act — use a fake connection string; we won't actually connect
+        services.AddDbContextWithRepositories<SqlServerDiTestDbContext>(
+            () => "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
+
+        // Assert
+        var provider = services.BuildServiceProvider();
+
+        var lifecycle = provider.GetRequiredService<IDbContextCreationLifecycle>();
+        lifecycle.Should().BeOfType<DefaultDbContextCreationLifecycle>();
+
+        var dbContext = provider.GetRequiredService<SqlServerDiTestDbContext>();
+        dbContext.Should().NotBeNull();
+
+        var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+        unitOfWork.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddDbContextWithSqlServerCreationLifecycle_should_register_default_lifecycle_and_DbContext()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        services.AddDbContextWithSqlServerCreationLifecycle<SqlServerDiTestDbContext>(
+            () => "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
+
+        // Assert
+        var provider = services.BuildServiceProvider();
+
+        var lifecycle = provider.GetRequiredService<IDbContextCreationLifecycle>();
+        lifecycle.Should().BeOfType<DefaultDbContextCreationLifecycle>();
+
+        var dbContext = provider.GetRequiredService<SqlServerDiTestDbContext>();
+        dbContext.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddDbContextWithRepositories_should_throw_when_connection_string_is_null()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        services.AddDbContextWithRepositories<SqlServerDiTestDbContext>(() => null);
+        var provider = services.BuildServiceProvider();
+
+        // Act
+        var act = () => provider.GetRequiredService<SqlServerDiTestDbContext>();
+
+        // Assert
+        act.Should().Throw<InvalidOperationException>();
+    }
+
+    public class SqlServerDiTestEntity : IHasId<int>
+    {
+        public int Id { get; set; }
+
+        [MaxLength(100)]
+        public required string Name { get; set; }
+    }
+
+    public class SqlServerDiTestDbContext : DbContext
+    {
+        private readonly IDbContextCreationLifecycle _lifecycle;
+
+        public SqlServerDiTestDbContext(DbContextOptions<SqlServerDiTestDbContext> options, IDbContextCreationLifecycle lifecycle)
+            : base(options) => _lifecycle = lifecycle;
+
+        public DbSet<SqlServerDiTestEntity> TestEntities { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            _lifecycle.OnModelCreating(modelBuilder, Database);
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}

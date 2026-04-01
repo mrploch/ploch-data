@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\ploch-common\src\TestingSupport.XUnit3.Dependencies\Ploch.TestingSupport.XUnit3.Dependencies.csproj" />
     <ProjectReference Include="..\..\src\Data.EFCore.SqLite\Ploch.Data.EFCore.SqLite.csproj" />
+    <ProjectReference Include="..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.DependencyInjection.SqLite\Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqLite.csproj" />
     <ProjectReference Include="..\..\src\Data.Model\Ploch.Data.Model.csproj" />
   </ItemGroup>
 
