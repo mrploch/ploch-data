@@ -6,13 +6,9 @@ using Ploch.Data.SampleApp.Data;
 using Ploch.Data.SampleApp.Model;
 
 var builder = Host.CreateApplicationBuilder(args);
-
-builder.Services.AddSampleAppDataServices(
-    options => options.UseSqlite("Data Source=sampleapp.db"),
-    builder.Configuration);
+builder.Services.AddDbContextWithRepositories<SampleAppDbContext>();
 
 using var host = builder.Build();
-
 using var scope = host.Services.CreateScope();
 var services = scope.ServiceProvider;
 

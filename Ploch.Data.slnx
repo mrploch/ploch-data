@@ -70,7 +70,7 @@
     <File Path="docker-compose.yml" />
     <File Path="NuGet.Config" />
     <File Path="README.md" />
-    <File Path="TODO.md" />
+    <File Path="TODO-archive.md" />
   </Folder>
   <Folder Name="/repository/ai/">
     <File Path=".cursorrules" />
@@ -117,6 +117,7 @@
   <Folder Name="/repository/scripts/">
     <File Path="Clean-DocFx.ps1" />
     <File Path="run-sonar-build-test.ps1" />
+    <File Path="TODO-archive.md" />
   </Folder>
   <Folder Name="/repository/shared/">
     <File Path="../mrploch-development/dependencies/Analyzers.Global.Packages.props" />

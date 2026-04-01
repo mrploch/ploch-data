@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ploch.Data.EFCore.SqLite" />
+    <PackageReference Include="Ploch.Data.EFCore" />
     <PackageReference Include="Ploch.Data.GenericRepository.EFCore" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Ploch.Data.EFCore;
 using Ploch.Data.EFCore.SqLite;
 
 namespace Ploch.Data.EFCore.IntegrationTesting;
@@ -62,11 +63,22 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     Configures the required services for the test.
     /// </summary>
     /// <remarks>
-    ///     This method should be overridden in derived classes to configure additional services required for the test.
+    ///     <para>
+    ///         This method should be overridden in derived classes to configure additional
+    ///         services required for the test.
+    ///     </para>
+    ///     <para>
+    ///         By default, it registers the <see cref="DefaultDbContextCreationLifecycle" />
+    ///         as the <see cref="IDbContextCreationLifecycle" /> implementation.
+    ///         Override this method and register a different implementation if your
+    ///         <see cref="DbContext" /> requires provider-specific lifecycle behaviour.
+    ///     </para>
     /// </remarks>
     /// <param name="services">The service collection.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
-    { }
+    {
+        services.AddDefaultDbContextCreationLifecycle();
+    }
 
     /// <summary>
     ///     Releases the unmanaged resources used by the <see cref="DataIntegrationTest{TDbContext}" />
