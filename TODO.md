@@ -1,6 +1,6 @@
 # Agent TODO List
 
-# Task 1: Implement changes for Issue #72
+## Task 1: Implement changes for Issue #72
 
 Implement changes required for <https://github.com/mrploch/ploch-data/issues/72>.
 I was experimenting with how to implement some of the methods mentioned there in another projects where I was trying out the `SampleApp`.
