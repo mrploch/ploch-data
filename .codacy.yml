@@ -4,6 +4,10 @@ engines:
     exclude_paths:
       - "src/**Tests/**"
       - "samples/**"
+      # DI packages intentionally share the same namespace for zero-code database switching.
+      # Codacy's namespace-path check flags this as an issue, but it is by design.
+      - "src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection.SqLite/**"
+      - "src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection.SqlServer/**"
   markdownlint:
     enabled: true
     exclude_paths:
