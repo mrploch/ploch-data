@@ -2,7 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Data.EFCore;
 
+// The namespace intentionally omits the ".SqlServer" suffix so that it matches the SqLite
+// variant exactly. Consumers switch databases by changing the package reference — no code
+// changes needed. Both packages expose the same class name and method in this shared namespace.
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Ploch.Data.GenericRepository.EFCore.DependencyInjection;
+#pragma warning restore IDE0130
 
 /// <summary>
 ///     Provides extension methods for registering a <see cref="DbContext" /> with the
