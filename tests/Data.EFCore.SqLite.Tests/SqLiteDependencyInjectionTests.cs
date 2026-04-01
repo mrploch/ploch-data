@@ -38,14 +38,13 @@ public class SqLiteDependencyInjectionTests
     {
         // Arrange
         var services = new ServiceCollection();
-        services.AddDbContextWithRepositories<DiTestDbContext>(() => null);
-        var provider = services.BuildServiceProvider();
 
-        // Act
-        var act = () => provider.GetRequiredService<DiTestDbContext>();
+        // Act — exception is thrown eagerly during registration
+        var act = () => services.AddDbContextWithRepositories<DiTestDbContext>(() => null);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().Throw<InvalidOperationException>()
+           .WithMessage("*connection string*not found*");
     }
 
     public class DiTestEntity : IHasId<int>

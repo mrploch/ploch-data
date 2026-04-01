@@ -34,7 +34,7 @@ public static class ServiceCollectionRegistrations
     ///     <para>
     ///         If <paramref name="connectionString" /> is <c>null</c>, the connection
     ///         string is loaded from <c>appsettings.json</c> using the
-    ///         <c>DefaultConnection</c> key via <see cref="ConnectionString.FromJsonFile()" />.
+    ///         <c>DefaultConnection</c> key via <c>ConnectionString.FromJsonFile()</c>.
     ///     </para>
     /// </remarks>
     /// <typeparam name="TDbContext">The type of <see cref="DbContext" /> to register.</typeparam>
@@ -52,10 +52,13 @@ public static class ServiceCollectionRegistrations
         Func<string?>? connectionString = null) where TDbContext : DbContext
     {
         connectionString ??= ConnectionString.FromJsonFile();
+        var resolvedConnectionString = connectionString() ??
+                                       throw new InvalidOperationException(
+                                           $"SQLite connection string for {typeof(TDbContext).Name} not found. " +
+                                           "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.");
 
         return services.AddSingleton<IDbContextCreationLifecycle, SqLiteDbContextCreationLifecycle>()
-                       .AddDbContext<TDbContext>(options => options.UseSqlite(connectionString() ??
-                                                                             throw new InvalidOperationException("Connection string not found.")))
+                       .AddDbContext<TDbContext>(options => options.UseSqlite(resolvedConnectionString))
                        .AddRepositories<TDbContext>();
     }
 }

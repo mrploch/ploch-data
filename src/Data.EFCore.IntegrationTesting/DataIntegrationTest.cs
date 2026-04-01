@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ploch.Data.EFCore;
 using Ploch.Data.EFCore.SqLite;
 
@@ -75,11 +76,16 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///         This ensures the <c>DateTimeOffset</c> properties fix is applied
     ///         automatically.
     ///     </para>
+    ///     <para>
+    ///         If a derived class registers a different <see cref="IDbContextCreationLifecycle" />
+    ///         before calling <c>base.ConfigureServices</c>, the existing registration
+    ///         is preserved (this method uses <c>TryAddSingleton</c>).
+    ///     </para>
     /// </remarks>
     /// <param name="services">The service collection.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
     {
-        services.AddSqLiteDbContextCreationLifecycle();
+        services.TryAddSingleton<IDbContextCreationLifecycle, SqLiteDbContextCreationLifecycle>();
     }
 
     /// <summary>

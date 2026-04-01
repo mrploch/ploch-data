@@ -36,7 +36,7 @@ public static class SqLiteDbContextCreationLifecycleServiceCollectionExtensions
     ///     <para>
     ///         If <paramref name="connectionString" /> is <c>null</c>, the connection
     ///         string is loaded from <c>appsettings.json</c> using the
-    ///         <c>DefaultConnection</c> key via <see cref="ConnectionString.FromJsonFile()" />.
+    ///         <c>DefaultConnection</c> key via <c>ConnectionString.FromJsonFile()</c>.
     ///     </para>
     ///     <para>
     ///         This method does <b>not</b> register generic repositories — call
@@ -58,9 +58,12 @@ public static class SqLiteDbContextCreationLifecycleServiceCollectionExtensions
         Func<string?>? connectionString = null) where TDbContext : DbContext
     {
         connectionString ??= ConnectionString.FromJsonFile();
+        var resolvedConnectionString = connectionString() ??
+                                       throw new InvalidOperationException(
+                                           $"SQLite connection string for {typeof(TDbContext).Name} not found. " +
+                                           "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.");
 
         return services.AddSqLiteDbContextCreationLifecycle()
-                       .AddDbContext<TDbContext>(options => options.UseSqlite(connectionString() ??
-                                                                             throw new InvalidOperationException("Connection string not found.")));
+                       .AddDbContext<TDbContext>(options => options.UseSqlite(resolvedConnectionString));
     }
 }

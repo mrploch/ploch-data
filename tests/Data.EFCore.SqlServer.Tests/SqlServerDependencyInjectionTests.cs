@@ -60,14 +60,13 @@ public class SqlServerDependencyInjectionTests
     {
         // Arrange
         var services = new ServiceCollection();
-        services.AddDbContextWithRepositories<SqlServerDiTestDbContext>(() => null);
-        var provider = services.BuildServiceProvider();
 
-        // Act
-        var act = () => provider.GetRequiredService<SqlServerDiTestDbContext>();
+        // Act — exception is thrown eagerly during registration
+        var act = () => services.AddDbContextWithRepositories<SqlServerDiTestDbContext>(() => null);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().Throw<InvalidOperationException>()
+           .WithMessage("*connection string*not found*");
     }
 
     public class SqlServerDiTestEntity : IHasId<int>

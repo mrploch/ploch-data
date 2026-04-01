@@ -62,14 +62,13 @@ public class SqLiteDbContextCreationLifecycleServiceCollectionExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        services.AddDbContextWithSqLiteCreationLifecycle<SqLiteLifecycleTestDbContext>(() => null);
-        var provider = services.BuildServiceProvider();
 
-        // Act
-        var act = () => provider.GetRequiredService<SqLiteLifecycleTestDbContext>();
+        // Act — exception is thrown eagerly during registration, not at resolution time
+        var act = () => services.AddDbContextWithSqLiteCreationLifecycle<SqLiteLifecycleTestDbContext>(() => null);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>();
+        act.Should().Throw<InvalidOperationException>()
+           .WithMessage("*connection string*not found*");
     }
 
     public class SqLiteLifecycleTestEntity : IHasId<int>
