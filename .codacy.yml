@@ -3,6 +3,7 @@ engines:
   sonarscharp:
     exclude_paths:
       - "src/**Tests/**"
+      - "samples/**"
   markdownlint:
     enabled: true
     exclude_paths:
