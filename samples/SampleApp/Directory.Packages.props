@@ -20,6 +20,8 @@
     <PackageVersion Include="Ploch.Data.EFCore.SqLite" Version="$(PlochDataPackagesVersion)" />
     <PackageVersion Include="Ploch.Data.EFCore.SqlServer" Version="$(PlochDataPackagesVersion)" />
     <PackageVersion Include="Ploch.Data.GenericRepository.EFCore" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqLite" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqlServer" Version="$(PlochDataPackagesVersion)" />
     <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.IntegrationTesting" Version="$(PlochDataPackagesVersion)" />
   </ItemGroup>
 

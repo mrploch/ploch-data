@@ -68,16 +68,18 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///         services required for the test.
     ///     </para>
     ///     <para>
-    ///         By default, it registers the <see cref="DefaultDbContextCreationLifecycle" />
-    ///         as the <see cref="IDbContextCreationLifecycle" /> implementation.
-    ///         Override this method and register a different implementation if your
-    ///         <see cref="DbContext" /> requires provider-specific lifecycle behaviour.
+    ///         By default, it registers the
+    ///         <see cref="SqLiteDbContextCreationLifecycle" /> as the
+    ///         <see cref="IDbContextCreationLifecycle" /> implementation, because
+    ///         the test infrastructure defaults to an in-memory SQLite database.
+    ///         This ensures the <c>DateTimeOffset</c> properties fix is applied
+    ///         automatically.
     ///     </para>
     /// </remarks>
     /// <param name="services">The service collection.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
     {
-        services.AddDefaultDbContextCreationLifecycle();
+        services.AddSqLiteDbContextCreationLifecycle();
     }
 
     /// <summary>

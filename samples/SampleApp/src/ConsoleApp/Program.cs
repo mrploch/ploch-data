@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ploch.Data.GenericRepository;
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
 using Ploch.Data.SampleApp.Data;
 using Ploch.Data.SampleApp.Model;
 

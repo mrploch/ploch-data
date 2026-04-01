@@ -7,6 +7,8 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/GenericRepository/">
+    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection.SqLite/Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqLite.csproj" />
+    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection.SqlServer/Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqlServer.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTesting/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore/Ploch.Data.GenericRepository.EFCore.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository/Ploch.Data.GenericRepository.csproj" />
