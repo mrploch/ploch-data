@@ -49,9 +49,9 @@ The project should have a simple domain model, but features of the `Ploch.Data.M
 - Categories
 - Tags
 - Properties
-- `IHasAuditProperties
-`
-  You can take a look at my other projects in the c:/devnet/my/mrploch folder like:
+- `IHasAuditProperties`
+
+You can take a look at my other projects in the c:/devnet/my/mrploch folder like:
 - C:/DevNet/my/mrploch/ploch-ai-tools/projects/knowledge-base
 - C:/DevNet/my/mrploch/ploch-tools-systemprofiles
 - C:/DevNet/my/mrploch/ploch-groupmatters
