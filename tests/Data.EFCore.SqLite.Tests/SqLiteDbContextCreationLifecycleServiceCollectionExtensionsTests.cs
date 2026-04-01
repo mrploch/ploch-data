@@ -79,18 +79,14 @@ public class SqLiteDbContextCreationLifecycleServiceCollectionExtensionsTests
         public required string Name { get; set; }
     }
 
-    public class SqLiteLifecycleTestDbContext : DbContext
+    public class SqLiteLifecycleTestDbContext(DbContextOptions<SqLiteLifecycleTestDbContext> options, IDbContextCreationLifecycle lifecycle)
+        : DbContext(options)
     {
-        private readonly IDbContextCreationLifecycle _lifecycle;
-
-        public SqLiteLifecycleTestDbContext(DbContextOptions<SqLiteLifecycleTestDbContext> options, IDbContextCreationLifecycle lifecycle)
-            : base(options) => _lifecycle = lifecycle;
-
         public DbSet<SqLiteLifecycleTestEntity> TestEntities { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            _lifecycle.OnModelCreating(modelBuilder, Database);
+            lifecycle.OnModelCreating(modelBuilder, Database);
             base.OnModelCreating(modelBuilder);
         }
     }

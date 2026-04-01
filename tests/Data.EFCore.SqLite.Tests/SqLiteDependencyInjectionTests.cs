@@ -55,18 +55,14 @@ public class SqLiteDependencyInjectionTests
         public required string Name { get; set; }
     }
 
-    public class DiTestDbContext : DbContext
+    public class DiTestDbContext(DbContextOptions<DiTestDbContext> options, IDbContextCreationLifecycle lifecycle)
+        : DbContext(options)
     {
-        private readonly IDbContextCreationLifecycle _lifecycle;
-
-        public DiTestDbContext(DbContextOptions<DiTestDbContext> options, IDbContextCreationLifecycle lifecycle)
-            : base(options) => _lifecycle = lifecycle;
-
         public DbSet<DiTestEntity> TestEntities { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            _lifecycle.OnModelCreating(modelBuilder, Database);
+            lifecycle.OnModelCreating(modelBuilder, Database);
             base.OnModelCreating(modelBuilder);
         }
     }

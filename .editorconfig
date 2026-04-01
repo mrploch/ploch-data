@@ -701,3 +701,13 @@ resharper_wrap_multiple_type_parameter_constraints_style = chop_if_long
 # ReSharper properties
 resharper_csharp_wrap_multiple_type_parameter_constraints_style = chop_if_long
 resharper_wrap_before_first_type_parameter_constraint = false
+
+# CC0067: Do not call overridable methods in constructors — reports too many false positives
+# for the abstract base class + virtual ConfigureServices pattern used in test infrastructure.
+dotnet_diagnostic.CC0067.severity = none
+
+# Test project overrides
+[*Tests/**/*.cs]
+# IDE0058: Expression value is never used — test assertions and fluent API chains
+# intentionally discard return values.
+dotnet_diagnostic.IDE0058.severity = none

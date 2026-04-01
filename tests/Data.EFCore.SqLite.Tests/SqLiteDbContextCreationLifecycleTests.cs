@@ -56,19 +56,15 @@ public class SqLiteDbContextCreationLifecycleTests
         public DateTimeOffset? CreatedTime { get; set; }
     }
 
-    public class LifecycleTestDbContext : DbContext
+    public class LifecycleTestDbContext(DbContextOptions<LifecycleTestDbContext> options, IDbContextCreationLifecycle lifecycle)
+        : DbContext(options)
     {
-        private readonly IDbContextCreationLifecycle _lifecycle;
-
-        public LifecycleTestDbContext(DbContextOptions<LifecycleTestDbContext> options, IDbContextCreationLifecycle lifecycle)
-            : base(options) => _lifecycle = lifecycle;
-
         public DbSet<LifecycleTestEntity> TestEntities { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(LifecycleTestDbContext).Assembly);
-            _lifecycle.OnModelCreating(modelBuilder, Database);
+            lifecycle.OnModelCreating(modelBuilder, Database);
             base.OnModelCreating(modelBuilder);
         }
     }

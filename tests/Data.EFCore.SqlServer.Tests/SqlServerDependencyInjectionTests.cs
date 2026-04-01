@@ -77,18 +77,14 @@ public class SqlServerDependencyInjectionTests
         public required string Name { get; set; }
     }
 
-    public class SqlServerDiTestDbContext : DbContext
+    public class SqlServerDiTestDbContext(DbContextOptions<SqlServerDiTestDbContext> options, IDbContextCreationLifecycle lifecycle)
+        : DbContext(options)
     {
-        private readonly IDbContextCreationLifecycle _lifecycle;
-
-        public SqlServerDiTestDbContext(DbContextOptions<SqlServerDiTestDbContext> options, IDbContextCreationLifecycle lifecycle)
-            : base(options) => _lifecycle = lifecycle;
-
         public DbSet<SqlServerDiTestEntity> TestEntities { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            _lifecycle.OnModelCreating(modelBuilder, Database);
+            lifecycle.OnModelCreating(modelBuilder, Database);
             base.OnModelCreating(modelBuilder);
         }
     }
