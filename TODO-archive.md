@@ -12,7 +12,7 @@ SqLite - or at least I believe this is what might be happening).
 Please fix those issues. I want to keep using the in-memory SqLite for tests. There has to be a way of getting this to work correctly.
 Research the solution, make necessary code changes. Verify that the tests pass, all of them. If there are other issues, fix them.
 When everything is working locally, commit and push the changes. Then observe PR checks. All need to pass. Resolve any issues that are there.
-You can use the changes you did in the https://github.com/mrploch/ploch-common repository. The PR https://github.com/mrploch/ploch-common/pull/177 is all green,
+You can use the changes you did in the <https://github.com/mrploch/ploch-common> repository. The PR <https://github.com/mrploch/ploch-common/pull/177> is all green,
 good, the checks are passing. The configuration of that project should be very similar to this one. I use the same tools, the same static code analyzers,
 the same SonarCloud org and so on. Also the project location in my local system is the same (take a look how the ploch-common now downloads the other
 repository -
@@ -28,10 +28,10 @@ conversations under the PR. All of them have to be addressed, no matter if this 
 changes, or, if a comment / conversation is false/positive (or not relevant) - by closing it (marking it as resolved with a comment).
 By conversations/comments I'm talking about the AI (or human) comments on the PR, like the examples below:
 
-- https://github.com/mrploch/ploch-data/pull/55#discussion_r2921786246
-- https://github.com/mrploch/ploch-data/pull/55#discussion_r2921786199
-- https://github.com/mrploch/ploch-data/pull/55/changes#r2921786197
-- https://github.com/mrploch/ploch-data/pull/55/changes#r2921757138
+- <https://github.com/mrploch/ploch-data/pull/55#discussion_r2921786246>
+- <https://github.com/mrploch/ploch-data/pull/55#discussion_r2921786199>
+- <https://github.com/mrploch/ploch-data/pull/55/changes#r2921786197>
+- <https://github.com/mrploch/ploch-data/pull/55/changes#r2921757138>
 
 All of conversations / comments like the above ones must be addressed before reporting completion.
 
@@ -115,10 +115,9 @@ Again, make sure the content is easy to read and follow. ALWAYS TEST!
 In another project, `ploch-common` in the same organization, we've added a new versioning mechanism. It is using
 the [NerdBank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning).
 We've also added a new release pipeline.
-The changes in another project are here: https://github.com/mrploch/ploch-common/pull/179
+The changes in another project are here: <https://github.com/mrploch/ploch-common/pull/179>
 Now we need to apply the same changes in this repository. Both repositories are very similar, which means it should work consistently.
 The same rules will apply to this repository.
 Please apply the same changes in this repository. To do that, create a new branch called exactly the same as in other repo `feature/nbgv-release-pipeline`.
 After making those changes, validate that they work.
 
-## Task 4

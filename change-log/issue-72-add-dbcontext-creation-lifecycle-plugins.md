@@ -3,8 +3,9 @@
 Provide a pluggable way of extending a `DbContext` creation lifecycle and inject custom logic.
 This would be particularly useful for applying the SqLite `DateTimeOffset` properties fix: calling `ApplySqLiteDateTimeOffsetPropertiesFix` method on the ModelBuilder but only when a SqLite instance is used.
 This would be the case if an app targets multiple Databases and, like in the SampleApp, can support either SqLite and other db (SqlServer in case of the SampleApp).
-<br/>
+
 **An interface to support such extension could look something like this:**
+
 ```csharp
 public interface IDbContextCreationLifecycle
 {
@@ -15,6 +16,7 @@ public interface IDbContextCreationLifecycle
 ```
 
 **The default implementation would simply do nothing, but the SqLite would apply the following logic:**
+
 ```csharp
 public class SqLiteDbContextCreationLifecycle : IDbContextCreationLifecycle
 {
@@ -29,6 +31,7 @@ public class SqLiteDbContextCreationLifecycle : IDbContextCreationLifecycle
 ```
 
 **The correct implementation would be injected into the DbContext constructor using dependency injection:**
+
 ```csharp
     private readonly IDbContextCreationLifecycle _modelCreationLifecycle;
 
@@ -37,11 +40,12 @@ public class SqLiteDbContextCreationLifecycle : IDbContextCreationLifecycle
 
     protected SampleAppDbContext(IDbContextCreationLifecycle modelCreationLifecycle) => _modelCreationLifecycle = modelCreationLifecycle;
 ```
-<br/>
+
 This will allow for a `.Data` project to contain only database-agnostic configuration logic. The `.Data.SqLite` project, which usually contains an implementation of `SqLiteDbContextFactory` for runtime services, would inject the `SqLiteDbContextCreationLifecycle` instance, and the `.Data.SqlServer` would use the `DefaultDbContextCreationLifecycle`.
-An application dependency injection container would register the correct implementation. This way, switching an app from one database to another would mean referencing different projects and adding one line in the services’ registration.
+An application dependency injection container would register the correct implementation. This way, switching an app from one database to another would mean referencing different projects and adding one line in the services' registration.
 
 Better - if we revive `.GenericRepository.EFCore.DependencyInjection`, and add `.GenericRepository.EFCore.DependencyInjection.SqLite` and `.GenericRepository.EFCore.DependencyInjection.SqlServer`, both containing the same method name in the same namespace:
+
 ```csharp
 public static class ServiceCollectionRegistrations
 {
@@ -60,6 +64,7 @@ public static class ServiceCollectionRegistrations
     }
 }
 ```
+
 ...and in `.GenericRepository.EFCore.DependencyInjection.SqLite` we will have `options.UseSqLite(...)` while having `options.UseSqlServer(...)` in the other one, there would be no need for code change. The appropriate method would be called depending on which package is referenced.
 
 # Implementation details
@@ -83,15 +88,8 @@ public static class ServiceCollectionRegistrations
 
 ### Nice to have
 
-Because we're adding some utility methods for the registration of the `DbContext`, consider adding some nice mechanism that will also tell which database to use, **avoiding things like this**:
-```csharp
-builder.Services.AddSampleAppDataServices(
-    // options => options.UseSqlite("Data Source=sampleapp.db"),
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
-    builder.Configuration);
-```
+Because we're adding some utility methods for the registration of the `DbContext`, consider adding some nice mechanism that will also tell which database to use, **avoiding things like this:**
 
-**Or this:**
 ```csharp
 builder.Services.AddSampleAppDataServices(
     // options => options.UseSqlite("Data Source=sampleapp.db"),
