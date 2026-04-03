@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Data.EFCore;
+using Ploch.Data.EFCore.SqLite;
 
-// The namespace intentionally omits the ".SqlServer" suffix so that it matches the SqLite
+// The namespace intentionally omits the ".SqLite" suffix so that it matches the SqlServer
 // variant exactly. Consumers switch databases by changing the package reference — no code
 // changes needed. Both packages expose the same class name and method in this shared namespace.
 #pragma warning disable IDE0130 // Namespace does not match folder structure
@@ -11,12 +12,12 @@ namespace Ploch.Data.GenericRepository.EFCore.DependencyInjection;
 
 /// <summary>
 ///     Provides extension methods for registering a <see cref="DbContext" /> with the
-///     SQL Server provider, the <see cref="DefaultDbContextCreationLifecycle" />, and
+///     SQLite provider, the <see cref="SqLiteDbContextCreationLifecycle" />, and
 ///     generic repository and Unit of Work services in a single call.
 /// </summary>
 /// <remarks>
 ///     <para>
-///         This class and <c>Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqLite</c>
+///         This class and <c>Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqlServer</c>
 ///         share the same namespace and method signature. Switching the database provider
 ///         requires only changing the package reference — no code changes are needed.
 ///     </para>
@@ -30,16 +31,11 @@ namespace Ploch.Data.GenericRepository.EFCore.DependencyInjection;
 public static class ServiceCollectionRegistrations
 {
     /// <summary>
-    ///     Registers a <typeparamref name="TDbContext" /> using the SQL Server provider,
-    ///     the <see cref="DefaultDbContextCreationLifecycle" />, and the generic
+    ///     Registers a <typeparamref name="TDbContext" /> using the SQLite provider,
+    ///     the <see cref="SqLiteDbContextCreationLifecycle" />, and the generic
     ///     repository and Unit of Work services.
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         SQL Server does not require any special model-creation lifecycle logic,
-    ///         so this method registers the <see cref="DefaultDbContextCreationLifecycle" />
-    ///         (no-op) implementation.
-    ///     </para>
     ///     <para>
     ///         If <paramref name="connectionString" /> is <c>null</c>, the connection
     ///         string is loaded from <c>appsettings.json</c> using the
@@ -49,25 +45,21 @@ public static class ServiceCollectionRegistrations
     /// <typeparam name="TDbContext">The type of <see cref="DbContext" /> to register.</typeparam>
     /// <param name="services">The service collection to add the registrations to.</param>
     /// <param name="connectionString">
-    ///     A function that returns the SQL Server connection string, or <c>null</c> to
-    ///     load from <c>appsettings.json</c>.
+    ///     A function that returns the SQLite connection string, or <c>null</c> to load
+    ///     from <c>appsettings.json</c>.
     /// </param>
     /// <returns>The same <see cref="IServiceCollection" /> for chaining.</returns>
     /// <exception cref="InvalidOperationException">
     ///     Thrown if the connection string function returns <c>null</c>.
     /// </exception>
-    public static IServiceCollection AddDbContextWithRepositories<TDbContext>(
-        this IServiceCollection services,
-        Func<string?>? connectionString = null) where TDbContext : DbContext
+    public static IServiceCollection AddDbContextWithRepositories<TDbContext>(this IServiceCollection services, Func<string?>? connectionString = null) where TDbContext : DbContext
     {
         connectionString ??= ConnectionString.FromJsonFile();
         var resolvedConnectionString = connectionString() ??
                                        throw new InvalidOperationException(
-                                           $"SQL Server connection string for {typeof(TDbContext).Name} not found. " +
+                                           $"SQLite connection string for {typeof(TDbContext).Name} not found. " +
                                            "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.");
 
-        return services.AddSingleton<IDbContextCreationLifecycle, DefaultDbContextCreationLifecycle>()
-                       .AddDbContext<TDbContext>(options => options.UseSqlServer(resolvedConnectionString))
-                       .AddRepositories<TDbContext>();
+        return services.AddDbContextWithRepositories<TDbContext, SqLiteDbContextCreationLifecycle>(options => options.UseSqlite(resolvedConnectionString));
     }
 }

@@ -60,6 +60,58 @@ dotnet test
 
 The integration tests use an in-memory SQLite database and verify repository operations, Unit of Work transactions, audit timestamps, hierarchical categories, and pagination.
 
+## Switching Between SQLite and SQL Server
+
+The SampleApp uses the provider-specific DI packages, which allow switching the database with **zero application code changes**. Only two things need to change: the package reference and the connection string.
+
+### Using SQLite (default)
+
+In the ConsoleApp `.csproj`, reference the SQLite package:
+
+```xml
+<PackageReference Include="Ploch.Data.GenericRepository.EFCore.SqLite" />
+```
+
+In `appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "DataSource=sampleapp.db;Cache=Shared"
+  }
+}
+```
+
+### Using SQL Server
+
+Swap the package reference to SQL Server:
+
+```xml
+<PackageReference Include="Ploch.Data.GenericRepository.EFCore.SqlServer" />
+```
+
+Update `appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=SampleApp;Integrated Security=True;TrustServerCertificate=True"
+  }
+}
+```
+
+### Why No Code Changes Are Needed
+
+Both packages expose the same namespace (`Ploch.Data.GenericRepository.EFCore.DependencyInjection`) and method (`AddDbContextWithRepositories<TDbContext>()`). The `Program.cs` call remains identical:
+
+```csharp
+builder.Services.AddDbContextWithRepositories<SampleAppDbContext>();
+```
+
+Behind the scenes, the SQLite package registers `SqLiteDbContextCreationLifecycle` (which applies the `DateTimeOffset` value converter fix), while the SQL Server package registers `DefaultDbContextCreationLifecycle` (no-op). The `SampleAppDbContext` accepts `IDbContextCreationLifecycle` via constructor injection and calls it from `OnModelCreating`, keeping the DbContext itself provider-agnostic.
+
+See the [Dependency Injection Guide](../../docs/dependency-injection.md) for full details on all registration approaches.
+
 ## Key Code Examples
 
 ### Entity with full Ploch.Data.Model interfaces
@@ -82,9 +134,11 @@ public class Article : IHasId<int>, IHasTitle, IHasDescription, IHasContents,
 ### DI registration
 
 ```csharp
-services.AddDbContext<SampleAppDbContext>(
-    options => options.UseSqlite("Data Source=sampleapp.db"));
-services.AddRepositories<SampleAppDbContext>(configuration);
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
+
+// One call registers DbContext + repositories + lifecycle plugin.
+// Connection string loaded from appsettings.json automatically.
+builder.Services.AddDbContextWithRepositories<SampleAppDbContext>();
 ```
 
 ### Repository usage with eager loading

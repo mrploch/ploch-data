@@ -97,27 +97,35 @@ The Generic Repository provides a clean abstraction over EF Core for CRUD operat
 
 ### Install
 
-Reference the following packages (or project references for local development):
+Reference **one** of the provider-specific DI packages (or project references for local development):
 
-- `Ploch.Data.GenericRepository.EFCore`
-- `Ploch.Data.Model`
+| Package | Database |
+|---------|----------|
+| `Ploch.Data.GenericRepository.EFCore.SqLite` | SQLite |
+| `Ploch.Data.GenericRepository.EFCore.SqlServer` | SQL Server |
+
+Both packages also bring in `Ploch.Data.GenericRepository.EFCore` and `Ploch.Data.Model` transitively.
 
 ### Register in DI
 
 ````csharp
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Ploch.Data.GenericRepository.EFCore;
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
 
-var services = new ServiceCollection();
-
-services.AddDbContext<MyAppDbContext>(
-    options => options.UseSqlite("Data Source=myapp.db"));
-
-services.AddRepositories<MyAppDbContext>(configuration);
+var builder = Host.CreateApplicationBuilder(args);
+builder.Services.AddDbContextWithRepositories<MyAppDbContext>();
 ````
 
-`AddRepositories<TDbContext>()` registers all repository interfaces (`IReadRepositoryAsync`, `IReadWriteRepositoryAsync`, etc.) and `IUnitOfWork` as scoped services.
+This single call registers the DbContext with the correct database provider, all repository interfaces (`IReadRepositoryAsync`, `IReadWriteRepositoryAsync`, etc.), `IUnitOfWork`, and the appropriate `IDbContextCreationLifecycle` implementation. The connection string is loaded from `appsettings.json` (`ConnectionStrings:DefaultConnection`) automatically.
+
+**Switching providers** requires only changing the package reference and the connection string in `appsettings.json` -- no code changes. See the [Dependency Injection Guide](dependency-injection.md) for details.
+
+Alternatively, if you need full control over DbContext options, register manually:
+
+````csharp
+services.AddDbContext<MyAppDbContext>(
+    options => options.UseSqlite("Data Source=myapp.db"));
+services.AddRepositories<MyAppDbContext>();
+````
 
 ### Inject and use a repository
 

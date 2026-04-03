@@ -43,8 +43,7 @@ public class SqLiteDependencyInjectionTests
         var act = () => services.AddDbContextWithRepositories<DiTestDbContext>(() => null);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-           .WithMessage("*connection string*not found*");
+        act.Should().Throw<InvalidOperationException>().WithMessage("*connection string*not found*");
     }
 
     public class DiTestEntity : IHasId<int>
@@ -55,8 +54,7 @@ public class SqLiteDependencyInjectionTests
         public required string Name { get; set; }
     }
 
-    public class DiTestDbContext(DbContextOptions<DiTestDbContext> options, IDbContextCreationLifecycle lifecycle)
-        : DbContext(options)
+    public class DiTestDbContext(DbContextOptions<DiTestDbContext> options, IDbContextCreationLifecycle lifecycle) : DbContext(options)
     {
         public DbSet<DiTestEntity> TestEntities { get; set; } = null!;
 

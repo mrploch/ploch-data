@@ -32,8 +32,7 @@ public class ServiceCollectionRegistrationsTests
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCustomReadWriteAsyncRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
-                                                                                                                        collection.AddScoped(repositoryInterface,
-                                                                                                                                             repositoryImpl));
+                                                                                                                        collection.AddScoped(repositoryInterface, repositoryImpl));
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
@@ -64,8 +63,7 @@ public class ServiceCollectionRegistrationsTests
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCustomReadWriteRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
-                                                                                                                   collection.AddScoped(repositoryInterface,
-                                                                                                                                        repositoryImpl));
+                                                                                                                   collection.AddScoped(repositoryInterface, repositoryImpl));
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
@@ -103,9 +101,8 @@ public class ServiceCollectionRegistrationsTests
     private sealed class CustomBlogRepository(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
         : ReadWriteRepositoryAsync<Blog, int>(dbContext, auditEntityHandler), ICustomBlogRepository
     {
-        public Blog? FindFirst(Expression<Func<Blog, bool>> query,
-                               Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null,
-                               CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public Blog? FindFirst(Expression<Func<Blog, bool>> query, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null, CancellationToken cancellationToken = default) =>
+            throw new NotImplementedException();
 
         public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
 

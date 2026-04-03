@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Data.EFCore;
-using Ploch.Data.EFCore.SqlServer;
 using Ploch.Data.GenericRepository;
 using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
 using Ploch.Data.Model;
@@ -19,8 +17,7 @@ public class SqlServerDependencyInjectionTests
         var services = new ServiceCollection();
 
         // Act — use a fake connection string; we won't actually connect
-        services.AddDbContextWithRepositories<SqlServerDiTestDbContext>(
-            () => "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
+        services.AddDbContextWithRepositories<SqlServerDiTestDbContext>(() => "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
 
         // Assert
         var provider = services.BuildServiceProvider();
@@ -42,8 +39,8 @@ public class SqlServerDependencyInjectionTests
         var services = new ServiceCollection();
 
         // Act
-        services.AddDbContextWithSqlServerCreationLifecycle<SqlServerDiTestDbContext>(
-            () => "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
+        services.AddDbContextWithSqlServerCreationLifecycle<SqlServerDiTestDbContext>(() =>
+                                                                                          "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
 
         // Assert
         var provider = services.BuildServiceProvider();
@@ -65,8 +62,7 @@ public class SqlServerDependencyInjectionTests
         var act = () => services.AddDbContextWithRepositories<SqlServerDiTestDbContext>(() => null);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-           .WithMessage("*connection string*not found*");
+        act.Should().Throw<InvalidOperationException>().WithMessage("*connection string*not found*");
     }
 
     public class SqlServerDiTestEntity : IHasId<int>
@@ -77,8 +73,7 @@ public class SqlServerDependencyInjectionTests
         public required string Name { get; set; }
     }
 
-    public class SqlServerDiTestDbContext(DbContextOptions<SqlServerDiTestDbContext> options, IDbContextCreationLifecycle lifecycle)
-        : DbContext(options)
+    public class SqlServerDiTestDbContext(DbContextOptions<SqlServerDiTestDbContext> options, IDbContextCreationLifecycle lifecycle) : DbContext(options)
     {
         public DbSet<SqlServerDiTestEntity> TestEntities { get; set; } = null!;
 

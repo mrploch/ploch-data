@@ -25,8 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\ploch-common\src\TestingSupport.XUnit3.Dependencies\Ploch.TestingSupport.XUnit3.Dependencies.csproj" />
-    <ProjectReference Include="..\..\src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj" />
-    <ProjectReference Include="..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.DependencyInjection.SqlServer\Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqlServer.csproj" />
+    <ProjectReference Include="..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.SqlServer\Ploch.Data.GenericRepository.EFCore.SqlServer.csproj" />
     <ProjectReference Include="..\Data.EFCore.Tests\Ploch.Data.EFCore.Tests.csproj" />
   </ItemGroup>
 

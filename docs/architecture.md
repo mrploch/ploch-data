@@ -161,12 +161,6 @@ The `UnitOfWork<TDbContext>` class wraps the EF Core `DbContext.SaveChangesAsync
 - **Dependencies:** `Ploch.Data.GenericRepository`, `Ploch.Data.EFCore`, `Microsoft.EntityFrameworkCore`
 - **Purpose:** EF Core implementations of all repository interfaces, `UnitOfWork`, and DI registration via `ServiceCollectionRegistration`.
 
-### Ploch.Data.GenericRepository.EFCore.DependencyInjection
-
-- **Target:** `net10.0`
-- **Dependencies:** `Ploch.Data.GenericRepository.EFCore`, `Ploch.Common.DependencyInjection`
-- **Purpose:** `GenericRepositoriesServicesBundle<TDbContext>` for the Ploch.Common `ServicesBundle` pattern.
-
 ### Ploch.Data.GenericRepository.EFCore.Specification
 
 - **Target:** `net10.0`

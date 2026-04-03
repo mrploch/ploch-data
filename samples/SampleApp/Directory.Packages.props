@@ -11,7 +11,7 @@
          These are only used in standalone mode (PackageReference).
          When UsePlochProjectReferences=true, ProjectReferences.props removes
          these PackageReferences and replaces them with ProjectReferences. -->
-    <PlochDataPackagesVersion>3.0.1</PlochDataPackagesVersion>
+    <PlochDataPackagesVersion>3.1.21-pr.74.feature-72-dbcontext.gdb605ad36f</PlochDataPackagesVersion>
   </PropertyGroup>
 
   <ItemGroup Label="Ploch.Data packages (from NuGet / GitHub Packages feed)">
@@ -20,8 +20,8 @@
     <PackageVersion Include="Ploch.Data.EFCore.SqLite" Version="$(PlochDataPackagesVersion)" />
     <PackageVersion Include="Ploch.Data.EFCore.SqlServer" Version="$(PlochDataPackagesVersion)" />
     <PackageVersion Include="Ploch.Data.GenericRepository.EFCore" Version="$(PlochDataPackagesVersion)" />
-    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqLite" Version="$(PlochDataPackagesVersion)" />
-    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqlServer" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.SqLite" Version="$(PlochDataPackagesVersion)" />
+    <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.SqlServer" Version="$(PlochDataPackagesVersion)" />
     <PackageVersion Include="Ploch.Data.GenericRepository.EFCore.IntegrationTesting" Version="$(PlochDataPackagesVersion)" />
   </ItemGroup>
 

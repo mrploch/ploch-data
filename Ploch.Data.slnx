@@ -6,10 +6,26 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/docs/">
+    <File Path="docs/architecture.md" />
+    <File Path="docs/data-model.md" />
+    <File Path="docs/data-project-setup.md" />
+    <File Path="docs/dependency-injection.md" />
+    <File Path="docs/extending.md" />
+    <File Path="docs/Generic Repositories.png" />
+    <File Path="docs/generic-repository.md" />
+    <File Path="docs/GenericRepositories.svg" />
+    <File Path="docs/getting-started.md" />
+    <File Path="docs/Hierarchical Model.png" />
+    <File Path="docs/Hierarchical Model.svg" />
+    <File Path="docs/integration-testing.md" />
+    <File Path="docs/Ploch.Data.md" />
+    <File Path="docs/README.md" />
+  </Folder>
   <Folder Name="/GenericRepository/">
-    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection.SqLite/Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqLite.csproj" />
-    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection.SqlServer/Ploch.Data.GenericRepository.EFCore.DependencyInjection.SqlServer.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTesting/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
+    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/Ploch.Data.GenericRepository.EFCore.SqLite.csproj" />
+    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/Ploch.Data.GenericRepository.EFCore.SqlServer.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore/Ploch.Data.GenericRepository.EFCore.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository/Ploch.Data.GenericRepository.csproj" />
     <File Path="src/Data.GenericRepository/README.md" />
