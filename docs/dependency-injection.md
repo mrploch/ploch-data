@@ -156,37 +156,45 @@ public interface IDbContextCreationLifecycle
 | `DefaultDbContextCreationLifecycle` | SQL Server / any | No-op -- no special configuration needed |
 | `SqLiteDbContextCreationLifecycle` | SQLite | Applies `DateTimeOffset` → binary converter to all `DateTimeOffset` and `DateTimeOffset?` properties |
 
-### Using the Lifecycle in Your DbContext
+### Using the Lifecycle in Your DbContext (Optional, Recommended)
 
-Your `DbContext` accepts `IDbContextCreationLifecycle` via constructor injection and calls its methods from the `OnModelCreating` and `OnConfiguring` overrides:
+Accepting `IDbContextCreationLifecycle` in your `DbContext` constructor is **optional** -- your DbContext works fine without it. However, it is **recommended** if:
+
+- Your application may target **multiple database providers** (e.g. SQLite for development, SQL Server for production).
+- You want the Data project to remain **database-agnostic**, with provider-specific logic injected externally.
+- You are building a **library or shared DbContext** that other applications will consume with different databases.
+
+The parameter should use a **default value of `null`** so that the DbContext remains usable even when no lifecycle is registered in the DI container:
 
 ````csharp
 public class MyAppDbContext : DbContext
 {
-    private readonly IDbContextCreationLifecycle _lifecycle;
+    private readonly IDbContextCreationLifecycle? _lifecycle;
 
     public MyAppDbContext(
         DbContextOptions<MyAppDbContext> options,
-        IDbContextCreationLifecycle lifecycle) : base(options)
+        IDbContextCreationLifecycle? lifecycle = null) : base(options)
         => _lifecycle = lifecycle;
 
-    protected MyAppDbContext(IDbContextCreationLifecycle lifecycle)
+    protected MyAppDbContext(IDbContextCreationLifecycle? lifecycle = null)
         => _lifecycle = lifecycle;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MyAppDbContext).Assembly);
-        _lifecycle.OnModelCreating(modelBuilder, Database);
+        _lifecycle?.OnModelCreating(modelBuilder, Database);
         base.OnModelCreating(modelBuilder);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        _lifecycle.OnConfiguring(optionsBuilder);
+        _lifecycle?.OnConfiguring(optionsBuilder);
     }
 }
 ````
+
+**Why `= null`?** The .NET DI container treats constructor parameters with default values as optional. If `IDbContextCreationLifecycle` is registered, the container injects it; if not, it passes `null`. Without the default value, the container would throw `InvalidOperationException` when resolving the DbContext. The `?.` null-conditional calls ensure the hooks are simply skipped when no lifecycle is present.
 
 When using the provider-specific DI packages, the correct lifecycle implementation is registered automatically. You do not need to register it manually.
 

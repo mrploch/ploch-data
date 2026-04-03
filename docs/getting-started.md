@@ -67,6 +67,8 @@ public class MyAppDbContext : DbContext
 }
 ````
 
+**Tip: Multi-database support.** If your application may target different databases (e.g. SQLite for local development, SQL Server for production), consider accepting `IDbContextCreationLifecycle? lifecycle = null` in your DbContext constructor. This keeps the Data project database-agnostic while allowing provider-specific logic (such as SQLite's `DateTimeOffset` fix) to be injected automatically. See the [Dependency Injection Guide](dependency-injection.md#using-the-lifecycle-in-your-dbcontext-optional-recommended) for details.
+
 ### Create a SQLite design-time factory
 
 ````csharp
