@@ -46,6 +46,13 @@ public abstract class SqLiteDbContextFactory<TDbContext, TFactory> : BaseDbConte
     { }
 
     /// <summary>
+    ///     Represents the default lifecycle management for the creation of a DbContext in the context of SQLite database operations.
+    ///     This property provides an implementation of <see cref="IDbContextCreationLifecycle" />,
+    ///     which handles logic and behaviors specifically related to the initialization and setup of DbContext instances.
+    /// </summary>
+    public static IDbContextCreationLifecycle CreationLifecycle { get; } = new SqLiteDbContextCreationLifecycle();
+
+    /// <summary>
     ///     Configures the options for the DbContext instance.
     /// </summary>
     /// <param name="connectionStringFunc">A function that returns the connection string.</param>
