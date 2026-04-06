@@ -354,7 +354,7 @@ For manual test DI setup without the base class, use `DbContextServicesRegistrat
 var services = new ServiceCollection();
 services.AddSingleton<IDbContextCreationLifecycle, SqLiteDbContextCreationLifecycle>();
 
-var (provider, dbContext) = DbContextServicesRegistrationHelper
+var (provider, dbContext, _) = DbContextServicesRegistrationHelper
     .BuildDbContextAndServiceProvider<MyAppDbContext>(services);
 
 await dbContext.Database.EnsureCreatedAsync();
