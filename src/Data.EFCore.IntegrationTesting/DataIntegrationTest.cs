@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ploch.Data.EFCore.SqLite;
 
 namespace Ploch.Data.EFCore.IntegrationTesting;
@@ -32,7 +33,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         dbContextConfigurator ??= new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory);
         _dbContextConfigurator = dbContextConfigurator;
 
-        (ServiceProvider, DbContext) =
+        (ServiceProvider, DbContext, RootServiceProvider) =
             DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(serviceCollection, dbContextConfigurator);
     }
 
@@ -49,6 +50,16 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     protected IServiceProvider ServiceProvider { get; }
 
     /// <summary>
+    ///     Gets the root (non-scoped) service provider.
+    /// </summary>
+    /// <remarks>
+    ///     Use this when you need to create additional scopes or resolve services
+    ///     outside the default test scope. For most test code, prefer
+    ///     <see cref="ServiceProvider" /> instead.
+    /// </remarks>
+    protected IServiceProvider RootServiceProvider { get; }
+
+    /// <summary>
     ///     Disposes of the resources used by the current instance of the
     ///     <see cref="DataIntegrationTest{TDbContext}" /> class.
     /// </summary>
@@ -62,11 +73,29 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     Configures the required services for the test.
     /// </summary>
     /// <remarks>
-    ///     This method should be overridden in derived classes to configure additional services required for the test.
+    ///     <para>
+    ///         This method should be overridden in derived classes to configure additional
+    ///         services required for the test.
+    ///     </para>
+    ///     <para>
+    ///         By default, it registers the
+    ///         <see cref="SqLiteDbContextCreationLifecycle" /> as the
+    ///         <see cref="IDbContextCreationLifecycle" /> implementation, because
+    ///         the test infrastructure defaults to an in-memory SQLite database.
+    ///         This ensures the <c>DateTimeOffset</c> properties fix is applied
+    ///         automatically.
+    ///     </para>
+    ///     <para>
+    ///         If a derived class registers a different <see cref="IDbContextCreationLifecycle" />
+    ///         before calling <c>base.ConfigureServices</c>, the existing registration
+    ///         is preserved (this method uses <c>TryAddSingleton</c>).
+    ///     </para>
     /// </remarks>
     /// <param name="services">The service collection.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
-    { }
+    {
+        services.TryAddSingleton<IDbContextCreationLifecycle, SqLiteDbContextCreationLifecycle>();
+    }
 
     /// <summary>
     ///     Releases the unmanaged resources used by the <see cref="DataIntegrationTest{TDbContext}" />

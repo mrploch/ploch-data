@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj" />
+    <ProjectReference Include="..\..\Data.EFCore\Ploch.Data.EFCore.csproj" />
+    <ProjectReference Include="..\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
+  </ItemGroup>
+
+</Project>

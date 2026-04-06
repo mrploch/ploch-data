@@ -3,6 +3,12 @@ engines:
   sonarscharp:
     exclude_paths:
       - "src/**Tests/**"
+      - "tests/**"
+      - "samples/**"
+      # DI packages intentionally share the same namespace for zero-code database switching.
+      # Codacy's namespace-path check flags this as an issue, but it is by design.
+      - "src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/**"
+      - "src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/**"
   markdownlint:
     enabled: true
     exclude_paths:
@@ -11,6 +17,8 @@ exclude_paths:
   - "AGENTS.md"
   - "GEMINI.md"
   - "CLAUDE.md"
+  - "TODO-archive.md"
+  - "change-log/**"
   - ".junie/**"
   - ".claude/**"
   - ".contextstream/**"

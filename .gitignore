@@ -406,3 +406,16 @@ codestream.xml
 **/.idea/**/GitLink.xml
 **/.idea/**/markdown.xml
 **/.idea/**/sonarlint.xml
+
+# AI Tools Config
+.claude/
+.contextstream/
+.cursor/
+.windsurf/
+.cursorrules
+
+# Backups of cs files
+**/*.cs.bak
+**/*.csproj.bak
+**/*.props.bak
+**/*.md.bak

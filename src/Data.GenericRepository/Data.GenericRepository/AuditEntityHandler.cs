@@ -10,8 +10,9 @@ namespace Ploch.Data.GenericRepository;
 ///     Handles auditing operations for entities, such as setting creation and modification timestamps and user information.
 /// </summary>
 /// <param name="userInfoProvider">Provider for retrieving current user information.</param>
+/// <param name="timeProvider">Provider for retrieving the current UTC time.</param>
 /// <param name="configuration">Configuration options for repositories, including auditing settings.</param>
-public class AuditEntityHandler(IUserInfoProvider userInfoProvider, IOptions<RepositoriesConfiguration> configuration) : IAuditEntityHandler
+public class AuditEntityHandler(IUserInfoProvider userInfoProvider, TimeProvider timeProvider, IOptions<RepositoriesConfiguration> configuration) : IAuditEntityHandler
 {
     /// <summary>
     ///     Handles the creation auditing for an entity by setting creation time and creator information.
@@ -23,7 +24,7 @@ public class AuditEntityHandler(IUserInfoProvider userInfoProvider, IOptions<Rep
         {
             if (entity is IHasCreatedTime createdTimeEntity)
             {
-                createdTimeEntity.CreatedTime = DateTimeOffset.UtcNow;
+                createdTimeEntity.CreatedTime = timeProvider.GetUtcNow();
             }
 
             if (entity is IHasCreatedBy createdByEntity)
@@ -43,7 +44,7 @@ public class AuditEntityHandler(IUserInfoProvider userInfoProvider, IOptions<Rep
         {
             if (entity is IHasModifiedTime modifiedTimeEntity)
             {
-                modifiedTimeEntity.ModifiedTime = DateTimeOffset.UtcNow;
+                modifiedTimeEntity.ModifiedTime = timeProvider.GetUtcNow();
             }
 
             if (entity is IHasModifiedBy modifiedByEntity)

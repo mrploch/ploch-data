@@ -1,8 +1,10 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ploch.Data.EFCore;
 using Ploch.Data.EFCore.IntegrationTesting;
-using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
@@ -10,12 +12,67 @@ namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 public class ServiceCollectionRegistrationsTests
 {
     [Fact]
+    public void AddDbContextWithRepositories_configurator_should_register_repositories_and_dbcontext()
+    {
+        var serviceCollection = new ServiceCollection();
+        var configurator = new TestDbContextConfigurator();
+
+        serviceCollection.AddDbContextWithRepositories<TestDbContext>(configurator);
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        serviceProvider.GetRequiredService<TestDbContext>().Should().NotBeNull();
+        serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
+        serviceProvider.GetRequiredService<IDbContextCreationLifecycle>().Should().BeOfType<DefaultDbContextCreationLifecycle>();
+    }
+
+    [Fact]
+    public void AddDbContextWithRepositories_options_should_register_repositories_and_dbcontext()
+    {
+        var serviceCollection = new ServiceCollection();
+
+        serviceCollection.AddDbContextWithRepositories<TestDbContext>(options => options.UseSqlite("Data Source=:memory:"));
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        serviceProvider.GetRequiredService<TestDbContext>().Should().NotBeNull();
+        serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
+        serviceProvider.GetRequiredService<IDbContextCreationLifecycle>().Should().BeOfType<DefaultDbContextCreationLifecycle>();
+    }
+
+    [Fact]
+    public void AddDbContextWithRepositories_lifecycle_should_register_repositories_and_dbcontext_with_custom_lifecycle()
+    {
+        var serviceCollection = new ServiceCollection();
+
+        serviceCollection.AddDbContextWithRepositories<TestDbContext, TestDbContextCreationLifecycle>(options => options.UseSqlite("Data Source=:memory:"));
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        serviceProvider.GetRequiredService<TestDbContext>().Should().NotBeNull();
+        serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
+        serviceProvider.GetRequiredService<IDbContextCreationLifecycle>().Should().BeOfType<TestDbContextCreationLifecycle>();
+    }
+
+    [Fact]
+    public void AddRepositories_with_configuration_should_register_repositories()
+    {
+        var serviceCollection = new ServiceCollection();
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
+
+        serviceCollection.AddRepositories<TestDbContext>(configuration);
+        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+
+        serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
+    }
+
+    [Fact]
     public void AddRepositories_should_register_repository_types_mapping_them_to_concrete_implementation()
     {
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
         serviceProvider.GetRequiredService<IReadRepositoryAsync<Blog, int>>().Should().BeOfType<ReadRepositoryAsync<Blog, int>>();
@@ -31,14 +88,12 @@ public class ServiceCollectionRegistrationsTests
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.AddCustomReadWriteAsyncRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
-                                                                                                                        collection.AddScoped(repositoryInterface,
-                                                                                                                                             repositoryImpl));
+        serviceCollection.AddCustomReadWriteAsyncRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>();
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
@@ -59,18 +114,51 @@ public class ServiceCollectionRegistrationsTests
     }
 
     [Fact]
+    public void AddCustomReadWriteAsyncRepository_with_registration_function_should_register_custom_repository()
+    {
+        var serviceCollection = new ServiceCollection();
+
+        serviceCollection.AddCustomReadWriteAsyncRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
+                                                                                                                        collection.AddScoped(repositoryInterface, repositoryImpl));
+        serviceCollection.AddScoped<TestCommandReadRepository>();
+        serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
+
+        serviceCollection.AddRepositories<TestDbContext>();
+        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+
+        // Resolving the custom repository interface
+        serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
+    }
+
+    [Fact]
+    public void AddCustomReadWriteRepository_with_registration_function_should_register_custom_repository()
+    {
+        var serviceCollection = new ServiceCollection();
+
+        serviceCollection.AddCustomReadWriteRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
+                                                                                                                   collection.AddScoped(repositoryInterface, repositoryImpl));
+        serviceCollection.AddScoped<TestCommandReadRepository>();
+        serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
+
+        serviceCollection.AddRepositories<TestDbContext>();
+        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+
+        // Resolving the custom repository interface
+        serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
+    }
+
+    [Fact]
     public void AddCustomRepository_should_register_custom_repository()
     {
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCustomReadWriteRepository<ICustomBlogRepository, CustomBlogRepository, Blog, int>((collection, repositoryInterface, repositoryImpl) =>
-                                                                                                                   collection.AddScoped(repositoryInterface,
-                                                                                                                                        repositoryImpl));
+                                                                                                                   collection.AddScoped(repositoryInterface, repositoryImpl));
         serviceCollection.AddScoped<TestCommandReadRepository>();
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
@@ -100,12 +188,13 @@ public class ServiceCollectionRegistrationsTests
 #pragma warning restore SA1201
     { }
 
+    // S1172: Unused parameters — all methods throw NotImplementedException; parameters are required by the interface contract.
+#pragma warning disable S1172
     private sealed class CustomBlogRepository(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
         : ReadWriteRepositoryAsync<Blog, int>(dbContext, auditEntityHandler), ICustomBlogRepository
     {
-        public Blog? FindFirst(Expression<Func<Blog, bool>> query,
-                               Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null,
-                               CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public Blog? FindFirst(Expression<Func<Blog, bool>> query, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null, CancellationToken cancellationToken = default) =>
+            throw new NotImplementedException();
 
         public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
 
@@ -127,5 +216,27 @@ public class ServiceCollectionRegistrationsTests
         public Blog? GetById(int id, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
 
         public Blog? GetById(object[] keyValues) => throw new NotImplementedException();
+    }
+#pragma warning restore S1172
+
+    private sealed class TestDbContextConfigurator : IDbContextConfigurator
+    {
+        public void Configure(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data Source=:memory:");
+        }
+    }
+
+    private sealed class TestDbContextCreationLifecycle : IDbContextCreationLifecycle
+    {
+        public void OnModelCreating(ModelBuilder modelBuilder, DatabaseFacade database)
+        {
+            // Intentionally empty: test stub that verifies DI registration resolves correctly.
+        }
+
+        public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Intentionally empty: test stub that verifies DI registration resolves correctly.
+        }
     }
 }

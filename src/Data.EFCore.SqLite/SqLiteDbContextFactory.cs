@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Ploch.Data.EFCore.SqLite;
 
 /// <summary>
-///     Provides a factory for creating DbContext instances with SQLite as the database provider.
+///     Provides an implementation of <see cref="IDesignTimeDbContextFactory{TContext}" /> for creating DbContext instances with SQLite as the database provider during
+///     design time.
 /// </summary>
 /// <inheritdoc />
 public abstract class SqLiteDbContextFactory<TDbContext, TFactory> : BaseDbContextFactory<TDbContext, TFactory>
@@ -42,6 +44,13 @@ public abstract class SqLiteDbContextFactory<TDbContext, TFactory> : BaseDbConte
     protected SqLiteDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc) : base(dbContextCreator,
                                                                                                                                                 connectionStringFunc)
     { }
+
+    /// <summary>
+    ///     Represents the default lifecycle management for the creation of a DbContext in the context of SQLite database operations.
+    ///     This property provides an implementation of <see cref="IDbContextCreationLifecycle" />,
+    ///     which handles logic and behaviors specifically related to the initialization and setup of DbContext instances.
+    /// </summary>
+    public static IDbContextCreationLifecycle CreationLifecycle { get; } = new SqLiteDbContextCreationLifecycle();
 
     /// <summary>
     ///     Configures the options for the DbContext instance.

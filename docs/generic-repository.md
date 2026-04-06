@@ -231,16 +231,40 @@ This pattern is available on `GetByIdAsync`, `FindFirstAsync`, `GetAllAsync`, an
 
 ## DI Registration
 
-### Standard Registration
+For a comprehensive guide covering all registration approaches, provider switching, lifecycle plugins, and connection string configuration, see the [Dependency Injection Guide](dependency-injection.md).
 
-A single call registers all repository interfaces and `IUnitOfWork`:
+### Provider-Specific Registration (Recommended)
+
+The simplest approach uses one of the provider-specific DI packages. A single call registers the DbContext, the correct lifecycle plugin, and all repository interfaces:
+
+````csharp
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
+
+// SQLite (reference Ploch.Data.GenericRepository.EFCore.SqLite)
+// SQL Server (reference Ploch.Data.GenericRepository.EFCore.SqlServer)
+// The call is identical — just change the package reference:
+builder.Services.AddDbContextWithRepositories<MyDbContext>();
+````
+
+The connection string is loaded from `appsettings.json` (`ConnectionStrings:DefaultConnection`) automatically. To provide one explicitly:
+
+````csharp
+builder.Services.AddDbContextWithRepositories<MyDbContext>(
+    () => configuration.GetConnectionString("MyConnection"));
+````
+
+### Manual Registration
+
+When you need full control over DbContext options:
 
 ````csharp
 services.AddDbContext<MyDbContext>(options => options.UseSqlite(connectionString));
-services.AddRepositories<MyDbContext>(configuration);
+services.AddRepositories<MyDbContext>();
 ````
 
-This registers:
+### What Gets Registered
+
+Both approaches register:
 - `IQueryableRepository<TEntity>` as `QueryableRepository<TEntity>`
 - `IReadRepositoryAsync<TEntity>` as `ReadRepositoryAsync<TEntity>`
 - `IReadRepositoryAsync<TEntity, TId>` as `ReadRepositoryAsync<TEntity, TId>`
@@ -248,26 +272,7 @@ This registers:
 - `IUnitOfWork` as `UnitOfWork<TDbContext>`
 - `IAuditEntityHandler` as `AuditEntityHandler`
 
-### ServicesBundle Registration
-
-For applications using the `ServicesBundle` pattern from `Ploch.Common`, inherit from `GenericRepositoriesServicesBundle<TDbContext>`:
-
-````csharp
-using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
-
-public class MyDataBundle : GenericRepositoriesServicesBundle<MyDbContext>
-{
-    protected override Action<DbContextOptionsBuilder> GetOptionsBuilderAction(
-        IConfiguration? configuration)
-    {
-        return options => options.UseSqlite(
-            configuration!.GetConnectionString("DefaultConnection"));
-    }
-}
-
-// Registration
-services.AddServicesBundle(new MyDataBundle(), configuration);
-````
+The provider-specific packages additionally register the correct `IDbContextCreationLifecycle` implementation (e.g. `SqLiteDbContextCreationLifecycle` for SQLite).
 
 ### Custom Repository Registration
 
@@ -407,6 +412,7 @@ catch (DataUpdateException ex)
 ## See Also
 
 - [Getting Started](getting-started.md)
+- [Dependency Injection Guide](dependency-injection.md) -- all registration approaches, provider switching, and lifecycle plugins
 - [Data Model Guide](data-model.md)
 - [Integration Testing](integration-testing.md)
 - [Sample Application](../samples/SampleApp/) -- working examples of all repository operations

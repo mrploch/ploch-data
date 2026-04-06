@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using Dawn;
 using Microsoft.EntityFrameworkCore;
+using Ploch.Common.ArgumentChecking;
 
 namespace Ploch.Data.GenericRepository.EFCore;
 
@@ -15,8 +15,7 @@ namespace Ploch.Data.GenericRepository.EFCore;
 ///     Initializes a new instance of the <see cref="QueryableRepository{TEntity}" /> class.
 /// </remarks>
 /// <param name="dbContext">The <see cref="DbContext" /> to use for querying entities.</param>
-public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepository<TEntity>
-    where TEntity : class
+public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepository<TEntity> where TEntity : class
 {
     /// <inheritdoc />
     public IQueryable<TEntity> Entities => DbSet;
@@ -24,7 +23,7 @@ public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepos
     /// <summary>
     ///     Gets the <see cref="DbContext" /> used for querying entities.
     /// </summary>
-    protected DbContext DbContext { get; } = dbContext;
+    protected DbContext DbContext { get; } = dbContext.NotNull();
 
     /// <summary>
     ///     Gets the <see cref="DbSet{TEntity}" /> used for querying entities.
@@ -38,7 +37,8 @@ public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepos
                                             Expression<Func<TEntity, bool>>? query = null,
                                             Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
-        Guard.Argument(pageNumber, nameof(pageNumber)).Positive();
+        pageNumber.Positive();
+        pageSize.Positive();
 
         var dbSetQuery = onDbSet != null ? onDbSet(Entities) : Entities;
 

@@ -15,9 +15,10 @@ public static class DbContextServicesRegistrationHelper
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
     /// <param name="connectionString">The database connection string. Default is in-memory SQLite database.</param>
-    /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
-    public static (IServiceProvider, TDbContext) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
-                                                                                              string connectionString = "Data Source=:memory:") where TDbContext : DbContext
+    /// <returns>A tuple containing the scoped IServiceProvider, the configured TDbContext, and the root IServiceProvider.</returns>
+    public static (IServiceProvider, TDbContext, IServiceProvider) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
+                                                                                                                string connectionString = "Data Source=:memory:")
+        where TDbContext : DbContext
     {
         // Create the connection once and share it across all DbContext instances.
         // This is critical for SQLite in-memory databases: each new connection to :memory:
@@ -37,9 +38,9 @@ public static class DbContextServicesRegistrationHelper
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
     /// <param name="dbContextConfigurator">The configurator responsible for setting up the DbContext options.</param>
-    /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
-    public static (IServiceProvider, TDbContext) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
-                                                                                              IDbContextConfigurator dbContextConfigurator)
+    /// <returns>A tuple containing the scoped IServiceProvider, the configured TDbContext, and the root IServiceProvider.</returns>
+    public static (IServiceProvider, TDbContext, IServiceProvider) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
+                                                                                                                IDbContextConfigurator dbContextConfigurator)
         where TDbContext : DbContext
     {
         serviceCollection.AddDbContext<TDbContext>(dbContextConfigurator.Configure);
@@ -47,8 +48,7 @@ public static class DbContextServicesRegistrationHelper
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection);
     }
 
-    private static (IServiceProvider, TDbContext) CreateProviderAndPrepareDbContext<TDbContext>(IServiceCollection serviceCollection)
-        where TDbContext : DbContext
+    private static (IServiceProvider, TDbContext, IServiceProvider) CreateProviderAndPrepareDbContext<TDbContext>(IServiceCollection serviceCollection) where TDbContext : DbContext
     {
         var serviceProvider = serviceCollection.BuildServiceProvider();
         var scope = serviceProvider.CreateScope();
@@ -60,6 +60,6 @@ public static class DbContextServicesRegistrationHelper
         // share the same DbContext instance (and its change tracker).
         // The shared connection in SqLiteDbContextConfigurator ensures all DbContext instances
         // (including those in UnitOfWork child scopes) access the same in-memory database.
-        return (scope.ServiceProvider, testDbContext);
+        return (scope.ServiceProvider, testDbContext, serviceProvider);
     }
 }

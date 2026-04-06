@@ -265,6 +265,16 @@ jobs:
         run: |
           dotnet nbgv set-version "${NEXT_DEV_VERSION}-prerelease"
 
+      - name: Update SampleApp to released stable version
+        if: success()
+        env:
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          PROPS_FILE="samples/SampleApp/Directory.Packages.props"
+          # Replace the floating wildcard (or any previous version) with the stable release version
+          sed -i "s|<PlochDataPackagesVersion>.*</PlochDataPackagesVersion>|<PlochDataPackagesVersion>${NUGET_VERSION}</PlochDataPackagesVersion>|" "$PROPS_FILE"
+          echo "Updated SampleApp PlochDataPackagesVersion to ${NUGET_VERSION}"
+
       - name: Archive consumed change-log entries
         if: success()
         run: |
@@ -281,11 +291,15 @@ jobs:
         if: success()
         env:
           NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
         run: |
           git add version.json
           git add change-log/ || true
+          git add samples/SampleApp/Directory.Packages.props || true
           git diff --cached --quiet && echo "No changes to commit" || \
-            git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development"
+            git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development
+
+          Update SampleApp to reference stable ${NUGET_VERSION} packages."
           if ! git push origin main 2>&1; then
             echo "::warning::Could not push version bump directly to main (branch protection). Create a PR to bump version.json to ${NEXT_DEV_VERSION}-prerelease manually."
             echo "push_failed=true" >> $GITHUB_OUTPUT

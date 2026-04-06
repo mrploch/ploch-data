@@ -43,9 +43,10 @@ public class Product : IHasId<int>, IHasTitle, IHasDescription, IHasAuditTimePro
     public DateTimeOffset? AccessedTime { get; set; }
 }
 
-// 2. Register in DI
-services.AddDbContext<MyDbContext>(options => options.UseSqlite(connectionString));
-services.AddRepositories<MyDbContext>(configuration);
+// 2. Register in DI (reference Ploch.Data.GenericRepository.EFCore.SqLite
+//    or Ploch.Data.GenericRepository.EFCore.SqlServer — same code for both)
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
+builder.Services.AddDbContextWithRepositories<MyDbContext>();
 
 // 3. Inject and use repositories
 public class ProductService(IReadWriteRepositoryAsync<Product, int> repository)
@@ -62,7 +63,8 @@ Full documentation is available in the [docs/](docs/) folder:
 
 - [Getting Started](docs/getting-started.md) -- quick start guides for common use cases
 - [Data Model Guide](docs/data-model.md) -- complete reference for `Ploch.Data.Model` interfaces
-- [Generic Repository Guide](docs/generic-repository.md) -- repository operations, Unit of Work, DI registration, specifications
+- [Generic Repository Guide](docs/generic-repository.md) -- repository operations, Unit of Work, specifications
+- [Dependency Injection Guide](docs/dependency-injection.md) -- DI registration, provider switching (SQLite/SQL Server), lifecycle plugins, connection string configuration
 - [Data Project Setup](docs/data-project-setup.md) -- step-by-step guide for creating Data and provider projects
 - [Integration Testing](docs/integration-testing.md) -- testing with in-memory SQLite, base test classes
 - [Extending the Libraries](docs/extending.md) -- custom repositories, new providers, extensibility
@@ -94,7 +96,8 @@ A fully working [Sample Application](samples/SampleApp/) demonstrates entity mod
 |---------|-------------|
 | [Ploch.Data.GenericRepository](src/Data.GenericRepository/Data.GenericRepository/) | Provider-agnostic repository and Unit of Work interfaces |
 | [Ploch.Data.GenericRepository.EFCore](src/Data.GenericRepository/Data.GenericRepository.EFCore/) | EF Core implementations, DI registration via `AddRepositories<TDbContext>()` |
-| [Ploch.Data.GenericRepository.EFCore.DependencyInjection](src/Data.GenericRepository/Data.GenericRepository.EFCore.DependencyInjection/) | `ServicesBundle` integration for Ploch.Common |
+| [Ploch.Data.GenericRepository.EFCore.SqLite](src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/) | One-call DI registration for SQLite (`AddDbContextWithRepositories<TDbContext>()`) |
+| [Ploch.Data.GenericRepository.EFCore.SqlServer](src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/) | One-call DI registration for SQL Server (`AddDbContextWithRepositories<TDbContext>()`) |
 | [Ploch.Data.GenericRepository.EFCore.Specification](src/Data.GenericRepository/Data.GenericRepository.EFCore.Specification/) | Ardalis.Specification integration |
 
 ### Testing
@@ -129,7 +132,9 @@ A generic repository and unit of work pattern implementation for Entity Framewor
 
 - Layered repository interfaces: `IQueryableRepository`, `IReadRepositoryAsync`, `IReadWriteRepositoryAsync`
 - Unit of Work: `IUnitOfWork` with `CommitAsync()` and `RollbackAsync()`
-- One-line DI registration: `services.AddRepositories<MyDbContext>()`
+- One-line DI registration: `services.AddDbContextWithRepositories<MyDbContext>()` (provider-specific) or `services.AddRepositories<MyDbContext>()` (manual)
+- Zero-code database provider switching between SQLite and SQL Server
+- Pluggable `IDbContextCreationLifecycle` for provider-specific model configuration
 - Custom repository support with full interface registration
 - Specification pattern integration via Ardalis.Specification
 - Automatic audit property handling
