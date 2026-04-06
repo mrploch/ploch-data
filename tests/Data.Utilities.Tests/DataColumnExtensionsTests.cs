@@ -10,8 +10,8 @@ public class DataColumnExtensionsTests
     [Fact]
     public void CopyProperties_should_copy_AllowDBNull()
     {
-        var source = new DataColumn("Source", typeof(string)) { AllowDBNull = false };
-        var target = new DataColumn("Target", typeof(string));
+        using var source = new DataColumn("Source", typeof(string)) { AllowDBNull = false };
+        using var target = new DataColumn("Target", typeof(string));
 
         source.CopyProperties(target);
 
@@ -21,8 +21,8 @@ public class DataColumnExtensionsTests
     [Fact]
     public void CopyProperties_should_copy_AutoIncrement()
     {
-        var source = new DataColumn("Source", typeof(int)) { AutoIncrement = true };
-        var target = new DataColumn("Target", typeof(int));
+        using var source = new DataColumn("Source", typeof(int)) { AutoIncrement = true };
+        using var target = new DataColumn("Target", typeof(int));
 
         source.CopyProperties(target);
 
@@ -32,8 +32,8 @@ public class DataColumnExtensionsTests
     [Fact]
     public void CopyProperties_should_copy_Caption()
     {
-        var source = new DataColumn("Source", typeof(string)) { Caption = "Test Caption" };
-        var target = new DataColumn("Target", typeof(string));
+        using var source = new DataColumn("Source", typeof(string)) { Caption = "Test Caption" };
+        using var target = new DataColumn("Target", typeof(string));
 
         source.CopyProperties(target);
 
@@ -43,8 +43,8 @@ public class DataColumnExtensionsTests
     [Fact]
     public void CopyProperties_should_copy_AutoIncrementSeed()
     {
-        var source = new DataColumn("Source", typeof(int)) { AutoIncrementSeed = 100 };
-        var target = new DataColumn("Target", typeof(int));
+        using var source = new DataColumn("Source", typeof(int)) { AutoIncrementSeed = 100 };
+        using var target = new DataColumn("Target", typeof(int));
 
         source.CopyProperties(target);
 
@@ -54,8 +54,8 @@ public class DataColumnExtensionsTests
     [Fact]
     public void CopyProperties_should_copy_AutoIncrementStep()
     {
-        var source = new DataColumn("Source", typeof(int)) { AutoIncrementStep = 5 };
-        var target = new DataColumn("Target", typeof(int));
+        using var source = new DataColumn("Source", typeof(int)) { AutoIncrementStep = 5 };
+        using var target = new DataColumn("Target", typeof(int));
 
         source.CopyProperties(target);
 
@@ -65,7 +65,7 @@ public class DataColumnExtensionsTests
     [Fact]
     public void CopyProperties_should_copy_all_properties_at_once()
     {
-        var source = new DataColumn("Source", typeof(int))
+        using var source = new DataColumn("Source", typeof(int))
         {
             AllowDBNull = false,
             AutoIncrement = true,
@@ -73,7 +73,7 @@ public class DataColumnExtensionsTests
             AutoIncrementSeed = 10,
             AutoIncrementStep = 2,
         };
-        var target = new DataColumn("Target", typeof(int));
+        using var target = new DataColumn("Target", typeof(int));
 
         source.CopyProperties(target);
 
@@ -87,8 +87,8 @@ public class DataColumnExtensionsTests
     [Fact]
     public void CopyProperties_should_not_copy_column_name()
     {
-        var source = new DataColumn("Source", typeof(string));
-        var target = new DataColumn("Target", typeof(string));
+        using var source = new DataColumn("Source", typeof(string));
+        using var target = new DataColumn("Target", typeof(string));
 
         source.CopyProperties(target);
 

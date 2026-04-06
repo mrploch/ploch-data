@@ -92,10 +92,13 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
         await unitOfWork.CommitAsync();
 
         var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
-        var pageQuery = queryableRepo.GetPageQuery(1, 5, onDbSet: q => q.Where(e => e.Id <= 8));
+
+        // Request all 10 items in one page, but the onDbSet filter limits to IDs <= 3
+        var pageQuery = queryableRepo.GetPageQuery(1, 10, onDbSet: q => q.Where(e => e.Id <= 3));
 
         var result = pageQuery.ToList();
-        result.Should().HaveCount(5);
+        result.Should().HaveCount(3);
+        result.Should().OnlyContain(e => e.Id <= 3);
     }
 
     [Fact]

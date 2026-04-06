@@ -273,8 +273,9 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         await unitOfWork.CommitAsync();
 
         var readRepo = CreateReadRepositoryAsync<TestEntity, int>();
-        var page = await readRepo.GetPageAsync(1, 5, sortBy: e => e.Name, query: e => e.Id > 3);
+        var page = await readRepo.GetPageAsync(1, 10, sortBy: e => e.Name, query: e => e.Id > 7);
 
-        page.Should().HaveCount(5);
+        page.Should().HaveCount(3);
+        page.Should().OnlyContain(e => e.Id > 7);
     }
 }
