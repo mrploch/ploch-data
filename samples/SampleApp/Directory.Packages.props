@@ -12,7 +12,7 @@
          These are only used in standalone mode (PackageReference).
          When UsePlochProjectReferences=true, ProjectReferences.props removes
          these PackageReferences and replaces them with ProjectReferences. -->
-    <PlochDataPackagesVersion>3.1.*-prerelease.*</PlochDataPackagesVersion>
+    <PlochDataPackagesVersion>3.1.6-prerelease</PlochDataPackagesVersion>
   </PropertyGroup>
 
   <ItemGroup Label="Ploch.Data packages (from NuGet / GitHub Packages feed)">
