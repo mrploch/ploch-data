@@ -33,7 +33,7 @@ public class SqlServerDependencyInjectionTests
     }
 
     [Fact]
-    public void AddDbContextWithSqlServerCreationLifecycle_should_register_default_lifecycle_and_DbContext()
+    public void AddDbContextUsingSqlServer_should_register_default_lifecycle_and_DbContext()
     {
         // Arrange
         var services = new ServiceCollection();
