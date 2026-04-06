@@ -19,6 +19,7 @@ namespace Ploch.Data.GenericRepository.EFCore;
 ///     Initializes a new instance of the <see cref="ReadWriteRepositoryAsync{TEntity, TId}" /> class.
 /// </remarks>
 /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
+/// <param name="auditEntityHandler">The handler for setting audit properties on entities during creation and modification.</param>
 public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
     : ReadRepositoryAsync<TEntity, TId>(dbContext, auditEntityHandler), IReadWriteRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
 {

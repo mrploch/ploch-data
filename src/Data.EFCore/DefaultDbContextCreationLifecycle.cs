@@ -9,8 +9,8 @@ namespace Ploch.Data.EFCore;
 /// </summary>
 /// <remarks>
 ///     Use this implementation for database providers that do not require any special
-///     model-creation logic (e.g. SQL Server). It is the default registered by
-///     <see cref="DbContextCreationLifecycleServiceCollectionExtensions.AddDefaultDbContextCreationLifecycle" />.
+///     model-creation logic (e.g. SQL Server). It is registered automatically by
+///     <c>AddDbContextWithRepositories&lt;TDbContext&gt;()</c> and related extension methods.
 /// </remarks>
 public class DefaultDbContextCreationLifecycle : IDbContextCreationLifecycle
 {

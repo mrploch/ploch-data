@@ -17,14 +17,18 @@ namespace Ploch.Data.GenericRepository.EFCore;
 public static class ServiceCollectionRegistration
 {
     private static readonly Dictionary<Type, Type> RepositoryTypeMappings = new()
-                                                                            { { typeof(IReadRepository<,>), typeof(ReadRepository<,>) },
-                                                                              { typeof(IWriteRepository<,>), typeof(ReadWriteRepository<,>) },
-                                                                              { typeof(IReadWriteRepository<,>), typeof(ReadWriteRepository<,>) } };
+    {
+        { typeof(IReadRepository<,>), typeof(ReadRepository<,>) },
+        { typeof(IWriteRepository<,>), typeof(ReadWriteRepository<,>) },
+        { typeof(IReadWriteRepository<,>), typeof(ReadWriteRepository<,>) },
+    };
 
     private static readonly Dictionary<Type, Type> RepositoryAsyncTypeMappings = new()
-                                                                                 { { typeof(IReadRepositoryAsync<,>), typeof(ReadRepositoryAsync<,>) },
-                                                                                   { typeof(IWriteRepositoryAsync<,>), typeof(ReadWriteRepositoryAsync<,>) },
-                                                                                   { typeof(IReadWriteRepositoryAsync<,>), typeof(ReadWriteRepositoryAsync<,>) } };
+    {
+        { typeof(IReadRepositoryAsync<,>), typeof(ReadRepositoryAsync<,>) },
+        { typeof(IWriteRepositoryAsync<,>), typeof(ReadWriteRepositoryAsync<,>) },
+        { typeof(IReadWriteRepositoryAsync<,>), typeof(ReadWriteRepositoryAsync<,>) },
+    };
 
     /// <summary>
     ///     Registers a <typeparamref name="TDbContext" /> using the <see cref="IDbContextConfigurator" />,

@@ -10,6 +10,7 @@ namespace Ploch.Data.GenericRepository;
 ///     Handles auditing operations for entities, such as setting creation and modification timestamps and user information.
 /// </summary>
 /// <param name="userInfoProvider">Provider for retrieving current user information.</param>
+/// <param name="timeProvider">Provider for retrieving the current UTC time.</param>
 /// <param name="configuration">Configuration options for repositories, including auditing settings.</param>
 public class AuditEntityHandler(IUserInfoProvider userInfoProvider, TimeProvider timeProvider, IOptions<RepositoriesConfiguration> configuration) : IAuditEntityHandler
 {

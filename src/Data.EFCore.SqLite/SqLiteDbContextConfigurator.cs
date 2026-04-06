@@ -74,14 +74,6 @@ public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private static SqliteConnection CreateAndOpenConnection(string connectionString)
-    {
-        var connection = new SqliteConnection(connectionString);
-        connection.Open();
-
-        return connection;
-    }
-
     /// <summary>
     ///     Releases the shared SQLite connection.
     /// </summary>
@@ -95,5 +87,13 @@ public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
         }
 
         _disposed = true;
+    }
+
+    private static SqliteConnection CreateAndOpenConnection(string connectionString)
+    {
+        var connection = new SqliteConnection(connectionString);
+        connection.Open();
+
+        return connection;
     }
 }
