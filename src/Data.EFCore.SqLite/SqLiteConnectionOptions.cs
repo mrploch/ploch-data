@@ -81,5 +81,5 @@ public record SqLiteConnectionOptions
     /// <param name="connectionString">The SQLite connection string.</param>
     /// <returns>A new instance of <see cref="SqLiteConnectionOptions" /> configured with the specified connection string.</returns>
     public static SqLiteConnectionOptions FromConnectionString(string connectionString) =>
-        new(connectionStringbuilder => connectionStringbuilder.ConnectionString = connectionString);
+        new(connectionStringBuilder => connectionStringBuilder.ConnectionString = connectionString);
 }
