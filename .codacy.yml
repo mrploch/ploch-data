@@ -3,6 +3,7 @@ engines:
   sonarscharp:
     exclude_paths:
       - "src/**Tests/**"
+      - "tests/**"
       - "samples/**"
       # DI packages intentionally share the same namespace for zero-code database switching.
       # Codacy's namespace-path check flags this as an issue, but it is by design.
