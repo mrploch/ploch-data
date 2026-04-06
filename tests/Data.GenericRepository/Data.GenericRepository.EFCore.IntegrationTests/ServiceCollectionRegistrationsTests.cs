@@ -188,11 +188,13 @@ public class ServiceCollectionRegistrationsTests
 #pragma warning restore SA1201
     { }
 
+    // S1172: Unused parameters — all methods throw NotImplementedException; parameters are required by the interface contract.
+#pragma warning disable S1172
     private sealed class CustomBlogRepository(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
         : ReadWriteRepositoryAsync<Blog, int>(dbContext, auditEntityHandler), ICustomBlogRepository
     {
         public Blog? FindFirst(Expression<Func<Blog, bool>> query, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null, CancellationToken cancellationToken = default) =>
-            throw new NotImplementedException($"Not implemented: {query}");
+            throw new NotImplementedException();
 
         public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
 
@@ -215,6 +217,7 @@ public class ServiceCollectionRegistrationsTests
 
         public Blog? GetById(object[] keyValues) => throw new NotImplementedException();
     }
+#pragma warning restore S1172
 
     private sealed class TestDbContextConfigurator : IDbContextConfigurator
     {
