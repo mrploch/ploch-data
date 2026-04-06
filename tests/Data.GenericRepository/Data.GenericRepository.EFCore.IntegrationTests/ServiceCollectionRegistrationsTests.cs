@@ -192,7 +192,7 @@ public class ServiceCollectionRegistrationsTests
         : ReadWriteRepositoryAsync<Blog, int>(dbContext, auditEntityHandler), ICustomBlogRepository
     {
         public Blog? FindFirst(Expression<Func<Blog, bool>> query, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null, CancellationToken cancellationToken = default) =>
-            throw new NotImplementedException();
+            throw new NotImplementedException($"Not implemented: {query}");
 
         public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
 
@@ -227,9 +227,13 @@ public class ServiceCollectionRegistrationsTests
     private sealed class TestDbContextCreationLifecycle : IDbContextCreationLifecycle
     {
         public void OnModelCreating(ModelBuilder modelBuilder, DatabaseFacade database)
-        { }
+        {
+            // Intentionally empty: test stub that verifies DI registration resolves correctly.
+        }
 
         public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        { }
+        {
+            // Intentionally empty: test stub that verifies DI registration resolves correctly.
+        }
     }
 }
