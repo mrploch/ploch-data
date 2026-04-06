@@ -6,5 +6,5 @@ using Ploch.Data.EFCore.SqLite;
 namespace Ploch.Data.SampleApp.Data.SqLite;
 #pragma warning restore IDE0130
 
-public class SampleAppDbContextFactory()
-    : SqLiteDbContextFactory<SampleAppDbContext, SampleAppDbContextFactory>(static options => new(options, new SqLiteDbContextCreationLifecycle()));
+public class SampleAppDbContextFactory() : SqLiteDbContextFactory<SampleAppDbContext, SampleAppDbContextFactory>(static options => new(options, CreationLifecycle))
+{ }
