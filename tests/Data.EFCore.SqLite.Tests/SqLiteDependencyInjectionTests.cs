@@ -38,9 +38,11 @@ public class SqLiteDependencyInjectionTests
     {
         // Arrange
         var services = new ServiceCollection();
+        services.AddDbContextWithRepositories<DiTestDbContext>(() => null);
+        var provider = services.BuildServiceProvider();
 
-        // Act — exception is thrown eagerly during registration
-        var act = () => services.AddDbContextWithRepositories<DiTestDbContext>(() => null);
+        // Act — exception is thrown lazily when the DbContext is resolved
+        var act = () => provider.GetRequiredService<DiTestDbContext>();
 
         // Assert
         act.Should().Throw<InvalidOperationException>().WithMessage("*connection string*not found*");

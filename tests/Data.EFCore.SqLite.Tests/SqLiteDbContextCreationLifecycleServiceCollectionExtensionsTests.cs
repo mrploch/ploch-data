@@ -62,9 +62,11 @@ public class SqLiteDbContextCreationLifecycleServiceCollectionExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
+        services.AddDbContextWithSqLiteCreationLifecycle<SqLiteLifecycleTestDbContext>(() => null);
+        var provider = services.BuildServiceProvider();
 
-        // Act — exception is thrown eagerly during registration, not at resolution time
-        var act = () => services.AddDbContextWithSqLiteCreationLifecycle<SqLiteLifecycleTestDbContext>(() => null);
+        // Act — exception is thrown lazily when the DbContext is resolved
+        var act = () => provider.GetRequiredService<SqLiteLifecycleTestDbContext>();
 
         // Assert
         act.Should().Throw<InvalidOperationException>()

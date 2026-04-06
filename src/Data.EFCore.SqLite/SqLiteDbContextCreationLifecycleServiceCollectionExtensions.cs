@@ -58,12 +58,11 @@ public static class SqLiteDbContextCreationLifecycleServiceCollectionExtensions
         Func<string?>? connectionString = null) where TDbContext : DbContext
     {
         connectionString ??= ConnectionString.FromJsonFile();
-        var resolvedConnectionString = connectionString() ??
-                                       throw new InvalidOperationException(
-                                           $"SQLite connection string for {typeof(TDbContext).Name} not found. " +
-                                           "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.");
 
         return services.AddSqLiteDbContextCreationLifecycle()
-                       .AddDbContext<TDbContext>(options => options.UseSqlite(resolvedConnectionString));
+                       .AddDbContext<TDbContext>(options => options.UseSqlite(connectionString() ??
+                                                                             throw new InvalidOperationException(
+                                                                                 $"SQLite connection string for {typeof(TDbContext).Name} not found. " +
+                                                                                 "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.")));
     }
 }
