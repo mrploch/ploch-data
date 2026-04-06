@@ -61,11 +61,10 @@ public static class ServiceCollectionRegistrations
     public static IServiceCollection AddDbContextWithRepositories<TDbContext>(this IServiceCollection services, Func<string?>? connectionString = null) where TDbContext : DbContext
     {
         connectionString ??= ConnectionString.FromJsonFile();
-        var resolvedConnectionString = connectionString() ??
-                                       throw new InvalidOperationException(
-                                           $"SQL Server connection string for {typeof(TDbContext).Name} not found. " +
-                                           "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.");
 
-        return services.AddDbContextWithRepositories<TDbContext>(options => options.UseSqlServer(resolvedConnectionString));
+        return services.AddDbContextWithRepositories<TDbContext>(options => options.UseSqlServer(connectionString() ??
+                                                                                                 throw new
+                                                                                                     InvalidOperationException($"SQL Server connection string for {typeof(TDbContext).Name} not found. " +
+                                                                                                                               "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.")));
     }
 }
