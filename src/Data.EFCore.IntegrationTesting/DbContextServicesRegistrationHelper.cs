@@ -15,7 +15,7 @@ public static class DbContextServicesRegistrationHelper
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
     /// <param name="connectionString">The database connection string. Default is in-memory SQLite database.</param>
-    /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
+    /// <returns>A tuple containing the scoped IServiceProvider, the configured TDbContext, and the root IServiceProvider.</returns>
     public static (IServiceProvider, TDbContext, IServiceProvider) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
                                                                                                                 string connectionString = "Data Source=:memory:")
         where TDbContext : DbContext
@@ -38,7 +38,7 @@ public static class DbContextServicesRegistrationHelper
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
     /// <param name="dbContextConfigurator">The configurator responsible for setting up the DbContext options.</param>
-    /// <returns>A tuple containing the IServiceProvider and the configured TDbContext.</returns>
+    /// <returns>A tuple containing the scoped IServiceProvider, the configured TDbContext, and the root IServiceProvider.</returns>
     public static (IServiceProvider, TDbContext, IServiceProvider) BuildDbContextAndServiceProvider<TDbContext>(IServiceCollection serviceCollection,
                                                                                                                 IDbContextConfigurator dbContextConfigurator)
         where TDbContext : DbContext

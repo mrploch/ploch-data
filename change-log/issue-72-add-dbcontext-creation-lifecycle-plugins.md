@@ -65,7 +65,7 @@ public static class ServiceCollectionRegistrations
 }
 ```
 
-...and in `.GenericRepository.EFCore.DependencyInjection.SqLite` we will have `options.UseSqLite(...)` while having `options.UseSqlServer(...)` in the other one, there would be no need for code change. The appropriate method would be called depending on which package is referenced.
+...and in `.GenericRepository.EFCore.DependencyInjection.SqLite` we will have `options.UseSqlite(...)` while having `options.UseSqlServer(...)` in the other one, there would be no need for code change. The appropriate method would be called depending on which package is referenced.
 
 # Implementation details
 

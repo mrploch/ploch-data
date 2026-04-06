@@ -10,7 +10,7 @@ Migrations are kept in provider-specific projects.
 - **Entity modelling** with `Ploch.Data.Model` interfaces (`IHasId`, `IHasTitle`, `IHasDescription`, `IHasContents`, `IHasAuditProperties`, `IHasCategories`, `IHasTags`)
 - **Common base types** -- `Category<T>` for hierarchical categories, `Tag<TId>` for flat tags, `Property<TValue>` for key/value metadata
 - **DbContext setup** with assembly-scanned entity configurations
-- **Targetting multiple databases** with provider-specific migrations.
+- **Targeting multiple databases** with provider-specific migrations.
 - **SQLite DateTimeOffset workaround** via `ApplySqLiteDateTimeOffsetPropertiesFix`
 - **Automatic audit timestamps** via `SaveChanges` override on `IHasAuditTimeProperties` entities
 - **DI registration** using `AddRepositories<TDbContext>()`

@@ -64,7 +64,7 @@ services.AddDbContext<MyAppDbContext>(options =>
 services.AddRepositories<MyAppDbContext>();
 ````
 
-Or with a custom lifecycle:
+Or with a DbContext options callback:
 
 ````csharp
 services.AddDbContextWithRepositories<MyAppDbContext>(options =>
