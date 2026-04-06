@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <SonarQubeExclude>true</SonarQubeExclude>
+    <OutputType>Exe</OutputType>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ploch-common\src\TestingSupport.XUnit3.Dependencies\Ploch.TestingSupport.XUnit3.Dependencies.csproj" />
+    <ProjectReference Include="..\..\src\Data.Utilities\Ploch.Data.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -162,7 +162,9 @@
     <Project Path="tests/Data.EFCore.SqLite.Tests/Ploch.Data.EFCore.SqLite.Tests.csproj" />
     <Project Path="tests/Data.EFCore.SqlServer.Tests/Ploch.Data.EFCore.SqlServer.Tests.csproj" />
     <Project Path="tests/Data.EFCore.Tests/Ploch.Data.EFCore.Tests.csproj" />
+    <Project Path="tests/Data.Model.Tests/Ploch.Data.Model.Tests.csproj" />
     <Project Path="tests/Data.StandardDataSets.Tests/Ploch.Data.StandardDataSets.Tests.csproj" />
+    <Project Path="tests/Data.Utilities.Tests/Ploch.Data.Utilities.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/GenericRepository/">
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTests/Ploch.Data.GenericRepository.EFCore.IntegrationTests.csproj" />
