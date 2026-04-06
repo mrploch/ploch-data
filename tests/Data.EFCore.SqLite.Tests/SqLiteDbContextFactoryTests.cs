@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ploch.Data.Model;
 using Xunit;
 
@@ -9,6 +10,47 @@ namespace Ploch.Data.EFCore.SqLite.Tests;
 
 public class SqLiteDbContextFactoryTests
 {
+    [Fact]
+    public void CreationLifecycle_should_return_SqLiteDbContextCreationLifecycle()
+    {
+        // Act
+        var lifecycle = TestSqLiteDbContextFactory.CreationLifecycle;
+
+        // Assert
+        lifecycle.Should().BeOfType<SqLiteDbContextCreationLifecycle>();
+    }
+
+    [Fact]
+    public void CreationLifecycle_should_return_same_instance()
+    {
+        // Act
+        var first = TestSqLiteDbContextFactory.CreationLifecycle;
+        var second = TestSqLiteDbContextFactory.CreationLifecycle;
+
+        // Assert
+        first.Should().BeSameAs(second);
+    }
+
+    [Fact]
+    public void CreationLifecycle_should_apply_DateTimeOffset_fix_when_used_with_factory_created_DbContext()
+    {
+        // Arrange — create a factory that passes CreationLifecycle to the DbContext,
+        // with an explicit in-memory connection string (no appsettings.json needed)
+        var connectionString = SqLiteConnectionOptions.InMemory.BuildConnectionString();
+        var factory = new LifecycleIntegrationTestFactory(
+            options => new LifecycleIntegrationTestDbContext(options, TestSqLiteDbContextFactory.CreationLifecycle),
+            () => connectionString);
+
+        // Act — CreateDbContext triggers OnModelCreating which calls the lifecycle
+        var dbContext = factory.CreateDbContext([]);
+        var model = dbContext.Model;
+
+        // Assert — DateTimeOffset properties should have the binary converter
+        var entityType = model.FindEntityType(typeof(LifecycleIntegrationTestEntity))!;
+        var createdAtProperty = entityType.FindProperty(nameof(LifecycleIntegrationTestEntity.CreatedAt))!;
+        createdAtProperty.GetValueConverter().Should().BeOfType<DateTimeOffsetToBinaryConverter>();
+    }
+
     [Fact]
     public void ConfigureOptions_should_use_Sqlite()
     {
@@ -90,6 +132,35 @@ public class SqLiteDbContextFactoryTests
     public class TestDbContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<TestEntity> TestEntities { get; set; } = null!;
+    }
+
+    public class LifecycleIntegrationTestEntity : IHasId<int>
+    {
+        public int Id { get; set; }
+
+        [MaxLength(100)]
+        public required string Name { get; set; }
+
+        public DateTimeOffset? CreatedAt { get; set; }
+    }
+
+    public class LifecycleIntegrationTestDbContext(DbContextOptions options, IDbContextCreationLifecycle lifecycle) : DbContext(options)
+    {
+        public DbSet<LifecycleIntegrationTestEntity> LifecycleTestEntities { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            lifecycle.OnModelCreating(modelBuilder, Database);
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+
+    private sealed class LifecycleIntegrationTestFactory : SqLiteDbContextFactory<LifecycleIntegrationTestDbContext, LifecycleIntegrationTestFactory>
+    {
+        public LifecycleIntegrationTestFactory(Func<DbContextOptions<LifecycleIntegrationTestDbContext>, LifecycleIntegrationTestDbContext> dbContextCreator,
+                                               Func<string> connectionStringFunc)
+            : base(dbContextCreator, connectionStringFunc)
+        { }
     }
 
     private sealed class TestSqLiteDbContextFactory : SqLiteDbContextFactory<TestDbContext, TestSqLiteDbContextFactory>
