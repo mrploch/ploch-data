@@ -1,12 +1,16 @@
 # Ploch.Data Sample Application
 
 A complete working example demonstrating all major features of the Ploch.Data libraries.
+It is configured to use either SQLite or SQL Server databases with SQLite being the default.
+
+Migrations are kept in provider-specific projects.
 
 ## What It Demonstrates
 
 - **Entity modelling** with `Ploch.Data.Model` interfaces (`IHasId`, `IHasTitle`, `IHasDescription`, `IHasContents`, `IHasAuditProperties`, `IHasCategories`, `IHasTags`)
 - **Common base types** -- `Category<T>` for hierarchical categories, `Tag<TId>` for flat tags, `Property<TValue>` for key/value metadata
 - **DbContext setup** with assembly-scanned entity configurations
+- **Targetting multiple databases** with provider-specific migrations.
 - **SQLite DateTimeOffset workaround** via `ApplySqLiteDateTimeOffsetPropertiesFix`
 - **Automatic audit timestamps** via `SaveChanges` override on `IHasAuditTimeProperties` entities
 - **DI registration** using `AddRepositories<TDbContext>()`
@@ -43,6 +47,21 @@ samples/SampleApp/
 ```
 
 ## Running the Console App
+
+First, you need to add migrations to the provider-specific project. By default, SQLite is used.
+
+```bash
+cd samples/SampleApp/src/Data.SQLite
+dotnet ef migrations add InitialCreate
+```
+
+Then, you need to create the database (it will be created in the Data.SQLite directory, ConsoleApp `appsettings.json` already points to it):
+
+```bash
+dotnet ef database update
+```
+
+Finally, run the console app (the default connection string points to the `sampleapp.db` file in the Data.SQLite directory created above):
 
 ```bash
 cd samples/SampleApp/src/ConsoleApp
@@ -98,6 +117,19 @@ Update `appsettings.json`:
     "DefaultConnection": "Server=localhost;Database=SampleApp;Integrated Security=True;TrustServerCertificate=True"
   }
 }
+```
+
+Add migrations to the SqlServer project (see the `appsettings.json` file for the connection string):
+
+```bash
+cd samples/SampleApp/src/Data.SqlServer
+dotnet ef migrations add InitialCreate
+```
+
+Then, you need to create the database:
+
+```bash
+dotnet ef database update
 ```
 
 ### Why No Code Changes Are Needed

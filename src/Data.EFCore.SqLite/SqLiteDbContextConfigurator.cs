@@ -20,11 +20,13 @@ namespace Ploch.Data.EFCore.SqLite;
 /// </remarks>
 public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
 {
+    // Cannot use the new System.Threading.Lock because we also target .NET 8.
+    // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
+    private readonly object _connectionLock = new();
     private readonly Action<SqliteDbContextOptionsBuilder>? _dbContextOptionsAction;
     private readonly SqLiteConnectionOptions _options;
-    private readonly object _connectionLock = new();
-    private SqliteConnection? _sharedConnection;
     private bool _disposed;
+    private SqliteConnection? _sharedConnection;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="SqLiteDbContextConfigurator" /> class.
@@ -72,6 +74,14 @@ public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
         GC.SuppressFinalize(this);
     }
 
+    private static SqliteConnection CreateAndOpenConnection(string connectionString)
+    {
+        var connection = new SqliteConnection(connectionString);
+        connection.Open();
+
+        return connection;
+    }
+
     /// <summary>
     ///     Releases the shared SQLite connection.
     /// </summary>
@@ -85,13 +95,5 @@ public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
         }
 
         _disposed = true;
-    }
-
-    private static SqliteConnection CreateAndOpenConnection(string connectionString)
-    {
-        var connection = new SqliteConnection(connectionString);
-        connection.Open();
-
-        return connection;
     }
 }

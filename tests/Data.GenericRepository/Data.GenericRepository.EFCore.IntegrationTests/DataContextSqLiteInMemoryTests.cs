@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
 using Ploch.Data.EFCore.SqLite;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
-using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
-public class DataContextSqLiteInMemoryTests(ITestOutputHelper output) : GenericRepositoryDataIntegrationTest<TestDbContext>(new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory))
+public class DataContextSqLiteInMemoryTests(ITestOutputHelper output)
+    : GenericRepositoryDataIntegrationTest<TestDbContext>(new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory))
 {
     [Fact]
     public void DataContext_add_and_query_by_id_should_create_entities_and_find_them()
@@ -25,8 +25,10 @@ public class DataContextSqLiteInMemoryTests(ITestOutputHelper output) : GenericR
         var actualBlog1 = DbContext.Blogs.Find(1);
         actualBlog1.Should().BeEquivalentTo(blog);
 
-        var actualBlogPost1 = DbContext.BlogPosts.Find(1);
+        var actualBlogPost1 = DbContext.BlogPosts.Single(bp => bp.Id == 1);
         actualBlogPost1.Should().BeEquivalentTo(blogPost1);
+        actualBlogPost1.Categories.Should().HaveCount(blogPost1.Categories.Count);
+        actualBlogPost1.Categories.Should().BeEquivalentTo(blogPost1.Categories);
 
         var actualBlogPost2 = DbContext.BlogPosts.First(bp => bp.Name == "Blog post 2");
         actualBlogPost2.Should().BeEquivalentTo(blogPost2);

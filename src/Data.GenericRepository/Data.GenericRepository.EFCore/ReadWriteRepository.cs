@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Dawn;
 using Microsoft.EntityFrameworkCore;
+using Ploch.Common.ArgumentChecking;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore;
@@ -17,13 +17,12 @@ namespace Ploch.Data.GenericRepository.EFCore;
 /// </remarks>
 /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
 public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : ReadRepository<TEntity, TId>(dbContext), IReadWriteRepository<TEntity, TId>
-    where TEntity : class, IHasId<TId>
+    : ReadRepository<TEntity, TId>(dbContext), IReadWriteRepository<TEntity, TId> where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />
     public TEntity Add(TEntity entity)
     {
-        Guard.Argument(entity, nameof(entity)).NotNull();
+        entity.NotNull();
 
         auditEntityHandler.HandleCreation(entity);
         DbContext.Set<TEntity>().Add(entity);
@@ -35,7 +34,7 @@ public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntity
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = "Guard does not enumerate items.")]
     public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
     {
-        Guard.Argument(entities, nameof(entities)).NotNull();
+        entities.NotNull();
 
         foreach (var entity in entities)
         {
@@ -50,7 +49,7 @@ public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntity
     /// <inheritdoc />
     public void Delete(TEntity entity)
     {
-        Guard.Argument(entity, nameof(entity)).NotNull();
+        entity.NotNull();
 
         DbContext.Set<TEntity>().Remove(entity);
     }
@@ -71,7 +70,7 @@ public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntity
     /// <inheritdoc />
     public void Update(TEntity entity)
     {
-        Guard.Argument(entity, nameof(entity)).NotNull();
+        entity.NotNull();
 
         var exist = GetById(entity.Id);
         if (exist == null)

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Data.EFCore;
 using Ploch.Data.EFCore.SqLite;
@@ -56,10 +57,29 @@ public static class ServiceCollectionRegistrations
     {
         connectionString ??= ConnectionString.FromJsonFile();
         var resolvedConnectionString = connectionString() ??
-                                       throw new InvalidOperationException(
-                                           $"SQLite connection string for {typeof(TDbContext).Name} not found. " +
-                                           "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.");
+                                       throw new InvalidOperationException($"SQLite connection string for {typeof(TDbContext).Name} not found. " +
+                                                                           "Provide a connection string or ensure it is present in appsettings.json under 'ConnectionStrings:DefaultConnection'.");
 
         return services.AddDbContextWithRepositories<TDbContext, SqLiteDbContextCreationLifecycle>(options => options.UseSqlite(resolvedConnectionString));
     }
+
+    /// <summary>
+    ///     Registers a <typeparamref name="TDbContext" /> using the provided
+    ///     <paramref name="configurator" />, the <see cref="SqLiteDbContextCreationLifecycle" />,
+    ///     and the generic repository and Unit of Work services.
+    /// </summary>
+    /// <typeparam name="TDbContext">The type of <see cref="DbContext" /> to register.</typeparam>
+    /// <param name="services">The service collection to add the registrations to.</param>
+    /// <param name="configurator">
+    ///     The <see cref="SqLiteDbContextConfigurator" /> used to configure the
+    ///     <typeparamref name="TDbContext" /> with SQLite.
+    /// </param>
+    /// <param name="configuration">
+    ///     Optional application configuration used for configuring the generic repositories.
+    /// </param>
+    /// <returns>The same <see cref="IServiceCollection" /> for chaining.</returns>
+    public static IServiceCollection AddDbContextWithRepositories<TDbContext>(this IServiceCollection services,
+                                                                              SqLiteDbContextConfigurator configurator,
+                                                                              IConfiguration? configuration) where TDbContext : DbContext =>
+        services.AddDbContextWithRepositories<TDbContext, SqLiteDbContextCreationLifecycle>(configurator, configuration);
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dawn;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ploch.Common.AppServices.Security;
+using Ploch.Common.ArgumentChecking;
 using Ploch.Data.EFCore;
 using Ploch.Data.Model;
 
@@ -26,10 +27,45 @@ public static class ServiceCollectionRegistration
                                                                                    { typeof(IReadWriteRepositoryAsync<,>), typeof(ReadWriteRepositoryAsync<,>) } };
 
     /// <summary>
+    ///     Registers a <typeparamref name="TDbContext" /> using the <see cref="IDbContextConfigurator" />,
+    ///     using a default type of the <see cref="IDbContextCreationLifecycle" /> - <see cref="DefaultDbContextCreationLifecycle" />, and the generic
+    ///     repository and Unit of Work services.
+    /// </summary>
+    /// <param name="services">The service collection to add the registrations to.</param>
+    /// <param name="configurator">The configurator responsible for setting up the DbContext options.</param>
+    /// <param name="configuration">Optional app configuration used for configuring of the Generic Repositories.</param>
+    /// <typeparam name="TDbContext">The type of <see cref="DbContext" /> to register.</typeparam>
+    /// <returns>The same <see cref="IServiceCollection" /> for chaining.</returns>
+    public static IServiceCollection AddDbContextWithRepositories<TDbContext>(this IServiceCollection services,
+                                                                              IDbContextConfigurator configurator,
+                                                                              IConfiguration? configuration = null) where TDbContext : DbContext =>
+        services.AddDbContextWithRepositories<TDbContext, DefaultDbContextCreationLifecycle>(configurator, configuration);
+
+    /// <summary>
+    ///     Registers a <typeparamref name="TDbContext" /> using the <see cref="IDbContextConfigurator" />,
+    ///     allowing to specify which <see cref="IDbContextCreationLifecycle" /> to use, and the generic
+    ///     repository and Unit of Work services.
+    /// </summary>
+    /// <typeparam name="TDbContext">The type of <see cref="DbContext" /> to register.</typeparam>
+    /// <typeparam name="TDbContextCreationLifecycle">The type of <see cref="IDbContextCreationLifecycle" /> to register.</typeparam>
+    /// <param name="services">The service collection to add the registrations to.</param>
+    /// <param name="configurator">The configurator responsible for setting up the DbContext options.</param>
+    /// <param name="configuration">Optional app configuration used for configuring of the Generic Repositories.</param>
+    /// <returns>The same <see cref="IServiceCollection" /> for chaining.</returns>
+    public static IServiceCollection AddDbContextWithRepositories<TDbContext, TDbContextCreationLifecycle>(this IServiceCollection services,
+                                                                                                           IDbContextConfigurator configurator,
+                                                                                                           IConfiguration? configuration = null)
+        where TDbContext : DbContext where TDbContextCreationLifecycle : class, IDbContextCreationLifecycle =>
+        services.AddDbContextWithRepositories<TDbContext, TDbContextCreationLifecycle>(configurator.NotNull().Configure, configuration);
+
+    /// <summary>
     ///     Registers a <typeparamref name="TDbContext" /> using the <see cref="DbContextOptionsBuilder" />,
     ///     using a default type of the <see cref="IDbContextCreationLifecycle" /> - <see cref="DefaultDbContextCreationLifecycle" />, and the generic
     ///     repository and Unit of Work services.
     /// </summary>
+    /// <param name="services">The service collection to add the registrations to.</param>
+    /// <param name="options">The options to pass to <see cref="DbContextOptionsBuilder" />.</param>
+    /// <param name="configuration">Optional app configuration used for configuring of the Generic Repositories.</param>
     /// <remarks>
     ///     <para>
     ///         SQL Server does not require any special model-creation lifecycle logic,
@@ -38,14 +74,14 @@ public static class ServiceCollectionRegistration
     ///     </para>
     /// </remarks>
     /// <typeparam name="TDbContext">The type of <see cref="DbContext" /> to register.</typeparam>
-    /// <param name="services">The service collection to add the registrations to.</param>
-    /// <param name="options">The options to pass to <see cref="DbContextOptionsBuilder" />.</param>
     /// <returns>The same <see cref="IServiceCollection" /> for chaining.</returns>
     /// <exception cref="ArgumentNullException">
     ///     Thrown if <paramref name="options" /> is <c>null</c>.
     /// </exception>
-    public static IServiceCollection AddDbContextWithRepositories<TDbContext>(this IServiceCollection services, Action<DbContextOptionsBuilder> options)
-        where TDbContext : DbContext => services.AddDbContextWithRepositories<TDbContext, DefaultDbContextCreationLifecycle>(options);
+    public static IServiceCollection AddDbContextWithRepositories<TDbContext>(this IServiceCollection services,
+                                                                              Action<DbContextOptionsBuilder> options,
+                                                                              IConfiguration? configuration = null) where TDbContext : DbContext =>
+        services.AddDbContextWithRepositories<TDbContext, DefaultDbContextCreationLifecycle>(options, configuration);
 
     /// <summary>
     ///     Registers a <typeparamref name="TDbContext" /> using the <see cref="DbContextOptionsBuilder" />,
@@ -56,34 +92,32 @@ public static class ServiceCollectionRegistration
     /// <typeparam name="TDbContextCreationLifecycle">The type of <see cref="IDbContextCreationLifecycle" /> to register.</typeparam>
     /// <param name="services">The service collection to add the registrations to.</param>
     /// <param name="options">The options to pass to <see cref="DbContextOptionsBuilder" />.</param>
+    /// <param name="configuration">The app configuration used for configuring of the Generic Repositories.</param>
     /// <returns>The same <see cref="IServiceCollection" /> for chaining.</returns>
     /// <exception cref="ArgumentNullException">
     ///     Thrown if <paramref name="options" /> is <c>null</c>.
     /// </exception>
-    public static IServiceCollection
-        AddDbContextWithRepositories<TDbContext, TDbContextCreationLifecycle>(this IServiceCollection services, Action<DbContextOptionsBuilder> options)
-        where TDbContext : DbContext where TDbContextCreationLifecycle : class, IDbContextCreationLifecycle
-    {
-        Guard.Argument(options, nameof(options)).NotNull();
-
-        return services.AddSingleton<IDbContextCreationLifecycle, TDbContextCreationLifecycle>()
-                       .AddDbContext<TDbContext>(options)
-                       .AddRepositories<TDbContext>();
-    }
+    public static IServiceCollection AddDbContextWithRepositories<TDbContext, TDbContextCreationLifecycle>(this IServiceCollection services,
+                                                                                                           Action<DbContextOptionsBuilder> options,
+                                                                                                           IConfiguration? configuration = null)
+        where TDbContext : DbContext where TDbContextCreationLifecycle : class, IDbContextCreationLifecycle => services.NotNull()
+                                                                                                                       .AddSingleton<IDbContextCreationLifecycle,
+                                                                                                                           TDbContextCreationLifecycle>()
+                                                                                                                       .AddDbContext<TDbContext>(options.NotNull())
+                                                                                                                       .AddRepositories<TDbContext>(configuration);
 
     /// <summary>
     ///     Registers the repository types in the service collection using <c>AddScoped</c> method.
     /// </summary>
-    /// <param name="serviceCollection">The service collection.</param>
+    /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration.</param>
     /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
     /// <returns>The same service collection.</returns>
-    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection, IConfiguration? configuration = null) where TDbContext : DbContext
+    public static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection services, IConfiguration? configuration = null) where TDbContext : DbContext
     {
-        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
         configuration ??= new ConfigurationBuilder().Build();
 
-        return serviceCollection.AddRepositories<TDbContext>(configuration, static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
+        return services.NotNull().AddRepositories<TDbContext>(configuration, static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType));
     }
 
     /// <summary>
@@ -128,38 +162,38 @@ public static class ServiceCollectionRegistration
     /// </code>
     ///     </example>
     /// </remarks>
-    /// <param name="serviceCollection">The service collection to add the repositories to.</param>
+    /// <param name="services">The service collection to add the repositories to.</param>
     /// <param name="registrationFunction">The <see cref="IServiceCollection" /> method used for registration.</param>
     /// <typeparam name="TRepositoryInterface">The interface type of the custom repository.</typeparam>
     /// <typeparam name="TRepository">The implementation type of the custom repository.</typeparam>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The entity <c>Id</c> property type.</typeparam>
     /// <returns>
-    ///     The same <see cref="IServiceCollection" /> passed in <paramref name="serviceCollection" /> used for method
+    ///     The same <see cref="IServiceCollection" /> passed in <paramref name="services" /> used for method
     ///     chaining.
     /// </returns>
     public static IServiceCollection AddCustomReadWriteAsyncRepository<TRepositoryInterface, TRepository, TEntity, TId>(
-        this IServiceCollection serviceCollection,
+        this IServiceCollection services,
         Func<IServiceCollection, Type, Type, IServiceCollection>? registrationFunction = null) where TRepositoryInterface : class, IReadWriteRepositoryAsync<TEntity, TId>
                                                                                                where TRepository : class, TRepositoryInterface,
                                                                                                IReadWriteRepositoryAsync<TEntity, TId>
                                                                                                where TEntity : class, IHasId<TId>
     {
-        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
+        services.NotNull();
 
         registrationFunction ??= static (collection, sourceType, targetType) => collection.AddScoped(sourceType, targetType);
 
-        registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
-        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));
+        registrationFunction(services, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
+        registrationFunction(services, typeof(IReadRepositoryAsync<TEntity>), typeof(TRepository));
 
         foreach (var (sourceType, _) in RepositoryAsyncTypeMappings)
         {
-            registrationFunction(serviceCollection, sourceType.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
+            registrationFunction(services, sourceType.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
         }
 
-        registrationFunction(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
+        registrationFunction(services, typeof(TRepositoryInterface), typeof(TRepository));
 
-        return serviceCollection;
+        return services;
     }
 
     /// <summary>
@@ -204,77 +238,78 @@ public static class ServiceCollectionRegistration
     /// </code>
     ///     </example>
     /// </remarks>
-    /// <param name="serviceCollection">The service collection to add the repositories to.</param>
+    /// <param name="services">The service collection to add the repositories to.</param>
     /// <param name="registrationFunction">The <see cref="IServiceCollection" /> method used for registration.</param>
     /// <typeparam name="TRepositoryInterface">The interface type of the custom repository.</typeparam>
     /// <typeparam name="TRepository">The implementation type of the custom repository.</typeparam>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The entity <c>Id</c> property type.</typeparam>
     /// <returns>
-    ///     The same <see cref="IServiceCollection" /> passed in <paramref name="serviceCollection" /> used for method
+    ///     The same <see cref="IServiceCollection" /> passed in <paramref name="services" /> used for method
     ///     chaining.
     /// </returns>
-    public static IServiceCollection AddCustomReadWriteRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddCustomReadWriteRepository<TRepositoryInterface, TRepository, TEntity, TId>(this IServiceCollection services,
                                                                                                                    Func<IServiceCollection, Type, Type, IServiceCollection>
                                                                                                                        registrationFunction)
         where TRepositoryInterface : class, IReadWriteRepositoryAsync<TEntity, TId>
         where TRepository : class, TRepositoryInterface, IReadWriteRepositoryAsync<TEntity, TId>
         where TEntity : class, IHasId<TId>
     {
-        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
-        Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
+        services.NotNull();
+        registrationFunction.NotNull();
 
-        registrationFunction(serviceCollection, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
+        registrationFunction(services, typeof(IQueryableRepository<>).MakeGenericType(typeof(TEntity)), typeof(TRepository));
 
-        registrationFunction(serviceCollection, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
-        registrationFunction(serviceCollection, typeof(IReadRepository<TEntity>), typeof(TRepository));
+        registrationFunction(services, typeof(IQueryableRepository<TEntity>), typeof(TRepository));
+        registrationFunction(services, typeof(IReadRepository<TEntity>), typeof(TRepository));
 
         foreach (var repositoryTypeMapping in RepositoryTypeMappings)
         {
-            registrationFunction(serviceCollection, repositoryTypeMapping.Key.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
+            registrationFunction(services, repositoryTypeMapping.Key.MakeGenericType(typeof(TEntity), typeof(TId)), typeof(TRepository));
         }
 
-        registrationFunction(serviceCollection, typeof(TRepositoryInterface), typeof(TRepository));
+        registrationFunction(services, typeof(TRepositoryInterface), typeof(TRepository));
 
-        return serviceCollection;
+        return services;
     }
 
     /// <summary>
     ///     Registers the repository types in the service collection.
     /// </summary>
-    /// <param name="serviceCollection">The service collection.</param>
+    /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration.</param>
     /// <param name="registrationFunction">The <see cref="IServiceCollection" /> method used for registration.</param>
     /// <typeparam name="TDbContext">The type of DbContext.</typeparam>
     /// <returns>The same service collection.</returns>
-    private static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection serviceCollection,
+    private static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection services,
                                                                   IConfiguration configuration,
                                                                   Func<IServiceCollection, Type, Type, IServiceCollection> registrationFunction) where TDbContext : DbContext
     {
-        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
-        Guard.Argument(registrationFunction, nameof(registrationFunction)).NotNull();
+        services.NotNull();
+        registrationFunction.NotNull();
 
-        serviceCollection.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>())
-                         .AddSingleton<IAuditEntityHandler, AuditEntityHandler>()
-                         .AddSingleton<IUserInfoProvider, NullUserInfoProvider>();
+        services.AddTransient<DbContext>(static provider => provider.GetRequiredService<TDbContext>())
+                .AddSingleton<IAuditEntityHandler, AuditEntityHandler>()
+                .AddSingleton<IUserInfoProvider, NullUserInfoProvider>()
+                .TryAddSingleton(TimeProvider.System);
 
-        serviceCollection.Configure<RepositoriesConfiguration>(configuration.GetSection(nameof(RepositoriesConfiguration)));
-        registrationFunction(serviceCollection, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
-        registrationFunction(serviceCollection, typeof(IReadRepository<>), typeof(ReadRepository<>));
-        registrationFunction(serviceCollection, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
+        services.Configure<RepositoriesConfiguration>(configuration.GetSection(nameof(RepositoriesConfiguration)));
+        registrationFunction(services, typeof(IQueryableRepository<>), typeof(QueryableRepository<>));
+        registrationFunction(services, typeof(IReadRepository<>), typeof(ReadRepository<>));
+        registrationFunction(services, typeof(IReadRepositoryAsync<>), typeof(ReadRepositoryAsync<>));
 
         foreach (var (sourceType, targetType) in RepositoryTypeMappings)
         {
-            registrationFunction(serviceCollection, sourceType, targetType);
+            registrationFunction(services, sourceType, targetType);
         }
 
         foreach (var (sourceType, targetType) in RepositoryAsyncTypeMappings)
         {
-            registrationFunction(serviceCollection, sourceType, targetType);
+            registrationFunction(services, sourceType, targetType);
         }
 
-        serviceCollection.AddScoped<IUnitOfWork, UnitOfWork<TDbContext>>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<TDbContext>>();
 
-        return serviceCollection;
+        return services;
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Ploch.Data.EFCore.SqLite;
 
 /// <summary>
-///     Provides a factory for creating DbContext instances with SQLite as the database provider.
+///     Provides an implementation of <see cref="IDesignTimeDbContextFactory{TContext}" /> for creating DbContext instances with SQLite as the database provider during
+///     design time.
 /// </summary>
 /// <inheritdoc />
 public abstract class SqLiteDbContextFactory<TDbContext, TFactory> : BaseDbContextFactory<TDbContext, TFactory>

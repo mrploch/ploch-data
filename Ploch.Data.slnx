@@ -41,6 +41,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
+    <Project Path="../ploch-common/src/Common.DependencyInjection/Ploch.Common.DependencyInjection.csproj" />
     <Project Path="../ploch-common/src/Common/Ploch.Common.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />

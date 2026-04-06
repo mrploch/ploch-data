@@ -39,8 +39,7 @@ public class SqlServerDependencyInjectionTests
         var services = new ServiceCollection();
 
         // Act
-        services.AddDbContextWithSqlServerCreationLifecycle<SqlServerDiTestDbContext>(() =>
-                                                                                          "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
+        services.AddDbContextUsingSqlServer<SqlServerDiTestDbContext>(() => "Server=localhost;Database=TestDb;Integrated Security=True;TrustServerCertificate=True");
 
         // Assert
         var provider = services.BuildServiceProvider();
@@ -73,13 +72,13 @@ public class SqlServerDependencyInjectionTests
         public required string Name { get; set; }
     }
 
-    public class SqlServerDiTestDbContext(DbContextOptions<SqlServerDiTestDbContext> options, IDbContextCreationLifecycle lifecycle) : DbContext(options)
+    public class SqlServerDiTestDbContext(DbContextOptions<SqlServerDiTestDbContext> options, IDbContextCreationLifecycle? lifecycle) : DbContext(options)
     {
         public DbSet<SqlServerDiTestEntity> TestEntities { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            lifecycle.OnModelCreating(modelBuilder, Database);
+            lifecycle?.OnModelCreating(modelBuilder, Database);
             base.OnModelCreating(modelBuilder);
         }
     }

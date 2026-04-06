@@ -4,6 +4,7 @@
        All package versions are defined here, exactly as an external consumer would. -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -11,7 +12,7 @@
          These are only used in standalone mode (PackageReference).
          When UsePlochProjectReferences=true, ProjectReferences.props removes
          these PackageReferences and replaces them with ProjectReferences. -->
-    <PlochDataPackagesVersion>3.1.21-pr.74.feature-72-dbcontext.gdb605ad36f</PlochDataPackagesVersion>
+    <PlochDataPackagesVersion>3.1.*-prerelease.*</PlochDataPackagesVersion>
   </PropertyGroup>
 
   <ItemGroup Label="Ploch.Data packages (from NuGet / GitHub Packages feed)">

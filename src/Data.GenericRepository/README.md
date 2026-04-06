@@ -9,8 +9,9 @@ The generic [Repository](https://martinfowler.com/eaaCatalog/repository.html) an
 | Package | Description |
 |---------|-------------|
 | [Ploch.Data.GenericRepository](Data.GenericRepository/) | Provider-agnostic repository and UoW interfaces |
-| [Ploch.Data.GenericRepository.EFCore](Data.GenericRepository.EFCore/) | EF Core implementations |
-| [Ploch.Data.GenericRepository.EFCore.DependencyInjection](Data.GenericRepository.EFCore.DependencyInjection/) | ServicesBundle integration for Ploch.Common |
+| [Ploch.Data.GenericRepository.EFCore](Data.GenericRepository.EFCore/) | EF Core implementations and manual DI registration (`AddRepositories`) |
+| [Ploch.Data.GenericRepository.EFCore.SqLite](Data.GenericRepository.EFCore.SqLite/) | One-call DI registration for SQLite (`AddDbContextWithRepositories`) |
+| [Ploch.Data.GenericRepository.EFCore.SqlServer](Data.GenericRepository.EFCore.SqlServer/) | One-call DI registration for SQL Server (`AddDbContextWithRepositories`) |
 | [Ploch.Data.GenericRepository.EFCore.IntegrationTesting](Data.GenericRepository.EFCore.IntegrationTesting/) | Integration test base classes |
 | [Ploch.Data.GenericRepository.EFCore.Specification](Data.GenericRepository.EFCore.Specification/) | Ardalis.Specification support |
 
@@ -21,9 +22,11 @@ While many consider EF Core a repository and unit of work, it lacks the ability 
 ## Quick Start
 
 ```csharp
-// Register all repositories + UnitOfWork for a DbContext
-services.AddDbContext<MyDbContext>(options => options.UseSqlite(connectionString));
-services.AddRepositories<MyDbContext>();
+// Register DbContext + all repositories + UnitOfWork in one call
+// Reference Ploch.Data.GenericRepository.EFCore.SqLite or .SqlServer
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
+
+builder.Services.AddDbContextWithRepositories<MyDbContext>();
 
 // Inject and use
 public class MyService(IReadRepositoryAsync<MyEntity, int> repository)
@@ -43,6 +46,8 @@ public class MyTransactionService(IUnitOfWork unitOfWork)
     }
 }
 ```
+
+To switch between SQLite and SQL Server, change the package reference and update `appsettings.json` -- no code changes needed. See the [Dependency Injection Guide](../../docs/dependency-injection.md) for details.
 
 ## Documentation
 

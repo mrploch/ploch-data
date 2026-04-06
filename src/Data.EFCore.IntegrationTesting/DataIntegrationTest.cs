@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Ploch.Data.EFCore;
 using Ploch.Data.EFCore.SqLite;
 
 namespace Ploch.Data.EFCore.IntegrationTesting;
@@ -34,7 +33,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         dbContextConfigurator ??= new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory);
         _dbContextConfigurator = dbContextConfigurator;
 
-        (ServiceProvider, DbContext) =
+        (ServiceProvider, DbContext, RootServiceProvider) =
             DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(serviceCollection, dbContextConfigurator);
     }
 
@@ -49,6 +48,16 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     This is used to resolve dependencies and services required during integration testing.
     /// </summary>
     protected IServiceProvider ServiceProvider { get; }
+
+    /// <summary>
+    ///     Gets the root (non-scoped) service provider.
+    /// </summary>
+    /// <remarks>
+    ///     Use this when you need to create additional scopes or resolve services
+    ///     outside the default test scope. For most test code, prefer
+    ///     <see cref="ServiceProvider" /> instead.
+    /// </remarks>
+    protected IServiceProvider RootServiceProvider { get; }
 
     /// <summary>
     ///     Disposes of the resources used by the current instance of the
