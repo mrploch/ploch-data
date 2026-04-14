@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <!-- Debug: ProjectReference to ploch-common for easier debugging -->

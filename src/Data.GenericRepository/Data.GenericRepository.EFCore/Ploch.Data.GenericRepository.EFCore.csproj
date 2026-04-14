@@ -5,7 +5,6 @@
     <PackageTags>efcore;dotnetcore</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
-    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
