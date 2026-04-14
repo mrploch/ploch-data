@@ -1,0 +1,9 @@
+---
+apply: always
+---
+
+# Naming Standards
+
+- Use **camelCase** for methods and properties.
+- Boolean names should begin with: `is`, `are`, `should`, `could`, `would` (e.g., `shouldLogUserOutAfterTransfer`).
+- Methods must start with a verb (e.g., `removeUserFromList`).
