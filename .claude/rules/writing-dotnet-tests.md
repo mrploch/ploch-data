@@ -1,0 +1,1 @@
+../../../.claude/rules/writing-dotnet-tests.md

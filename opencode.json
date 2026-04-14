@@ -1,0 +1,26 @@
+{
+  "mcp": {
+    "contextstream": {
+      "command": [
+        "npx",
+        "-y",
+        "contextstream-mcp"
+      ],
+      "enabled": true,
+      "environment": {
+        "CONTEXTSTREAM_API_KEY": "{env:CONTEXTSTREAM_API_KEY}",
+        "CONTEXTSTREAM_AUTO_HIDE_INTEGRATIONS": "true",
+        "CONTEXTSTREAM_CONSOLIDATED": "true",
+        "CONTEXTSTREAM_HOOK_TRANSCRIPTS_ENABLED": "true",
+        "CONTEXTSTREAM_INCLUDE_STRUCTURED_CONTENT": "true",
+        "CONTEXTSTREAM_LOG_LEVEL": "quiet",
+        "CONTEXTSTREAM_OUTPUT_FORMAT": "compact",
+        "CONTEXTSTREAM_SEARCH_LIMIT": "15",
+        "CONTEXTSTREAM_SEARCH_MAX_CHARS": "2400",
+        "CONTEXTSTREAM_TOOLSET": "complete",
+        "CONTEXTSTREAM_TRANSCRIPTS_ENABLED": "true"
+      },
+      "type": "local"
+    }
+  }
+}

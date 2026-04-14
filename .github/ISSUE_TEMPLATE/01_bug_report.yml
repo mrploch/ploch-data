@@ -1,0 +1,149 @@
+name: Bug Report
+description: Report a bug or unexpected behaviour in a Ploch.Data package.
+title: "[Bug]: "
+labels: [ "bug", "triage" ]
+body:
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before you submit
+      options:
+        - label: I have searched [existing issues](https://github.com/mrploch/ploch-data/issues) and this has not been reported before.
+          required: true
+        - label: I have read the [documentation](https://github.com/mrploch/ploch-data#readme) and this is not covered there.
+          required: true
+        - label: I am not reporting a security vulnerability (use the [security advisory](https://github.com/mrploch/ploch-data/security/advisories/new) instead).
+          required: true
+
+  - type: dropdown
+    id: affected-package
+    attributes:
+      label: Affected Package
+      description: Which Ploch.Data package is affected?
+      options:
+        - Ploch.Data.Model
+        - Ploch.Data.EFCore (GenericRepository / Unit of Work)
+        - Ploch.Data.EFCore.SqLite
+        - Ploch.Data.EFCore.SqlServer
+        - Ploch.Data.EFCore.IntegrationTesting
+        - Ploch.Data.StandardDataSets
+        - Ploch.Data.Utilities
+        - Multiple packages
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug.
+      placeholder: What happened? What did you expect to happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal steps or code to reproduce the behaviour. The more specific, the faster we can investigate.
+      placeholder: |
+        1. Register services with...
+        2. Call repository method...
+        3. Observe error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Reproduction Code
+      description: Minimal code sample that demonstrates the issue.
+      render: csharp
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behaviour
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behaviour
+      description: What actually happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: stacktrace
+    attributes:
+      label: Exception / Stack Trace
+      description: Paste the full exception and stack trace, if applicable.
+      render: text
+
+  - type: dropdown
+    id: regression
+    attributes:
+      label: Regression?
+      description: Did this work in a previous version?
+      options:
+        - "Yes — it worked in a previous version"
+        - "No — this is new functionality or I haven't tested older versions"
+        - "Not sure"
+    validations:
+      required: false
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Known Workarounds
+      description: Have you found any workarounds? This helps other users while we investigate.
+
+  - type: input
+    id: package-version
+    attributes:
+      label: Package Version
+      description: The version of the affected Ploch.Data package.
+      placeholder: "3.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: dotnet-version
+    attributes:
+      label: .NET Version
+      description: Target framework or `dotnet --version` output.
+      placeholder: "net8.0 / net10.0 / 10.0.100"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: database-provider
+    attributes:
+      label: Database Provider
+      description: Which database provider are you using?
+      options:
+        - SQLite
+        - SQL Server
+        - PostgreSQL (Npgsql)
+        - In-Memory (for testing)
+        - Other
+        - Not applicable
+    validations:
+      required: false
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: OS and version (e.g. Windows 11, Ubuntu 24.04, macOS 15).
+      placeholder: "Windows 11"
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or log output that might help.

@@ -1,0 +1,1 @@
+../../../.claude/rules/data-provider-project.md
