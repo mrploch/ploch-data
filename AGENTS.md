@@ -778,3 +778,39 @@ The `samples/SampleApp/` directory contains a Knowledge Base sample application 
 
 - Treat SampleApp csproj files as if they were in a separate repository.
 - Update `PlochDataPackagesVersion` after publishing new package versions.
+
+## Cursor Cloud specific instructions
+
+### Overview
+
+Ploch.Data is a .NET library suite (targeting `net8.0` + `net10.0`) providing entity model interfaces, Generic Repository / Unit of Work pattern over EF Core, and utility packages. There is no long-running server; the product is a set of NuGet libraries plus a `samples/SampleApp/ConsoleApp` demo.
+
+### Required sibling repositories
+
+The build depends on two sibling repos cloned **one level above** the workspace root:
+
+| Repo | Path | Purpose |
+|------|------|---------|
+| `mrploch-development` | `../mrploch-development` | Shared `*.Packages.props` files imported by `Directory.Packages.props` |
+| `ploch-common` | `../ploch-common` | `Ploch.Common.*` and `TestingSupport.XUnit3.*` project references |
+
+The update script handles cloning these automatically. `ploch-common` must **not** be a shallow clone (depth 1) because Nerdbank.GitVersioning needs commit history to compute version heights; the update script uses `git fetch --unshallow` to fix this.
+
+### Build, test, and run
+
+All commands use Debug configuration with `UsePlochProjectReferences=true` so Ploch.* packages resolve via ProjectReference (no GitHub Packages auth needed):
+
+```bash
+dotnet restore ./Ploch.Data.slnx -p:UsePlochProjectReferences=true
+dotnet build   ./Ploch.Data.slnx --no-restore -p:UsePlochProjectReferences=true
+dotnet test    ./Ploch.Data.slnx --no-build   -p:UsePlochProjectReferences=true
+dotnet run --project samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.ConsoleApp.csproj --no-build
+```
+
+### Gotchas
+
+- **NBGV shallow clone error**: If the build fails with `Shallow clone lacks the objects required to calculate version height`, the `ploch-common` repo needs `git fetch --unshallow`.
+- **Duplicate import warning (MSB4011)**: `Ploch.Packages.props` is imported twice in `Directory.Packages.props`. This is a known non-blocking warning in the repo.
+- **SQL Server test skipped**: `Data.EFCore.SqlServer.Tests` has one test explicitly skipped (`[Fact(Skip = ...)]`). No Docker/SQL Server setup is needed.
+- **No `global.json`**: The repo does not pin SDK versions via `global.json`. The update script installs both .NET 8.0 and 10.0 SDKs.
+- **GitHub Packages NuGet source**: The `NuGet.Config` includes a `github` source for `Ploch.*` packages. In Debug mode with `UsePlochProjectReferences=true`, these resolve via ProjectReference so no auth token is required. Release builds or standalone SampleApp builds would need a `GH_PACKAGES_TOKEN`.
