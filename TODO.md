@@ -1,6 +1,6 @@
 # Agent TODO List
 
-## Task 1: Implement changes for Issue #72
+## [DONE] Task 1: Implement changes for Issue #72
 
 Implement changes required for <https://github.com/mrploch/ploch-data/issues/72>.
 I was experimenting with how to implement some of the methods mentioned there in another projects where I was trying out the `SampleApp`.
@@ -29,12 +29,14 @@ Across `tests/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTe
 Using the same repository to verify what was written bypasses the true persistence check — the test passes even if the repository reads from its own tracking cache. A fresh `DbContext` (or a second `IUnitOfWork`) reads directly from the database, which is what we actually want to verify.
 
 Example — instead of:
+
 ```csharp
 var result = await repository.GetByIdAsync(entity.Id);
 result.Should().BeEquivalentTo(entity, options => options.WithEntityEquivalencyOptions());
 ```
 
 Use:
+
 ```csharp
 var dbContext = CreateRootDbContext();
 var result = await dbContext.Set<TEntity>().FindAsync(entity.Id);
@@ -66,3 +68,10 @@ Make sure the content is easy to read and follow. ALWAYS TEST commands and provi
 Store the main documentation in the `docs` folder, but also add README.md files to each of the projects (if they don't already have them), but this should only
 contain an overview, and link to the docs for fully detailed documentation. If a library already has a README.md, review it and update it if needed.
 Again, make sure the content is easy to read and follow. ALWAYS TEST!
+
+## Task 3: Improve integration testing experience and fix tests in this repo and update docs
+
+We need to fix the equivalency options helper, fix the failing tests.
+We also need to add proper ability to create new db context each time, instead of a scoped same instance
+Usage od IDbContextFactory
+improve docs

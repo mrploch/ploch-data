@@ -30,6 +30,10 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     /// <summary>
     ///     Creates a new unit of work.
     /// </summary>
+    /// <param name="useScopedProvider">
+    ///     <see langword="true" /> to resolve from <see cref="DataIntegrationTest{TDbContext}.ScopedServiceProvider" />;
+    ///     otherwise resolve from <see cref="DataIntegrationTest{TDbContext}.RootServiceProvider" />.
+    /// </param>
     /// <returns>The unit of work.</returns>
     protected IUnitOfWork CreateUnitOfWork(bool useScopedProvider = true) => GetServiceProvider(useScopedProvider).GetRequiredService<IUnitOfWork>();
 
@@ -37,46 +41,67 @@ public abstract class GenericRepositoryDataIntegrationTest<TDbContext>(IDbContex
     ///     Creates an instance of <see cref="IQueryableRepository{TEntity}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
+    /// <param name="useScopedProvider">
+    ///     <see langword="true" /> to resolve from <see cref="DataIntegrationTest{TDbContext}.ScopedServiceProvider" />;
+    ///     otherwise resolve from <see cref="DataIntegrationTest{TDbContext}.RootServiceProvider" />.
+    /// </param>
     /// <returns>An instance of <see cref="IQueryableRepository{TEntity}" />.</returns>
-    protected IQueryableRepository<TEntity> CreateQueryableRepository<TEntity>() where TEntity : class => ScopedServiceProvider.GetRequiredService<IQueryableRepository<TEntity>>();
+    protected IQueryableRepository<TEntity> CreateQueryableRepository<TEntity>(bool useScopedProvider = true) where TEntity : class =>
+        GetServiceProvider(useScopedProvider).GetRequiredService<IQueryableRepository<TEntity>>();
 
     /// <summary>
     ///     Creates an instance of <see cref="IReadRepositoryAsync{TEntity}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
+    /// <param name="useScopedProvider">
+    ///     <see langword="true" /> to resolve from <see cref="DataIntegrationTest{TDbContext}.ScopedServiceProvider" />;
+    ///     otherwise resolve from <see cref="DataIntegrationTest{TDbContext}.RootServiceProvider" />.
+    /// </param>
     /// <returns>An instance of a <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.</returns>
     [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
-    protected IReadRepositoryAsync<TEntity, TId> CreateReadRepositoryAsync<TEntity, TId>() where TEntity : class, IHasId<TId> =>
-        ScopedServiceProvider.GetRequiredService<IReadRepositoryAsync<TEntity, TId>>();
+    protected IReadRepositoryAsync<TEntity, TId> CreateReadRepositoryAsync<TEntity, TId>(bool useScopedProvider = true) where TEntity : class, IHasId<TId> =>
+        GetServiceProvider(useScopedProvider).GetRequiredService<IReadRepositoryAsync<TEntity, TId>>();
 
     /// <summary>
     ///     Creates a <see cref="IReadRepository{TEntity}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
+    /// <param name="useScopedProvider">
+    ///     <see langword="true" /> to resolve from <see cref="DataIntegrationTest{TDbContext}.ScopedServiceProvider" />;
+    ///     otherwise resolve from <see cref="DataIntegrationTest{TDbContext}.RootServiceProvider" />.
+    /// </param>
     /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}" />.</returns>
-    protected IReadRepository<TEntity, TId> CreateReadRepository<TEntity, TId>() where TEntity : class, IHasId<TId> =>
-        ScopedServiceProvider.GetRequiredService<IReadRepository<TEntity, TId>>();
+    protected IReadRepository<TEntity, TId> CreateReadRepository<TEntity, TId>(bool useScopedProvider = true) where TEntity : class, IHasId<TId> =>
+        GetServiceProvider(useScopedProvider).GetRequiredService<IReadRepository<TEntity, TId>>();
 
     /// <summary>
     ///     Creates a <see cref="IReadWriteRepository{TEntity,TId}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
+    /// <param name="useScopedProvider">
+    ///     <see langword="true" /> to resolve from <see cref="DataIntegrationTest{TDbContext}.ScopedServiceProvider" />;
+    ///     otherwise resolve from <see cref="DataIntegrationTest{TDbContext}.RootServiceProvider" />.
+    /// </param>
     /// <returns>An instance of <see cref="IReadWriteRepository{TEntity,TId}" />.</returns>
-    protected IReadWriteRepository<TEntity, TId> CreateReadWriteRepository<TEntity, TId>() where TEntity : class, IHasId<TId> =>
-        ScopedServiceProvider.GetRequiredService<IReadWriteRepository<TEntity, TId>>();
+    protected IReadWriteRepository<TEntity, TId> CreateReadWriteRepository<TEntity, TId>(bool useScopedProvider = true) where TEntity : class, IHasId<TId> =>
+        GetServiceProvider(useScopedProvider).GetRequiredService<IReadWriteRepository<TEntity, TId>>();
 
     /// <summary>
     ///     Creates a <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.
     /// </summary>
     /// <typeparam name="TEntity">The entity type.</typeparam>
     /// <typeparam name="TId">The identifier type.</typeparam>
+    /// <param name="useScopedProvider">
+    ///     <see langword="true" /> to resolve from <see cref="DataIntegrationTest{TDbContext}.ScopedServiceProvider" />;
+    ///     otherwise resolve from <see cref="DataIntegrationTest{TDbContext}.RootServiceProvider" />.
+    /// </param>
     /// <returns>An instance of <see cref="IReadWriteRepositoryAsync{TEntity,TId}" />.</returns>
     [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "The type name created ends with Async hence the name.")]
-    protected IReadWriteRepositoryAsync<TEntity, TId> CreateReadWriteRepositoryAsync<TEntity, TId>() where TEntity : class, IHasId<TId> =>
-        ScopedServiceProvider.GetRequiredService<IReadWriteRepositoryAsync<TEntity, TId>>();
+    protected IReadWriteRepositoryAsync<TEntity, TId> CreateReadWriteRepositoryAsync<TEntity, TId>(bool useScopedProvider = true) where TEntity : class, IHasId<TId> =>
+        GetServiceProvider(useScopedProvider).GetRequiredService<IReadWriteRepositoryAsync<TEntity, TId>>();
 
     private IServiceProvider GetServiceProvider(bool useScopedProvider) => useScopedProvider ? ScopedServiceProvider : RootServiceProvider;
 }

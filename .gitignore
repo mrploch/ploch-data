@@ -408,7 +408,7 @@ codestream.xml
 **/.idea/**/sonarlint.xml
 
 # AI Tools Config
-.claude/skills/
+.claude/skills/winui3-*
 .claude/settings.local.json
 .contextstream/
 .cursor/

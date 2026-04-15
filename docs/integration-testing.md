@@ -79,13 +79,19 @@ Extends `DataIntegrationTest<TDbContext>` with helper methods for creating repos
 
 ### What It Provides (in addition to DataIntegrationTest)
 
-| Method | Returns |
-|--------|---------|
-| `CreateUnitOfWork()` | `IUnitOfWork` |
-| `CreateReadRepositoryAsync<TEntity, TId>()` | `IReadRepositoryAsync<TEntity, TId>` |
-| `CreateReadWriteRepositoryAsync<TEntity, TId>()` | `IReadWriteRepositoryAsync<TEntity, TId>` |
-| `CreateReadRepository<TEntity, TId>()` | `IReadRepository<TEntity, TId>` |
-| `CreateReadWriteRepository<TEntity, TId>()` | `IReadWriteRepository<TEntity, TId>` |
+| Method                                                                        | Returns                                   |
+|-------------------------------------------------------------------------------|-------------------------------------------|
+| `CreateUnitOfWork(bool useScopedProvider = true)`                             | `IUnitOfWork`                             |
+| `CreateQueryableRepository<TEntity>(bool useScopedProvider = true)`           | `IQueryableRepository<TEntity>`           |
+| `CreateReadRepositoryAsync<TEntity, TId>(bool useScopedProvider = true)`      | `IReadRepositoryAsync<TEntity, TId>`      |
+| `CreateReadWriteRepositoryAsync<TEntity, TId>(bool useScopedProvider = true)` | `IReadWriteRepositoryAsync<TEntity, TId>` |
+| `CreateReadRepository<TEntity, TId>(bool useScopedProvider = true)`           | `IReadRepository<TEntity, TId>`           |
+| `CreateReadWriteRepository<TEntity, TId>(bool useScopedProvider = true)`      | `IReadWriteRepository<TEntity, TId>`      |
+
+All helper methods use the scoped provider by default. Pass `false` to resolve from the root provider.
+
+TODO: Explain more when to use scoped and root - but also fix how the dbcontext can be created new each time (using of IDbContexxtFactory):
+This needs to be fixed in tests.
 
 The `AddRepositories<TDbContext>()` call is made automatically in `ConfigureServices`.
 

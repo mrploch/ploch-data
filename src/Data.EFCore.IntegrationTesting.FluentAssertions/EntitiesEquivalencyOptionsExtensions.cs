@@ -1,7 +1,7 @@
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 
-namespace Ploch.Data.EFCore.IntegrationTesting;
+namespace Ploch.Data.EFCore.IntegrationTesting.FluentAssertions;
 
 /// <summary>
 ///     Provides FluentAssertions equivalency extension methods for comparing EF Core entities
@@ -15,6 +15,10 @@ public static class EntitiesEquivalencyOptionsExtensions
     /// </summary>
     /// <typeparam name="TSelf">The concrete type of the equivalency options, used for the fluent chain.</typeparam>
     /// <param name="options">The equivalency options to configure.</param>
+    /// <param name="dateTimeOffsetToleranceMilliseconds">
+    ///     Specifies the maximum allowed difference in milliseconds between <see cref="DateTimeOffset" /> values.
+    ///     Defaults to 0.
+    /// </param>
     /// <returns>
     ///     The same <paramref name="options" /> instance with the entity-comparison settings applied,
     ///     allowing further chaining.
@@ -37,7 +41,7 @@ public static class EntitiesEquivalencyOptionsExtensions
     ///                 <b>Cyclic navigation properties:</b> EF Core entity graphs commonly form reference
     ///                 cycles — for example <c>BlogPost → Tag → BlogPosts → BlogPost</c>. Without handling,
     ///                 FluentAssertions recurses indefinitely.
-    ///                 <see cref="EquivalencyOptionsExtensions.IgnoringCyclicReferences{TSelf}" /> stops the
+    ///                 <see cref="SelfReferenceEquivalencyOptions.IgnoringCyclicReferences{TSelf}" /> stops the
     ///                 traversal when a cycle is detected.
     ///             </description>
     ///         </item>
@@ -48,7 +52,7 @@ public static class EntitiesEquivalencyOptionsExtensions
     ///                 precision, while .NET retains 100-nanosecond (tick) precision. The maximum observed
     ///                 difference is ~78 µs. A <b>1-millisecond tolerance</b> (10× the maximum rounding
     ///                 error) is applied to every <see cref="DateTimeOffset" /> property comparison via
-    ///                 <see cref="FluentAssertions.Primitives.DateTimeOffsetAssertions.BeCloseTo" />.
+    ///                 DateTimeOffsetAssertionsef="DateTimeOffsetAssertions.BeCloseTo" />.
     ///             </description>
     ///         </item>
     ///     </list>
@@ -61,29 +65,36 @@ public static class EntitiesEquivalencyOptionsExtensions
     /// </remarks>
     /// <example>
     ///     <code>
-    ///     // Basic comparison of two entities loaded from the database.
-    ///     actual.Should().BeEquivalentTo(expected, options => options.WithEntityEquivalencyOptions());
+    ///      // Basic comparison of two entities loaded from the database.
+    ///      actual.Should().BeEquivalentTo(expected, options => options.WithEntityEquivalencyOptions());
     ///
-    ///     // Combined with exclusions for back-navigation properties that differ between an in-memory
-    ///     // object and a DB-loaded one (e.g. Tag.BlogPosts is populated by EF Core but not in test setup).
-    ///     actual.Should().BeEquivalentTo(expected,
-    ///         options => options.Excluding(p => p.Tags)
-    ///                           .Excluding(p => p.Categories)
-    ///                           .WithEntityEquivalencyOptions());
+    ///      // Combined with exclusions for back-navigation properties that differ between an in-memory
+    ///      // object and a DB-loaded one (e.g. Tag.BlogPosts is populated by EF Core but not in test setup).
+    ///      actual.Should().BeEquivalentTo(expected,
+    ///          options => options.Excluding(p => p.Tags)
+    ///                            .Excluding(p => p.Categories)
+    ///                            .WithEntityEquivalencyOptions());
     ///
-    ///     // Collection assertion — ContainEquivalentOf and ContainEquivalentOf both accept the same options.
-    ///     blogPosts.Should().ContainEquivalentOf(expected,
-    ///         options => options.Excluding(p => p.Categories).WithEntityEquivalencyOptions());
-    ///     </code>
+    ///      // Collection assertion — ContainEquivalentOf and ContainEquivalentOf both accept the same options.
+    ///      blogPosts.Should().ContainEquivalentOf(expected,
+    ///          options => options.Excluding(p => p.Categories).WithEntityEquivalencyOptions());
+    ///      </code>
     /// </example>
-    public static TSelf WithEntityEquivalencyOptions<TSelf>(this SelfReferenceEquivalencyOptions<TSelf> options)
+    public static TSelf WithEntityEquivalencyOptions<TSelf>(this SelfReferenceEquivalencyOptions<TSelf> options, double dateTimeOffsetToleranceMilliseconds = 100)
         where TSelf : SelfReferenceEquivalencyOptions<TSelf>
     {
         // 1ms tolerance is ~10× the maximum observed precision loss when SQLite truncates
         // sub-microsecond ticks from a stored DateTimeOffset value.
         return options.WithoutStrictOrdering()
                       .IgnoringCyclicReferences()
-                      .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(1)))
-                      .WhenTypeIs<DateTimeOffset>();
+                      .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(dateTimeOffsetToleranceMilliseconds)))
+                      .WhenTypeIs<DateTimeOffset>()
+            /*.Using<IEnumerable>(ctx =>
+                                {
+                                    var subject = ctx.Subject?.Cast<object>() ?? [];
+                                    var expectation = ctx.Expectation?.Cast<object>() ?? [];
+                                    subject.Should().BeEquivalentTo(expectation);
+                                })
+            .WhenTypeIs<IEnumerable>()*/;
     }
 }

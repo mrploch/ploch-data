@@ -69,7 +69,33 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         GC.SuppressFinalize(this);
     }
 
-    protected TDbContext CreateRootDbContext() => RootServiceProvider.GetRequiredService<TDbContext>();
+    /// <summary>
+    ///     Creates a new <typeparamref name="TDbContext" /> instance from the root service provider.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use this when a test needs an additional context instance that is separate from
+    ///         the default scoped <see cref="DbContext" /> exposed by this class.
+    ///     </para>
+    ///     <para>
+    ///         The returned context should be disposed by the caller when no longer needed.
+    ///     </para>
+    ///     <example>
+    ///         <code>
+    ///         using var rootContext = CreateRootDbContext();
+    ///         var total = await rootContext.Set&lt;MyEntity&gt;().CountAsync();
+    ///         </code>
+    ///     </example>
+    /// </remarks>
+    /// <returns>A <typeparamref name="TDbContext" /> resolved from <see cref="RootServiceProvider" />.</returns>
+    protected TDbContext CreateRootDbContext()
+    {
+        var dbContextFactory = RootServiceProvider.GetRequiredService<IDbContextFactory<TDbContext>>();
+
+        return dbContextFactory.CreateDbContext();
+
+        // return RootServiceProvider.GetRequiredService<TDbContext>();
+    }
 
     /// <summary>
     ///     Configures the required services for the test.

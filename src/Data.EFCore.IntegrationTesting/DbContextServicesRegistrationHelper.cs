@@ -47,6 +47,7 @@ public static class DbContextServicesRegistrationHelper
         IDbContextConfigurator dbContextConfigurator) where TDbContext : DbContext
     {
         serviceCollection.AddDbContext<TDbContext>(dbContextConfigurator.Configure);
+        serviceCollection.AddDbContextFactory<TDbContext>(dbContextConfigurator.Configure);
 
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection);
     }
