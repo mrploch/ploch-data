@@ -20,22 +20,10 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         blogPosts.Should().HaveCount(2);
         var actualPost1 = blogPosts.Single(p => p.Id == blogPost1.Id);
 
-        // Exclude Tags/Categories from deep comparison — EF Core populates back-navigations
-        // (e.g. Tag.BlogPosts) on the loaded entity that the in-memory object doesn't have.
-        // Counts are verified separately below.
-        actualPost1.Should()
-                   .BeEquivalentTo(blogPost1,
-                                   options => options.Excluding(p => p.Tags)
-                                                     .Excluding(p => p.Categories)
-                                                     .WithEntityEquivalencyOptions());
-        actualPost1.Tags.Should().HaveCount(blogPost1.Tags.Count);
-        actualPost1.Categories.Should().HaveCount(blogPost1.Categories.Count);
+        actualPost1.Should().BeEquivalentTo(blogPost1, options => options.WithEntityEquivalencyOptions());
 
         blogPosts.Should()
-                 .ContainEquivalentOf(blogPost2,
-                                      options => options.Excluding(p => p.Categories)
-                                                        .Excluding(p => p.Tags)
-                                                        .WithEntityEquivalencyOptions());
+                 .ContainEquivalentOf(blogPost2, options => options.WithEntityEquivalencyOptions());
         foreach (var blogPost in blogPosts)
         {
             blogPost.Tags.Should().NotBeEmpty();
@@ -116,10 +104,12 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         for (var i = 5; i <= 9; i++)
         {
             var blogPost = posts[i];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should().BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 
@@ -146,10 +136,12 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         for (var i = 7; i <= 9; i++)
         {
             var blogPost = posts[i];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should().BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 

@@ -107,10 +107,12 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         for (var i = 0; i < 5; i++)
         {
             var blogPost = posts[i + 5];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should().BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 
@@ -138,10 +140,12 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         for (var i = 7; i <= 9; i++)
         {
             var blogPost = posts[i];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should().BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 
