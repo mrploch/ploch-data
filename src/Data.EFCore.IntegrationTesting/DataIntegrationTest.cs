@@ -33,7 +33,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         dbContextConfigurator ??= new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory);
         _dbContextConfigurator = dbContextConfigurator;
 
-        (ServiceProvider, DbContext, RootServiceProvider) =
+        (RootServiceProvider, ScopedServiceProvider, DbContext) =
             DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(serviceCollection, dbContextConfigurator);
     }
 
@@ -47,7 +47,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     Provides access to the configured service provider.
     ///     This is used to resolve dependencies and services required during integration testing.
     /// </summary>
-    protected IServiceProvider ServiceProvider { get; }
+    protected IServiceProvider ScopedServiceProvider { get; }
 
     /// <summary>
     ///     Gets the root (non-scoped) service provider.
@@ -55,7 +55,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     /// <remarks>
     ///     Use this when you need to create additional scopes or resolve services
     ///     outside the default test scope. For most test code, prefer
-    ///     <see cref="ServiceProvider" /> instead.
+    ///     <see cref="ScopedServiceProvider" /> instead.
     /// </remarks>
     protected IServiceProvider RootServiceProvider { get; }
 
@@ -68,6 +68,8 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         Dispose(true);
         GC.SuppressFinalize(this);
     }
+
+    protected TDbContext CreateRootDbContext() => RootServiceProvider.GetRequiredService<TDbContext>();
 
     /// <summary>
     ///     Configures the required services for the test.
@@ -110,7 +112,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         {
             DbContext.Dispose();
 
-            if (ServiceProvider is IDisposable disposableProvider)
+            if (ScopedServiceProvider is IDisposable disposableProvider)
             {
                 disposableProvider.Dispose();
             }

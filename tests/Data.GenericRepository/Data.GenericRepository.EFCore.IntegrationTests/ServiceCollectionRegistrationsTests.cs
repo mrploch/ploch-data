@@ -61,7 +61,7 @@ public class ServiceCollectionRegistrationsTests
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
 
         serviceCollection.AddRepositories<TestDbContext>(configuration);
-        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (_, serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
     }
@@ -72,7 +72,7 @@ public class ServiceCollectionRegistrationsTests
         var serviceCollection = new ServiceCollection();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (_, serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         serviceProvider.GetRequiredService<IReadRepository<Blog, int>>().Should().BeOfType<ReadRepository<Blog, int>>();
         serviceProvider.GetRequiredService<IReadRepositoryAsync<Blog, int>>().Should().BeOfType<ReadRepositoryAsync<Blog, int>>();
@@ -93,7 +93,7 @@ public class ServiceCollectionRegistrationsTests
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (_, serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
@@ -124,7 +124,7 @@ public class ServiceCollectionRegistrationsTests
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (_, serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
@@ -141,7 +141,7 @@ public class ServiceCollectionRegistrationsTests
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (_, serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();
@@ -158,7 +158,7 @@ public class ServiceCollectionRegistrationsTests
         serviceCollection.AddScoped<IReadWriteRepositoryAsync<Blog, int>, CustomBlogRepository>();
 
         serviceCollection.AddRepositories<TestDbContext>();
-        var (serviceProvider, _, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
+        var (_, serviceProvider, _) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(serviceCollection);
 
         // Resolving the custom repository interface
         serviceProvider.GetRequiredService<ICustomBlogRepository>().Should().BeOfType<CustomBlogRepository>();

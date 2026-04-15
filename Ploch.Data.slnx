@@ -124,6 +124,7 @@
     <File Path="qodana.sarif.json" />
     <File Path="qodana.yaml" />
     <File Path="../mrploch-development/dependencies/Serilog.Logging.Packages.props" />
+    <File Path="sonar-project.properties" />
   </Folder>
   <Folder Name="/repository/dependencies/">
     <File Path="../mrploch-development/dependencies/Common.Packages.props" />
@@ -159,6 +160,7 @@
     <File Path=".github/workflows/build-dotnet.yml" />
   </Folder>
   <Folder Name="/Tests/">
+    <File Path="tests/.editorconfig" />
     <Project Path="tests/Data.EFCore.SqLite.Tests/Ploch.Data.EFCore.SqLite.Tests.csproj" />
     <Project Path="tests/Data.EFCore.SqlServer.Tests/Ploch.Data.EFCore.SqlServer.Tests.csproj" />
     <Project Path="tests/Data.EFCore.Tests/Ploch.Data.EFCore.Tests.csproj" />
@@ -170,6 +172,7 @@
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTests/Ploch.Data.GenericRepository.EFCore.IntegrationTests.csproj" />
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.Tests/Ploch.Data.GenericRepository.Tests.csproj" />
   </Folder>
+  <Project Path="src/Data.EFCore.IntegrationTesting.FluentAssertions/Ploch.Data.EFCore.IntegrationTesting.FluentAssertions.csproj" />
   <!-- DocumentationSite excluded: docfx.console 2.59.4 is incompatible with .NET 10.
        Upgrade to modern docfx dotnet tool to re-enable. -->
   <!-- <Project Path="DocumentationSite/DocumentationSite.csproj" /> -->

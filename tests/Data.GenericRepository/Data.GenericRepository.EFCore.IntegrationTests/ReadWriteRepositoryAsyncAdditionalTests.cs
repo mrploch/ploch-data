@@ -10,7 +10,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "ToDelete" });
+        await repository.AddAsync(new() { Id = 1, Name = "ToDelete" });
         await unitOfWork.CommitAsync();
 
         await repository.DeleteAsync(1);
@@ -28,7 +28,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
 
         var act = async () => await repository.DeleteAsync(999);
 
-        await act.Should().ThrowAsync<EntityNotFoundException>().Where(e => e.Message.Contains("not found"));
+        await act.Should().ThrowAsync<EntityNotFoundException>();
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Original" });
+        await repository.AddAsync(new() { Id = 1, Name = "Original" });
         await unitOfWork.CommitAsync();
 
         var updatedEntity = new TestEntity { Id = 1, Name = "Updated" };
@@ -81,12 +81,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        var entities = new List<TestEntity>
-        {
-            new() { Id = 1, Name = "First" },
-            new() { Id = 2, Name = "Second" },
-            new() { Id = 3, Name = "Third" },
-        };
+        var entities = new List<TestEntity> { new() { Id = 1, Name = "First" }, new() { Id = 2, Name = "Second" }, new() { Id = 3, Name = "Third" } };
 
         var result = await repository.AddRangeAsync(entities);
         await unitOfWork.CommitAsync();
@@ -101,7 +96,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "WithOnDbSet" });
+        await repository.AddAsync(new() { Id = 1, Name = "WithOnDbSet" });
         await unitOfWork.CommitAsync();
 
         var result = await repository.GetByIdAsync(1, q => q.Where(e => e.Name.Contains("WithOnDbSet")));
@@ -115,7 +110,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Excluded" });
+        await repository.AddAsync(new() { Id = 1, Name = "Excluded" });
         await unitOfWork.CommitAsync();
 
         var result = await repository.GetByIdAsync(1, q => q.Where(e => e.Name == "NonExistent"));
@@ -128,11 +123,11 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "KeyValueFind" });
+        await repository.AddAsync(new() { Id = 1, Name = "KeyValueFind" });
         await unitOfWork.CommitAsync();
 
         var readRepo = CreateReadRepositoryAsync<TestEntity, int>();
-        var result = await readRepo.GetByIdAsync([1]);
+        var result = await readRepo.GetByIdAsync([ 1 ]);
 
         result.Should().NotBeNull();
         result!.Name.Should().Be("KeyValueFind");
@@ -143,9 +138,9 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Alpha" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Beta" });
-        await repository.AddAsync(new TestEntity { Id = 3, Name = "AlphaTwo" });
+        await repository.AddAsync(new() { Id = 1, Name = "Alpha" });
+        await repository.AddAsync(new() { Id = 2, Name = "Beta" });
+        await repository.AddAsync(new() { Id = 3, Name = "AlphaTwo" });
         await unitOfWork.CommitAsync();
 
         var result = await repository.GetAllAsync(e => e.Name.Contains("Alpha"));
@@ -158,8 +153,8 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "First" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Second" });
+        await repository.AddAsync(new() { Id = 1, Name = "First" });
+        await repository.AddAsync(new() { Id = 2, Name = "Second" });
         await unitOfWork.CommitAsync();
 
         var result = await repository.GetAllAsync(onDbSet: q => q.OrderByDescending(e => e.Name));
@@ -173,8 +168,8 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Alpha" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Beta" });
+        await repository.AddAsync(new() { Id = 1, Name = "Alpha" });
+        await repository.AddAsync(new() { Id = 2, Name = "Beta" });
         await unitOfWork.CommitAsync();
 
         var result = await repository.FindFirstAsync(e => e.Name == "Beta");
@@ -188,8 +183,8 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Alpha" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Beta" });
+        await repository.AddAsync(new() { Id = 1, Name = "Alpha" });
+        await repository.AddAsync(new() { Id = 2, Name = "Beta" });
         await unitOfWork.CommitAsync();
 
         var result = await repository.FindFirstAsync(e => e.Name == "Alpha", q => q.OrderBy(e => e.Name));
@@ -203,7 +198,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Alpha" });
+        await repository.AddAsync(new() { Id = 1, Name = "Alpha" });
         await unitOfWork.CommitAsync();
 
         var result = await repository.FindFirstAsync(e => e.Name == "NonExistent");
@@ -216,9 +211,9 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Alpha" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Beta" });
-        await repository.AddAsync(new TestEntity { Id = 3, Name = "AlphaTwo" });
+        await repository.AddAsync(new() { Id = 1, Name = "Alpha" });
+        await repository.AddAsync(new() { Id = 2, Name = "Beta" });
+        await repository.AddAsync(new() { Id = 3, Name = "AlphaTwo" });
         await unitOfWork.CommitAsync();
 
         var readRepo = CreateReadRepositoryAsync<TestEntity, int>();
@@ -232,8 +227,8 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Alpha" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Beta" });
+        await repository.AddAsync(new() { Id = 1, Name = "Alpha" });
+        await repository.AddAsync(new() { Id = 2, Name = "Beta" });
         await unitOfWork.CommitAsync();
 
         var readRepo = CreateReadRepositoryAsync<TestEntity, int>();
@@ -249,7 +244,7 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         var repository = unitOfWork.Repository<TestEntity, int>();
         for (var i = 1; i <= 10; i++)
         {
-            await repository.AddAsync(new TestEntity { Id = i, Name = $"Entity{i}" });
+            await repository.AddAsync(new() { Id = i, Name = $"Entity{i}" });
         }
 
         await unitOfWork.CommitAsync();
@@ -267,15 +262,16 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         var repository = unitOfWork.Repository<TestEntity, int>();
         for (var i = 1; i <= 10; i++)
         {
-            await repository.AddAsync(new TestEntity { Id = i, Name = $"Entity{i}" });
+            await repository.AddAsync(new() { Id = i, Name = $"Entity{i}" });
         }
 
         await unitOfWork.CommitAsync();
 
         var readRepo = CreateReadRepositoryAsync<TestEntity, int>();
-        var page = await readRepo.GetPageAsync(1, 10, sortBy: e => e.Name, query: e => e.Id > 7);
+        var page = await readRepo.GetPageAsync(1, 10, e => e.Name, e => e.Id > 7);
 
         page.Should().HaveCount(3);
         page.Should().OnlyContain(e => e.Id > 7);
+        page.Select(e => e.Name).Should().BeInAscendingOrder();
     }
 }

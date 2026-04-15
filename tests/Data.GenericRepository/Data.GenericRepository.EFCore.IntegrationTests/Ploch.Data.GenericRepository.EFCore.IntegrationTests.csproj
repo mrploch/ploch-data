@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ploch-common\src\TestingSupport.XUnit3.AutoMoq\Ploch.TestingSupport.XUnit3.AutoMoq.csproj" />
+    <ProjectReference Include="..\..\..\src\Data.EFCore.IntegrationTesting.FluentAssertions\Ploch.Data.EFCore.IntegrationTesting.FluentAssertions.csproj" />
     <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
     <ProjectReference Include="..\..\..\src\Data.GenericRepository\Data.GenericRepository\Ploch.Data.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\src\Data.Model\Ploch.Data.Model.csproj" />

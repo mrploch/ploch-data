@@ -10,12 +10,12 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "First" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Second" });
+        await repository.AddAsync(new() { Id = 1, Name = "First" });
+        await repository.AddAsync(new() { Id = 2, Name = "Second" });
         await unitOfWork.CommitAsync();
 
-        var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
-        var entities = queryableRepo.Entities;
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
+        var entities = queryableRepo.Entities.ToArray();
 
         entities.Should().HaveCount(2);
     }
@@ -27,12 +27,12 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
         var repository = unitOfWork.Repository<TestEntity, int>();
         for (var i = 1; i <= 15; i++)
         {
-            await repository.AddAsync(new TestEntity { Id = i, Name = $"Entity{i:D2}" });
+            await repository.AddAsync(new() { Id = i, Name = $"Entity{i:D2}" });
         }
 
         await unitOfWork.CommitAsync();
 
-        var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
         var pageQuery = queryableRepo.GetPageQuery(2, 5);
 
         var result = pageQuery.ToList();
@@ -44,13 +44,13 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new TestEntity { Id = 1, Name = "Charlie" });
-        await repository.AddAsync(new TestEntity { Id = 2, Name = "Alpha" });
-        await repository.AddAsync(new TestEntity { Id = 3, Name = "Bravo" });
+        await repository.AddAsync(new() { Id = 1, Name = "Charlie" });
+        await repository.AddAsync(new() { Id = 2, Name = "Alpha" });
+        await repository.AddAsync(new() { Id = 3, Name = "Bravo" });
         await unitOfWork.CommitAsync();
 
-        var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
-        var pageQuery = queryableRepo.GetPageQuery(1, 3, sortBy: e => e.Name);
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
+        var pageQuery = queryableRepo.GetPageQuery(1, 3, e => e.Name);
 
         var result = pageQuery.ToList();
         result.Should().HaveCount(3);
@@ -66,12 +66,12 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
         var repository = unitOfWork.Repository<TestEntity, int>();
         for (var i = 1; i <= 10; i++)
         {
-            await repository.AddAsync(new TestEntity { Id = i, Name = $"Entity{i}" });
+            await repository.AddAsync(new() { Id = i, Name = $"Entity{i}" });
         }
 
         await unitOfWork.CommitAsync();
 
-        var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
         var pageQuery = queryableRepo.GetPageQuery(1, 10, query: e => e.Id > 5);
 
         var result = pageQuery.ToList();
@@ -86,12 +86,12 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
         var repository = unitOfWork.Repository<TestEntity, int>();
         for (var i = 1; i <= 10; i++)
         {
-            await repository.AddAsync(new TestEntity { Id = i, Name = $"Entity{i}" });
+            await repository.AddAsync(new() { Id = i, Name = $"Entity{i}" });
         }
 
         await unitOfWork.CommitAsync();
 
-        var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
 
         // Request all 10 items in one page, but the onDbSet filter limits to IDs <= 3
         var pageQuery = queryableRepo.GetPageQuery(1, 10, onDbSet: q => q.Where(e => e.Id <= 3));
@@ -104,7 +104,7 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
     [Fact]
     public void GetPageQuery_should_throw_when_page_number_is_zero()
     {
-        var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
 
         var act = () => queryableRepo.GetPageQuery(0, 5);
 
@@ -114,7 +114,7 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
     [Fact]
     public void GetPageQuery_should_throw_when_page_size_is_zero()
     {
-        var queryableRepo = (IQueryableRepository<TestEntity>)CreateReadRepositoryAsync<TestEntity, int>();
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
 
         var act = () => queryableRepo.GetPageQuery(1, 0);
 
