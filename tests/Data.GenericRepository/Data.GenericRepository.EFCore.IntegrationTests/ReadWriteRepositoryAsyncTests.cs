@@ -57,19 +57,12 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         blogPosts.Should().HaveCount(2);
         blogPosts.Should()
                  .ContainEquivalentOf(blogPost1,
-                                      options => options.Excluding(p => p.Categories)
-                                                        .IgnoringCyclicReferences()
-                                                        .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                        .WhenTypeIs<DateTimeOffset>());
+                                      options => options.Excluding(p => p.Categories).WithEntityEquivalencyOptions());
         blogPosts.Should()
                  .ContainEquivalentOf(blogPost2,
-                                      options => options.Excluding(p => p.Categories)
-                                                        .IgnoringCyclicReferences()
-                                                        .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                        .WhenTypeIs<DateTimeOffset>());
+                                      options => options.Excluding(p => p.Categories).WithEntityEquivalencyOptions());
         foreach (var blogPost in blogPosts)
         {
-            blogPost.Tags.Should().NotBeEmpty();
             blogPost.Tags.Should().NotBeEmpty();
         }
     }
@@ -187,11 +180,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.GetByIdAsync(blogPost2.Id, query => query.Include(e => e.Tags));
-        blogPost.Should()
-                .BeEquivalentTo(blogPost2,
-                                options => options.IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.WithEntityEquivalencyOptions());
         blogPost!.Tags.Should().NotBeEmpty();
     }
 
@@ -210,9 +199,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
                 .BeEquivalentTo(blogPost2,
                                 options => options.Excluding(p => p.Categories)
                                                   .Excluding(p => p.Tags)
-                                                  .IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+                                                  .WithEntityEquivalencyOptions());
     }
 
     [Fact]
@@ -292,8 +279,6 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
                 .BeEquivalentTo(testBlogEntities.blogPost1,
                                 options => options.Excluding(p => p.Categories)
                                                   .Excluding(p => p.Tags)
-                                                  .IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+                                                  .WithEntityEquivalencyOptions());
     }
 }

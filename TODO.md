@@ -22,6 +22,27 @@ This project is located here: C:/DevNet/my/mrploch-temp/ploch-data-sample-app-te
 Keep in mind that the changes are mostly implemented already in the SampleApp in here: `C:/DevNet/my/mrploch-temp/ploch-data-sample-app-test/Ploch.Data.SampleApp.slnx`. You'll be in most cases just moving them into appropriate locations and adding test coverage and documentation.
 So base your changes on those.
 
+## Task: Use DbContext for Validation in GenericRepository Integration Tests
+
+Across `tests/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTests/`, tests that verify entities were added/updated/deleted should use a fresh `DbContext` (via `CreateRootDbContext()`) instead of the repository under test.
+
+Using the same repository to verify what was written bypasses the true persistence check — the test passes even if the repository reads from its own tracking cache. A fresh `DbContext` (or a second `IUnitOfWork`) reads directly from the database, which is what we actually want to verify.
+
+Example — instead of:
+```csharp
+var result = await repository.GetByIdAsync(entity.Id);
+result.Should().BeEquivalentTo(entity, options => options.WithEntityEquivalencyOptions());
+```
+
+Use:
+```csharp
+var dbContext = CreateRootDbContext();
+var result = await dbContext.Set<TEntity>().FindAsync(entity.Id);
+result.Should().BeEquivalentTo(entity, options => options.WithEntityEquivalencyOptions());
+```
+
+Affects all tests in: `ReadWriteRepositoryAsyncTests`, `ReadWriteRepositoryDeleteByIdTests`, `UnitOfWorkRepositoryAsyncSQLiteInMemoryTests`, and similar.
+
 ## Task 2: Provide a Comprehensive Documentation for the Ploch.Data Libraries
 
 *Make the changes but don't commit them yet*

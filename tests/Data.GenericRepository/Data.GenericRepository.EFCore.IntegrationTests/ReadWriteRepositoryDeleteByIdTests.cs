@@ -1,7 +1,6 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Ploch.Data.EFCore.IntegrationTesting;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 

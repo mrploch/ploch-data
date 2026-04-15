@@ -20,8 +20,6 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         blogPosts.Should().HaveCount(2);
         var actualPost1 = blogPosts.Single(p => p.Id == blogPost1.Id);
 
-        //TODO: Improve validation - only equivalence problem are the DateTimeOffsetts which seems to have precission problem
-
         // Exclude Tags/Categories from deep comparison — EF Core populates back-navigations
         // (e.g. Tag.BlogPosts) on the loaded entity that the in-memory object doesn't have.
         // Counts are verified separately below.
@@ -29,9 +27,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
                    .BeEquivalentTo(blogPost1,
                                    options => options.Excluding(p => p.Tags)
                                                      .Excluding(p => p.Categories)
-                                                     .IgnoringCyclicReferences()
-                                                     .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                     .WhenTypeIs<DateTimeOffset>());
+                                                     .WithEntityEquivalencyOptions());
         actualPost1.Tags.Should().HaveCount(blogPost1.Tags.Count);
         actualPost1.Categories.Should().HaveCount(blogPost1.Categories.Count);
 
@@ -39,9 +35,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
                  .ContainEquivalentOf(blogPost2,
                                       options => options.Excluding(p => p.Categories)
                                                         .Excluding(p => p.Tags)
-                                                        .IgnoringCyclicReferences()
-                                                        .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                        .WhenTypeIs<DateTimeOffset>());
+                                                        .WithEntityEquivalencyOptions());
         foreach (var blogPost in blogPosts)
         {
             blogPost.Tags.Should().NotBeEmpty();
@@ -82,11 +76,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPost = repository.GetById(blogPost2.Id, query => query.Include(e => e.Tags));
-        blogPost.Should()
-                .BeEquivalentTo(blogPost2,
-                                options => options.IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.WithEntityEquivalencyOptions());
         blogPost2.Tags.Should().NotBeEmpty();
     }
 
@@ -105,9 +95,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
                 .BeEquivalentTo(blogPost2,
                                 options => options.Excluding(p => p.Categories)
                                                   .Excluding(p => p.Tags)
-                                                  .IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+                                                  .WithEntityEquivalencyOptions());
         blogPost2.Tags.Should().NotBeEmpty();
     }
 
@@ -220,9 +208,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
                 .BeEquivalentTo(testBlogEntities.blogPost1,
                                 options => options.Excluding(p => p.Categories)
                                                   .Excluding(p => p.Tags)
-                                                  .IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+                                                  .WithEntityEquivalencyOptions());
     }
 
     [Fact]

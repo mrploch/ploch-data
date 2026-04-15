@@ -42,10 +42,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         var actualBlog = await blogRepository.GetByIdAsync(blog.Id);
         actualBlog.Should()
                   .BeEquivalentTo(blog,
-                                  options => options.Excluding(p => p.BlogPosts)
-                                                    .IgnoringCyclicReferences()
-                                                    .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                    .WhenTypeIs<DateTimeOffset>());
+                                  options => options.Excluding(p => p.BlogPosts).WithEntityEquivalencyOptions());
         actualBlog!.Name.Should().Be(blog.Name);
 
         var actualBlogPost1 = await unitOfWork2.Repository<BlogPost, int>().GetByIdAsync(blogPost1.Id);
@@ -53,18 +50,14 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
                        .BeEquivalentTo(blogPost1,
                                        options => options.Excluding(p => p.Categories)
                                                          .Excluding(p => p.Tags)
-                                                         .IgnoringCyclicReferences()
-                                                         .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                         .WhenTypeIs<DateTimeOffset>());
+                                                         .WithEntityEquivalencyOptions());
 
         var actualBlogPost2 = await unitOfWork2.Repository<BlogPost, int>().GetByIdAsync(blogPost2.Id);
         actualBlogPost2.Should()
                        .BeEquivalentTo(blogPost2,
                                        options => options.Excluding(p => p.Categories)
                                                          .Excluding(p => p.Tags)
-                                                         .IgnoringCyclicReferences()
-                                                         .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                         .WhenTypeIs<DateTimeOffset>());
+                                                         .WithEntityEquivalencyOptions());
 
         var testUnitOfWork = CreateUnitOfWork();
 
@@ -95,10 +88,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         blog.Name = "Updated Blog";
         actualBlog.Should()
                   .BeEquivalentTo(blog,
-                                  options => options.Excluding(p => p.BlogPosts)
-                                                    .IgnoringCyclicReferences()
-                                                    .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                    .WhenTypeIs<DateTimeOffset>());
+                                  options => options.Excluding(p => p.BlogPosts).WithEntityEquivalencyOptions());
     }
 
     [Fact]
@@ -116,10 +106,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         var actualBlog = await blogRepository.GetByIdAsync(blog.Id);
         actualBlog.Should()
                   .BeEquivalentTo(blog,
-                                  options => options.Excluding(p => p.BlogPosts)
-                                                    .IgnoringCyclicReferences()
-                                                    .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                    .WhenTypeIs<DateTimeOffset>());
+                                  options => options.Excluding(p => p.BlogPosts).WithEntityEquivalencyOptions());
     }
 
     [Fact]
