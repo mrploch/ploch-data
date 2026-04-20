@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using FluentAssertions;
 using Ploch.Data.Utilities;
@@ -93,5 +94,25 @@ public class DataColumnExtensionsTests
         source.CopyProperties(target);
 
         target.ColumnName.Should().Be("Target");
+    }
+
+    [Fact]
+    public void CopyProperties_should_throw_ArgumentNullException_when_source_is_null()
+    {
+        using var target = new DataColumn("Target", typeof(string));
+
+        var act = () => ((DataColumn)null!).CopyProperties(target);
+
+        act.Should().Throw<ArgumentNullException>().WithParameterName("sourceColumn");
+    }
+
+    [Fact]
+    public void CopyProperties_should_throw_ArgumentNullException_when_target_is_null()
+    {
+        using var source = new DataColumn("Source", typeof(string));
+
+        var act = () => source.CopyProperties(null!);
+
+        act.Should().Throw<ArgumentNullException>().WithParameterName("targetColumn");
     }
 }
