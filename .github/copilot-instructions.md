@@ -102,7 +102,6 @@ Escalation ladder — walk it in order and stop at the first step that answers t
 
 **Never answer "I don't know what we did before" without running at least step 1, then step 2 if step 1 was thin.**
 
-
 ## Project Scope Discipline
 
 - Reuse the `project_id` returned by `init(...)` or `context(...)` for project-scoped writes and lookups
@@ -210,6 +209,7 @@ When `context()` returns `context_pressure.level: "high"`:
 - After compaction: `init(folder_path="...", is_post_compact=true)` to restore
 
 ---
+
 ## IMPORTANT: No Hooks Available
 
 **This editor does NOT have hooks to enforce ContextStream behavior.**
@@ -331,10 +331,12 @@ project(action="index_status")
 - `team`: cross-project team search
 
 ### Output Format Hints
+
 - Use `output_format="paths"` for file listings and rename targets
 - Use `output_format="count"` for "how many" queries
 
 ### Two-Phase Search Pattern (for precision)
+
 - Pass 1 (discovery): `search(mode="auto", query="<concept + module>", output_format="paths", limit=10)`
 - Pass 2 (precision): use one of:
   - exact text/symbol: `search(mode="keyword", query="\"exact_text\"", include_content=true)`
@@ -343,6 +345,7 @@ project(action="index_status")
 - Then use local Read/Grep only on paths returned by ContextStream.
 
 ### When Local Tools Are OK
+
 - The stale/not-indexed grace window has elapsed (~20s default, configurable)
 - ContextStream search still returns 0 results or errors after retry
 - User explicitly requests local tools
@@ -355,6 +358,7 @@ project(action="index_status")
 You MUST save state manually when the conversation gets long:
 
 ### When to Save State
+
 - After completing a major task
 - Before the conversation might be compacted
 - If `context()` returns `context_pressure.level: "high"`
