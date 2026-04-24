@@ -72,7 +72,6 @@ Before guessing, improvising, or struggling through a workflow you don't fully k
 - Treat `[LESSONS_WARNING]` as active working instructions for the current task, not optional background context; apply them immediately and keep them in mind until the task is done
 - Prefer surfaced ContextStream knowledge over inventing a new workflow from memory
 
-
 ## Past Sessions Are Queryable — USE THEM
 
 ### Auto-Grounding (in `context()`)
@@ -147,11 +146,13 @@ These should be followed exactly as they contain real-time context.
 - `exhaustive`: all occurrences / complete match sets
 - `team`: cross-project team search
 
-### Output Format Hints:
+### Output Format Hints
+
 - `output_format="paths"` for file lists and rename targets
 - `output_format="count"` for "how many" queries
 
-### Two-Phase Search Playbook (recommended):
+### Two-Phase Search Playbook (recommended)
+
 1. **Discovery pass**: run `search(mode="auto", query="<concept + module>", output_format="paths", limit=10)`
 2. **Precision pass**: use symbols from pass 1 with a specific mode:
    - Exact symbol/text: `search(mode="keyword", query="\"my_symbol\"", include_content=true, file_types=["rs"], limit=20)`
@@ -217,6 +218,7 @@ You MUST follow these rules manually - there is no automatic enforcement.
 ## ContextStream Knowledge First
 
 **Before guessing or struggling through an unfamiliar workflow, check ContextStream first.**
+
 - Start with `context(...)` and follow `[MATCHED_SKILLS]`, `[LESSONS_WARNING]`, `[PREFERENCE]`, and `<system-reminder>` output
 - Treat `[LESSONS_WARNING]` as active working instructions for the current task, not optional background context
 - If the task is unfamiliar, process-heavy, or likely documented already, inspect `skill(action="list")`, `memory(action="list_docs")`, `session(action="get_lessons")`, or `memory(action="decisions")` before trial-and-error
@@ -251,7 +253,7 @@ You MUST follow these rules manually - there is no automatic enforcement.
 
 Transcripts are OFF by default.
 
-### Enable for this chat:
+### Enable for this chat
 ```
 context(user_message="<user's message>", save_exchange=true, session_id="<session-id>")
 ```
@@ -267,7 +269,7 @@ context(user_message="<user's message>", save_exchange=false, session_id="<sessi
 - `CONTEXTSTREAM_TRANSCRIPTS_ENABLED="true|false"`
 - `CONTEXTSTREAM_HOOK_TRANSCRIPTS_ENABLED="true|false"`
 
-### Session ID Guidelines:
+### Session ID Guidelines
 - Generate ONCE at the start of the conversation
 - Use a unique identifier (UUID or timestamp-based)
 - Keep the SAME session_id for ALL context() calls
@@ -282,7 +284,7 @@ You MUST manage indexing manually:
 
 **IMPORTANT: Indexing and ingest are ALWAYS available. NEVER claim that transport mode, HTTP mode, or remote mode prevents indexing/ingest operations. Both `project(action="index")` and `project(action="ingest_local")` work in all configurations.**
 
-### After Creating/Editing Files:
+### After Creating/Editing Files
 ```
 project(action="index")
 ```
@@ -294,7 +296,8 @@ If folder context is active, this resolves the current repo and uses the local i
 project(action="ingest_local", path="<project_folder>")
 ```
 
-### Signs You Need to Re-index:
+### Signs You Need to Re-index
+
 - Search doesn't find code you just wrote
 - Search returns old versions of functions
 - New files don't appear in search results
@@ -317,7 +320,7 @@ project(action="index_status")
 - **IF NOT indexed or stale (>7 days):** wait up to ~20s for background refresh, retry `search(mode="auto", ...)`, then allow local tools only after the grace window elapses
 - **IF search returns 0 results after retry/window:** local tools are allowed
 
-### Choose Search Mode Intelligently:
+### Choose Search Mode Intelligently
 - `auto` (recommended): query-aware mode selection
 - `hybrid`: mixed semantic + keyword retrieval for broad discovery
 - `semantic`: conceptual questions ("how does X work?")
@@ -327,11 +330,11 @@ project(action="index_status")
 - `exhaustive`: all occurrences / complete match coverage
 - `team`: cross-project team search
 
-### Output Format Hints:
+### Output Format Hints
 - Use `output_format="paths"` for file listings and rename targets
 - Use `output_format="count"` for "how many" queries
 
-### Two-Phase Search Pattern (for precision):
+### Two-Phase Search Pattern (for precision)
 - Pass 1 (discovery): `search(mode="auto", query="<concept + module>", output_format="paths", limit=10)`
 - Pass 2 (precision): use one of:
   - exact text/symbol: `search(mode="keyword", query="\"exact_text\"", include_content=true)`
@@ -339,7 +342,7 @@ project(action="index_status")
   - all occurrences: `search(mode="exhaustive", query="symbol_or_text")`
 - Then use local Read/Grep only on paths returned by ContextStream.
 
-### When Local Tools Are OK:
+### When Local Tools Are OK
 - The stale/not-indexed grace window has elapsed (~20s default, configurable)
 - ContextStream search still returns 0 results or errors after retry
 - User explicitly requests local tools
@@ -351,19 +354,20 @@ project(action="index_status")
 **There is NO automatic state saving before compaction.**
 You MUST save state manually when the conversation gets long:
 
-### When to Save State:
+### When to Save State
 - After completing a major task
 - Before the conversation might be compacted
 - If `context()` returns `context_pressure.level: "high"`
 
-### How to Save State:
+### How to Save State
+
 ```
 session(action="capture", event_type="session_snapshot",
   title="Session checkpoint",
   content="{ \"summary\": \"what we did\", \"active_files\": [...], \"next_steps\": [...] }")
 ```
 
-### After Compaction (if context seems lost):
+### After Compaction (if context seems lost)
 ```
 init(folder_path="...", is_post_compact=true)
 ```
@@ -410,7 +414,7 @@ ContextStream memory, docs, and todos persist across sessions, are searchable, a
 
 If the response includes [VERSION_NOTICE] or [VERSION_CRITICAL], tell the user about the available update.
 
-### Update Commands:
+### Update Commands
 ```bash
 # macOS/Linux
 curl -fsSL https://contextstream.io/scripts/setup-beta.sh | bash
