@@ -100,7 +100,8 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        var blogPosts = await repository.GetPageAsync(2, 5, onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
+        // Explicit OrderBy so the page contents are deterministic — without it, the DB may return rows in any order.
+        var blogPosts = await repository.GetPageAsync(2, 5, onDbSet: query => query.OrderBy(e => e.Id).Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(5);
 
@@ -133,7 +134,8 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
                                                       query: query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" ||
                                                                       query.Name == "Blog post 8" || query.Name == "Blog post 9" || query.Name == "Blog post 10",
 #pragma warning restore SA1117
-                                                      onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
+                                                      // Explicit OrderBy so the filtered page is deterministic.
+                                                      onDbSet: query => query.OrderBy(e => e.Id).Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(3);
 
@@ -159,7 +161,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        var blogPosts = await repository.GetPageAsync(2, 5);
+
+        // Explicit OrderBy so posts[i + 5] reliably matches the returned slice.
+        var blogPosts = await repository.GetPageAsync(2, 5, onDbSet: q => q.OrderBy(e => e.Id));
 
         blogPosts.Should().HaveCount(5);
 

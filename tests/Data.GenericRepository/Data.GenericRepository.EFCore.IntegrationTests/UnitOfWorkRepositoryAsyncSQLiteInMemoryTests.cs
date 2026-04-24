@@ -35,7 +35,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
 
         await unitOfWork.CommitAsync();
 
-        var unitOfWork2 = CreateUnitOfWork();
+        using var unitOfWork2 = CreateUnitOfWork();
 
         var blogRepository = CreateReadRepositoryAsync<Blog, int>();
 
@@ -59,7 +59,7 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
                                                          .Excluding(p => p.Tags)
                                                          .WithEntityEquivalencyOptions());
 
-        var testUnitOfWork = CreateUnitOfWork();
+        using var testUnitOfWork = CreateUnitOfWork();
 
         var actualIdeas = await testUnitOfWork.Repository<UserIdea, int>().GetAllAsync();
 

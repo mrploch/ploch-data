@@ -14,6 +14,7 @@ namespace Ploch.Data.EFCore.IntegrationTesting;
 public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbContext : DbContext
 {
     private readonly IDbContextConfigurator? _dbContextConfigurator;
+    private bool _disposed;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DataIntegrationTest{TDbContext}" /> class.
@@ -134,13 +135,26 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     /// </param>
     protected virtual void Dispose(bool disposing)
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         if (disposing)
         {
             DbContext.Dispose();
 
-            if (ScopedServiceProvider is IDisposable disposableProvider)
+            // Dispose the scope first for fine-grained ordering, then the root — the root
+            // would cascade-dispose its scopes anyway, but explicit ordering is cheaper than
+            // relying on container semantics across providers.
+            if (ScopedServiceProvider is IDisposable disposableScope)
             {
-                disposableProvider.Dispose();
+                disposableScope.Dispose();
+            }
+
+            if (RootServiceProvider is IDisposable disposableRoot)
+            {
+                disposableRoot.Dispose();
             }
 
             if (_dbContextConfigurator is IDisposable disposableConfigurator)
@@ -148,5 +162,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
                 disposableConfigurator.Dispose();
             }
         }
+
+        _disposed = true;
     }
 }
