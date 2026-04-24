@@ -1,6 +1,5 @@
 using FluentAssertions;
 using FluentAssertions.Equivalency;
-using Ploch.TestingSupport.FluentAssertions;
 
 namespace Ploch.Data.EFCore.IntegrationTesting.FluentAssertions;
 
