@@ -1,5 +1,6 @@
 using FluentAssertions;
 using FluentAssertions.Equivalency;
+using Ploch.TestingSupport.FluentAssertions;
 
 namespace Ploch.Data.EFCore.IntegrationTesting.FluentAssertions;
 
@@ -17,7 +18,8 @@ public static class EntitiesEquivalencyOptionsExtensions
     /// <param name="options">The equivalency options to configure.</param>
     /// <param name="dateTimeOffsetToleranceMilliseconds">
     ///     Specifies the maximum allowed difference in milliseconds between <see cref="DateTimeOffset" /> values.
-    ///     Defaults to 0.
+    ///     Defaults to <c>1</c> millisecond — approximately 10× the maximum observed SQLite rounding error (~78 µs),
+    ///     tight enough to catch real timing regressions and loose enough to be stable.
     /// </param>
     /// <returns>
     ///     The same <paramref name="options" /> instance with the entity-comparison settings applied,
@@ -25,8 +27,8 @@ public static class EntitiesEquivalencyOptionsExtensions
     /// </returns>
     /// <remarks>
     ///     <para>
-    ///         Three recurring issues arise when comparing in-memory entity objects with entities loaded from a
-    ///         relational database. This method handles all three in a single call:
+    ///         Four recurring issues arise when comparing in-memory entity objects with entities loaded from a
+    ///         relational database. This method handles all four in a single call:
     ///     </para>
     ///     <list type="bullet">
     ///         <item>
@@ -41,7 +43,7 @@ public static class EntitiesEquivalencyOptionsExtensions
     ///                 <b>Cyclic navigation properties:</b> EF Core entity graphs commonly form reference
     ///                 cycles — for example <c>BlogPost → Tag → BlogPosts → BlogPost</c>. Without handling,
     ///                 FluentAssertions recurses indefinitely.
-    ///                 <see cref="SelfReferenceEquivalencyOptions.IgnoringCyclicReferences{TSelf}" /> stops the
+    ///                 <c>IgnoringCyclicReferences()</c> stops the
     ///                 traversal when a cycle is detected.
     ///             </description>
     ///         </item>
@@ -52,7 +54,16 @@ public static class EntitiesEquivalencyOptionsExtensions
     ///                 precision, while .NET retains 100-nanosecond (tick) precision. The maximum observed
     ///                 difference is ~78 µs. A <b>1-millisecond tolerance</b> (10× the maximum rounding
     ///                 error) is applied to every <see cref="DateTimeOffset" /> property comparison via
-    ///                 DateTimeOffsetAssertionsef="DateTimeOffsetAssertions.BeCloseTo" />.
+    ///                 <c>BeCloseTo</c>.
+    ///             </description>
+    ///         </item>
+    ///         <item>
+    ///             <description>
+    ///                 <b>Null vs empty collections:</b> EF Core does not initialise navigation collections
+    ///                 that were not eager-loaded via <c>Include()</c> — they remain <see langword="null" />.
+    ///                 In-memory test entities typically initialise them to <c>new List&lt;T&gt;()</c>.
+    ///                 A custom <see cref="IEquivalencyStep" /> treats a <see langword="null" /> collection
+    ///                 as equivalent to an empty collection (and vice versa).
     ///             </description>
     ///         </item>
     ///     </list>
@@ -80,21 +91,13 @@ public static class EntitiesEquivalencyOptionsExtensions
     ///          options => options.Excluding(p => p.Categories).WithEntityEquivalencyOptions());
     ///      </code>
     /// </example>
-    public static TSelf WithEntityEquivalencyOptions<TSelf>(this SelfReferenceEquivalencyOptions<TSelf> options, double dateTimeOffsetToleranceMilliseconds = 100)
+    public static TSelf WithEntityEquivalencyOptions<TSelf>(this SelfReferenceEquivalencyOptions<TSelf> options, double dateTimeOffsetToleranceMilliseconds = 1)
         where TSelf : SelfReferenceEquivalencyOptions<TSelf>
     {
-        // 1ms tolerance is ~10× the maximum observed precision loss when SQLite truncates
-        // sub-microsecond ticks from a stored DateTimeOffset value.
-        return options.WithoutStrictOrdering()
+        return options.Using(new NullEmptyCollectionEquivalencyStep())
+                      .WithoutStrictOrdering()
                       .IgnoringCyclicReferences()
                       .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(dateTimeOffsetToleranceMilliseconds)))
-                      .WhenTypeIs<DateTimeOffset>()
-            /*.Using<IEnumerable>(ctx =>
-                                {
-                                    var subject = ctx.Subject?.Cast<object>() ?? [];
-                                    var expectation = ctx.Expectation?.Cast<object>() ?? [];
-                                    subject.Should().BeEquivalentTo(expectation);
-                                })
-            .WhenTypeIs<IEnumerable>()*/;
+                      .WhenTypeIs<DateTimeOffset>();
     }
 }

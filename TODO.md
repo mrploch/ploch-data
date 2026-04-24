@@ -75,3 +75,12 @@ We need to fix the equivalency options helper, fix the failing tests.
 We also need to add proper ability to create new db context each time, instead of a scoped same instance
 Usage od IDbContextFactory
 improve docs
+Prompt:
+
+```markdown
+Can you check the failing tests? Do proper research why the GetAll_should_return_entities_with_includes test is failing when asserting BeEquivalentTo.
+I want this type of assertion to work. I've created a helper extension method WithEntityEquivalencyOptions to fix some of the equivalency options,
+but it seems it's still not enough. For example, one failure is that when comparing the original and actual entity (the one obtained back from the db), the collection
+property is null, while on the other it is empty. I want this type of comparison to succeed. The best option would be to fix the `WithEntityEquivalencyOptions`
+method to allow such differences. Make the plan first. Try to ask codex for an option on this as well.
+```

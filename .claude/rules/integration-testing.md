@@ -90,6 +90,7 @@ result.Should().BeEquivalentTo(expected,
 | **Collection ordering** | Databases do not guarantee row order for navigation collections | `WithoutStrictOrdering()` — match by value, not position |
 | **Cyclic navigation properties** | EF Core populates inverse back-references (`BlogPost.Tag.BlogPosts.BlogPost…`) | `IgnoringCyclicReferences()` — stop at detected cycles |
 | **`DateTimeOffset` precision loss** | SQLite stores `DateTimeOffset` as TEXT with ~100µs precision; .NET keeps 100ns ticks. Max observed delta ≈ 78µs | Applies a **1ms tolerance** (10× the max rounding error) on every `DateTimeOffset` comparison |
+| **Null vs empty collections** | EF Core does not initialise navigation collections that were not eager-loaded — they stay `null`. In-memory entities initialise them to `new List<T>()` | A custom `IEquivalencyStep` (`NullEmptyCollectionEquivalencyStep`) treats `null` as equivalent to an empty collection |
 
 ### Combine with targeted exclusions, not with extra manual configuration
 
@@ -118,7 +119,7 @@ posts.Should().ContainEquivalentOf(expected, options =>
 
 ### Do not reinvent the wheel
 
-If an equivalency test is failing due to ordering, cycles, or `DateTimeOffset` mismatches, **do not** manually add `WithoutStrictOrdering()`, `IgnoringCyclicReferences()`, or custom `DateTimeOffset` comparers. Call `WithEntityEquivalencyOptions()` instead. If the method does not cover your case, extend the method rather than papering over it per-test.
+If an equivalency test is failing due to ordering, cycles, `DateTimeOffset` mismatches, or null-vs-empty collections, **do not** manually add `WithoutStrictOrdering()`, `IgnoringCyclicReferences()`, custom `DateTimeOffset` comparers, or `.Using<IEnumerable>()` handlers. Call `WithEntityEquivalencyOptions()` instead. If the method does not cover your case, extend the method rather than papering over it per-test.
 
 ## Quick Reference
 
@@ -136,6 +137,7 @@ If an equivalency test is failing due to ordering, cycles, or `DateTimeOffset` m
 - ❌ `repository.GetByIdAsync(id)` to verify a write done via the same (or another) repository.
 - ❌ Manually constructing a new `DbContext` with a new `DbContextOptions` — it will not share the in-memory SQLite connection and will see an empty database.
 - ❌ Manually chaining `WithoutStrictOrdering().IgnoringCyclicReferences()...` in each test — use `WithEntityEquivalencyOptions()`.
+- ❌ Using `.Using<IEnumerable>().WhenTypeIs<IEnumerable>()` to handle null-vs-empty collections — this creates a nested `BeEquivalentTo` call that loses all configured options (DateTimeOffset tolerance, cyclic reference handling). The `NullEmptyCollectionEquivalencyStep` in `WithEntityEquivalencyOptions()` handles this correctly within the pipeline.
 - ❌ Comparing `DateTimeOffset` values with `.Should().Be()` after a SQLite round-trip — the stored value loses sub-microsecond precision.
 
 ## Related References

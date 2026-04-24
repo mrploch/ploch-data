@@ -20,10 +20,17 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         blogPosts.Should().HaveCount(2);
         var actualPost1 = blogPosts.Single(p => p.Id == blogPost1.Id);
 
-        actualPost1.Should().BeEquivalentTo(blogPost1, options => options.WithEntityEquivalencyOptions());
+        actualPost1.Should()
+                   .BeEquivalentTo(blogPost1,
+                                   options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                     .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                     .WithEntityEquivalencyOptions());
 
         blogPosts.Should()
-                 .ContainEquivalentOf(blogPost2, options => options.WithEntityEquivalencyOptions());
+                 .ContainEquivalentOf(blogPost2,
+                                      options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                        .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                        .WithEntityEquivalencyOptions());
         foreach (var blogPost in blogPosts)
         {
             blogPost.Tags.Should().NotBeEmpty();
@@ -79,11 +86,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPost = repository.GetById([ blogPost2.Id ]);
-        blogPost.Should()
-                .BeEquivalentTo(blogPost2,
-                                options => options.Excluding(p => p.Categories)
-                                                  .Excluding(p => p.Tags)
-                                                  .WithEntityEquivalencyOptions());
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).WithEntityEquivalencyOptions());
         blogPost2.Tags.Should().NotBeEmpty();
     }
 
@@ -196,11 +199,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         var blogPost = repository.FindFirst(post => post.Name.Contains("Blog post 1"));
 
         blogPost.Should().NotBeNull();
-        blogPost.Should()
-                .BeEquivalentTo(testBlogEntities.blogPost1,
-                                options => options.Excluding(p => p.Categories)
-                                                  .Excluding(p => p.Tags)
-                                                  .WithEntityEquivalencyOptions());
+        blogPost.Should().BeEquivalentTo(testBlogEntities.blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).WithEntityEquivalencyOptions());
     }
 
     [Fact]

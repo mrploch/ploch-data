@@ -414,6 +414,21 @@ codestream.xml
 .cursor/
 .windsurf/
 .cursorrules
+.mcp.json
+.vscode/mcp.json
+.github/skills/
+
+# JetBrains Rider — additional per-user files not already covered
+**/.idea*/AICommit.xml
+**/.idea*/indexLayout.xml
+**/.idea/.idea.Data.EFCore.dir/
+src/**/.idea/
+
+# Local dev artefacts
+identifier.sqlite
+*.sqlite
+temp-research-*.md
+temp-*.md
 
 # Backups of cs files
 **/*.cs.bak
