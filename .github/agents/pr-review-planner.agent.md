@@ -58,9 +58,9 @@ Output format:
 ## Comment disposition
 
 - One line per PR comment or thread:
-    - `change required`
-    - `reply only`
-    - `blocked by missing access`
+  - `change required`
+  - `reply only`
+  - `blocked by missing access`
 
 ## CI and checks
 

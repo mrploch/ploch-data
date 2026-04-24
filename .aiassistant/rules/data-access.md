@@ -42,6 +42,7 @@ public class ListProfilesUseCase(IReadRepositoryAsync<SystemProfile, int> profil
 ### Unit of Work Injection
 
 Inject `IUnitOfWork` when:
+
 - **Multiple entity types** must be modified in a single atomic transaction.
 - The consumer needs to **commit or rollback** explicitly.
 - You want to **retrieve repositories dynamically** by entity type.
@@ -278,6 +279,7 @@ public static IServiceCollection AddDataServices(
 ```
 
 This single call registers:
+
 - `IQueryableRepository<TEntity>` as `QueryableRepository<TEntity>`
 - `IReadRepositoryAsync<TEntity>` as `ReadRepositoryAsync<TEntity>`
 - `IReadRepositoryAsync<TEntity, TId>` as `ReadRepositoryAsync<TEntity, TId>`

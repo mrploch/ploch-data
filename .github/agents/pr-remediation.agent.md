@@ -44,9 +44,9 @@ Output format:
 ## Comment and conversation resolution
 
 - One line per item:
-    - `code changed`
-    - `replied with evidence`
-    - `blocked by missing write access`
+  - `code changed`
+  - `replied with evidence`
+  - `blocked by missing write access`
 
 ## Final status
 

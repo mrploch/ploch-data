@@ -14,6 +14,7 @@ Contains rules that should be used, when testing a .NET code.
 - Use the [AutoFixture library](https://github.com/AutoFixture/AutoFixture)
 
 ## Writing Tests
+
 - Try to test observable behaviour, not implementation details.
 - Try structure tests using the **Arrange, Act, Assert** pattern, where appropriate, unless it negatively affects readability and flow
 - For unit tests, mock external dependencies.

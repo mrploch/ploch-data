@@ -37,6 +37,7 @@ src/
 ### Required References
 
 Every provider project needs:
+
 - A project reference to the base Data project (`Ploch.{Product}.Data`).
 - A project reference to the provider-specific factory base from `ploch-data`.
 - `Microsoft.EntityFrameworkCore.Design` with `PrivateAssets=all` — required for migrations tooling.
@@ -205,7 +206,7 @@ dotnet ef database update
 
 Deletes the local database file (SQLite) or database (SQL Server), recreates migrations, and applies them. Useful during development when the model is changing frequently.
 
-#### SQLite variant:
+#### SQLite variant
 
 ```powershell
 Remove-Item *.db -Force -Confirm:$false -ErrorAction SilentlyContinue
@@ -213,7 +214,7 @@ Remove-Item *.db -Force -Confirm:$false -ErrorAction SilentlyContinue
 ./update-database.ps1
 ```
 
-#### SQL Server variant:
+#### SQL Server variant
 
 ```powershell
 dotnet ef database drop --force

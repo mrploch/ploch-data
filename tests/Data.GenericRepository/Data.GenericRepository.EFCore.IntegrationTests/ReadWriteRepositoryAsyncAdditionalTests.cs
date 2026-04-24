@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
@@ -16,7 +17,10 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         await repository.DeleteAsync(1);
         await unitOfWork.CommitAsync();
 
-        var result = await repository.GetByIdAsync(1);
+        // Verify via a fresh DbContext rather than the repository under test,
+        // so the assertion cannot be served from the repository's change tracker.
+        await using var rootDbContext = CreateRootDbContext();
+        var result = await rootDbContext.Set<TestEntity>().FindAsync(1);
         result.Should().BeNull();
     }
 
@@ -43,7 +47,8 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         await repository.DeleteAsync(entity);
         await unitOfWork.CommitAsync();
 
-        var result = await repository.GetByIdAsync(entity.Id);
+        await using var rootDbContext = CreateRootDbContext();
+        var result = await rootDbContext.Set<TestEntity>().FindAsync(entity.Id);
         result.Should().BeNull();
     }
 
@@ -71,7 +76,8 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         await repository.UpdateAsync(updatedEntity);
         await unitOfWork.CommitAsync();
 
-        var result = await repository.GetByIdAsync(1);
+        await using var rootDbContext = CreateRootDbContext();
+        var result = await rootDbContext.Set<TestEntity>().FindAsync(1);
         result.Should().NotBeNull();
         result!.Name.Should().Be("Updated");
     }
@@ -187,10 +193,12 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         await repository.AddAsync(new() { Id = 2, Name = "Beta" });
         await unitOfWork.CommitAsync();
 
-        var result = await repository.FindFirstAsync(e => e.Name == "Alpha", q => q.OrderBy(e => e.Name));
+        // Predicate matches multiple rows so the onDbSet ordering is observable:
+        // both "Alpha" and "Beta" contain 'a', OrderByDescending(Name) should yield "Beta" first.
+        var result = await repository.FindFirstAsync(e => e.Name.Contains('a'), q => q.OrderByDescending(e => e.Name));
 
         result.Should().NotBeNull();
-        result!.Name.Should().Be("Alpha");
+        result!.Name.Should().Be("Beta");
     }
 
     [Fact]
@@ -249,10 +257,13 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
 
         await unitOfWork.CommitAsync();
 
+        // Explicit sort on Id so the page contents are deterministic — without a sort,
+        // a regression that always returns the first three rows would still pass.
         var readRepo = CreateReadRepositoryAsync<TestEntity, int>();
-        var page = await readRepo.GetPageAsync(2, 3);
+        var page = await readRepo.GetPageAsync(2, 3, e => e.Id);
 
         page.Should().HaveCount(3);
+        page.Select(e => e.Id).Should().Equal(4, 5, 6);
     }
 
     [Fact]

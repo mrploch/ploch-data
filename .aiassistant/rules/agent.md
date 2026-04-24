@@ -60,6 +60,7 @@ After pushing changes or creating/updating a PR, you **must** monitor CI checks 
 6. **Only then declare complete:** Work is not done until all CI checks are green and automated PR feedback has been addressed.
 
 **Do not:**
+
 - Ignore or dismiss failing checks.
 - Mark work as complete while checks are still running or failing.
 - Assume a failure is "flaky" without evidence — investigate first.
