@@ -173,7 +173,8 @@ test coverage, and documentation over cosmetic feedback.
   #pragma warning disable CA2200 // Rethrow to preserve stack details
   ...
   #pragma warning restore CA2200
-```
+  ```
+
   Keep in mind that there are other ways of disabling those warnings. If this
   is a false positive in many places, then it might make sense to disable
   it in `.editorconfig` file.

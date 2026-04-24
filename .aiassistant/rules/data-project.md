@@ -26,11 +26,13 @@ src/
 ## Project File (.csproj)
 
 Required package references:
+
 - `Microsoft.EntityFrameworkCore` — always required.
 - `Microsoft.EntityFrameworkCore.Relational` — if using relational-specific features (e.g. `HasConversion`, `HasIndex`).
 - `Microsoft.EntityFrameworkCore.Tools` — if EF Core migrations will be managed in this project (set `PrivateAssets=all`).
 
 Optional references:
+
 - `Ploch.Data.GenericRepository.EFCore` or `Ploch.Data.EFCore` — for generic repository and Unit of Work integration.
 - `Microsoft.EntityFrameworkCore.Proxies` — only if lazy loading proxies are required.
 
@@ -138,6 +140,7 @@ internal class ListConfiguration : IEntityTypeConfiguration<List>
 ### What to Configure
 
 **Always configure in Fluent API (in the configuration class):**
+
 - Relationships (`HasOne`, `HasMany`, `WithOne`, `WithMany`).
 - Delete behaviour (`OnDelete`) — always set explicitly; do not rely on EF Core conventions.
 - Discriminators for TPH inheritance (`HasDiscriminator`).
@@ -146,6 +149,7 @@ internal class ListConfiguration : IEntityTypeConfiguration<List>
 - Enum-to-string conversions (`HasConversion<string>()`).
 
 **Prefer Data Annotations on the entity (in the Model project):**
+
 - `[Key]` for primary keys (when not following EF Core naming conventions).
 - `[Required]` for required properties.
 - `[MaxLength]` for string length constraints.
