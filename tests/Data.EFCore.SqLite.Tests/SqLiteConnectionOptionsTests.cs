@@ -31,7 +31,14 @@ public class SqLiteConnectionOptionsTests
         var connectionString = "Data Source=test_cs.db;Mode=ReadOnly";
         var options = SqLiteConnectionOptions.FromConnectionString(connectionString);
 
-        options.BuildConnectionString().Should().Be(connectionString);
+        // Microsoft.Data.Sqlite.SqliteConnectionStringBuilder.ToString() does not preserve
+        // original keyword casing/order, so assert semantic equivalence via its own parser
+        // rather than string equality against the input.
+        var builtFromOptions = new SqliteConnectionStringBuilder(options.BuildConnectionString());
+        var expectedBuilder = new SqliteConnectionStringBuilder(connectionString);
+
+        builtFromOptions.DataSource.Should().Be(expectedBuilder.DataSource);
+        builtFromOptions.Mode.Should().Be(expectedBuilder.Mode);
     }
 
     [Fact]

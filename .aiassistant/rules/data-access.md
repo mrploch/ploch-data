@@ -352,19 +352,25 @@ catch (DataUpdateException ex)
 
 ### Integration Test Setup
 
-Use an in-memory database for integration tests:
+Use a shared SQLite in-memory connection for integration tests. SQLite in-memory matches the real relational provider behaviour (foreign keys, indexes, transactions, migrations) that the EF Core InMemory provider does not simulate. A single shared connection keeps the database alive for the lifetime of the test and is re-used by every `DbContext` instance created within it.
 
 ```csharp
-public abstract class RepositoryTestFixture
+public abstract class RepositoryTestFixture : IAsyncDisposable
 {
+    private readonly SqliteConnection _connection;
     protected readonly MyDbContext DbContext;
 
     protected RepositoryTestFixture()
     {
+        _connection = new SqliteConnection("Data Source=:memory:");
+        _connection.Open();
+
         var options = new DbContextOptionsBuilder<MyDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .UseSqlite(_connection)
             .Options;
+
         DbContext = new MyDbContext(options);
+        DbContext.Database.EnsureCreated();
     }
 
     protected IReadWriteRepositoryAsync<TEntity, int> GetRepository<TEntity>()
@@ -372,8 +378,16 @@ public abstract class RepositoryTestFixture
     {
         return new ReadWriteRepositoryAsync<TEntity, int>(DbContext);
     }
+
+    public async ValueTask DisposeAsync()
+    {
+        await DbContext.DisposeAsync();
+        await _connection.DisposeAsync();
+    }
 }
 ```
+
+> The `Ploch.Data.EFCore.IntegrationTesting` package already provides `DbContextServicesRegistrationHelper` and `DataIntegrationTest<TDbContext>` base classes that wire this up — prefer those when writing tests inside this repository. The snippet above is the standalone equivalent for external consumers.
 
 ### Unit Testing with Mocks
 

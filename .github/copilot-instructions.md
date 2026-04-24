@@ -67,6 +67,7 @@ When you need information, do not default to code search or trial-and-error. Con
 Default assumption: if the user asks "how do we do X?", "why did we choose Y?", "what's the pattern for Z?", or "did we already decide about Q?" — the answer is likely in a doc, decision, lesson, plan, or skill, NOT in the code. Check the right knowledge surface BEFORE reading source files or re-deriving the answer.
 
 Before guessing, improvising, or struggling through a workflow you don't fully know:
+
 - Start with `context(...)` and obey `[GROUNDING]` (prior-work anchors), `[MATCHED_SKILLS]`, `[LESSONS_WARNING]`, `[PREFERENCE]`, `[DECISIONS]`, `[MEMORY]`, and `<system-reminder>` output — those are already filtered to the current task
 - Treat `[LESSONS_WARNING]` as active working instructions for the current task, not optional background context; apply them immediately and keep them in mind until the task is done
 - Prefer surfaced ContextStream knowledge over inventing a new workflow from memory
@@ -135,7 +136,8 @@ These should be followed exactly as they contain real-time context.
 3. If NOT indexed or stale: wait for background refresh (up to ~20s, configurable), retry `search(mode="auto", ...)`, then use local tools only after the grace window elapses
 4. If search returns 0 results after refresh/retry: local tools are allowed
 
-### Search Mode Selection:
+### Search Mode Selection
+
 - `auto` (recommended): query-aware mode selection
 - `hybrid`: mixed semantic + keyword retrieval for broad discovery
 - `semantic`: conceptual/natural-language questions ("how does auth work?")
@@ -183,6 +185,7 @@ When `context()` returns `[MATCHED_SKILLS]`, you **MUST run** the listed skills 
 - Skills marked ○ (available) are optional but often helpful
 
 Reusable instruction + action bundles that persist across projects and sessions:
+
 - Browse: `skill(action="list")` or `skill(action="list", scope="team")`
 - Create: `skill(action="create", name="...", instruction_body="...", trigger_patterns=[...])`
 - Update: `skill(action="update", name="...", instruction_body="...", change_summary="...")` (name or `skill_id`)
@@ -253,12 +256,14 @@ Transcripts are OFF by default.
 context(user_message="<user's message>", save_exchange=true, session_id="<session-id>")
 ```
 
-### Disable for this chat:
+### Disable for this chat
+
 ```
 context(user_message="<user's message>", save_exchange=false, session_id="<session-id>")
 ```
 
-### Default policy via MCP config env:
+### Default policy via MCP config env
+
 - `CONTEXTSTREAM_TRANSCRIPTS_ENABLED="true|false"`
 - `CONTEXTSTREAM_HOOK_TRANSCRIPTS_ENABLED="true|false"`
 
@@ -283,7 +288,8 @@ project(action="index")
 ```
 If folder context is active, this resolves the current repo and uses the local ingest path automatically.
 
-### To Target A Specific Folder Or Recover From Stale Scope:
+### To Target A Specific Folder Or Recover From Stale Scope
+
 ```
 project(action="ingest_local", path="<project_folder>")
 ```
@@ -299,12 +305,14 @@ project(action="ingest_local", path="<project_folder>")
 
 **There is NO hook to redirect local tools.** You MUST self-enforce:
 
-### Before ANY Search, Check Index Status:
+### Before ANY Search, Check Index Status
+
 ```
 project(action="index_status")
 ```
 
-### Search Protocol:
+### Search Protocol
+
 - **IF indexed & fresh:** `search(mode="auto", query="...")` before local tools
 - **IF NOT indexed or stale (>7 days):** wait up to ~20s for background refresh, retry `search(mode="auto", ...)`, then allow local tools only after the grace window elapses
 - **IF search returns 0 results after retry/window:** local tools are allowed

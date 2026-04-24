@@ -39,7 +39,7 @@ Domain entities in MrPloch projects are **simple POCO types** that implement int
 - For tree structures (parent/children of the same type), implement `IHierarchicalParentChildrenComposite<TEntity>`.
 - For entities that only need a parent reference, use `IHierarchicalWithParent<TParent>` or `IHierarchicalWithParentComposite<TParent>` (self-referential).
 - For entities that only need children, use `IHierarchicalWithChildren<TChildren>` or `IHierarchicalWithChildrenComposite<TChildren>` (self-referential).
-- Mark `Parent` and `Children` navigation properties as `virtual` for EF Core lazy loading support.
+- If an EF Core provider-layer project opts into lazy loading (via the lazy-loading proxies package), mark the corresponding `Parent` and `Children` navigation properties as `virtual` in that layer. The core domain model must stay provider-agnostic — do not require `virtual` purely for EF Core in repositories or applications that do not use lazy loading.
 
 ## Categorisation and Tagging
 
@@ -53,6 +53,6 @@ Domain entities in MrPloch projects are **simple POCO types** that implement int
 - Use `= null!` for required reference-type properties (EF Core will populate them).
 - Use `= []` or `= null!` for collection properties.
 - Nullable properties (`string?`, `ICollection<T>?`) for optional fields.
-- Mark navigation properties as `virtual` when lazy loading may be used.
-- Use `[Key]`, `[Required]`, `[MaxLength]` from `System.ComponentModel.DataAnnotations` where appropriate — do not rely solely on Fluent API for basic constraints.
+- Mark navigation properties as `virtual` only when a consuming project (typically the EF Core provider layer) needs lazy loading. Keep the core model free of ORM-specific requirements.
+- Data Annotations from `System.ComponentModel.DataAnnotations` (`[Key]`, `[Required]`, `[MaxLength]`) are optional. Apply them on the entity only when they carry provider-agnostic meaning (e.g. validation). Relational-only constraints belong in Fluent API configurations in the Data project, not on the entity.
 - Keep entities in a dedicated `Model` or `Models` namespace (e.g. `Ploch.Lists.Model`, `Ploch.EditorConfigTools.Models`).
