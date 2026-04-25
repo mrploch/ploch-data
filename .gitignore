@@ -410,6 +410,7 @@ codestream.xml
 # AI Tools Config
 .claude/skills/winui3-*
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
 .contextstream/
 .cursor/
 .windsurf/
