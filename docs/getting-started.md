@@ -245,9 +245,11 @@ public class ProductRepositoryTests
 The `GenericRepositoryDataIntegrationTest<TDbContext>` base class provides:
 
 - `DbContext` -- the configured EF Core context backed by in-memory SQLite.
-- `CreateUnitOfWork()` -- creates a new `IUnitOfWork` instance.
-- `CreateReadRepositoryAsync<TEntity, TId>()` -- creates a typed read repository.
-- `CreateReadWriteRepositoryAsync<TEntity, TId>()` -- creates a typed read/write repository.
+- `CreateUnitOfWork(bool useScopedProvider = true)` -- creates a new `IUnitOfWork` instance.
+- `CreateReadRepositoryAsync<TEntity, TId>(bool useScopedProvider = true)` -- creates a typed read repository.
+- `CreateReadWriteRepositoryAsync<TEntity, TId>(bool useScopedProvider = true)` -- creates a typed read/write repository.
+
+All helper methods resolve services from the scoped provider by default. Pass `false` to resolve from the root provider.
 
 ## Next Steps
 

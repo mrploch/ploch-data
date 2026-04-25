@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/mrploch/ploch-data/security/advisories/new
+    about: Report a security vulnerability privately. Do not open a public issue.
+  - name: Question or Discussion
+    url: https://github.com/mrploch/ploch-data/discussions
+    about: Ask questions, get help, or discuss ideas. Issues are for bugs and feature requests only.
+  - name: Issue in Ploch.Common
+    url: https://github.com/mrploch/ploch-common/issues
+    about: If your issue is in a Ploch.Common package (not Ploch.Data), report it there instead.

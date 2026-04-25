@@ -1,6 +1,6 @@
 # Agent TODO List
 
-## Task 1: Implement changes for Issue #72
+## [DONE] Task 1: Implement changes for Issue #72
 
 Implement changes required for <https://github.com/mrploch/ploch-data/issues/72>.
 I was experimenting with how to implement some of the methods mentioned there in another projects where I was trying out the `SampleApp`.
@@ -21,6 +21,29 @@ This project is located here: C:/DevNet/my/mrploch-temp/ploch-data-sample-app-te
 
 Keep in mind that the changes are mostly implemented already in the SampleApp in here: `C:/DevNet/my/mrploch-temp/ploch-data-sample-app-test/Ploch.Data.SampleApp.slnx`. You'll be in most cases just moving them into appropriate locations and adding test coverage and documentation.
 So base your changes on those.
+
+## Task: Use DbContext for Validation in GenericRepository Integration Tests
+
+Across `tests/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTests/`, tests that verify entities were added/updated/deleted should use a fresh `DbContext` (via `CreateRootDbContext()`) instead of the repository under test.
+
+Using the same repository to verify what was written bypasses the true persistence check — the test passes even if the repository reads from its own tracking cache. A fresh `DbContext` (or a second `IUnitOfWork`) reads directly from the database, which is what we actually want to verify.
+
+Example — instead of:
+
+```csharp
+var result = await repository.GetByIdAsync(entity.Id);
+result.Should().BeEquivalentTo(entity, options => options.WithEntityEquivalencyOptions());
+```
+
+Use:
+
+```csharp
+var dbContext = CreateRootDbContext();
+var result = await dbContext.Set<TEntity>().FindAsync(entity.Id);
+result.Should().BeEquivalentTo(entity, options => options.WithEntityEquivalencyOptions());
+```
+
+Affects all tests in: `ReadWriteRepositoryAsyncTests`, `ReadWriteRepositoryDeleteByIdTests`, `UnitOfWorkRepositoryAsyncSQLiteInMemoryTests`, and similar.
 
 ## Task 2: Provide a Comprehensive Documentation for the Ploch.Data Libraries
 
@@ -45,3 +68,19 @@ Make sure the content is easy to read and follow. ALWAYS TEST commands and provi
 Store the main documentation in the `docs` folder, but also add README.md files to each of the projects (if they don't already have them), but this should only
 contain an overview, and link to the docs for fully detailed documentation. If a library already has a README.md, review it and update it if needed.
 Again, make sure the content is easy to read and follow. ALWAYS TEST!
+
+## Task 3: Improve integration testing experience and fix tests in this repo and update docs
+
+We need to fix the equivalency options helper, fix the failing tests.
+We also need to add proper ability to create new db context each time, instead of a scoped same instance
+Usage od IDbContextFactory
+improve docs
+Prompt:
+
+```markdown
+Can you check the failing tests? Do proper research why the GetAll_should_return_entities_with_includes test is failing when asserting BeEquivalentTo.
+I want this type of assertion to work. I've created a helper extension method WithEntityEquivalencyOptions to fix some of the equivalency options,
+but it seems it's still not enough. For example, one failure is that when comparing the original and actual entity (the one obtained back from the db), the collection
+property is null, while on the other it is empty. I want this type of comparison to succeed. The best option would be to fix the `WithEntityEquivalencyOptions`
+method to allow such differences. Make the plan first. Try to ask codex for an option on this as well.
+```

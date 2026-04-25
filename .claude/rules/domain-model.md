@@ -1,0 +1,1 @@
+../../../.claude/rules/domain-model.md

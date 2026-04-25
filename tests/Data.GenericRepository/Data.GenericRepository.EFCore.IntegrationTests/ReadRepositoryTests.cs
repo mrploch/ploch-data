@@ -16,23 +16,23 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepository<BlogPost, int>();
-        var blogPosts = repository.GetAll(query => query.Include(e => e.Tags));
+        var blogPosts = repository.GetAll(query => query.Include(e => e.Tags).Include(e => e.Categories).ThenInclude(c => c.Children));
         blogPosts.Should().HaveCount(2);
-        blogPosts.Should()
-                 .ContainEquivalentOf(blogPost1,
-                                      options => options.Excluding(p => p.Categories)
-                                                        .IgnoringCyclicReferences()
-                                                        .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                        .WhenTypeIs<DateTimeOffset>());
+        var actualPost1 = blogPosts.Single(p => p.Id == blogPost1.Id);
+
+        actualPost1.Should()
+                   .BeEquivalentTo(blogPost1,
+                                   options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                     .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                     .WithEntityEquivalencyOptions());
+
         blogPosts.Should()
                  .ContainEquivalentOf(blogPost2,
-                                      options => options.Excluding(p => p.Categories)
-                                                        .IgnoringCyclicReferences()
-                                                        .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                        .WhenTypeIs<DateTimeOffset>());
+                                      options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                        .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                        .WithEntityEquivalencyOptions());
         foreach (var blogPost in blogPosts)
         {
-            blogPost.Tags.Should().NotBeEmpty();
             blogPost.Tags.Should().NotBeEmpty();
         }
     }
@@ -71,11 +71,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPost = repository.GetById(blogPost2.Id, query => query.Include(e => e.Tags));
-        blogPost.Should()
-                .BeEquivalentTo(blogPost2,
-                                options => options.IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.WithEntityEquivalencyOptions());
         blogPost2.Tags.Should().NotBeEmpty();
     }
 
@@ -90,13 +86,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         var repository = CreateReadRepository<BlogPost, int>();
         var blogPost = repository.GetById([ blogPost2.Id ]);
-        blogPost.Should()
-                .BeEquivalentTo(blogPost2,
-                                options => options.Excluding(p => p.Categories)
-                                                  .Excluding(p => p.Tags)
-                                                  .IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).WithEntityEquivalencyOptions());
         blogPost2.Tags.Should().NotBeEmpty();
     }
 
@@ -117,10 +107,12 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         for (var i = 5; i <= 9; i++)
         {
             var blogPost = posts[i];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should().BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 
@@ -140,17 +132,21 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
                                            query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" || query.Name == "Blog post 8" ||
                                                     query.Name == "Blog post 9" || query.Name == "Blog post 10",
 #pragma warning restore SA1117
-                                           query => query.Include(e => e.Tags).Include(e => e.Categories));
+                                           // Explicit OrderBy so page contents are deterministic — without it, the
+                                           // DB may return filtered rows in any order and the index-based assertion below would be flaky.
+                                           query => query.OrderBy(e => e.Id).Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(3);
 
         for (var i = 7; i <= 9; i++)
         {
             var blogPost = posts[i];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should().BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 
@@ -164,7 +160,9 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepository<BlogPost, int>();
-        var blogPosts = repository.GetPage(2, 5);
+        // Explicit OrderBy so the page contents are deterministic and posts[i + 5] below
+        // reliably match the returned slice.
+        var blogPosts = repository.GetPage(2, 5, onDbSet: q => q.OrderBy(e => e.Id));
 
         blogPosts.Should().HaveCount(5);
 
@@ -205,13 +203,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         var blogPost = repository.FindFirst(post => post.Name.Contains("Blog post 1"));
 
         blogPost.Should().NotBeNull();
-        blogPost.Should()
-                .BeEquivalentTo(testBlogEntities.blogPost1,
-                                options => options.Excluding(p => p.Categories)
-                                                  .Excluding(p => p.Tags)
-                                                  .IgnoringCyclicReferences()
-                                                  .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100)))
-                                                  .WhenTypeIs<DateTimeOffset>());
+        blogPost.Should().BeEquivalentTo(testBlogEntities.blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).WithEntityEquivalencyOptions());
     }
 
     [Fact]

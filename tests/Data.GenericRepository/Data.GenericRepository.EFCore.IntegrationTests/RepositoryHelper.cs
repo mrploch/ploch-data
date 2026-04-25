@@ -2,13 +2,53 @@
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
+/// <summary>
+/// Helpers for seeding repository-backed integration-test fixtures with a known set of blog, blog-post,
+/// tag, category, and user-idea entities. The helpers wrap <see cref="EntitiesBuilder" /> so tests can
+/// populate the database in a single call and get typed references back to the seeded entities for
+/// later assertion.
+/// </summary>
 public static class RepositoryHelper
 {
+    /// <summary>
+    /// Seeds a blog with two blog posts via the synchronous repository and returns the seeded entities.
+    /// </summary>
+    /// <param name="blogRepository">The synchronous <see cref="IReadWriteRepository{Blog,Int32}" /> to add the blog to.</param>
+    /// <returns>
+    /// A tuple of the seeded <see cref="Blog" /> and the two <see cref="BlogPost" /> instances attached to it.
+    /// </returns>
+    /// <example>
+    /// <code>
+    /// var (blog, post1, post2) = RepositoryHelper.AddTestBlogEntities(blogRepository);
+    /// </code>
+    /// </example>
     public static (Blog, BlogPost, BlogPost) AddTestBlogEntities(IReadWriteRepository<Blog, int> blogRepository)
     {
         var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
 
         blogRepository.Add(blog);
+
+        return (blog, blogPost1, blogPost2);
+    }
+
+    /// <summary>
+    /// Seeds a blog with two blog posts via the asynchronous repository and returns the seeded entities.
+    /// </summary>
+    /// <param name="blogRepository">The asynchronous <see cref="IReadWriteRepositoryAsync{Blog,Int32}" /> to add the blog to.</param>
+    /// <returns>
+    /// A task that resolves to a tuple of the seeded <see cref="Blog" /> and the two <see cref="BlogPost" />
+    /// instances attached to it.
+    /// </returns>
+    /// <example>
+    /// <code>
+    /// var (blog, post1, post2) = await RepositoryHelper.AddTestBlogEntities(blogRepository);
+    /// </code>
+    /// </example>
+    public static async Task<(Blog, BlogPost, BlogPost)> AddTestBlogEntities(IReadWriteRepositoryAsync<Blog, int> blogRepository)
+    {
+        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
+
+        await blogRepository.AddAsync(blog);
 
         return (blog, blogPost1, blogPost2);
     }

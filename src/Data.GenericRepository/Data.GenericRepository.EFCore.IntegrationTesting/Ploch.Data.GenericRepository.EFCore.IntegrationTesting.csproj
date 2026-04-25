@@ -2,10 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <!--
 
