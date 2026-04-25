@@ -21,6 +21,7 @@ exclude_paths:
   - "change-log/**"
   - ".junie/**"
   - ".claude/**"
+  - ".aiassistant/**"
   - ".contextstream/**"
   - ".cursorrules"
   - "workload-install.ps1"
