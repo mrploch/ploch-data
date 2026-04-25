@@ -84,6 +84,9 @@
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
   </Folder>
+  <Folder Name="/ploch-common/tests/">
+    <Project Path="../ploch-common/tests/TestingSupport.FluentAssertions.Tests/Ploch.TestingSupport.FluentAssertions.Tests.csproj" />
+  </Folder>
   <Folder Name="/repository/">
     <File Path="build-dotnet-commands.ps1" />
     <File Path="build.ps1" />
