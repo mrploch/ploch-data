@@ -14,6 +14,12 @@ engines:
     exclude_paths:
       - "**/README.md"
 exclude_paths:
+  # Test and sample projects are excluded from all Codacy engines.
+  # The sonarscharp engine already excludes them, but the global list ensures
+  # other engines (e.g. Codacy's internal C# analyzer) honour the same scope.
+  - "tests/**"
+  - "src/**Tests/**"
+  - "samples/**"
   - "AGENTS.md"
   - "GEMINI.md"
   - "CLAUDE.md"

@@ -94,8 +94,6 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         var dbContextFactory = RootServiceProvider.GetRequiredService<IDbContextFactory<TDbContext>>();
 
         return dbContextFactory.CreateDbContext();
-
-        // return RootServiceProvider.GetRequiredService<TDbContext>();
     }
 
     /// <summary>
