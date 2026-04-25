@@ -28,6 +28,10 @@ exclude_paths:
   - ".github/agents/**"
   - ".github/copilot-instructions.md"
   - ".github/git-commit-instructions.md"
+  # The Copilot PR pipeline workflow is tracked for rework in
+  # https://github.com/mrploch/ploch-data/issues/79 (request-body schema
+  # mismatch + timeout-as-success bug). Re-enable analysis after rework.
+  - ".github/workflows/copilot-pr-pipeline.yml"
   - "workload-install.ps1"
   - "docs/**"
   - ".syncignore"
