@@ -3,13 +3,13 @@
 # Workspace ID: 57db5f34-e7f0-42c0-86c4-bb981f96c880
 
 # ContextStream Rules
-**MANDATORY STARTUP:** On the first message of EVERY session call `init(...)` then `context(user_message="...")`. On subsequent messages, call `context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run.
+**MANDATORY STARTUP:** If ContextStream tools are available, on the first message of every session call `init(...)` then `context(user_message="...")`. On subsequent messages, call `context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run. If ContextStream tools are unavailable, proceed with the platform's available tools.
 
-## Required Tool Calls
+## Required Tool Calls (when ContextStream tools are available)
 
 1. **First message in session**: Call `init(folder_path="<project_path>")` then `context(user_message="...", session_id="<id>")`
 2. **Subsequent messages (default)**: Call `context(user_message="...", session_id="<id>")` first. Narrow bypass: immediate read-only ContextStream calls with fresh context + no state changes.
-3. **Before file search**: Call `search(mode="auto", query="...")` before local tools
+3. **Before file search**: Call `search(mode="auto", query="...")` before local tools. If ContextStream is unavailable, use the platform's local tools directly.
 
 **Read-only examples** (default: call `context(...)` first; narrow bypass only for immediate read-only ContextStream calls when context is fresh and no state-changing tool has run): `workspace(action="list"|"get"|"create")`, `memory(action="list_docs"|"list_events"|"list_todos"|"list_tasks"|"list_transcripts"|"list_nodes"|"decisions"|"get_doc"|"get_event"|"get_task"|"get_todo"|"get_transcript")`, `session(action="get_lessons"|"get_plan"|"list_plans"|"recall")`, `help(action="version"|"tools"|"auth")`, `project(action="list"|"get"|"index_status")`, `reminder(action="list"|"active")`, any read-only data query
 
@@ -133,6 +133,7 @@ These should be followed exactly as they contain real-time context.
 2. If indexed & fresh: `search(mode="auto", query="...")` before local tools
 3. If NOT indexed or stale: wait for background refresh (up to ~20s, configurable), retry `search(mode="auto", ...)`, then use local tools only after the grace window elapses
 4. If search returns 0 results after refresh/retry: local tools are allowed
+5. If ContextStream tools are unavailable, fail to load, time out, or error: fall back to local tools immediately
 
 ### Search Mode Selection:
 - `auto` (recommended): query-aware mode selection
@@ -335,6 +336,7 @@ project(action="index_status")
 
 ### When Local Tools Are OK:
 
+- ContextStream tools are unavailable in the current environment
 - The stale/not-indexed grace window has elapsed (~20s default, configurable)
 - ContextStream search still returns 0 results or errors after retry
 - User explicitly requests local tools

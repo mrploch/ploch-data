@@ -436,3 +436,4 @@ temp-*.md
 **/*.csproj.bak
 **/*.props.bak
 **/*.md.bak
+temp/

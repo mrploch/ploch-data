@@ -1,0 +1,1 @@
+../../../.claude/rules/pr-checks-completion-gate.md

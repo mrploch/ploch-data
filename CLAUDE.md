@@ -5,7 +5,7 @@
 
 # ContextStream Rules
 
-**MANDATORY STARTUP:** On the first message of EVERY session call `mcp__contextstream__init(...)` then `mcp__contextstream__context(user_message="...")`. On subsequent messages, call `mcp__contextstream__context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run.
+**MANDATORY STARTUP:** If ContextStream tools are available, on the first message of every session call `mcp__contextstream__init(...)` then `mcp__contextstream__context(user_message="...")`. On subsequent messages, call `mcp__contextstream__context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run. If ContextStream tools are unavailable, proceed with the platform's available tools.
 
 ## Quick Rules
 
@@ -14,7 +14,7 @@
 |---------|----------|
 | **First message in session** | `mcp__contextstream__init(...)` → `mcp__contextstream__context(user_message="...")` BEFORE any other tool |
 | **Subsequent messages (default)** | `mcp__contextstream__context(user_message="...")` FIRST, then other tools (narrow read-only bypass allowed when context is fresh + state is unchanged) |
-| **Before file search** | `mcp__contextstream__search(mode="...", query="...")` BEFORE Glob/Grep/Read |
+| **Before file search** | Use `mcp__contextstream__search(mode="...", query="...")` when available; otherwise use available local tools (Glob/Grep/Read) directly |
 </contextstream_rules>
 
 ## Detailed Rules
@@ -149,7 +149,7 @@ Escalation ladder — walk it in order and stop at the first step that answers t
 - ContextStream search handles **all** search use cases: exact text, regex, glob patterns, semantic queries, file paths
 - ContextStream search results contain **real file paths, line numbers, and code content** — they ARE code results
 - **NEVER** dismiss ContextStream results as "non-code" — use the returned file paths to `read_file` the relevant code
-- Only fall back to `Grep`/`Glob` after stale/not-indexed grace window (~20s) and retry still returns **exactly 0 results**
+- Fall back to `Grep`/`Glob` if ContextStream search is **unavailable, fails, times out, or returns 0 results**
 
 ### Search Mode Selection (use these instead of built-in tools):
 
