@@ -132,6 +132,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
                                            query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" || query.Name == "Blog post 8" ||
                                                     query.Name == "Blog post 9" || query.Name == "Blog post 10",
 #pragma warning restore SA1117
+
                                            // Explicit OrderBy so page contents are deterministic — without it, the
                                            // DB may return filtered rows in any order and the index-based assertion below would be flaky.
                                            query => query.OrderBy(e => e.Id).Include(e => e.Tags).Include(e => e.Categories));
@@ -160,6 +161,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepository<BlogPost, int>();
+
         // Explicit OrderBy so the page contents are deterministic and posts[i + 5] below
         // reliably match the returned slice.
         var blogPosts = repository.GetPage(2, 5, onDbSet: q => q.OrderBy(e => e.Id));
