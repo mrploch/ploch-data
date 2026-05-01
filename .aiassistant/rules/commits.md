@@ -8,7 +8,7 @@ All commit messages **must** follow the [Conventional Commits](https://www.conve
 
 ## Format
 
-```
+```text
 <type>(<scope>): <subject>
 
 <body>
@@ -77,7 +77,7 @@ Every commit **must** include a `Refs: #<issue-number>` footer linking to a GitH
 
 ### Simple feature
 
-```
+```text
 feat(common): Add StringExtensions.ContainsAny method
 
 Added a new extension method that checks whether a string contains
@@ -88,7 +88,7 @@ Refs: #162
 
 ### Breaking change
 
-```
+```text
 chore(solution)!: Update ContainsAny namespace
 
 Moved the public API method Strings.ContainsAny to the
@@ -102,7 +102,7 @@ Refs: #162
 
 ### Bug fix
 
-```
+```text
 fix(data): Prevent duplicate entity on concurrent upsert
 
 Added optimistic concurrency check in the upsert path to avoid
@@ -113,7 +113,7 @@ Refs: #187
 
 ### Multi-scope refactor
 
-```
+```text
 refactor(solution): Extract shared audit timestamp logic
 
 Moved SetAuditTimestamps from individual DbContext overrides into
@@ -128,7 +128,7 @@ If a commit contains information that should go to the change log, make sure you
 
 ### CI/build change
 
-```
+```text
 ci(github-actions): Add fetch-depth 0 for NBGV versioning
 
 NBGV requires full git history to calculate commit height.

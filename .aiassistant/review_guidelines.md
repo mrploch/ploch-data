@@ -165,8 +165,8 @@ test coverage, and documentation over cosmetic feedback.
 
 - Prefer minimal, readable, maintainable code over clever or
   over-engineered solutions.
-- Always build entire solution using `dotnet build Ploch.Data.slnx` and
-  make sure **there is no new warnings** produced by static code analyzers.
+- Always build the entire solution using `dotnet build Ploch.Data.slnx` and
+  make sure **there are no new warnings** produced by static code analyzers.
   If there are, you need to address them. Some of them might be false positive,
   in this case you can disable them temporarily in code using for example
   ```csharp
@@ -178,7 +178,7 @@ test coverage, and documentation over cosmetic feedback.
   Keep in mind that there are other ways of disabling those warnings. If this
   is a false positive in many places, then it might make sense to disable
   it in `.editorconfig` file.
-  But anyway, the golden rule is **THERE MUST BE NOT EVEN A SINGLE NEW WARNING**.
+  But either way, the golden rule is **THERE MUST NOT BE EVEN A SINGLE NEW WARNING**.
 - Remove dead code, temporary workarounds, debug code, and commented-out
   implementations unless there is a clear justification.
 - Fail fast on unrecoverable errors. Silent failure, swallowed

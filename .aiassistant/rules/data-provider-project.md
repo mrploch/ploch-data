@@ -185,13 +185,20 @@ Each provider project must include an `appsettings.json` with a `DefaultConnecti
 
 Every provider project must include these three scripts. Run them from the provider project directory.
 
+Each script must wrap its body in `Push-Location $PSScriptRoot` / `try { ... } finally { Pop-Location }` so it remains location-independent and safe to invoke from any working directory.
+
 ### `recreate-migrations.ps1`
 
 Deletes all existing migrations and creates a fresh `Initial` migration:
 
 ```powershell
-Remove-Item Migrations -Force -Confirm:$false -Recurse
-dotnet ef migrations add Initial
+Push-Location $PSScriptRoot
+try {
+    Remove-Item Migrations -Force -Confirm:$false -Recurse
+    dotnet ef migrations add Initial
+} finally {
+    Pop-Location
+}
 ```
 
 ### `update-database.ps1`
@@ -199,7 +206,12 @@ dotnet ef migrations add Initial
 Applies pending migrations to the local database:
 
 ```powershell
-dotnet ef database update
+Push-Location $PSScriptRoot
+try {
+    dotnet ef database update
+} finally {
+    Pop-Location
+}
 ```
 
 ### `recreate-migrations-update-database.ps1`
@@ -209,17 +221,27 @@ Deletes the local database file (SQLite) or database (SQL Server), recreates mig
 #### SQLite variant
 
 ```powershell
-Remove-Item *.db -Force -Confirm:$false -ErrorAction SilentlyContinue
-./recreate-migrations.ps1
-./update-database.ps1
+Push-Location $PSScriptRoot
+try {
+    Remove-Item *.db -Force -Confirm:$false -ErrorAction SilentlyContinue
+    ./recreate-migrations.ps1
+    ./update-database.ps1
+} finally {
+    Pop-Location
+}
 ```
 
 #### SQL Server variant
 
 ```powershell
-dotnet ef database drop --force
-./recreate-migrations.ps1
-./update-database.ps1
+Push-Location $PSScriptRoot
+try {
+    dotnet ef database drop --force
+    ./recreate-migrations.ps1
+    ./update-database.ps1
+} finally {
+    Pop-Location
+}
 ```
 
 ## .gitignore

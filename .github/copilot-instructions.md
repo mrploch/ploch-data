@@ -517,7 +517,7 @@ The `samples/SampleApp/` directory contains a Knowledge Base sample application 
 ## Documentation
 
 - Use XML documentation comments for all public methods. Try to provide examples where it makes sense.
-- Always keep the documentation markdown files in `docs` folder in the repository root [docs/](../docs/) up to date. If new features are being added, then those docs need to be extended to include the new feature usage documentationo. If anything changes, then the docs need to be updated. Always provide examples in the docs when discussing a feature.
+- Always keep the documentation markdown files in `docs` folder in the repository root [docs/](../docs/) up to date. If new features are being added, then those docs need to be extended to include the new feature usage documentation. If anything changes, then the docs need to be updated. Always provide examples in the docs when discussing a feature.
 
 ## Validation expectations
 
