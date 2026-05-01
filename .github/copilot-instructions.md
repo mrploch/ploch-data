@@ -341,7 +341,7 @@ project(action="index_status")
 - `exhaustive`: all occurrences / complete match coverage
 - `team`: cross-project team search
 
-### Output Format Hints
+### Output Format Hints (Search-First Section)
 
 - Use `output_format="paths"` for file listings and rename targets
 - Use `output_format="count"` for "how many" queries

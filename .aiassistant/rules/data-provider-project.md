@@ -8,7 +8,7 @@ Rules for creating provider-specific Data projects (SQLite, SQL Server) in MrPlo
 
 ## Project Structure
 
-```
+```text
 src/
   Data.SQLite/                              # or Data.SqlServer/
     Migrations/
@@ -248,15 +248,15 @@ try {
 
 Each provider project should include a `.gitignore` that excludes local database files:
 
-### SQLite
+### SQLite (.gitignore)
 
-```
+```gitignore
 *.db
 *.db-shm
 *.db-wal
 ```
 
-### SQL Server
+### SQL Server (.gitignore)
 
 No additional ignores needed (database is server-hosted).
 
