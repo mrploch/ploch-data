@@ -94,18 +94,26 @@ jobs:
           sudo apt install -y ca-certificates gnupg
           # Try multiple keyservers with a short timeout so a single unresponsive
           # server cannot hang the build for 30+ minutes (the default GPG timeout).
+          # keys.openpgp.org is listed last because it strips user IDs, which
+          # causes GPG to skip the import even though recv-keys exits 0.
           KEY_FINGERPRINT=3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
           KEYRING=/usr/share/keyrings/mono-official-archive-keyring.gpg
-          for ks in hkps://keys.openpgp.org hkp://keyserver.ubuntu.com:80 hkp://pgp.mit.edu; do
-            if sudo timeout 30 gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --keyserver "$ks" --recv-keys "$KEY_FINGERPRINT"; then
-              echo "Imported mono signing key from $ks"
+          IMPORTED=0
+          for ks in hkp://keyserver.ubuntu.com:80 hkp://pgp.mit.edu hkps://keys.openpgp.org; do
+            sudo timeout 30 gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --keyserver "$ks" --recv-keys "$KEY_FINGERPRINT" || true
+            # Verify a usable key (with at least one user ID) actually landed —
+            # keys.openpgp.org strips UIDs so the key may "import" but be unusable.
+            if sudo gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --list-keys "$KEY_FINGERPRINT" 2>/dev/null | grep -q '^uid'; then
+              echo "Imported mono signing key (with UID) from $ks"
+              IMPORTED=1
               break
             fi
-            echo "Keyserver $ks unavailable, trying next..."
+            echo "Keyserver $ks did not yield a usable key, trying next..."
           done
-          # Verify the key was imported (any failure produces an empty keyring,
-          # which would silently break the apt-update sign check below).
-          sudo gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --list-keys "$KEY_FINGERPRINT"
+          if [ "$IMPORTED" -ne 1 ]; then
+            echo "::error::Failed to import mono signing key from any keyserver"
+            exit 1
+          fi
           echo "deb [signed-by=$KEYRING] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
           sudo apt update
           sudo apt install -y mono-devel
