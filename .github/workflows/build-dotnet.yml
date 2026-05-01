@@ -87,27 +87,46 @@ jobs:
 
       - name: Install mono
         run: |
-          sudo apt install -y ca-certificates gnupg
-          # Try multiple keyservers with a short timeout so a single unresponsive
-          # server cannot hang the build for 30+ minutes (the default GPG timeout).
-          # keys.openpgp.org is listed last because it strips user IDs, which
-          # causes GPG to skip the import even though recv-keys exits 0.
-          KEY_FINGERPRINT=3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          sudo apt install -y ca-certificates gnupg curl
           KEYRING=/usr/share/keyrings/mono-official-archive-keyring.gpg
+          KEY_FINGERPRINT=3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
           IMPORTED=0
-          for ks in hkp://keyserver.ubuntu.com:80 hkp://pgp.mit.edu hkps://keys.openpgp.org; do
-            sudo timeout 30 gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --keyserver "$ks" --recv-keys "$KEY_FINGERPRINT" || true
-            # Verify a usable key (with at least one user ID) actually landed —
-            # keys.openpgp.org strips UIDs so the key may "import" but be unusable.
-            if sudo gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --list-keys "$KEY_FINGERPRINT" 2>/dev/null | grep -q '^uid'; then
-              echo "Imported mono signing key (with UID) from $ks"
-              IMPORTED=1
-              break
+          # Primary: download the key directly from the mono project's HTTPS
+          # endpoint. This avoids GPG keyservers entirely, which have been
+          # unreliable (keyserver.ubuntu.com / pgp.mit.edu unresponsive,
+          # keys.openpgp.org strips UIDs).
+          if curl -fsSL --max-time 30 https://download.mono-project.com/repo/xamarin.gpg -o /tmp/mono.gpg.raw; then
+            # The file may be either ASCII-armored or binary; --dearmor
+            # handles the armored case, and a binary keyring can be copied
+            # as-is. Try dearmor first; if it fails, treat the file as binary.
+            if sudo gpg --dearmor < /tmp/mono.gpg.raw > /tmp/mono.gpg.bin 2>/dev/null && [ -s /tmp/mono.gpg.bin ]; then
+              sudo cp /tmp/mono.gpg.bin "$KEYRING"
+            else
+              sudo cp /tmp/mono.gpg.raw "$KEYRING"
             fi
-            echo "Keyserver $ks did not yield a usable key, trying next..."
-          done
+            sudo chmod 644 "$KEYRING"
+            if sudo gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --list-keys "$KEY_FINGERPRINT" 2>/dev/null | grep -q '^uid'; then
+              echo "Imported mono signing key directly from download.mono-project.com"
+              IMPORTED=1
+            fi
+          fi
+          # Fallback: keyserver loop (each capped at 30s so an unresponsive
+          # server cannot hang the build).
           if [ "$IMPORTED" -ne 1 ]; then
-            echo "::error::Failed to import mono signing key from any keyserver"
+            echo "Direct download failed or yielded no usable key; falling back to keyservers..."
+            sudo rm -f "$KEYRING"
+            for ks in hkp://keyserver.ubuntu.com:80 hkp://pgp.mit.edu; do
+              sudo timeout 30 gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --keyserver "$ks" --recv-keys "$KEY_FINGERPRINT" || true
+              if sudo gpg --homedir /tmp --no-default-keyring --keyring "$KEYRING" --list-keys "$KEY_FINGERPRINT" 2>/dev/null | grep -q '^uid'; then
+                echo "Imported mono signing key (with UID) from $ks"
+                IMPORTED=1
+                break
+              fi
+              echo "Keyserver $ks did not yield a usable key, trying next..."
+            done
+          fi
+          if [ "$IMPORTED" -ne 1 ]; then
+            echo "::error::Failed to import mono signing key from any source"
             exit 1
           fi
           echo "deb [signed-by=$KEYRING] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
