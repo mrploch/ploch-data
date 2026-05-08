@@ -147,6 +147,9 @@ jobs:
         continue-on-error: true
       - name: Install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
+      # Note: analysis settings (coverage paths, exclusions) are passed inline
+      # via /d: arguments. The .NET edition of the SonarScanner does not read
+      # sonar-project.properties — that file would actively fail post-processing.
       - name: SonarScanner Begin
         id: sonar-begin
         env:
@@ -157,6 +160,9 @@ jobs:
           /o:"${{ env.SONAR_ORGANIZATION }}"
           /d:sonar.login="$SONAR_TOKEN"
           /d:sonar.projectBaseDir="${{ github.workspace }}"
+          /d:sonar.cs.opencover.reportsPaths="**/CoverageResults/coverage.opencover.xml"
+          /d:sonar.exclusions="**/tests/**,**/*.Tests/**,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/Migrations/**,**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/.github/**,**/*.yml,**/*.yaml"
+          /d:sonar.coverage.exclusions="**/tests/**,**/*.Tests/**,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/samples/**,**/*.ps1"
         continue-on-error: true
 
       # Build and Test (always runs regardless of SonarCloud status)
@@ -165,13 +171,14 @@ jobs:
       - name: Test Coverage
         run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
 
-      # SonarCloud end (runs even after test failures, only if begin succeeded)
+      # SonarCloud end (runs even after test failures, only if begin succeeded).
+      # Fails the job loudly if post-processing fails — silent failures here led
+      # to ~3 weeks of unanalysed builds when sonar-project.properties broke End.
       - name: SonarScanner End
         if: always() && steps.sonar-begin.outcome == 'success'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
-        continue-on-error: true
 
       - name: Upload Test Results
         if: always()
