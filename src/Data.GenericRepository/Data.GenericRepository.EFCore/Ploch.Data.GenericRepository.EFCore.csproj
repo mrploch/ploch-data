@@ -24,7 +24,7 @@
   <!-- Release: PackageReference (versions from Directory.Packages.props) -->
   <ItemGroup Condition="'$(UseProjectReferences)' != 'true'">
     <PackageReference Include="Ploch.Common.AppServices" />
-    <PackageReference Include="Ploch.Common.DependencyInnjection" />
+    <PackageReference Include="Ploch.Common.DependencyInjection" />
   </ItemGroup>
 
   <ItemGroup>
