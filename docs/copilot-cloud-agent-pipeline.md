@@ -114,7 +114,7 @@ Use `pr-pipeline-orchestrator` and give it:
 
 ### GitHub Actions usage
 
-This repository also includes [copilot-pr-pipeline.yml](/C:/DevNet/my/mrploch/ploch-data/.github/workflows/copilot-pr-pipeline.yml).
+This repository also includes [copilot-pr-pipeline.yml](../.github/workflows/copilot-pr-pipeline.yml).
 
 Use it from `Actions -> Copilot PR Pipeline -> Run workflow`.
 

@@ -73,7 +73,7 @@ Again, make sure the content is easy to read and follow. ALWAYS TEST!
 
 We need to fix the equivalency options helper, fix the failing tests.
 We also need to add proper ability to create new db context each time, instead of a scoped same instance
-Usage od IDbContextFactory
+Usage of IDbContextFactory
 improve docs
 Prompt:
 

@@ -47,7 +47,7 @@ Applies the following configuration to a FluentAssertions equivalency assertion:
 #### Usage
 
 ```csharp
-using Ploch.Data.EFCore.IntegrationTesting;
+using Ploch.Data.EFCore.IntegrationTesting.FluentAssertions;
 
 // Basic — compare an entity retrieved from the DB with the in-memory original.
 actual.Should().BeEquivalentTo(expected, options => options.WithEntityEquivalencyOptions());

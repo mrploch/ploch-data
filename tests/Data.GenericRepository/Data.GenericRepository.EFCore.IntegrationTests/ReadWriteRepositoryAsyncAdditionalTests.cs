@@ -93,7 +93,11 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
         await unitOfWork.CommitAsync();
 
         result.Should().HaveCount(3);
-        var all = await repository.GetAllAsync();
+
+        // Verify via a fresh DbContext rather than the repository under test,
+        // per the integration-testing rule against validating a feature with itself.
+        await using var rootDbContext = CreateRootDbContext();
+        var all = await rootDbContext.Set<TestEntity>().ToListAsync();
         all.Should().HaveCount(3);
     }
 

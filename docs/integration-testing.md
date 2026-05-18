@@ -90,7 +90,7 @@ Extends `DataIntegrationTest<TDbContext>` with helper methods for creating repos
 
 All helper methods use the scoped provider by default. Pass `false` to resolve from the root provider.
 
-TODO: Explain more when to use scoped and root - but also fix how the dbcontext can be created new each time (using of IDbContexxtFactory):
+TODO: Explain more when to use scoped and root - but also fix how the DbContext can be created new each time by using IDbContextFactory:
 This needs to be fixed in tests.
 
 The `AddRepositories<TDbContext>()` call is made automatically in `ConfigureServices`.

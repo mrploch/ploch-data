@@ -19,11 +19,15 @@ public static class EntitiesEquivalencyOptionsExtensions
     ///     Specifies the maximum allowed difference in milliseconds between <see cref="DateTimeOffset" /> values.
     ///     Defaults to <c>1</c> millisecond — approximately 10× the maximum observed SQLite rounding error (~78 µs),
     ///     tight enough to catch real timing regressions and loose enough to be stable.
+    ///     Must be non-negative.
     /// </param>
     /// <returns>
     ///     The same <paramref name="options" /> instance with the entity-comparison settings applied,
     ///     allowing further chaining.
     /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Thrown when <paramref name="dateTimeOffsetToleranceMilliseconds" /> is negative.
+    /// </exception>
     /// <remarks>
     ///     <para>
     ///         Four recurring issues arise when comparing in-memory entity objects with entities loaded from a
@@ -93,6 +97,14 @@ public static class EntitiesEquivalencyOptionsExtensions
     public static TSelf WithEntityEquivalencyOptions<TSelf>(this SelfReferenceEquivalencyOptions<TSelf> options, double dateTimeOffsetToleranceMilliseconds = 1)
         where TSelf : SelfReferenceEquivalencyOptions<TSelf>
     {
+        if (dateTimeOffsetToleranceMilliseconds < 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(dateTimeOffsetToleranceMilliseconds),
+                dateTimeOffsetToleranceMilliseconds,
+                "DateTimeOffset tolerance must be non-negative.");
+        }
+
         return options.Using(new NullEmptyCollectionEquivalencyStep())
                       .WithoutStrictOrdering()
                       .IgnoringCyclicReferences()

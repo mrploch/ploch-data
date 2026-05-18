@@ -63,7 +63,7 @@ public class ReadWriteRepositoryDeleteByIdTests : GenericRepositoryDataIntegrati
         var repository = CreateReadRepository<Blog, int>();
         var result = repository.GetById(blog.Id, q => q.Include(q => q.BlogPosts).ThenInclude(bp => bp.Tags).Include(q => q.BlogPosts).ThenInclude(bp => bp.Categories));
 
-        var rootDbContext = CreateRootDbContext();
+        await using var rootDbContext = CreateRootDbContext();
 
         var resultFromDb = await rootDbContext.Blogs.Include(q => q.BlogPosts)
                                               .ThenInclude(bp => bp.Tags)
