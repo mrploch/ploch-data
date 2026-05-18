@@ -71,7 +71,7 @@ By default, the built-in GitHub MCP server is read-only and scoped to the curren
 If you want automated comment replies and broader GitHub research, do the following in the repository settings:
 
 1. Go to `Settings -> Copilot -> Cloud agent`.
-2. Add MCP configuration using the example from [copilot-cloud-agent-mcp.example.json](/C:/DevNet/my/mrploch/ploch-data/docs/copilot-cloud-agent-mcp.example.json).
+2. Add MCP configuration using the example from [copilot-cloud-agent-mcp.example.json](./copilot-cloud-agent-mcp.example.json).
 3. Go to `Settings -> Environments`.
 4. Create an environment named `copilot`.
 5. Add an environment secret named `COPILOT_MCP_GITHUB_PERSONAL_ACCESS_TOKEN`.

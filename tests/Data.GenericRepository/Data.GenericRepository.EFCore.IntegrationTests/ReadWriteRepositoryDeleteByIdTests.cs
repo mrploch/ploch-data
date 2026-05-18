@@ -1,6 +1,5 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
@@ -24,8 +23,7 @@ public class ReadWriteRepositoryDeleteByIdTests : GenericRepositoryDataIntegrati
         // After committing, it should be gone from the database.
         await unitOfWork.CommitAsync();
 
-        var anotherDbContext = RootServiceProvider.GetRequiredService<TestDbContext>();
-
+        await using var anotherDbContext = CreateRootDbContext();
         var result = await anotherDbContext.TestEntities.FindAsync(idToDelete);
         result.Should().BeNull();
     }
