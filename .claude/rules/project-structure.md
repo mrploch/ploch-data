@@ -1,1 +1,0 @@
-../../../.claude/rules/project-structure.md

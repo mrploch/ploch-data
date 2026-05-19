@@ -1,1 +1,0 @@
-../../../.claude/rules/naming.md
