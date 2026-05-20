@@ -255,6 +255,45 @@ public static class RepositoryHelper
         return new[] { userIdea1, userIdea2 };
     }
 
+    /// <summary>
+    /// Seeds two user-idea entities directly via the <see cref="DbContext" /> and returns them.
+    /// </summary>
+    /// <remarks>
+    /// Use this overload in the Arrange phase of an integration test. Seeding through the plain
+    /// <see cref="DbContext" /> — rather than through a repository — keeps the test's fixture setup
+    /// independent of the Generic Repository write path, which is itself code under test.
+    /// </remarks>
+    /// <param name="dbContext">The <see cref="DbContext" /> to add the user ideas to.</param>
+    /// <returns>A task that resolves to the two seeded <see cref="UserIdea" /> entities.</returns>
+    public static async Task<IEnumerable<UserIdea>> AddAsyncTestUserIdeasEntitiesAsync(DbContext dbContext)
+    {
+        var (userIdea1, userIdea2) = EntitiesBuilder.BuildUserIdeaEntities();
+
+        await dbContext.AddAsync(userIdea1);
+        await dbContext.AddAsync(userIdea2);
+        await dbContext.SaveChangesAsync();
+
+        return new[] { userIdea1, userIdea2 };
+    }
+
+    /// <summary>
+    /// Seeds two user-idea entities via a short-lived <see cref="DbContext" /> obtained from
+    /// <paramref name="dbContextFactory" /> and returns them.
+    /// </summary>
+    /// <remarks>
+    /// The context produced by <paramref name="dbContextFactory" /> is created, used, and disposed
+    /// inside this method. Pass <c>CreateRootDbContext</c> to seed through a context separate from
+    /// the one the code under test reads through.
+    /// </remarks>
+    /// <param name="dbContextFactory">A factory that produces a new <see cref="DbContext" /> to seed through.</param>
+    /// <returns>A task that resolves to the two seeded <see cref="UserIdea" /> entities.</returns>
+    public static async Task<IEnumerable<UserIdea>> AddAsyncTestUserIdeasEntitiesAsync(Func<DbContext> dbContextFactory)
+    {
+        await using var dbContext = dbContextFactory();
+
+        return await AddAsyncTestUserIdeasEntitiesAsync(dbContext);
+    }
+
     public static async Task<BlogPostTag[]> AddBlogPostTagsAsync(IReadWriteRepositoryAsync<BlogPostTag, int> repository, int tagCount)
     {
         var tags = EntitiesBuilder.BuildRandomTags(tagCount);
