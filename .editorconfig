@@ -707,7 +707,7 @@ resharper_wrap_before_first_type_parameter_constraint = false
 dotnet_diagnostic.CC0067.severity = none
 
 # Test project overrides
-[*Tests/**/*.cs]
+[tests/**/*.cs]
 # IDE0058: Expression value is never used — test assertions and fluent API chains
 # intentionally discard return values.
 dotnet_diagnostic.IDE0058.severity = none

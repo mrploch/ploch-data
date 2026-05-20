@@ -12,11 +12,15 @@ public class ReadWriteRepositoryDeleteByIdTests : GenericRepositoryDataIntegrati
     {
         const int idToDelete = 10;
 
-        using var unitOfWork = CreateUnitOfWork();
-        var asyncRepo = unitOfWork.Repository<TestEntity, int>();
-        await asyncRepo.AddAsync(new() { Id = idToDelete, Name = "ToDelete" });
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the entity is not tracked by the unit of
+        // work that performs the delete; the delete then genuinely round-trips through the database.
+        await using (var seedContext = CreateRootDbContext())
+        {
+            await seedContext.TestEntities.AddAsync(new() { Id = idToDelete, Name = "ToDelete" });
+            await seedContext.SaveChangesAsync();
+        }
 
+        using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
         await repository.DeleteAsync(idToDelete);
 
@@ -52,11 +56,9 @@ public class ReadWriteRepositoryDeleteByIdTests : GenericRepositoryDataIntegrati
     [Fact]
     public async Task GetById_with_onDbSet_should_return_entity()
     {
-        using var unitOfWork = CreateUnitOfWork();
-        var blogRepository1 = unitOfWork.Repository<Blog, int>();
-        var (blog, blogPost1, _) = await RepositoryHelper.AddTestBlogEntities(blogRepository1);
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the read below re-hydrates from the database
+        // rather than being served the seeded entities from the read context's change tracker.
+        var (blog, blogPost1, _) = await RepositoryHelper.AddTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadRepository<Blog, int>();
         var result = repository.GetById(blog.Id, q => q.Include(q => q.BlogPosts).ThenInclude(bp => bp.Tags).Include(q => q.BlogPosts).ThenInclude(bp => bp.Categories));
@@ -83,10 +85,12 @@ public class ReadWriteRepositoryDeleteByIdTests : GenericRepositoryDataIntegrati
     [Fact]
     public async Task GetById_with_onDbSet_should_return_null_when_filter_excludes_entity()
     {
-        using var unitOfWork = CreateUnitOfWork();
-        var asyncRepo = unitOfWork.Repository<TestEntity, int>();
-        await asyncRepo.AddAsync(new() { Id = 1, Name = "Excluded" });
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the read genuinely queries the database.
+        await using (var seedContext = CreateRootDbContext())
+        {
+            await seedContext.TestEntities.AddAsync(new() { Id = 1, Name = "Excluded" });
+            await seedContext.SaveChangesAsync();
+        }
 
         var repository = CreateReadRepository<TestEntity, int>();
         var result = repository.GetById(1, q => q.Where(e => e.Name == "NonExistent"));
