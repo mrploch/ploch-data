@@ -9,6 +9,10 @@ public class ReadWriteRepositoryAsyncAuditTests : GenericRepositoryDataIntegrati
     public async Task Update_and_CommitAsync_should_set_modified_time_audit_property()
     {
         var unitOfWork = CreateUnitOfWork();
+
+        // Seeded through the repository on purpose: this class verifies the audit behaviour of the
+        // repository write path, and the assertion below checks that a repository Add leaves
+        // ModifiedTime unset. A separate-context seed would make that assertion vacuous.
         var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
         await unitOfWork.CommitAsync();
 
@@ -29,6 +33,9 @@ public class ReadWriteRepositoryAsyncAuditTests : GenericRepositoryDataIntegrati
     {
         var unitOfWork = CreateUnitOfWork();
         var createdTime = DateTimeOffset.UtcNow;
+
+        // Adding through the repository and committing IS the operation under test here, so this
+        // seeding deliberately stays repository-based.
         var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
         await unitOfWork.CommitAsync();
 

@@ -27,6 +27,8 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
             }
         }
 
+        // Act — adding entities through the unit of work's repositories and committing IS the
+        // behaviour under test here, so this seeding deliberately stays repository-based.
         await unitOfWork.Repository<Blog, int>().AddAsync(testBlog);
 
         var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
@@ -71,12 +73,11 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
     [Fact]
     public async Task UpdateAsync_entity()
     {
+        // Arrange — seed via a separate context so the fixture setup does not depend on the
+        // repository write path; the update below is the operation under test.
+        var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
+
         using var unitOfWork = CreateUnitOfWork();
-
-        var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
-
         var blogUpdated = new Blog { Id = blog.Id, Name = "Updated Blog" };
 
         await unitOfWork.Repository<Blog, int>().UpdateAsync(blogUpdated);
@@ -86,9 +87,15 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
 
         var actualBlog = await blogRepository.GetByIdAsync(blog.Id);
         blog.Name = "Updated Blog";
+
+        // Audit timestamps are the concern of ReadWriteRepositoryAsyncAuditTests; UpdateAsync
+        // legitimately sets ModifiedTime, so exclude the audit columns from this comparison.
         actualBlog.Should()
                   .BeEquivalentTo(blog,
-                                  options => options.Excluding(p => p.BlogPosts).WithEntityEquivalencyOptions());
+                                  options => options.Excluding(p => p.BlogPosts)
+                                                    .Excluding(p => p.CreatedTime)
+                                                    .Excluding(p => p.ModifiedTime)
+                                                    .WithEntityEquivalencyOptions());
     }
 
     [Fact]
@@ -97,6 +104,9 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         using var unitOfWork = CreateUnitOfWork();
 
         var repository = unitOfWork.Repository<Blog, int>();
+
+        // Act — adding the blog through the repository is the operation under test, so this
+        // call deliberately stays repository-based.
         var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(repository);
 
         await unitOfWork.CommitAsync();
@@ -112,12 +122,11 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
     [Fact]
     public async Task DeleteAsync_entity()
     {
+        // Arrange — seed via a separate context so the fixture setup does not depend on the
+        // repository write path; the delete below is the operation under test.
+        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
+
         using var unitOfWork = CreateUnitOfWork();
-
-        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
-
         var actualBlog = await unitOfWork.Repository<Blog, int>().GetByIdAsync(blog.Id);
         await unitOfWork.Repository<Blog, int>().DeleteAsync(actualBlog);
         await unitOfWork.CommitAsync();
@@ -135,14 +144,12 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
     [Fact]
     public async Task Delete_entity()
     {
+        // Arrange — seed via a separate context so the fixture setup does not depend on the
+        // repository write path; the delete below is the operation under test.
+        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
+
         using var unitOfWork = CreateUnitOfWork();
-
         var repositoryAsync = unitOfWork.Repository<Blog, int>();
-
-        var (blog, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(repositoryAsync);
-
-        await unitOfWork.CommitAsync();
-
         var actualBlog = await repositoryAsync.GetByIdAsync(blog.Id);
         await repositoryAsync.DeleteAsync(actualBlog);
         await unitOfWork.CommitAsync();
