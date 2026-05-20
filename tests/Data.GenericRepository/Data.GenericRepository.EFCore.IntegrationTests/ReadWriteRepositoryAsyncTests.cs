@@ -31,11 +31,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task CountAsync_should_return_entity_count()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
         var count = await repository.CountAsync();
@@ -46,11 +44,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task GetAllAsync_should_return_entities_with_includes()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var (_, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
         var blogPosts = await repository.GetAllAsync(onDbSet: query => query.Include(e => e.Tags));
@@ -70,11 +66,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task GetAllAsync_should_return_entities_without_includes()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var (_, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, blogPost1, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
         var blogPosts = await repository.GetAllAsync();
@@ -86,18 +80,16 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
                  .ContainEquivalentOf(blogPost2,
                                       options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).Excluding(p => p.CreatedTime).Excluding(p => p.ModifiedTime));
 
-        // Categories and Tags are not included in the query but they will not be empty because they are already loaded in the context.
-        // This is why I don't check for emptiness here.
+        // GetAllAsync() without an Include does not load Categories or Tags, so they are excluded
+        // from the comparison.
     }
 
     [Fact]
     public async Task GetPageAsync_should_return_a_page_of_entities_with_includes()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(unitOfWork.Repository<Blog, int>(), 20);
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(CreateRootDbContext, 20);
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
 
@@ -121,11 +113,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task GetPageAsync_should_return_a_page_of_entities_with_includes_using_query()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(unitOfWork.Repository<Blog, int>(), 20);
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(CreateRootDbContext, 20);
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
 
@@ -156,11 +146,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task GetPageAsync_should_return_a_page_of_entities_without_includes()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(unitOfWork.Repository<Blog, int>(), 20);
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(CreateRootDbContext, 20);
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
 
@@ -182,11 +170,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task GetByIdAsync_should_return_entity_with_includes()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var (_, _, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, _, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.GetByIdAsync(blogPost2.Id, query => query.Include(e => e.Tags));
@@ -197,11 +183,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task GetByIdAsync_with_object_key_should_return_entity_with_includes()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var (_, _, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, _, blogPost2) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.GetByIdAsync([ blogPost2.Id ]);
@@ -275,18 +259,16 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     [Fact]
     public async Task FindFirstAsync_should_execute_query_and_return_the_first_hit()
     {
-        using var unitOfWork = CreateUnitOfWork();
-
-        var testBlogEntities = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(unitOfWork.Repository<Blog, int>());
-
-        await unitOfWork.CommitAsync();
+        // Arrange — seed via a separate context so the seeded entities are not in the read
+        // context's change tracker; the query below genuinely round-trips through the database.
+        var (_, blogPost1, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.FindFirstAsync(post => post.Name.Contains("Blog post 1"));
 
         blogPost.Should().NotBeNull();
         blogPost.Should()
-                .BeEquivalentTo(testBlogEntities.blogPost1,
+                .BeEquivalentTo(blogPost1,
                                 options => options.Excluding(p => p.Categories)
                                                   .Excluding(p => p.Tags)
                                                   .WithEntityEquivalencyOptions());

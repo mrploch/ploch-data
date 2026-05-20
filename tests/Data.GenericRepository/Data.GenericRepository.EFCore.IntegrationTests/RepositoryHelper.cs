@@ -54,6 +54,52 @@ public static class RepositoryHelper
         return (blog, blogPost1, blogPost2);
     }
 
+    /// <summary>
+    /// Seeds a blog with two blog posts directly via the <see cref="DbContext" /> and returns the seeded entities.
+    /// </summary>
+    /// <remarks>
+    /// Use this overload in the Arrange phase of an integration test. Seeding through the plain
+    /// <see cref="DbContext" /> — rather than through a repository — keeps the test's fixture setup
+    /// independent of the Generic Repository write path, which is itself code under test.
+    /// </remarks>
+    /// <param name="dbContext">The <see cref="DbContext" /> to add the blog to.</param>
+    /// <returns>
+    /// A task that resolves to a tuple of the seeded <see cref="Blog" /> and the two <see cref="BlogPost" />
+    /// instances attached to it.
+    /// </returns>
+    public static async Task<(Blog, BlogPost, BlogPost)> AddTestBlogEntitiesAsync(DbContext dbContext)
+    {
+        var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
+
+        await dbContext.AddAsync(blog);
+        await dbContext.SaveChangesAsync();
+
+        return (blog, blogPost1, blogPost2);
+    }
+
+    /// <summary>
+    /// Seeds a blog with two blog posts via a short-lived <see cref="DbContext" /> obtained from
+    /// <paramref name="dbContextFactory" /> and returns the seeded entities.
+    /// </summary>
+    /// <remarks>
+    /// The context produced by <paramref name="dbContextFactory" /> is created, used, and disposed
+    /// inside this method. Pass <c>CreateRootDbContext</c> so the fixture is seeded through a context
+    /// separate from the one the code under test reads through — this keeps the seeded entities out
+    /// of the read context's change tracker without the caller managing a context's lifetime or
+    /// remembering to clear the tracker.
+    /// </remarks>
+    /// <param name="dbContextFactory">A factory that produces a new <see cref="DbContext" /> to seed through.</param>
+    /// <returns>
+    /// A task that resolves to a tuple of the seeded <see cref="Blog" /> and the two <see cref="BlogPost" />
+    /// instances attached to it.
+    /// </returns>
+    public static async Task<(Blog, BlogPost, BlogPost)> AddTestBlogEntitiesAsync(Func<DbContext> dbContextFactory)
+    {
+        await using var dbContext = dbContextFactory();
+
+        return await AddTestBlogEntitiesAsync(dbContext);
+    }
+
     public static IEnumerable<UserIdea> AddTestUserIdeasEntities(IReadWriteRepository<UserIdea, int> userIdeasRepository)
     {
         var (userIdea1, userIdea2) = EntitiesBuilder.BuildUserIdeaEntities();
@@ -61,7 +107,7 @@ public static class RepositoryHelper
         userIdeasRepository.Add(userIdea1);
         userIdeasRepository.Add(userIdea2);
 
-        return new[] { userIdea1, userIdea2 };
+        return [userIdea1, userIdea2];
     }
 
     public static async Task<(Blog blog, BlogPost[] blogPosts)> AddAsyncTestBlogEntitiesWithManyPostsAsync(IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
@@ -206,7 +252,46 @@ public static class RepositoryHelper
         await userIdeasReadWriteRepository.AddAsync(userIdea1);
         await userIdeasReadWriteRepository.AddAsync(userIdea2);
 
-        return new[] { userIdea1, userIdea2 };
+        return [userIdea1, userIdea2];
+    }
+
+    /// <summary>
+    /// Seeds two user-idea entities directly via the <see cref="DbContext" /> and returns them.
+    /// </summary>
+    /// <remarks>
+    /// Use this overload in the Arrange phase of an integration test. Seeding through the plain
+    /// <see cref="DbContext" /> — rather than through a repository — keeps the test's fixture setup
+    /// independent of the Generic Repository write path, which is itself code under test.
+    /// </remarks>
+    /// <param name="dbContext">The <see cref="DbContext" /> to add the user ideas to.</param>
+    /// <returns>A task that resolves to the two seeded <see cref="UserIdea" /> entities.</returns>
+    public static async Task<IEnumerable<UserIdea>> AddAsyncTestUserIdeasEntitiesAsync(DbContext dbContext)
+    {
+        var (userIdea1, userIdea2) = EntitiesBuilder.BuildUserIdeaEntities();
+
+        await dbContext.AddAsync(userIdea1);
+        await dbContext.AddAsync(userIdea2);
+        await dbContext.SaveChangesAsync();
+
+        return [userIdea1, userIdea2];
+    }
+
+    /// <summary>
+    /// Seeds two user-idea entities via a short-lived <see cref="DbContext" /> obtained from
+    /// <paramref name="dbContextFactory" /> and returns them.
+    /// </summary>
+    /// <remarks>
+    /// The context produced by <paramref name="dbContextFactory" /> is created, used, and disposed
+    /// inside this method. Pass <c>CreateRootDbContext</c> to seed through a context separate from
+    /// the one the code under test reads through.
+    /// </remarks>
+    /// <param name="dbContextFactory">A factory that produces a new <see cref="DbContext" /> to seed through.</param>
+    /// <returns>A task that resolves to the two seeded <see cref="UserIdea" /> entities.</returns>
+    public static async Task<IEnumerable<UserIdea>> AddAsyncTestUserIdeasEntitiesAsync(Func<DbContext> dbContextFactory)
+    {
+        await using var dbContext = dbContextFactory();
+
+        return await AddAsyncTestUserIdeasEntitiesAsync(dbContext);
     }
 
     public static async Task<BlogPostTag[]> AddBlogPostTagsAsync(IReadWriteRepositoryAsync<BlogPostTag, int> repository, int tagCount)
