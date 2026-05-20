@@ -804,7 +804,7 @@ All commands use Debug configuration with `UsePlochProjectReferences=true` so Pl
 dotnet restore ./Ploch.Data.slnx -p:UsePlochProjectReferences=true
 dotnet build   ./Ploch.Data.slnx --no-restore -p:UsePlochProjectReferences=true
 dotnet test    ./Ploch.Data.slnx --no-build   -p:UsePlochProjectReferences=true
-dotnet run --project samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.ConsoleApp.csproj --no-build
+dotnet run --project samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.ConsoleApp.csproj --no-build -p:UsePlochProjectReferences=true
 ```
 
 ### Gotchas
@@ -812,5 +812,5 @@ dotnet run --project samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.Conso
 - **NBGV shallow clone error**: If the build fails with `Shallow clone lacks the objects required to calculate version height`, the `ploch-common` repo needs `git fetch --unshallow`.
 - **Duplicate import warning (MSB4011)**: `Ploch.Packages.props` is imported twice in `Directory.Packages.props`. This is a known non-blocking warning in the repo.
 - **SQL Server test skipped**: `Data.EFCore.SqlServer.Tests` has one test explicitly skipped (`[Fact(Skip = ...)]`). No Docker/SQL Server setup is needed.
-- **No `global.json`**: The repo does not pin SDK versions via `global.json`. The update script installs both .NET 8.0 and 10.0 SDKs.
+- **global.json usage**: The repository contains a global.json file, but it does not pin specific SDK versions. The update script installs both .NET 8.0 and 10.0 SDKs.
 - **GitHub Packages NuGet source**: The `NuGet.Config` includes a `github` source for `Ploch.*` packages. In Debug mode with `UsePlochProjectReferences=true`, these resolve via ProjectReference so no auth token is required. Release builds or standalone SampleApp builds would need a `GH_PACKAGES_TOKEN`.
