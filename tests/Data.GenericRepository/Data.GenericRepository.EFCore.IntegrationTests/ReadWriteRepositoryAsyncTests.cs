@@ -261,14 +261,14 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
     {
         // Arrange — seed via a separate context so the seeded entities are not in the read
         // context's change tracker; the query below genuinely round-trips through the database.
-        var testBlogEntities = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
+        var (_, blogPost1, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.FindFirstAsync(post => post.Name.Contains("Blog post 1"));
 
         blogPost.Should().NotBeNull();
         blogPost.Should()
-                .BeEquivalentTo(testBlogEntities.blogPost1,
+                .BeEquivalentTo(blogPost1,
                                 options => options.Excluding(p => p.Categories)
                                                   .Excluding(p => p.Tags)
                                                   .WithEntityEquivalencyOptions());
