@@ -4,7 +4,12 @@
 # Workspace ID: 57db5f34-e7f0-42c0-86c4-bb981f96c880
 
 # Codex CLI Instructions
+
+> **All ContextStream rules below apply only when ContextStream tools are available in the current environment.** If they are not loaded, proceed with the platform's available tools (Glob, Grep, Read, Edit, Write, Bash, etc.) and ignore the "use ContextStream first" directives. The remainder of this document assumes the tools are present.
+
 ## 🚨 MANDATORY STARTUP: CONTEXT-FIRST FLOW 🚨
+
+If ContextStream tools are available, on the first message of every session call `init(...)` then `context(user_message="...")`. On subsequent messages, call `context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run. If ContextStream tools are unavailable, proceed with the platform's available tools.
 
 <contextstream_rules>
 
@@ -13,7 +18,7 @@
 | **First message in session** | `init()` → `context(user_message="<msg>")` BEFORE any other tool |
 | **Subsequent messages (default)** | `context(user_message="<msg>")` FIRST, then other tools |
 | **Narrow bypass** | Immediate read-only ContextStream calls are allowed only when prior context is fresh and no state-changing tool has run |
-| **Before Glob/Grep/Read/Search** | `search(mode="auto", query="...")` FIRST |
+| **Before Glob/Grep/Read/Search** | Use `search(mode="auto", query="...")` when available; otherwise use available local tools directly |
 
 </contextstream_rules>
 
@@ -102,12 +107,12 @@ STOP → Call search(mode="auto", query="...") FIRST
 - `Read(file)` for discovery → Use `search(mode="auto", query="...")` instead
 - `Task(subagent_type="Explore")` → Use `search(mode="auto")` instead
 
-✅ **ALWAYS DO THIS:**
+✅ **ALWAYS DO THIS (when ContextStream is available):**
 1. `search(mode="auto", query="what you're looking for")`
-2. Only use local tools (Glob/Grep/Read) if ContextStream returns **0 results**
+2. Use local tools (Glob/Grep/Read) if ContextStream is **unavailable, fails, times out, or returns 0 results**
 3. Use Read ONLY for exact file edits after you know the file path
 
-This applies to **EVERY search** throughout the **ENTIRE conversation**, not just the first message.
+This applies to **EVERY search** throughout the **ENTIRE conversation** when ContextStream tools are loaded — not just the first message.
 
 ---
 
@@ -121,7 +126,7 @@ This applies to **EVERY search** throughout the **ENTIRE conversation**, not jus
 **When `init` returns `indexing_status: "started"` or `"refreshing"`:**
 - Background indexing is running automatically
 - Search results will be available within seconds to minutes
-- **DO NOT fall back to local tools** - wait for ContextStream search to work
+- Prefer waiting for ContextStream search rather than falling back immediately; fall back to local tools only if it stays unavailable, errors, or returns 0 results after retry
 - If search returns 0 results initially, try again after a moment
 
 **Only manually trigger indexing if:**
@@ -345,7 +350,7 @@ session(action="capture", event_type="session_snapshot", title="Pre-compaction s
 
 **Graph data:** If graph queries (`dependencies`, `impact`) return empty, run `graph(action="ingest")` once.
 
-**NEVER fall back to local tools (Glob/Grep/Read) just because search returned 0 results on first try.** Retry first.
+**Don't fall back to local tools (Glob/Grep/Read) just because search returned 0 results on first try — retry first.** Falling back is appropriate when ContextStream is unavailable, the retry still returns 0 results, or the tools error out.
 
 ### Enhanced Context (Server-Side Warnings)
 
@@ -367,7 +372,7 @@ session(action="capture", event_type="session_snapshot", title="Pre-compaction s
 
 ### Search & Code Intelligence (ContextStream-first)
 
-⚠️ **STOP: Before using Search/Glob/Grep/Read/Explore** → Call `search(mode="auto")` FIRST. Use local tools ONLY if ContextStream returns 0 results.
+⚠️ **STOP: Before using Search/Glob/Grep/Read/Explore** → Call `search(mode="auto")` FIRST when ContextStream is available. Use local tools if ContextStream is unavailable, fails, times out, or returns 0 results.
 
 **❌ WRONG workflow (wastes tokens, slow):**
 ```
@@ -668,10 +673,11 @@ search(mode="auto", query="what you're looking for")
 - Then use local Read/Grep only on paths returned by ContextStream.
 
 ### When Local Tools Are OK:
+✅ ContextStream tools are unavailable in the current environment
 ✅ Project is not indexed
 ✅ Index is stale/outdated (>7 days old)
 ✅ ContextStream search returns 0 results
-✅ ContextStream returns errors
+✅ ContextStream returns errors or times out
 ✅ User explicitly requests local tools
 
 ### When to Use ContextStream Search:

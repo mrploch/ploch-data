@@ -1,0 +1,8 @@
+# Code owners for ploch-data.
+#
+# A review from @kploch is required on any pull request, because
+# `require_code_owner_reviews` is enabled on the protected `main` branch.
+# Bot accounts are not code owners, so their approvals do not satisfy
+# this requirement.
+
+* @kploch

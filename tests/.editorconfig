@@ -28,6 +28,7 @@ dotnet_diagnostic.IDE0052.severity = warning # Remove unused private members
 
 # SonarAnalyzer settings
 dotnet_diagnostic.s4487.severity = none # Unread "private" fields should be removed
+dotnet_diagnostic.s4261.severity = none # Methods that return Task should end with "Async" - not applicable to xUnit test methods whose names follow the Method_should_do_X convention
 
 # StyleCop settings
 dotnet_diagnostic.sa0001.severity = none # XML comment analysis is disabled due to project configuration

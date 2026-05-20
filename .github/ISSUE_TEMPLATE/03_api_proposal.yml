@@ -1,0 +1,95 @@
+name: API Proposal
+description: Propose a new public API addition or change to a Ploch.Data package.
+title: "[API Proposal]: "
+labels: [ "api-proposal", "triage" ]
+body:
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before you submit
+      options:
+        - label: I have searched [existing issues](https://github.com/mrploch/ploch-data/issues) for similar API proposals.
+          required: true
+
+  - type: dropdown
+    id: affected-package
+    attributes:
+      label: Target Package
+      description: Which package would this API belong to?
+      options:
+        - Ploch.Data.Model
+        - Ploch.Data.EFCore (GenericRepository / Unit of Work)
+        - Ploch.Data.EFCore.SqLite
+        - Ploch.Data.EFCore.SqlServer
+        - Ploch.Data.EFCore.IntegrationTesting
+        - Ploch.Data.StandardDataSets
+        - Ploch.Data.Utilities
+        - New package
+    validations:
+      required: true
+
+  - type: textarea
+    id: background
+    attributes:
+      label: Background and Motivation
+      description: Why is this API needed? What scenario does it enable?
+    validations:
+      required: true
+
+  - type: textarea
+    id: api-proposal
+    attributes:
+      label: Proposed API
+      description: |
+        Define the new or modified public API surface. Include types, methods, interfaces,
+        and extension methods. Mark new additions clearly.
+      value: |
+        ```csharp
+        namespace Ploch.Data;
+
+        // New interface / class / extension method:
+        public interface IExample
+        {
+            // TODO: Define API surface
+        }
+        ```
+      render: csharp
+    validations:
+      required: true
+
+  - type: textarea
+    id: usage
+    attributes:
+      label: Usage Examples
+      description: Show how a consumer would use the proposed API.
+      value: |
+        ```csharp
+        // Example: How a consumer would use this API
+        ```
+      render: csharp
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Designs
+      description: What other approaches did you consider? Why is this design preferred?
+
+  - type: dropdown
+    id: breaking-change
+    attributes:
+      label: Breaking Change?
+      description: Does this modify or remove existing public API?
+      options:
+        - "No — purely additive"
+        - "Yes — modifies existing API"
+        - "Yes — removes existing API"
+    validations:
+      required: true
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and Considerations
+      description: Any risks, edge cases, performance concerns, or compatibility issues to consider.

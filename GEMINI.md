@@ -3,21 +3,21 @@
 # Workspace ID: 57db5f34-e7f0-42c0-86c4-bb981f96c880
 
 # ContextStream Rules
+**MANDATORY STARTUP:** If ContextStream tools are available, on the first message of every session call `init(...)` then `context(user_message="...")`. On subsequent messages, call `context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run. If ContextStream tools are unavailable, proceed with the platform's available tools.
 
-**MANDATORY STARTUP:** On the first message of EVERY session call `init(...)` then `context(user_message="...")`. On subsequent messages, call `context(user_message="...")` first by default. A narrow bypass is allowed only for immediate read-only ContextStream calls when prior context is still fresh and no state-changing tool has run.
-
-## Required Tool Calls
+## Required Tool Calls (when ContextStream tools are available)
 
 1. **First message in session**: Call `init(folder_path="<project_path>")` then `context(user_message="...", session_id="<id>")`
 2. **Subsequent messages (default)**: Call `context(user_message="...", session_id="<id>")` first. Narrow bypass: immediate read-only ContextStream calls with fresh context + no state changes.
-3. **Before file search**: Call `search(mode="auto", query="...")` before local tools
+3. **Before file search**: Call `search(mode="auto", query="...")` before local tools. If ContextStream is unavailable, use the platform's local tools directly.
 
 **Read-only examples** (default: call `context(...)` first; narrow bypass only for immediate read-only ContextStream calls when context is fresh and no state-changing tool has run): `workspace(action="list"|"get"|"create")`, `memory(action="list_docs"|"list_events"|"list_todos"|"list_tasks"|"list_transcripts"|"list_nodes"|"decisions"|"get_doc"|"get_event"|"get_task"|"get_todo"|"get_transcript")`, `session(action="get_lessons"|"get_plan"|"list_plans"|"recall")`, `help(action="version"|"tools"|"auth")`, `project(action="list"|"get"|"index_status")`, `reminder(action="list"|"active")`, any read-only data query
 
 **Common queries — use these exact tool calls:**
-
 - "list lessons" / "show lessons" → `session(action="get_lessons")`
+- "save lesson" / "remember this lesson" / "lesson learned" / "I made a mistake" → `session(action="capture_lesson", title="...", trigger="...", impact="...", prevention="...", severity="low|medium|high|critical")` — **NEVER store lessons in local files** (e.g. `~/.claude/.../memory/`, `.cursorrules`, scratch markdown). Lessons live in ContextStream so they auto-surface as `[LESSONS_WARNING]` on future turns and across sessions.
 - "list decisions" / "show decisions" / "how many decisions" → `memory(action="decisions")`
+- "save decision" / "decided to" → `session(action="capture", event_type="decision", title="...", content="...")`
 - "list docs" → `memory(action="list_docs")`
 - "list tasks" → `memory(action="list_tasks")`
 - "list todos" → `memory(action="list_todos")`
@@ -25,8 +25,12 @@
 - "list events" → `memory(action="list_events")`
 - "show snapshots" / "list snapshots" → `memory(action="list_events", event_type="session_snapshot")`
 - "save snapshot" → `session(action="capture", event_type="session_snapshot", title="...", content="...")`
+- "what did we do last session" / "past sessions" / "previous work" / "pick up where we left off" → `session(action="recall", query="...")` (ranked context) OR `memory(action="list_transcripts", limit=10)` (chronological list)
+- "search past sessions" / "find in past transcripts" / "when did we discuss X" → `memory(action="search_transcripts", query="...")` — full-text search over saved conversation transcripts
+- "show transcript" / "read session <id>" → `memory(action="get_transcript", transcript_id="...")`
 - "list skills" / "show my skills" → `skill(action="list")`
-- "create a skill" → `skill(action="create", name="...", instruction_body="...", trigger_patterns=[...])`
+- "create a skill" → `skill(action="create", name="...", instruction_body="...", project_id="<current_project_id>", trigger_patterns=[...])`
+- "update a skill" → `skill(action="update", name="...", instruction_body="...", change_summary="...")`
 - "run skill" / "use skill" → `skill(action="run", name="...")`
 - "import skills" / "import my CLAUDE.md" → `skill(action="import", file_path="...", format="auto")`
 
@@ -43,9 +47,75 @@ If the `instruct` tool is available, run `instruct(action="get", session_id="...
 - Transcript capture is optional and OFF by default. Enable per session with `save_exchange=true` (and `session_id`), disable with `save_exchange=false`.
 - Default context-first keeps state reliable; the narrow read-only bypass avoids unnecessary repeats
 
+## Finding Information — Search ContextStream Knowledge, Not Just Code
+
+**Auto-grounding:** Every `context(user_message="...")` call may include a `[GROUNDING]` block — pre-ranked prior work (transcripts, snapshots, docs, decisions, lessons) for **this** message. When you see it, read those hits **before** fanning out into code search; skipping search entirely is often correct. Outside `context()`, use `session(action="ground", user_message="...")` for the same one-shot bundle (recall + docs + decisions + lessons + skills + git).
+
+When you need information, do not default to code search or trial-and-error. ContextStream stores far more than source — docs, decisions, lessons, preferences, plans, tasks, todos, skills, memory nodes, and full session transcripts all live behind dedicated tools. Pick the right knowledge surface by what you're looking for:
+
+- **Source code / symbol / file** → `search(mode="auto", query="...")`
+- **Why we did X / past decisions** → `memory(action="decisions", query="...")`
+- **Architecture / spec / design doc** → `memory(action="list_docs")` then `memory(action="get_doc", doc_id="title or UUID")`
+- **Prior mistakes ("never do X again")** → `session(action="get_lessons", query="...")`
+- **User preferences / conventions / constraints** → already surfaced as `[PREFERENCE]`; also `memory(action="list_nodes", node_type="preference")` or `memory(action="list_nodes", node_type="constraint")`
+- **Open work / tasks / todos** → `memory(action="list_tasks")` / `memory(action="list_todos")`
+- **Active or past plans** → `session(action="list_plans")` then `session(action="get_plan", plan_id="...")`
+- **Reusable workflows / skills** → `skill(action="list")` then `skill(action="run", name="...")`
+- **"What did we do before?" (continuation work)** → `session(action="recall", query="...")` — see the Past Sessions ladder below
+- **Unsure which surface** → `memory(action="search", query="...")` — hybrid across memory nodes + docs; falls back to `session(action="recall", query="...")` for transcript/snapshot coverage
+
+Default assumption: if the user asks "how do we do X?", "why did we choose Y?", "what's the pattern for Z?", or "did we already decide about Q?" — the answer is likely in a doc, decision, lesson, plan, or skill, NOT in the code. Check the right knowledge surface BEFORE reading source files or re-deriving the answer.
+
+Before guessing, improvising, or struggling through a workflow you don't fully know:
+
+- Start with `context(...)` and obey `[GROUNDING]` (prior-work anchors), `[MATCHED_SKILLS]`, `[LESSONS_WARNING]`, `[PREFERENCE]`, `[DECISIONS]`, `[MEMORY]`, and `<system-reminder>` output — those are already filtered to the current task
+- Treat `[LESSONS_WARNING]` as active working instructions for the current task, not optional background context; apply them immediately and keep them in mind until the task is done
+- Prefer surfaced ContextStream knowledge over inventing a new workflow from memory
+
+## Past Sessions Are Queryable — USE THEM
+
+### Auto-Grounding (in `context()`)
+
+When `context()` returns `[GROUNDING]`, those lines are **pre-ranked prior work for your current message** — read them first (transcript/snapshot/doc/decision/lesson entry points). Skipping code search is often correct. For the same bundle **outside** `context()`, call `session(action="ground", user_message="...")`.
+
+Transcripts for every turn of every session are captured and indexed automatically. Session snapshots bookmark turning points. **Before asking the user what you did last time, or re-deriving context you built together previously, check the transcript + snapshot layer.** It's fast, it's complete, and the user is paying for it.
+
+Triggers to query past sessions:
+
+- User says "last time", "previous", "yesterday", "earlier", "we decided", "we talked about", "pick up where we left off", "what were we working on"
+- You have a task that's clearly a continuation (e.g. finishing a refactor that's half-done on disk)
+- You're about to ask a clarifying question whose answer is likely in a prior session
+- You're unsure whether a decision or approach has already been made
+
+Escalation ladder — walk it in order and stop at the first step that answers the question:
+
+1. **`session(action="recall", query="<what you're continuing>")`** — always the first call. Ranked fusion across transcripts, snapshots, docs, and decisions. Covers 80% of "what did we do before" questions.
+
+2. **`memory(action="search_transcripts", query="<keyword or phrase>")`** — fall through when `recall` returns thin or off-topic results, or when you need every mention of a specific term. Full-text search across ALL saved transcripts.
+
+3. **`memory(action="list_events", event_type="session_snapshot")`** — when you want the turning-point bookmarks (manual + auto pre-compaction captures). Useful for "what state were we in at the end of <session>" questions that `recall` misses because the answer isn't in conversational text.
+
+4. **`memory(action="list_transcripts", limit=10)`** — when you need a chronological index of recent sessions (titles, timestamps, IDs). Use when the user wants to know "when did we last work on X".
+
+5. **`memory(action="get_transcript", transcript_id="<uuid>")`** — read a full past session end-to-end. Use only after the steps above pointed you at a specific transcript ID and you need the complete exchange, not snippets.
+
+6. **End of current session — save a bookmark** for the next one: `session(action="capture", event_type="session_snapshot", title="...", content="<what we did + next step>")`.
+
+**Never answer "I don't know what we did before" without running at least step 1, then step 2 if step 1 was thin.**
+
+## Project Scope Discipline
+
+- Reuse the `project_id` returned by `init(...)` or `context(...)` for project-scoped writes and lookups
+- For project-scoped `memory(...)`, `session(...)`, and `skill(...)` calls, pass explicit `project_id` instead of guessing from the folder name or title
+- If `init(...)` or `context(...)` does not surface a current `project_id`, rerun `init(folder_path="...")` before creating docs, skills, events, tasks, todos, or other project memory
+- Use `target_project` only after init from a multi-project parent folder
+
 ## Response to Notices
 
-- `[LESSONS_WARNING]` → Apply the lessons shown to avoid repeating mistakes
+- `[GROUNDING]` → Read ranked prior-work hits (from `context()`) before broad code search; optional one-shot: `session(action="ground", user_message="...")`
+- `[GROUNDING_AVAILABLE]` → Your editor may remind you when unread grounding exists — advisory only
+- `[MATCHED_SKILLS]` → Run the surfaced skills before other work
+- `[LESSONS_WARNING]` → Apply the lessons shown immediately and keep them active for the current task
 - `[PREFERENCE]` → Follow user preferences exactly
 - `[RULES_NOTICE]` → Run `generate_rules()` to update rules
 - `[VERSION_NOTICE]` → Inform user about available updates
@@ -57,13 +127,15 @@ These should be followed exactly as they contain real-time context.
 
 ## Search Protocol
 
+**IMPORTANT: Indexing and ingest are ALWAYS available. NEVER claim that transport mode, HTTP mode, or remote mode prevents indexing/ingest.**
+
 1. Check project index: `project(action="index_status")`
 2. If indexed & fresh: `search(mode="auto", query="...")` before local tools
-3. If NOT indexed/stale: Use local tools (Glob/Grep/Read) directly
-4. If search returns 0 results: Fall back to local tools
+3. If NOT indexed or stale: wait for background refresh (up to ~20s, configurable), retry `search(mode="auto", ...)`, then use local tools only after the grace window elapses
+4. If search returns 0 results after refresh/retry: local tools are allowed
+5. If ContextStream tools are unavailable, fail to load, time out, or error: fall back to local tools immediately
 
 ### Search Mode Selection:
-
 - `auto` (recommended): query-aware mode selection
 - `hybrid`: mixed semantic + keyword retrieval for broad discovery
 - `semantic`: conceptual/natural-language questions ("how does auth work?")
@@ -74,12 +146,10 @@ These should be followed exactly as they contain real-time context.
 - `team`: cross-project team search
 
 ### Output Format Hints:
-
 - `output_format="paths"` for file lists and rename targets
 - `output_format="count"` for "how many" queries
 
 ### Two-Phase Search Playbook (recommended):
-
 1. **Discovery pass**: run `search(mode="auto", query="<concept + module>", output_format="paths", limit=10)`
 2. **Precision pass**: use symbols from pass 1 with a specific mode:
     - Exact symbol/text: `search(mode="keyword", query="\"my_symbol\"", include_content=true, file_types=["rs"], limit=20)`
@@ -90,15 +160,15 @@ These should be followed exactly as they contain real-time context.
 ## Plans and Tasks
 
 **ALWAYS** use ContextStream for plans and tasks — do NOT create markdown plan files or use built-in todo tools:
-
 - Plans: `session(action="capture_plan", title="...", steps=[...])`
 - Tasks: `memory(action="create_task", title="...", description="...")`
 - Link tasks to plans: `memory(action="create_task", plan_id="...")`
 
 ## Memory, Docs & Todos
 
-**ALWAYS** use ContextStream for memory, documents, and todos — NOT editor built-in tools or local files:
+**ALWAYS** use ContextStream for memory, lessons, decisions, documents, and todos — NOT editor built-in tools, `~/.claude/.../memory/`, `.cursorrules`, or local files. Local-file storage is invisible to the lesson/preference/skill auto-surfacing pipeline that fires on every future turn.
 
+- Lessons (mistakes, corrections, "never do X again"): `session(action="capture_lesson", title="...", trigger="...", impact="...", prevention="...", severity="low|medium|high|critical", category="...")`
 - Decisions: `session(action="capture", event_type="decision", title="...", content="...")`
 - Notes/insights: `session(action="capture", event_type="note|insight", title="...", content="...")`
 - Facts/preferences: `memory(action="create_node", node_type="fact|preference", title="...", content="...")`
@@ -106,15 +176,21 @@ These should be followed exactly as they contain real-time context.
 - Todos: `memory(action="create_todo", title="...", todo_priority="high|medium|low")`
   Do NOT use `create_memory`, `TodoWrite`, `todo_list`, or local file writes for persistence.
 
-## Skills
+## Skills (IMPORTANT — Do Not Ignore Matched Skills)
+
+When `context()` returns `[MATCHED_SKILLS]`, you **MUST run** the listed skills via `skill(action="run", name="...")`.
+
+- Skills marked ⚡ (high-priority, priority ≥ 80) are **mandatory** — run them immediately before other work
+- Skills marked ▶ (recommended, priority ≥ 60) should be run unless clearly irrelevant
+- Skills marked ○ (available) are optional but often helpful
 
 Reusable instruction + action bundles that persist across projects and sessions:
-
 - Browse: `skill(action="list")` or `skill(action="list", scope="team")`
 - Create: `skill(action="create", name="...", instruction_body="...", trigger_patterns=[...])`
+- Update: `skill(action="update", name="...", instruction_body="...", change_summary="...")` (name or `skill_id`)
 - Run: `skill(action="run", name="...")` — executes the skill's action pipeline
 - Import: `skill(action="import", file_path="CLAUDE.md", format="auto")` — imports from any rules file
-- Skills auto-activate when their trigger keywords match the user's message. No explicit call needed.
+- Skills auto-activate when their trigger keywords match the user's message. The `context()` response surfaces them.
 
 ## Code Search
 
@@ -127,17 +203,24 @@ Use `search(include_content=true)` to get inline code snippets in results.
 ## Context Pressure
 
 When `context()` returns `context_pressure.level: "high"`:
-
 - Save a session snapshot before compaction
 - `session(action="capture", event_type="session_snapshot", title="...", content="...")`
 - After compaction: `init(folder_path="...", is_post_compact=true)` to restore
 
 ---
-
 ## IMPORTANT: No Hooks Available
 
 **This editor does NOT have hooks to enforce ContextStream behavior.**
 You MUST follow these rules manually - there is no automatic enforcement.
+
+## ContextStream Knowledge First
+
+**Before guessing or struggling through an unfamiliar workflow, check ContextStream first.**
+
+- Start with `context(...)` and follow `[MATCHED_SKILLS]`, `[LESSONS_WARNING]`, `[PREFERENCE]`, and `<system-reminder>` output
+- Treat `[LESSONS_WARNING]` as active working instructions for the current task, not optional background context
+- If the task is unfamiliar, process-heavy, or likely documented already, inspect `skill(action="list")`, `memory(action="list_docs")`, `session(action="get_lessons")`, or `memory(action="decisions")` before trial-and-error
+- If `context()` returns `[MATCHED_SKILLS]`, run the listed skills before other work
 
 ---
 
@@ -156,6 +239,7 @@ You MUST follow these rules manually - there is no automatic enforcement.
 3. **Call `context(user_message="<first_message>", session_id="<id>")`**
    - Gets task-specific rules, lessons, and preferences
    - Check for [LESSONS_WARNING], [PREFERENCE], [RULES_NOTICE]
+   - If [LESSONS_WARNING] appears, treat those lessons as mandatory instructions for the task until it is finished
 
 4. **Default behavior:** call `context(...)` first on each message. Narrow bypass is allowed only for immediate read-only ContextStream calls when previous context is still fresh and no state-changing tool has run.
 
@@ -173,13 +257,11 @@ context(user_message="<user's message>", save_exchange=true, session_id="<sessio
 ```
 
 ### Disable for this chat:
-
 ```
 context(user_message="<user's message>", save_exchange=false, session_id="<session-id>")
 ```
 
 ### Default policy via MCP config env:
-
 - `CONTEXTSTREAM_TRANSCRIPTS_ENABLED="true|false"`
 - `CONTEXTSTREAM_HOOK_TRANSCRIPTS_ENABLED="true|false"`
 
@@ -196,11 +278,12 @@ context(user_message="<user's message>", save_exchange=false, session_id="<sessi
 **There is NO automatic file indexing in this editor.**
 You MUST manage indexing manually:
 
+**IMPORTANT: Indexing and ingest are ALWAYS available. NEVER claim that transport mode, HTTP mode, or remote mode prevents indexing/ingest operations. Both `project(action="index")` and `project(action="ingest_local")` work in all configurations.**
+
 ### After Creating/Editing Files:
 ```
 project(action="index")
 ```
-
 If folder context is active, this resolves the current repo and uses the local ingest path automatically.
 
 ### To Target A Specific Folder Or Recover From Stale Scope:
@@ -225,10 +308,9 @@ project(action="index_status")
 ```
 
 ### Search Protocol:
-
 - **IF indexed & fresh:** `search(mode="auto", query="...")` before local tools
-- **IF NOT indexed or stale (>7 days):** Use local tools directly
-- **IF search returns 0 results:** Fall back to local tools
+- **IF NOT indexed or stale (>7 days):** wait up to ~20s for background refresh, retry `search(mode="auto", ...)`, then allow local tools only after the grace window elapses
+- **IF search returns 0 results after retry/window:** local tools are allowed
 
 ### Choose Search Mode Intelligently:
 - `auto` (recommended): query-aware mode selection
@@ -254,9 +336,9 @@ project(action="index_status")
 
 ### When Local Tools Are OK:
 
-- Project is not indexed
-- Index is stale/outdated (>7 days old)
-- ContextStream search returns 0 results or errors
+- ContextStream tools are unavailable in the current environment
+- The stale/not-indexed grace window has elapsed (~20s default, configurable)
+- ContextStream search still returns 0 results or errors after retry
 - User explicitly requests local tools
 
 ---
@@ -335,8 +417,23 @@ npm install -g @contextstream/mcp-server@latest
 
 ---
 
+
+---
+
+## Antigravity-Specific Reliability Notes
+
+- Antigravity currently has no documented lifecycle hooks for ContextStream enforcement.
+- Treat ContextStream-first behavior as mandatory policy: run `context(...)` first, then `search(mode="auto", ...)` before local discovery.
+- Keep `mcp_config.json` valid and minimal: preserve non-ContextStream servers and only update the `contextstream` block.
+- If ContextStream appears skipped, verify:
+    1. MCP server status is healthy in Antigravity settings
+    2. Project is indexed and `search(mode="auto", ...)` is retried before local fallbacks
+    3. Rule files contain the current ContextStream managed block
+
 For comprehensive long-form rules, import `@./.contextstream/rules.md` where supported.
 </contextstream>
+
+
 <!-- END ContextStream -->
 
 ---
