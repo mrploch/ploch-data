@@ -58,7 +58,7 @@ public class ReadWriteRepositoryDeleteByIdTests : GenericRepositoryDataIntegrati
     {
         // Arrange — seed via a separate context so the read below re-hydrates from the database
         // rather than being served the seeded entities from the read context's change tracker.
-        var (blog, blogPost1, _) = await RepositoryHelper.AddTestBlogEntities(CreateRootDbContext);
+        var (blog, blogPost1, _) = await RepositoryHelper.AddTestBlogEntitiesAsync(CreateRootDbContext);
 
         var repository = CreateReadRepository<Blog, int>();
         var result = repository.GetById(blog.Id, q => q.Include(q => q.BlogPosts).ThenInclude(bp => bp.Tags).Include(q => q.BlogPosts).ThenInclude(bp => bp.Categories));

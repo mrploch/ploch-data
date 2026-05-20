@@ -67,7 +67,7 @@ public static class RepositoryHelper
     /// A task that resolves to a tuple of the seeded <see cref="Blog" /> and the two <see cref="BlogPost" />
     /// instances attached to it.
     /// </returns>
-    public static async Task<(Blog, BlogPost, BlogPost)> AddTestBlogEntities(DbContext dbContext)
+    public static async Task<(Blog, BlogPost, BlogPost)> AddTestBlogEntitiesAsync(DbContext dbContext)
     {
         var (blog, blogPost1, blogPost2) = EntitiesBuilder.BuildBlogEntity();
 
@@ -93,11 +93,11 @@ public static class RepositoryHelper
     /// A task that resolves to a tuple of the seeded <see cref="Blog" /> and the two <see cref="BlogPost" />
     /// instances attached to it.
     /// </returns>
-    public static async Task<(Blog, BlogPost, BlogPost)> AddTestBlogEntities(Func<DbContext> dbContextFactory)
+    public static async Task<(Blog, BlogPost, BlogPost)> AddTestBlogEntitiesAsync(Func<DbContext> dbContextFactory)
     {
         await using var dbContext = dbContextFactory();
 
-        return await AddTestBlogEntities(dbContext);
+        return await AddTestBlogEntitiesAsync(dbContext);
     }
 
     public static IEnumerable<UserIdea> AddTestUserIdeasEntities(IReadWriteRepository<UserIdea, int> userIdeasRepository)
@@ -107,7 +107,7 @@ public static class RepositoryHelper
         userIdeasRepository.Add(userIdea1);
         userIdeasRepository.Add(userIdea2);
 
-        return new[] { userIdea1, userIdea2 };
+        return [userIdea1, userIdea2];
     }
 
     public static async Task<(Blog blog, BlogPost[] blogPosts)> AddAsyncTestBlogEntitiesWithManyPostsAsync(IReadWriteRepositoryAsync<Blog, int> blogReadWriteRepository,
@@ -252,7 +252,7 @@ public static class RepositoryHelper
         await userIdeasReadWriteRepository.AddAsync(userIdea1);
         await userIdeasReadWriteRepository.AddAsync(userIdea2);
 
-        return new[] { userIdea1, userIdea2 };
+        return [userIdea1, userIdea2];
     }
 
     /// <summary>
@@ -273,7 +273,7 @@ public static class RepositoryHelper
         await dbContext.AddAsync(userIdea2);
         await dbContext.SaveChangesAsync();
 
-        return new[] { userIdea1, userIdea2 };
+        return [userIdea1, userIdea2];
     }
 
     /// <summary>
