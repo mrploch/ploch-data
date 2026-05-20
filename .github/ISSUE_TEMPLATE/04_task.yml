@@ -1,0 +1,65 @@
+name: Task
+description: Internal task for maintenance, refactoring, CI/CD, documentation, or other non-feature work.
+title: "[Task]: "
+labels: [ "task" ]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be done and why?
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Define what "done" looks like.
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-area
+    attributes:
+      label: Affected Area
+      description: What part of the project does this task affect?
+      options:
+        - Source code
+        - Tests
+        - CI/CD pipeline
+        - Documentation
+        - Build configuration
+        - Dependencies
+        - Multiple areas
+    validations:
+      required: false
+
+  - type: dropdown
+    id: affected-repos
+    attributes:
+      label: Affected Repositories
+      description: Does this task affect other repositories in the MrPloch workspace?
+      multiple: true
+      options:
+        - ploch-data only
+        - ploch-common
+        - ploch-lists
+        - ploch-endpoints
+        - ploch-groupmatters
+        - mrploch-development
+        - ploch-github-actions
+        - ploch-templates-dotnet-repository
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any related issues, PRs, documentation, or context.

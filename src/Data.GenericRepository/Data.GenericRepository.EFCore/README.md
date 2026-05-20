@@ -19,11 +19,21 @@ Entity Framework Core implementations of the Generic Repository and Unit of Work
 
 ## Quick Start
 
+For most applications, use one of the provider-specific packages instead of this package directly:
+- `Ploch.Data.GenericRepository.EFCore.SqLite` -- SQLite
+- `Ploch.Data.GenericRepository.EFCore.SqlServer` -- SQL Server
+
 ```csharp
-// Register in DI
+// Recommended: use a provider-specific package for one-call registration
+using Ploch.Data.GenericRepository.EFCore.DependencyInjection;
+builder.Services.AddDbContextWithRepositories<MyDbContext>();
+
+// Alternative: manual registration with this package
 services.AddDbContext<MyDbContext>(options => options.UseSqlite(connectionString));
 services.AddRepositories<MyDbContext>();
+```
 
+```csharp
 // Use repositories
 public class MyService(IReadWriteRepositoryAsync<Product, int> repo)
 {
@@ -42,4 +52,5 @@ public class MyService(IReadWriteRepositoryAsync<Product, int> repo)
 
 ## Documentation
 
-See the [Generic Repository Guide](../../../docs/generic-repository.md) for detailed documentation including all read/write operations, Unit of Work patterns, specifications, and error handling.
+- [Dependency Injection Guide](../../../docs/dependency-injection.md) -- all DI registration approaches, provider switching, and lifecycle plugins
+- [Generic Repository Guide](../../../docs/generic-repository.md) -- all read/write operations, Unit of Work patterns, specifications, and error handling

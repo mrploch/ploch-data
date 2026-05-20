@@ -1,5 +1,4 @@
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
-using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;

@@ -13,6 +13,11 @@
     <PackageReference Remove="Ploch.Data.EFCore.SqLite" />
     <PackageReference Remove="Ploch.Data.EFCore.SqlServer" />
     <PackageReference Remove="Ploch.Data.GenericRepository.EFCore" />
+    <!-- Only one of the DI packages can be referenced at a time (they share the same
+         namespace and method signatures). Remove both, but only add the one the SampleApp
+         actually uses as a ProjectReference below. -->
+    <PackageReference Remove="Ploch.Data.GenericRepository.EFCore.SqLite" />
+    <PackageReference Remove="Ploch.Data.GenericRepository.EFCore.SqlServer" />
     <PackageReference Remove="Ploch.Data.GenericRepository.EFCore.IntegrationTesting" />
   </ItemGroup>
 
@@ -24,6 +29,9 @@
     <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.EFCore.SqLite\Ploch.Data.EFCore.SqLite.csproj" />
     <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.EFCore.SqlServer\Ploch.Data.EFCore.SqlServer.csproj" />
     <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore\Ploch.Data.GenericRepository.EFCore.csproj" />
+    <!-- Only add the SqLite DI project — the SampleApp uses SQLite. Adding both would
+         cause an ambiguity error because they share the same namespace and method names. -->
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.SqLite\Ploch.Data.GenericRepository.EFCore.SqLite.csproj" />
     <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\src\Data.GenericRepository\Data.GenericRepository.EFCore.IntegrationTesting\Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
   </ItemGroup>
 </Project>

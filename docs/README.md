@@ -8,7 +8,8 @@ Comprehensive documentation for the Ploch.Data libraries -- a set of .NET packag
 |----------|-------------|
 | [Getting Started](getting-started.md) | Quick start guides for common use cases |
 | [Data Model](data-model.md) | Complete guide to `Ploch.Data.Model` interfaces and common types |
-| [Generic Repository](generic-repository.md) | Repository and Unit of Work patterns, DI registration, Specification support |
+| [Generic Repository](generic-repository.md) | Repository and Unit of Work patterns, Specification support |
+| [Dependency Injection](dependency-injection.md) | DI registration, provider switching, lifecycle plugins, connection string configuration |
 | [Data Project Setup](data-project-setup.md) | Step-by-step guide for creating Data and provider projects |
 | [Integration Testing](integration-testing.md) | Testing with in-memory SQLite, base test classes, and patterns |
 | [Extending the Libraries](extending.md) | Custom repositories, new providers, and extensibility points |
@@ -24,7 +25,8 @@ Comprehensive documentation for the Ploch.Data libraries -- a set of .NET packag
 | `Ploch.Data.EFCore.SqlServer` | SQL Server provider: `SqlServerDbContextFactory`, `SqlServerDbContextConfigurator` |
 | `Ploch.Data.GenericRepository` | Provider-agnostic repository and Unit of Work interfaces (`IReadRepositoryAsync`, `IReadWriteRepositoryAsync`, `IUnitOfWork`) |
 | `Ploch.Data.GenericRepository.EFCore` | EF Core implementations of the Generic Repository and Unit of Work, plus DI registration |
-| `Ploch.Data.GenericRepository.EFCore.DependencyInjection` | `GenericRepositoriesServicesBundle` for the Ploch.Common `ServicesBundle` pattern |
+| `Ploch.Data.GenericRepository.EFCore.SqLite` | One-call DI registration for SQLite (DbContext + repositories + lifecycle) |
+| `Ploch.Data.GenericRepository.EFCore.SqlServer` | One-call DI registration for SQL Server (DbContext + repositories + lifecycle) |
 | `Ploch.Data.GenericRepository.EFCore.Specification` | Ardalis.Specification integration for composable, reusable query logic |
 | `Ploch.Data.EFCore.IntegrationTesting` | `DataIntegrationTest<TDbContext>` base class for EF Core integration tests |
 | `Ploch.Data.GenericRepository.EFCore.IntegrationTesting` | `GenericRepositoryDataIntegrationTest<TDbContext>` base class with repository/UoW helpers |

@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ploch.Data.EFCore.SqLite;
 
 namespace Ploch.Data.EFCore.IntegrationTesting;
@@ -13,6 +14,7 @@ namespace Ploch.Data.EFCore.IntegrationTesting;
 public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbContext : DbContext
 {
     private readonly IDbContextConfigurator? _dbContextConfigurator;
+    private bool _disposed;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DataIntegrationTest{TDbContext}" /> class.
@@ -32,7 +34,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         dbContextConfigurator ??= new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory);
         _dbContextConfigurator = dbContextConfigurator;
 
-        (ServiceProvider, DbContext) =
+        (RootServiceProvider, ScopedServiceProvider, DbContext) =
             DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(serviceCollection, dbContextConfigurator);
     }
 
@@ -46,7 +48,17 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     Provides access to the configured service provider.
     ///     This is used to resolve dependencies and services required during integration testing.
     /// </summary>
-    protected IServiceProvider ServiceProvider { get; }
+    protected IServiceProvider ScopedServiceProvider { get; }
+
+    /// <summary>
+    ///     Gets the root (non-scoped) service provider.
+    /// </summary>
+    /// <remarks>
+    ///     Use this when you need to create additional scopes or resolve services
+    ///     outside the default test scope. For most test code, prefer
+    ///     <see cref="ScopedServiceProvider" /> instead.
+    /// </remarks>
+    protected IServiceProvider RootServiceProvider { get; }
 
     /// <summary>
     ///     Disposes of the resources used by the current instance of the
@@ -59,14 +71,58 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     }
 
     /// <summary>
+    ///     Creates a new <typeparamref name="TDbContext" /> instance from the root service provider.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Use this when a test needs an additional context instance that is separate from
+    ///         the default scoped <see cref="DbContext" /> exposed by this class.
+    ///     </para>
+    ///     <para>
+    ///         The returned context should be disposed by the caller when no longer needed.
+    ///     </para>
+    ///     <example>
+    ///         <code>
+    ///         using var rootContext = CreateRootDbContext();
+    ///         var total = await rootContext.Set&lt;MyEntity&gt;().CountAsync();
+    ///         </code>
+    ///     </example>
+    /// </remarks>
+    /// <returns>A <typeparamref name="TDbContext" /> resolved from <see cref="RootServiceProvider" />.</returns>
+    protected TDbContext CreateRootDbContext()
+    {
+        var dbContextFactory = RootServiceProvider.GetRequiredService<IDbContextFactory<TDbContext>>();
+
+        return dbContextFactory.CreateDbContext();
+    }
+
+    /// <summary>
     ///     Configures the required services for the test.
     /// </summary>
     /// <remarks>
-    ///     This method should be overridden in derived classes to configure additional services required for the test.
+    ///     <para>
+    ///         This method should be overridden in derived classes to configure additional
+    ///         services required for the test.
+    ///     </para>
+    ///     <para>
+    ///         By default, it registers the
+    ///         <see cref="SqLiteDbContextCreationLifecycle" /> as the
+    ///         <see cref="IDbContextCreationLifecycle" /> implementation, because
+    ///         the test infrastructure defaults to an in-memory SQLite database.
+    ///         This ensures the <c>DateTimeOffset</c> properties fix is applied
+    ///         automatically.
+    ///     </para>
+    ///     <para>
+    ///         If a derived class registers a different <see cref="IDbContextCreationLifecycle" />
+    ///         before calling <c>base.ConfigureServices</c>, the existing registration
+    ///         is preserved (this method uses <c>TryAddSingleton</c>).
+    ///     </para>
     /// </remarks>
     /// <param name="services">The service collection.</param>
     protected virtual void ConfigureServices(IServiceCollection services)
-    { }
+    {
+        services.TryAddSingleton<IDbContextCreationLifecycle, SqLiteDbContextCreationLifecycle>();
+    }
 
     /// <summary>
     ///     Releases the unmanaged resources used by the <see cref="DataIntegrationTest{TDbContext}" />
@@ -77,13 +133,26 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     /// </param>
     protected virtual void Dispose(bool disposing)
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         if (disposing)
         {
             DbContext.Dispose();
 
-            if (ServiceProvider is IDisposable disposableProvider)
+            // Dispose the scope first for fine-grained ordering, then the root — the root
+            // would cascade-dispose its scopes anyway, but explicit ordering is cheaper than
+            // relying on container semantics across providers.
+            if (ScopedServiceProvider is IDisposable disposableScope)
             {
-                disposableProvider.Dispose();
+                disposableScope.Dispose();
+            }
+
+            if (RootServiceProvider is IDisposable disposableRoot)
+            {
+                disposableRoot.Dispose();
             }
 
             if (_dbContextConfigurator is IDisposable disposableConfigurator)
@@ -91,5 +160,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
                 disposableConfigurator.Dispose();
             }
         }
+
+        _disposed = true;
     }
 }

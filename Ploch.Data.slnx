@@ -6,8 +6,26 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/docs/">
+    <File Path="docs/architecture.md" />
+    <File Path="docs/data-model.md" />
+    <File Path="docs/data-project-setup.md" />
+    <File Path="docs/dependency-injection.md" />
+    <File Path="docs/extending.md" />
+    <File Path="docs/Generic Repositories.png" />
+    <File Path="docs/generic-repository.md" />
+    <File Path="docs/GenericRepositories.svg" />
+    <File Path="docs/getting-started.md" />
+    <File Path="docs/Hierarchical Model.png" />
+    <File Path="docs/Hierarchical Model.svg" />
+    <File Path="docs/integration-testing.md" />
+    <File Path="docs/Ploch.Data.md" />
+    <File Path="docs/README.md" />
+  </Folder>
   <Folder Name="/GenericRepository/">
     <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTesting/Ploch.Data.GenericRepository.EFCore.IntegrationTesting.csproj" />
+    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/Ploch.Data.GenericRepository.EFCore.SqLite.csproj" />
+    <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/Ploch.Data.GenericRepository.EFCore.SqlServer.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository.EFCore/Ploch.Data.GenericRepository.EFCore.csproj" />
     <Project Path="src/Data.GenericRepository/Data.GenericRepository/Ploch.Data.GenericRepository.csproj" />
     <File Path="src/Data.GenericRepository/README.md" />
@@ -23,6 +41,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
+    <Project Path="../ploch-common/src/Common.DependencyInjection/Ploch.Common.DependencyInjection.csproj" />
     <Project Path="../ploch-common/src/Common/Ploch.Common.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
@@ -33,6 +52,7 @@
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
+    <Project Path="../ploch-common/src/TestingSupport.FluentAssertions/Ploch.TestingSupport.FluentAssertions.csproj" />
     <Project Path="../ploch-common/src/TestingSupport.XUnit3.AutoMoq/Ploch.TestingSupport.XUnit3.AutoMoq.csproj">
       <Configuration Solution="Debug|ARM" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|ARM64" Project="Debug|Any CPU" />
@@ -64,12 +84,16 @@
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
   </Folder>
+  <Folder Name="/ploch-common/tests/">
+    <Project Path="../ploch-common/tests/TestingSupport.FluentAssertions.Tests/Ploch.TestingSupport.FluentAssertions.Tests.csproj" />
+  </Folder>
   <Folder Name="/repository/">
     <File Path="build-dotnet-commands.ps1" />
     <File Path="build.ps1" />
     <File Path="docker-compose.yml" />
     <File Path="NuGet.Config" />
     <File Path="README.md" />
+    <File Path="TODO-archive.md" />
     <File Path="TODO.md" />
   </Folder>
   <Folder Name="/repository/ai/">
@@ -81,7 +105,26 @@
     <File Path="CLAUDE.md" />
   </Folder>
   <Folder Name="/repository/ai/claude/rules/">
+    <File Path=".claude/rules/agent.md" />
+    <File Path=".claude/rules/branch-naming.md" />
+    <File Path=".claude/rules/code-quality.md" />
+    <File Path=".claude/rules/commits.md" />
+    <File Path=".claude/rules/data-access.md" />
+    <File Path=".claude/rules/data-project.md" />
+    <File Path=".claude/rules/data-provider-project.md" />
+    <File Path=".claude/rules/dependencies.md" />
+    <File Path=".claude/rules/documentation.md" />
+    <File Path=".claude/rules/domain-model.md" />
+    <File Path=".claude/rules/integration-testing.md" />
+    <File Path=".claude/rules/naming.md" />
+    <File Path=".claude/rules/pr-descriptions.md" />
+    <File Path=".claude/rules/project-structure.md" />
+    <File Path=".claude/rules/qa.md" />
+    <File Path=".claude/rules/rules.md" />
     <File Path=".claude/rules/sample-app.md" />
+    <File Path=".claude/rules/summaries.md" />
+    <File Path=".claude/rules/todo-tasks-execution.md" />
+    <File Path=".claude/rules/writing-dotnet-tests.md" />
   </Folder>
   <Folder Name="/repository/ai/copilot/">
     <File Path=".github/copilot-instructions.md" />
@@ -105,6 +148,7 @@
     <File Path="qodana.sarif.json" />
     <File Path="qodana.yaml" />
     <File Path="../mrploch-development/dependencies/Serilog.Logging.Packages.props" />
+    <File Path="sonar-project.properties" />
   </Folder>
   <Folder Name="/repository/dependencies/">
     <File Path="../mrploch-development/dependencies/Common.Packages.props" />
@@ -140,15 +184,19 @@
     <File Path=".github/workflows/build-dotnet.yml" />
   </Folder>
   <Folder Name="/Tests/">
+    <File Path="tests/.editorconfig" />
     <Project Path="tests/Data.EFCore.SqLite.Tests/Ploch.Data.EFCore.SqLite.Tests.csproj" />
     <Project Path="tests/Data.EFCore.SqlServer.Tests/Ploch.Data.EFCore.SqlServer.Tests.csproj" />
     <Project Path="tests/Data.EFCore.Tests/Ploch.Data.EFCore.Tests.csproj" />
+    <Project Path="tests/Data.Model.Tests/Ploch.Data.Model.Tests.csproj" />
     <Project Path="tests/Data.StandardDataSets.Tests/Ploch.Data.StandardDataSets.Tests.csproj" />
+    <Project Path="tests/Data.Utilities.Tests/Ploch.Data.Utilities.Tests.csproj" />
   </Folder>
   <Folder Name="/Tests/GenericRepository/">
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTests/Ploch.Data.GenericRepository.EFCore.IntegrationTests.csproj" />
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.Tests/Ploch.Data.GenericRepository.Tests.csproj" />
   </Folder>
+  <Project Path="src/Data.EFCore.IntegrationTesting.FluentAssertions/Ploch.Data.EFCore.IntegrationTesting.FluentAssertions.csproj" />
   <!-- DocumentationSite excluded: docfx.console 2.59.4 is incompatible with .NET 10.
        Upgrade to modern docfx dotnet tool to re-enable. -->
   <!-- <Project Path="DocumentationSite/DocumentationSite.csproj" /> -->

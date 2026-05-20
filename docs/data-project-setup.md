@@ -115,24 +115,31 @@ public class Author : IHasId<int>, INamed, IHasDescription
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
         <PackageReference Include="Ploch.Data.GenericRepository.EFCore" />
-        <PackageReference Include="Ploch.Data.EFCore.SqLite" />
+        <PackageReference Include="Ploch.Data.EFCore" />
     </ItemGroup>
 </Project>
 ````
 
 ### DbContext
 
+The recommended approach is to accept `IDbContextCreationLifecycle` as an **optional** constructor parameter. This keeps the Data project database-agnostic -- provider-specific logic (such as SQLite's `DateTimeOffset` fix) is injected by the DI registration rather than hard-coded in the DbContext.
+
 ````csharp
 using Microsoft.EntityFrameworkCore;
-using Ploch.Data.EFCore.SqLite;
+using Ploch.Data.EFCore;
 using Ploch.Data.Model;
 
 public class SampleAppDbContext : DbContext
 {
-    protected SampleAppDbContext() { }
+    private readonly IDbContextCreationLifecycle? _lifecycle;
 
-    public SampleAppDbContext(DbContextOptions<SampleAppDbContext> options)
-        : base(options) { }
+    protected SampleAppDbContext(IDbContextCreationLifecycle? lifecycle = null)
+        => _lifecycle = lifecycle;
+
+    public SampleAppDbContext(
+        DbContextOptions<SampleAppDbContext> options,
+        IDbContextCreationLifecycle? lifecycle = null) : base(options)
+        => _lifecycle = lifecycle;
 
     public DbSet<Article> Articles { get; set; } = null!;
     public DbSet<ArticleCategory> ArticleCategories { get; set; } = null!;
@@ -145,8 +152,7 @@ public class SampleAppDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(SampleAppDbContext).Assembly);
 
-        // Required for SQLite DateTimeOffset support
-        modelBuilder.ApplySqLiteDateTimeOffsetPropertiesFix(Database);
+        _lifecycle?.OnModelCreating(modelBuilder, Database);
 
         base.OnModelCreating(modelBuilder);
     }

@@ -33,8 +33,8 @@ public class SqlServerDbContextConfigurator(string connectionString, Action<SqlS
     /// <param name="optionsBuilder">The option builder to configure.</param>
     public void Configure(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(connectionString);
-        optionsBuilderAction?.Invoke(new SqlServerDbContextOptionsBuilder(optionsBuilder));
+        optionsBuilder = optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilderAction?.Invoke(new(optionsBuilder));
     }
 
     private static string GetConnectionString(Action<SqlConnectionStringBuilder> connectionStringBuilderAction)

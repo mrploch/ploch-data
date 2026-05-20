@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Ploch.Data.EFCore.SqLite;
+using Ploch.Data.EFCore;
 using Ploch.Data.Model;
 using Ploch.Data.SampleApp.Model;
 
@@ -7,11 +7,12 @@ namespace Ploch.Data.SampleApp.Data;
 
 public class SampleAppDbContext : DbContext
 {
-    public SampleAppDbContext(DbContextOptions<SampleAppDbContext> options) : base(options)
-    { }
+    private readonly IDbContextCreationLifecycle _modelCreationLifecycle;
 
-    protected SampleAppDbContext()
-    { }
+    public SampleAppDbContext(DbContextOptions<SampleAppDbContext> options, IDbContextCreationLifecycle modelCreationLifecycle) : base(options) =>
+        _modelCreationLifecycle = modelCreationLifecycle;
+
+    protected SampleAppDbContext(IDbContextCreationLifecycle modelCreationLifecycle) => _modelCreationLifecycle = modelCreationLifecycle;
 
     public DbSet<Article> Articles { get; set; } = null!;
 
@@ -38,8 +39,14 @@ public class SampleAppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SampleAppDbContext).Assembly);
-        modelBuilder.ApplySqLiteDateTimeOffsetPropertiesFix(Database);
+        _modelCreationLifecycle.OnModelCreating(modelBuilder, Database);
         base.OnModelCreating(modelBuilder);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        _modelCreationLifecycle.OnConfiguring(optionsBuilder);
     }
 
     private void SetAuditTimestamps()

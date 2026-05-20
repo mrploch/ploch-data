@@ -16,27 +16,28 @@ namespace Ploch.Data.EFCore;
 ///     see remarks for details.
 /// </typeparam>
 /// <remarks>
-///     This abstract class extends BaseDbContextFactory and provides methods to configure SQLite options
-///     for the DbContext instances it creates.
-///     The <typeparamref name="TFactory" /> should be the type being implemented, for example:
-///     <code>
-///         public class SampleAppDbContextFactory : BaseDbContextFactory&lt;SampleAppDbContext,
-///                      SampleAppDbContextFactory&gt;, IDbContextFactory&lt;SampleAppDbContext&gt;
-///         {
-///             public SampleAppDbContextFactory() : base(options => new SampleAppDbContext(options))
-///             { }
-///             ...
-///         }
-///     </code>
-/// </remarks>
-/// <remarks>
-///     Initializes a new instance of the <see cref="BaseDbContextFactory{TDbContext, TFactory}" />
-///     class.
+///     <para>
+///         Provides a base implementation of <see cref="IDesignTimeDbContextFactory{TDbContext}" /> used to create
+///         <see cref="DbContext" /> instances at design-time.
+///     </para>
+///     <para>
+///         It also configures the migrations assembly to be the one where the <typeparamref name="TFactory" /> type is defined.
+///     </para>
+///     <para>
+///         This type would usually be implemented in an assembly that contains the migrations and would configure DbContext to
+///         use a specific database. It would configure the provider and specify other options, like a connection string.
+///         The <typeparamref name="TFactory" /> type parameter is used to determine the assembly that contains the migrations.
+///     </para>
+///     <para>
+///         This type makes it easy to use a different assembly for migrations than the one that contains the DbContext.
+///         One of the scenarios where this is useful is when targeting multiple databases using the same DbContext.
+///         You can take a look at the <see href="https://github.com/mrploch/ploch-data/tree/main/samples/SampleApp">SampleApp</see> project
+///         for an example of how to use this class.
+///     </para>
 /// </remarks>
 /// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
 /// <param name="connectionStringFunc">Function to return the connection string.</param>
-public abstract class BaseDbContextFactory<TDbContext, TFactory>(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator,
-                                                                 Func<string> connectionStringFunc)
+public abstract class BaseDbContextFactory<TDbContext, TFactory>(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc)
     : IDesignTimeDbContextFactory<TDbContext> where TDbContext : DbContext where TFactory : BaseDbContextFactory<TDbContext, TFactory>
 {
     /// <summary>
@@ -44,8 +45,7 @@ public abstract class BaseDbContextFactory<TDbContext, TFactory>(Func<DbContextO
     /// </summary>
     /// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
     protected BaseDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator) : this(dbContextCreator, ConnectionString.FromJsonFile()!)
-    {
-    }
+    { }
 
     /// <summary>
     ///     Creates a new instance of the <typeparamref name="TDbContext" /> class.
@@ -79,6 +79,5 @@ public abstract class BaseDbContextFactory<TDbContext, TFactory>(Func<DbContextO
     /// <param name="connectionStringFunc">A function that provides the connection string.</param>
     /// <param name="optionsBuilder">An options builder for configuring the DbContext options.</param>
     /// <returns>The configured DbContextOptionsBuilder.</returns>
-    protected abstract DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc,
-                                                                            DbContextOptionsBuilder<TDbContext> optionsBuilder);
+    protected abstract DbContextOptionsBuilder<TDbContext> ConfigureOptions(Func<string> connectionStringFunc, DbContextOptionsBuilder<TDbContext> optionsBuilder);
 }

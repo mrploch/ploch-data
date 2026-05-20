@@ -406,3 +406,35 @@ codestream.xml
 **/.idea/**/GitLink.xml
 **/.idea/**/markdown.xml
 **/.idea/**/sonarlint.xml
+
+# AI Tools Config
+# Kept local-only (symlinks not handled well by Git for Windows).
+.ai/
+.aiassistant/
+.claude/
+.contextstream/
+.cursor/
+.windsurf/
+.cursorrules
+.mcp.json
+.vscode/mcp.json
+.github/skills/
+
+# JetBrains Rider — additional per-user files not already covered
+**/.idea*/AICommit.xml
+**/.idea*/indexLayout.xml
+**/.idea/.idea.Data.EFCore.dir/
+src/**/.idea/
+
+# Local dev artefacts
+identifier.sqlite
+*.sqlite
+temp-research-*.md
+temp-*.md
+
+# Backups of cs files
+**/*.cs.bak
+**/*.csproj.bak
+**/*.props.bak
+**/*.md.bak
+temp/

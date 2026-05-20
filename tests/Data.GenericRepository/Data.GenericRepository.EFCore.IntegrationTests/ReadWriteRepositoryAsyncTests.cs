@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
-using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
 namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
@@ -56,11 +55,14 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
         var blogPosts = await repository.GetAllAsync(onDbSet: query => query.Include(e => e.Tags));
         blogPosts.Should().HaveCount(2);
-        blogPosts.Should().ContainEquivalentOf(blogPost1, options => options.Excluding(p => p.Categories).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
-        blogPosts.Should().ContainEquivalentOf(blogPost2, options => options.Excluding(p => p.Categories).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
+        blogPosts.Should()
+                 .ContainEquivalentOf(blogPost1,
+                                      options => options.Excluding(p => p.Categories).WithEntityEquivalencyOptions());
+        blogPosts.Should()
+                 .ContainEquivalentOf(blogPost2,
+                                      options => options.Excluding(p => p.Categories).WithEntityEquivalencyOptions());
         foreach (var blogPost in blogPosts)
         {
-            blogPost.Tags.Should().NotBeEmpty();
             blogPost.Tags.Should().NotBeEmpty();
         }
     }
@@ -77,8 +79,12 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var repository = CreateReadWriteRepositoryAsync<BlogPost, int>();
         var blogPosts = await repository.GetAllAsync();
         blogPosts.Should().HaveCount(2);
-        blogPosts.Should().ContainEquivalentOf(blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).Excluding(p => p.CreatedTime).Excluding(p => p.ModifiedTime));
-        blogPosts.Should().ContainEquivalentOf(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).Excluding(p => p.CreatedTime).Excluding(p => p.ModifiedTime));
+        blogPosts.Should()
+                 .ContainEquivalentOf(blogPost1,
+                                      options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).Excluding(p => p.CreatedTime).Excluding(p => p.ModifiedTime));
+        blogPosts.Should()
+                 .ContainEquivalentOf(blogPost2,
+                                      options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).Excluding(p => p.CreatedTime).Excluding(p => p.ModifiedTime));
 
         // Categories and Tags are not included in the query but they will not be empty because they are already loaded in the context.
         // This is why I don't check for emptiness here.
@@ -94,18 +100,21 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        var blogPosts = await repository.GetPageAsync(2, 5, onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
+
+        // Explicit OrderBy so the page contents are deterministic — without it, the DB may return rows in any order.
+        var blogPosts = await repository.GetPageAsync(2, 5, onDbSet: query => query.OrderBy(e => e.Id).Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(5);
 
         for (var i = 0; i < 5; i++)
         {
             var blogPost = posts[i + 5];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should()
-                       .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 
@@ -120,25 +129,27 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
 
-        var blogPosts =
-            await repository.GetPageAsync(2,
-                                          3,
+        var blogPosts = await repository.GetPageAsync(2,
+                                                      3,
 #pragma warning disable SA1117 // Parameters should be placed on the same line
-                                          query: query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" ||
-                                                          query.Name == "Blog post 8" || query.Name == "Blog post 9" || query.Name == "Blog post 10",
+                                                      query: query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" ||
+                                                                      query.Name == "Blog post 8" || query.Name == "Blog post 9" || query.Name == "Blog post 10",
 #pragma warning restore SA1117
-                                          onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
+
+                                                      // Explicit OrderBy so the filtered page is deterministic.
+                                                      onDbSet: query => query.OrderBy(e => e.Id).Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(3);
 
         for (var i = 7; i <= 9; i++)
         {
             var blogPost = posts[i];
-            var queriedPost = blogPosts.Should().ContainEquivalentOf(blogPost, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags)).Subject;
-            queriedPost.Tags.Should().BeEquivalentTo(blogPost.Tags, options => options.Excluding(t => t.BlogPosts));
-            queriedPost.Categories.Should().HaveCount(blogPost.Categories.Count);
-            queriedPost.Categories.Should()
-                       .BeEquivalentTo(blogPost.Categories, options => options.Excluding(c => c.BlogPosts).Excluding(c => c.Parent).Excluding(c => c.Children));
+            blogPosts.Should()
+                     .ContainEquivalentOf(blogPost,
+                                          options => options.Excluding(member => member.Path.EndsWith(".BlogPosts"))
+                                                            .Excluding(member => member.Path.EndsWith(".Parent"))
+                                                            .Excluding(member => member.Path.EndsWith(".Children"))
+                                                            .WithEntityEquivalencyOptions());
         }
     }
 
@@ -152,7 +163,9 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        var blogPosts = await repository.GetPageAsync(2, 5);
+
+        // Explicit OrderBy so posts[i + 5] reliably matches the returned slice.
+        var blogPosts = await repository.GetPageAsync(2, 5, onDbSet: q => q.OrderBy(e => e.Id));
 
         blogPosts.Should().HaveCount(5);
 
@@ -177,7 +190,7 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
         var blogPost = await repository.GetByIdAsync(blogPost2.Id, query => query.Include(e => e.Tags));
-        blogPost.Should().BeEquivalentTo(blogPost2, options => options.IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
+        blogPost.Should().BeEquivalentTo(blogPost2, options => options.WithEntityEquivalencyOptions());
         blogPost!.Tags.Should().NotBeEmpty();
     }
 
@@ -191,8 +204,12 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         await unitOfWork.CommitAsync();
 
         var repository = CreateReadRepositoryAsync<BlogPost, int>();
-        var blogPost = await repository.GetByIdAsync([blogPost2.Id]);
-        blogPost.Should().BeEquivalentTo(blogPost2, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
+        var blogPost = await repository.GetByIdAsync([ blogPost2.Id ]);
+        blogPost.Should()
+                .BeEquivalentTo(blogPost2,
+                                options => options.Excluding(p => p.Categories)
+                                                  .Excluding(p => p.Tags)
+                                                  .WithEntityEquivalencyOptions());
     }
 
     [Fact]
@@ -268,6 +285,10 @@ public class ReadWriteRepositoryAsyncTests : GenericRepositoryDataIntegrationTes
         var blogPost = await repository.FindFirstAsync(post => post.Name.Contains("Blog post 1"));
 
         blogPost.Should().NotBeNull();
-        blogPost.Should().BeEquivalentTo(testBlogEntities.blogPost1, options => options.Excluding(p => p.Categories).Excluding(p => p.Tags).IgnoringCyclicReferences().Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromMilliseconds(100))).WhenTypeIs<DateTimeOffset>());
+        blogPost.Should()
+                .BeEquivalentTo(testBlogEntities.blogPost1,
+                                options => options.Excluding(p => p.Categories)
+                                                  .Excluding(p => p.Tags)
+                                                  .WithEntityEquivalencyOptions());
     }
 }

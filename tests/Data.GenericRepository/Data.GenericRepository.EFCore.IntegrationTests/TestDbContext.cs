@@ -2,13 +2,10 @@
 using Ploch.Data.EFCore.SqLite;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
 
-namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests.Data;
+namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
-public class TestDbContext : DbContext
+public class TestDbContext(DbContextOptions<TestDbContext> options) : DbContext(options)
 {
-    public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
-    { }
-
     public DbSet<Blog> Blogs { get; set; } = null!;
 
     public DbSet<BlogPost> BlogPosts { get; set; } = null!;

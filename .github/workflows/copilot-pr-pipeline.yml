@@ -1,0 +1,380 @@
+name: Copilot PR Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Existing pull request number to analyze
+        required: true
+        type: string
+      mode:
+        description: Pipeline mode
+        required: true
+        type: choice
+        default: plan-only
+        options:
+          - plan-only
+          - full-followup-pr
+      model:
+        description: Model for the top-level task
+        required: true
+        type: choice
+        default: gpt-5.3-codex
+        options:
+          - gpt-5.3-codex
+          - gpt-5.4
+          - claude-sonnet-4.6
+          - claude-opus-4.6
+      custom_agent:
+        description: Optional override for the custom agent identifier
+        required: false
+        type: string
+      wait_for_completion:
+        description: Poll the task until it reaches a terminal state or timeout
+        required: true
+        type: boolean
+        default: false
+      timeout_minutes:
+        description: Poll timeout in minutes when wait_for_completion is true
+        required: true
+        type: number
+        default: 30
+
+permissions:
+  contents: read
+  pull-requests: read
+  actions: read
+
+concurrency:
+  group: copilot-pr-pipeline-${{ github.repository }}-${{ inputs.pr_number }}-${{ inputs.mode }}
+  cancel-in-progress: false
+
+jobs:
+  launch-task:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.COPILOT_AGENT_PAT }}
+      GITHUB_API_VERSION: 2026-03-10
+      INPUT_PR_NUMBER: ${{ inputs.pr_number }}
+      INPUT_MODE: ${{ inputs.mode }}
+      INPUT_MODEL: ${{ inputs.model }}
+      INPUT_CUSTOM_AGENT: ${{ inputs.custom_agent }}
+      INPUT_WAIT_FOR_COMPLETION: ${{ inputs.wait_for_completion }}
+      INPUT_TIMEOUT_MINUTES: ${{ inputs.timeout_minutes }}
+
+    steps:
+      - name: Validate inputs and secret
+        run: |
+          set -euo pipefail
+
+          if ! [[ "$INPUT_PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "::error::pr_number must be a positive integer."
+            exit 1
+          fi
+
+          if ! [[ "$INPUT_TIMEOUT_MINUTES" =~ ^[0-9]+$ ]] || [ "$INPUT_TIMEOUT_MINUTES" -lt 1 ] || [ "$INPUT_TIMEOUT_MINUTES" -gt 180 ]; then
+            echo "::error::timeout_minutes must be an integer between 1 and 180."
+            exit 1
+          fi
+
+          if [ -n "$INPUT_CUSTOM_AGENT" ] && ! [[ "$INPUT_CUSTOM_AGENT" =~ ^[a-z0-9][a-z0-9-]{1,48}[a-z0-9]$ ]]; then
+            echo "::error::custom_agent must be empty or match the GitHub custom agent identifier pattern."
+            exit 1
+          fi
+
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::COPILOT_AGENT_PAT secret is required. Use a user token that can call the Copilot Agent Tasks API."
+            exit 1
+          fi
+
+          USER_STATUS=$(curl -sS -o /tmp/user.json -w "%{http_code}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: $GITHUB_API_VERSION" \
+            https://api.github.com/user)
+
+          if [ "$USER_STATUS" != "200" ]; then
+            echo "::error::COPILOT_AGENT_PAT is invalid or does not identify a GitHub user token (HTTP $USER_STATUS)."
+            cat /tmp/user.json
+            exit 1
+          fi
+
+      - name: Fetch PR metadata
+        id: pr
+        run: |
+          set -euo pipefail
+
+          PR_STATUS=$(curl -sS -o /tmp/pr.json -w "%{http_code}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: $GITHUB_API_VERSION" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${INPUT_PR_NUMBER}")
+
+          if [ "$PR_STATUS" != "200" ]; then
+            echo "::error::Unable to load PR #${INPUT_PR_NUMBER} from ${GITHUB_REPOSITORY} (HTTP $PR_STATUS)."
+            cat /tmp/pr.json
+            exit 1
+          fi
+
+          echo "pr_url=$(jq -r '.html_url' /tmp/pr.json)" >> "$GITHUB_OUTPUT"
+          echo "pr_title<<EOF" >> "$GITHUB_OUTPUT"
+          jq -r '.title' /tmp/pr.json >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "base_ref=$(jq -r '.base.ref' /tmp/pr.json)" >> "$GITHUB_OUTPUT"
+          echo "head_ref=$(jq -r '.head.ref' /tmp/pr.json)" >> "$GITHUB_OUTPUT"
+          echo "author=$(jq -r '.user.login' /tmp/pr.json)" >> "$GITHUB_OUTPUT"
+          echo "is_draft=$(jq -r '.draft' /tmp/pr.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve pipeline settings
+        id: config
+        run: |
+          set -euo pipefail
+
+          if [ -n "$INPUT_CUSTOM_AGENT" ]; then
+            CUSTOM_AGENT="$INPUT_CUSTOM_AGENT"
+          elif [ "$INPUT_MODE" = "plan-only" ]; then
+            CUSTOM_AGENT="pr-review-planner"
+          else
+            CUSTOM_AGENT="pr-pipeline-orchestrator"
+          fi
+
+          if [ "$INPUT_MODE" = "full-followup-pr" ]; then
+            CREATE_PULL_REQUEST=true
+          else
+            CREATE_PULL_REQUEST=false
+          fi
+
+          echo "custom_agent=$CUSTOM_AGENT" >> "$GITHUB_OUTPUT"
+          echo "create_pull_request=$CREATE_PULL_REQUEST" >> "$GITHUB_OUTPUT"
+
+      - name: Build task payload
+        id: payload
+        env:
+          PR_URL: ${{ steps.pr.outputs.pr_url }}
+          PR_TITLE: ${{ steps.pr.outputs.pr_title }}
+          PR_BASE_REF: ${{ steps.pr.outputs.base_ref }}
+          PR_HEAD_REF: ${{ steps.pr.outputs.head_ref }}
+          PR_AUTHOR: ${{ steps.pr.outputs.author }}
+          PR_IS_DRAFT: ${{ steps.pr.outputs.is_draft }}
+          RESOLVED_CUSTOM_AGENT: ${{ steps.config.outputs.custom_agent }}
+          CREATE_PULL_REQUEST: ${{ steps.config.outputs.create_pull_request }}
+        run: |
+          set -euo pipefail
+
+          EVENT_CONTENT="Run the ${INPUT_MODE} Copilot PR pipeline for pull request #${INPUT_PR_NUMBER} in ${GITHUB_REPOSITORY}."
+          printf '%s' "$EVENT_CONTENT" > /tmp/event-content.txt
+
+          if [ "$INPUT_MODE" = "plan-only" ]; then
+            cat > /tmp/problem-statement.txt <<EOF
+            Review existing pull request #${INPUT_PR_NUMBER} (${PR_URL}) titled "${PR_TITLE}" by @${PR_AUTHOR}.
+
+            Use the repository's ${RESOLVED_CUSTOM_AGENT} custom agent if custom agent selection is supported.
+
+            Required outcome:
+            - inspect the current PR, not a hypothetical replacement
+            - review all changed files and the actual implementation
+            - inspect linked issues, related pull requests, and historical context when relevant
+            - inspect every review comment, thread, and conversation available on the PR
+            - inspect current CI and all checks
+            - produce a complete remediation plan only
+            - do not change code
+            - do not create a pull request
+
+            Important repository-specific context:
+            - this repository has SampleApp consumer constraints around PackageReference and ProjectReferences.props
+            - if a proposed fix could affect external consumer behavior, include SampleApp validation in the plan
+            EOF
+          else
+            cat > /tmp/problem-statement.txt <<EOF
+            Run the full Copilot PR pipeline for existing pull request #${INPUT_PR_NUMBER} (${PR_URL}) titled "${PR_TITLE}" by @${PR_AUTHOR}.
+
+            Use the repository's ${RESOLVED_CUSTOM_AGENT} custom agent if custom agent selection is supported.
+
+            Required workflow:
+            - investigate the repository context first
+            - review the existing PR in depth
+            - produce a remediation plan
+            - ensure non-trivial plans are reviewed by plan-critic
+            - if code changes are needed, open a follow-up pull request from base branch "${PR_BASE_REF}" instead of assuming you can edit the existing PR branch directly
+            - in the follow-up PR, reference the original PR #${INPUT_PR_NUMBER}
+            - do not skip any PR comment, conversation, or CI failure
+            - do not declare success while required checks are failing
+
+            Important repository-specific context:
+            - this repository has SampleApp consumer constraints around PackageReference and ProjectReferences.props
+            - if a fix can affect package-consumer behavior, validate the relevant SampleApp path
+            EOF
+          fi
+
+          jq -n \
+            --arg event_content "$(cat /tmp/event-content.txt)" \
+            --arg problem_statement "$(cat /tmp/problem-statement.txt)" \
+            --arg model "$INPUT_MODEL" \
+            --arg custom_agent "$RESOLVED_CUSTOM_AGENT" \
+            --arg base_ref "$PR_BASE_REF" \
+            --arg event_url "$PR_URL" \
+            --arg pr_number "$INPUT_PR_NUMBER" \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --argjson create_pull_request "$CREATE_PULL_REQUEST" \
+            '{
+                event_content: $event_content,
+                problem_statement: $problem_statement,
+                model: $model,
+                custom_agent: $custom_agent,
+                create_pull_request: $create_pull_request,
+                base_ref: $base_ref,
+                event_type: "pull_request",
+                event_url: $event_url,
+                event_identifiers: [
+                  ("pr:" + $pr_number),
+                  ("repo:" + $repository)
+                ]
+              }' > /tmp/task-payload-with-agent.json
+
+          jq 'del(.custom_agent)' /tmp/task-payload-with-agent.json > /tmp/task-payload-without-agent.json
+
+      - name: Create agent task
+        id: create
+        env:
+          RESOLVED_CUSTOM_AGENT: ${{ steps.config.outputs.custom_agent }}
+        run: |
+          set -euo pipefail
+
+          create_task() {
+            local payload_file="$1"
+            local output_file="$2"
+
+            curl -sS -o "$output_file" -w "%{http_code}" \
+              -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "X-GitHub-Api-Version: $GITHUB_API_VERSION" \
+              "https://api.github.com/agents/repos/${GITHUB_REPOSITORY}/tasks" \
+              --data "@${payload_file}"
+          }
+
+          HTTP_STATUS=$(create_task /tmp/task-payload-with-agent.json /tmp/task-response.json)
+          USED_CUSTOM_AGENT=true
+
+          if [ "$HTTP_STATUS" != "201" ]; then
+            echo "::warning::Task creation with custom_agent failed (HTTP $HTTP_STATUS)."
+            cat /tmp/task-response.json
+
+            HTTP_STATUS=$(create_task /tmp/task-payload-without-agent.json /tmp/task-response.json)
+            USED_CUSTOM_AGENT=false
+          fi
+
+          if [ "$HTTP_STATUS" != "201" ]; then
+            echo "::error::Unable to create Copilot agent task (HTTP $HTTP_STATUS)."
+            cat /tmp/task-response.json
+            exit 1
+          fi
+
+          echo "used_custom_agent=$USED_CUSTOM_AGENT" >> "$GITHUB_OUTPUT"
+          echo "task_id=$(jq -r '.id' /tmp/task-response.json)" >> "$GITHUB_OUTPUT"
+          echo "task_url=$(jq -r '.url' /tmp/task-response.json)" >> "$GITHUB_OUTPUT"
+          echo "task_html_url=$(jq -r '.html_url' /tmp/task-response.json)" >> "$GITHUB_OUTPUT"
+          echo "task_state=$(jq -r '.state' /tmp/task-response.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Write launch summary
+        env:
+          PR_URL: ${{ steps.pr.outputs.pr_url }}
+          TASK_HTML_URL: ${{ steps.create.outputs.task_html_url }}
+          TASK_ID: ${{ steps.create.outputs.task_id }}
+          USED_CUSTOM_AGENT: ${{ steps.create.outputs.used_custom_agent }}
+          RESOLVED_CUSTOM_AGENT: ${{ steps.config.outputs.custom_agent }}
+          CREATE_PULL_REQUEST: ${{ steps.config.outputs.create_pull_request }}
+        run: |
+          {
+            echo "## Copilot PR pipeline task launched"
+            echo ""
+            echo "- Repository: \`${GITHUB_REPOSITORY}\`"
+            echo "- Target PR: [#${INPUT_PR_NUMBER}](${PR_URL})"
+            echo "- Mode: \`${INPUT_MODE}\`"
+            echo "- Model: \`${INPUT_MODEL}\`"
+            echo "- Requested custom agent: \`${RESOLVED_CUSTOM_AGENT}\`"
+            echo "- Custom agent accepted by API: \`${USED_CUSTOM_AGENT}\`"
+            echo "- Follow-up PR creation enabled: \`${CREATE_PULL_REQUEST}\`"
+            echo "- Task ID: \`${TASK_ID}\`"
+            echo "- Task URL: ${TASK_HTML_URL}"
+            echo ""
+            echo "If this run used \`full-followup-pr\`, the agent is expected to open a new remediation PR rather than directly mutate the existing PR branch."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Wait for completion
+        if: ${{ inputs.wait_for_completion }}
+        id: wait
+        env:
+          TASK_ID: ${{ steps.create.outputs.task_id }}
+        run: |
+          set -euo pipefail
+
+          DEADLINE=$(( $(date +%s) + (INPUT_TIMEOUT_MINUTES * 60) ))
+          LAST_RESPONSE=""
+
+          while [ "$(date +%s)" -lt "$DEADLINE" ]; do
+            STATUS=$(curl -sS -o /tmp/task-status.json -w "%{http_code}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "X-GitHub-Api-Version: $GITHUB_API_VERSION" \
+              "https://api.github.com/agents/repos/${GITHUB_REPOSITORY}/tasks/${TASK_ID}")
+
+            if [ "$STATUS" != "200" ]; then
+              echo "::error::Unable to read task status for ${TASK_ID} (HTTP $STATUS)."
+              cat /tmp/task-status.json
+              exit 1
+            fi
+
+            LAST_RESPONSE=/tmp/task-status.json
+            STATE=$(jq -r '.state' "$LAST_RESPONSE")
+            echo "Current task state: $STATE"
+
+            case "$STATE" in
+              completed)
+                break
+                ;;
+              failed|timed_out|cancelled)
+                echo "::error::Copilot task ended in state '$STATE'."
+                cat "$LAST_RESPONSE"
+                exit 1
+                ;;
+              waiting_for_user)
+                echo "::notice::Copilot task is waiting for user input."
+                break
+                ;;
+            esac
+
+            sleep 30
+          done
+
+          FINAL_STATE=$(jq -r '.state' "$LAST_RESPONSE")
+          TASK_HTML_URL=$(jq -r '.html_url' "$LAST_RESPONSE")
+          SESSION_HEAD_REF=$(jq -r '.sessions[0].head_ref // empty' "$LAST_RESPONSE")
+          GENERATED_PR_IDS=$(jq -r '
+            [.artifacts[]? |
+              if .provider == "github" and .type == "pull" then
+                (.data.id | tostring)
+              elif .provider == "github" and .type == "github_resource" and (.data.type // "") == "pull_request" then
+                (.data.id | tostring)
+              else
+                empty
+              end] | join(", ")
+          ' "$LAST_RESPONSE")
+
+          echo "final_state=$FINAL_STATE" >> "$GITHUB_OUTPUT"
+          echo "task_html_url=$TASK_HTML_URL" >> "$GITHUB_OUTPUT"
+          echo "session_head_ref=$SESSION_HEAD_REF" >> "$GITHUB_OUTPUT"
+          echo "generated_pr_ids=$GENERATED_PR_IDS" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Copilot PR pipeline final state"
+            echo ""
+            echo "- Task state: \`${FINAL_STATE}\`"
+            echo "- Task URL: ${TASK_HTML_URL}"
+            if [ -n "$SESSION_HEAD_REF" ]; then
+              echo "- Agent branch: \`${SESSION_HEAD_REF}\`"
+            fi
+            if [ -n "$GENERATED_PR_IDS" ]; then
+              echo "- Generated PR artifacts: \`${GENERATED_PR_IDS}\`"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

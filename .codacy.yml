@@ -3,18 +3,41 @@ engines:
   sonarscharp:
     exclude_paths:
       - "src/**Tests/**"
+      - "tests/**"
+      - "samples/**"
+      # DI packages intentionally share the same namespace for zero-code database switching.
+      # Codacy's namespace-path check flags this as an issue, but it is by design.
+      - "src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/**"
+      - "src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/**"
   markdownlint:
     enabled: true
     exclude_paths:
       - "**/README.md"
 exclude_paths:
+  # Test and sample projects are excluded from all Codacy engines.
+  # The sonarscharp engine already excludes them, but the global list ensures
+  # other engines (e.g. Codacy's internal C# analyzer) honour the same scope.
+  - "tests/**"
+  - "src/**Tests/**"
+  - "samples/**"
   - "AGENTS.md"
   - "GEMINI.md"
   - "CLAUDE.md"
+  - "TODO.md"
+  - "TODO-archive.md"
+  - "change-log/**"
   - ".junie/**"
   - ".claude/**"
+  - ".aiassistant/**"
   - ".contextstream/**"
   - ".cursorrules"
+  - ".github/agents/**"
+  - ".github/copilot-instructions.md"
+  - ".github/git-commit-instructions.md"
+  # The Copilot PR pipeline workflow is tracked for rework in
+  # https://github.com/mrploch/ploch-data/issues/79 (request-body schema
+  # mismatch + timeout-as-success bug). Re-enable analysis after rework.
+  - ".github/workflows/copilot-pr-pipeline.yml"
   - "workload-install.ps1"
   - "docs/**"
   - ".syncignore"

@@ -2,12 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-    <SonarQubeExclude>true</SonarQubeExclude>
     <OutputType>Exe</OutputType>
     <!-- VSTHRD200: Async suffix not conventional for xUnit test methods -->
     <NoWarn>$(NoWarn);VSTHRD200</NoWarn>

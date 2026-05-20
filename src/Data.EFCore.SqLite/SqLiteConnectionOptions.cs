@@ -5,6 +5,31 @@ namespace Ploch.Data.EFCore.SqLite;
 /// <summary>
 ///     Represents options for configuring an SQLite connection.
 /// </summary>
+/// <example>
+///     Using an in-memory database:
+///     <code>
+///         var options = SqLiteConnectionOptions.InMemory;
+///         var connectionString = options.BuildConnectionString();
+///     </code>
+///     Using a database file:
+///     <code>
+///         var options = SqLiteConnectionOptions.UsingFile("my-database.db");
+///         var connectionString = options.BuildConnectionString();
+///     </code>
+///     Configuring with a connection string:
+///     <code>
+///         var options = SqLiteConnectionOptions.FromConnectionString("Data Source=my-database.db;Mode=ReadOnly");
+///         var connectionString = options.BuildConnectionString();
+///     </code>
+///     Configuring with a connection string builder:
+///     <code>
+///         var options = new SqLiteConnectionOptions(builder => {
+///             builder.DataSource = "my-database.db";
+///             builder.Mode = SqliteOpenMode.ReadWriteCreate;
+///         });
+///         var connectionString = options.BuildConnectionString();
+///     </code>
+/// </example>
 public record SqLiteConnectionOptions
 {
     private readonly SqliteConnectionStringBuilder _connectionStringBuilder = new();
@@ -49,4 +74,12 @@ public record SqLiteConnectionOptions
     /// <param name="dbFilePath">The file path to the SQLite database.</param>
     /// <returns>A new instance of <see cref="SqLiteConnectionOptions" /> configured to use the specified database file.</returns>
     public static SqLiteConnectionOptions UsingFile(string dbFilePath) => new(dbFilePath: dbFilePath);
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="SqLiteConnectionOptions" /> class from a connection string.
+    /// </summary>
+    /// <param name="connectionString">The SQLite connection string.</param>
+    /// <returns>A new instance of <see cref="SqLiteConnectionOptions" /> configured with the specified connection string.</returns>
+    public static SqLiteConnectionOptions FromConnectionString(string connectionString) =>
+        new(connectionStringBuilder => connectionStringBuilder.ConnectionString = connectionString);
 }
