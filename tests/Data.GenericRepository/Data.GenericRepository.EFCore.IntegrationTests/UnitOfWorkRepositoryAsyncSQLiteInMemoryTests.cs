@@ -78,9 +78,13 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         var (blog, _, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
 
         using var unitOfWork = CreateUnitOfWork();
-        var blogUpdated = new Blog { Id = blog.Id, Name = "Updated Blog" };
 
-        await unitOfWork.Repository<Blog, int>().UpdateAsync(blogUpdated);
+        // Fetch-modify-update — the idiomatic update pattern. Loading the entity first means the
+        // update payload carries every column, so columns the caller does not change (such as
+        // CreatedTime) are preserved rather than blanked out by CurrentValues.SetValues.
+        var blogToUpdate = (await unitOfWork.Repository<Blog, int>().GetByIdAsync(blog.Id))!;
+        blogToUpdate.Name = "Updated Blog";
+        await unitOfWork.Repository<Blog, int>().UpdateAsync(blogToUpdate);
         await unitOfWork.CommitAsync();
 
         var blogRepository = CreateReadRepositoryAsync<Blog, int>();
@@ -88,12 +92,12 @@ public class UnitOfWorkRepositoryAsyncSQLiteInMemoryTests : GenericRepositoryDat
         var actualBlog = await blogRepository.GetByIdAsync(blog.Id);
         blog.Name = "Updated Blog";
 
-        // Audit timestamps are the concern of ReadWriteRepositoryAsyncAuditTests; UpdateAsync
-        // legitimately sets ModifiedTime, so exclude the audit columns from this comparison.
+        // ModifiedTime is excluded because UpdateAsync legitimately changes it (audit behaviour
+        // is covered by ReadWriteRepositoryAsyncAuditTests). CreatedTime is intentionally kept in
+        // the comparison — the fetch-modify-update pattern above must leave it untouched.
         actualBlog.Should()
                   .BeEquivalentTo(blog,
                                   options => options.Excluding(p => p.BlogPosts)
-                                                    .Excluding(p => p.CreatedTime)
                                                     .Excluding(p => p.ModifiedTime)
                                                     .WithEntityEquivalencyOptions());
     }
