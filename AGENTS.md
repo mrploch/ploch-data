@@ -824,4 +824,4 @@ dotnet run --project samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.Conso
 
 ### Cursor Cloud background agents
 
-Cursor Cloud background agents provision the workspace with an environment update script (configured in Cursor, not committed to this repo). It clones the sibling repositories listed above, runs `git fetch --unshallow` on `ploch-common`, and installs the .NET 8.0 and 10.0 SDKs.
+Cursor Cloud background agents provision the workspace with an environment update script (configured in Cursor, not committed to this repo) that clones the sibling repositories listed above, runs `git fetch --unshallow` on `ploch-common`, and installs the .NET 8.0 and 10.0 SDKs.
