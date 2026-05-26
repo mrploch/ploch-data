@@ -4,6 +4,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=alert_status&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=coverage&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/krisploch)
 
 | Package | Version | Downloads |
 |---------|---------|-----------|
@@ -28,6 +29,18 @@
 # Ploch.Data Libraries
 
 A set of .NET libraries for building data access layers using standardised entity models, the Generic Repository and Unit of Work patterns, and Entity Framework Core.
+
+## Support the Project
+
+If `Ploch.Data` saves you time or makes your projects nicer, please consider supporting its development. Every coffee directly funds time spent on maintenance, bug fixes, and new features.
+
+<p align="center">
+  <a href="https://buymeacoffee.com/krisploch" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee — krisploch" height="60" width="217" />
+  </a>
+</p>
+
+Thank you for keeping open-source maintainers caffeinated.
 
 ## Quick Start
 
