@@ -12,6 +12,12 @@ engines:
   markdownlint:
     enabled: true
     exclude_paths:
+      # README.md uses embedded HTML for the centered Buy Me a Coffee
+      # button (a documented sponsor-link pattern), which triggers
+      # MD033/no-inline-html. The "**/" prefix alone does not match the
+      # repository-root README.md under Codacy's glob semantics, so the
+      # unprefixed pattern is required as well.
+      - "README.md"
       - "**/README.md"
 exclude_paths:
   # Test and sample projects are excluded from all Codacy engines.
