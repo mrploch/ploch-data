@@ -35,7 +35,7 @@ A set of .NET libraries for building data access layers using standardised entit
 If `Ploch.Data` saves you time or makes your projects nicer, please consider supporting its development. Every coffee directly funds time spent on maintenance, bug fixes, and new features.
 
 <p align="center">
-  <a href="https://buymeacoffee.com/krisploch" target="_blank">
+  <a href="https://buymeacoffee.com/krisploch" target="_blank" rel="noopener noreferrer">
     <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee — krisploch" height="60" width="217" />
   </a>
 </p>
