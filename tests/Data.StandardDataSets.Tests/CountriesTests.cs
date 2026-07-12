@@ -18,6 +18,6 @@ public class CountriesTests
     public void EnglishCountryNames_should_not_contain_duplicates()
     {
         var englishCountryNames = Regions.EnglishCountryNames();
-        englishCountryNames.Count().Should().Be(englishCountryNames.Select(name => name.ToLower()).Distinct().Count());
+        englishCountryNames.Count().Should().Be(englishCountryNames.Select(name => name.ToUpperInvariant()).Distinct().Count());
     }
 }

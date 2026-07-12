@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ploch.Data.EFCore;
@@ -35,23 +36,6 @@ public static class DbContextExtensions
         return context.Set(entityType);
     }
 
-    public static TValue? GetStaticPropertyValue<TValue>(this Type type, string propertyName)
-    {
-        var property = type.GetProperty(propertyName, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-
-        if (property == null)
-        {
-            throw new InvalidOperationException($"Static property '{propertyName}' was not found on type '{type}'.");
-        }
-
-        var valueObj = property.GetValue(null);
-
-        return valueObj switch
-               { null => default,
-                 TValue value => value,
-                 _ => throw new InvalidOperationException($"Static property {propertyName} in {type} is not of {typeof(TValue)} type") };
-    }
-
     /// <summary>
     ///     Retrieves an entity set dynamically for the specified entity type.
     /// </summary>
@@ -74,11 +58,51 @@ public static class DbContextExtensions
             throw new InvalidOperationException($"Entity type '{entityType.Name}' was not found in the context.");
         }
 
-        var setMethod = typeof(DbContext).GetMethods().First(m => m.Name == "Set" && m.ContainsGenericParameters && m.GetParameters().Length == 0);
+        var setMethod = typeof(DbContext).GetMethods().First(m => m.Name == nameof(Set) && m.ContainsGenericParameters && m.GetParameters().Length == 0);
 
         var genericSetMethod = setMethod.MakeGenericMethod(entityType);
 
         return (IQueryable<object>)genericSetMethod.Invoke(context, null)!;
+    }
+
+    /// <summary>
+    ///     Retrieves the value of a static property from the specified type.
+    /// </summary>
+    /// <typeparam name="TValue">The expected type of the property value.</typeparam>
+    /// <param name="type">The type that declares the static property.</param>
+    /// <param name="propertyName">The name of the static property. Public and non-public properties are supported.</param>
+    /// <returns>
+    ///     The value of the static property, or <see langword="default" /> when the stored value is <see langword="null" />.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="type" /> or <paramref name="propertyName" /> is null.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the property is not found on <paramref name="type" />, or when its value is not of type
+    ///     <typeparamref name="TValue" />.
+    /// </exception>
+    public static TValue? GetStaticPropertyValue<TValue>(this Type type, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(type);
+        ArgumentNullException.ThrowIfNull(propertyName);
+
+        // Accessing non-public static properties is the documented purpose of this helper —
+        // callers explicitly opt in by naming the property (see GetStaticPropertyValueTests).
+#pragma warning disable S3011 // Reflection should not be used to increase accessibility
+        var property = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+#pragma warning restore S3011
+
+        if (property == null)
+        {
+            throw new InvalidOperationException($"Static property '{propertyName}' was not found on type '{type}'.");
+        }
+
+        var valueObj = property.GetValue(null);
+
+        return valueObj switch
+               { null => default,
+                 TValue value => value,
+                 _ => throw new InvalidOperationException($"Static property {propertyName} in {type} is not of {typeof(TValue)} type") };
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Ploch.Data.EFCore.SqLite;
@@ -50,6 +51,9 @@ public abstract class SqLiteDbContextFactory<TDbContext, TFactory> : BaseDbConte
     ///     This property provides an implementation of <see cref="IDbContextCreationLifecycle" />,
     ///     which handles logic and behaviors specifically related to the initialization and setup of DbContext instances.
     /// </summary>
+    [SuppressMessage("Design",
+                     "CA1000:Do not declare static members on generic types",
+                     Justification = "Intended access is through concrete, non-generic derived factories, so callers never need to supply type arguments.")]
     public static IDbContextCreationLifecycle CreationLifecycle { get; } = new SqLiteDbContextCreationLifecycle();
 
     /// <summary>
