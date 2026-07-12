@@ -4,7 +4,7 @@
 native SQLite library ([GHSA-2m69-gcr7-jv3q](https://github.com/advisories/GHSA-2m69-gcr7-jv3q)).
 Every Ploch.Data package that transitively pulls the SQLite provider (via
 `Microsoft.EntityFrameworkCore.Sqlite`) shipped the vulnerable native library, because EF Core —
-including the latest 10.0.x patch releases — still floors the dependency at the vulnerable `2.1.11`.
+including the latest 10.0.x patch releases — still pins the dependency at the vulnerable `2.1.11`.
 
 # Change
 

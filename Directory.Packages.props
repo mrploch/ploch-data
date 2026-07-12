@@ -11,8 +11,11 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.5" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.5" />
     <!-- Direct override: every SQLitePCLRaw.lib.e_sqlite3 2.1.x (<= 2.1.11) carries a
-         high-severity SQLite vulnerability (GHSA-2m69-gcr7-jv3q) and EF Core still floors
-         at the vulnerable 2.1.11. The 3.x bundle ships the patched native SQLite. -->
+         high-severity SQLite vulnerability (GHSA-2m69-gcr7-jv3q) and EF Core still pins
+         the vulnerable 2.1.11. The 3.x bundle ships the patched native SQLite.
+         Remove this version and the direct PackageReference in Data.EFCore.SqLite once
+         Microsoft.EntityFrameworkCore.Sqlite references SQLitePCLRaw 3.x itself; verify
+         with a vulnerable-packages scan (dotnet list package, vulnerable + transitive). -->
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
