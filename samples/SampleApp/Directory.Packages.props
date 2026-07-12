@@ -31,6 +31,9 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.5" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
+    <!-- Direct override: SQLitePCLRaw.lib.e_sqlite3 <= 2.1.11 carries a high-severity
+         SQLite vulnerability (GHSA-2m69-gcr7-jv3q); EF Core still floors at 2.1.11. -->
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
   </ItemGroup>
 
   <ItemGroup Label="Microsoft Extensions">

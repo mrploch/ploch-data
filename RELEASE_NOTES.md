@@ -1,5 +1,15 @@
 # Release Notes
 
+## Unreleased
+
+### Security
+
+- **Fixed vulnerable transitive `SQLitePCLRaw.lib.e_sqlite3` (high severity,
+  [GHSA-2m69-gcr7-jv3q](https://github.com/advisories/GHSA-2m69-gcr7-jv3q))** — `Ploch.Data.EFCore.SqLite`
+  now references `SQLitePCLRaw.bundle_e_sqlite3` 3.0.3 directly, overriding the vulnerable 2.1.x
+  version that EF Core still pulls transitively. All packages depending on the SQLite provider
+  resolve the patched native SQLite library. See `change-log/issue-91-vulnerable-sqlitepclraw.md`. (#91)
+
 ## v2.1 — NBGV Versioning and Release Pipeline
 
 ### Overview
