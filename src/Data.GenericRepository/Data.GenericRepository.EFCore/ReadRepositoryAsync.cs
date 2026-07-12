@@ -17,6 +17,11 @@ namespace Ploch.Data.GenericRepository.EFCore;
 public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
     : QueryableRepository<TEntity>(dbContext), IReadRepositoryAsync<TEntity> where TEntity : class
 {
+    /// <summary>
+    ///     Gets the handler used to record entity access for auditing purposes.
+    /// </summary>
+    protected IAuditEntityHandler AuditEntityHandler { get; } = auditEntityHandler;
+
     /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default) =>
         await DbSet.FindAsync(keyValues, cancellationToken).ConfigureAwait(false);
@@ -40,7 +45,7 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
 
         foreach (var entity in result)
         {
-            auditEntityHandler.HandleAccess(entity);
+            AuditEntityHandler.HandleAccess(entity);
         }
 
         return result;
@@ -91,7 +96,7 @@ public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntity
 
         if (result != null)
         {
-            auditEntityHandler.HandleAccess(result);
+            AuditEntityHandler.HandleAccess(result);
         }
 
         return result;

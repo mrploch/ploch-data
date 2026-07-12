@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +11,6 @@ namespace Ploch.Data.EFCore.Tests;
 
 public class CollectionStringSplitConverterTests : DataIntegrationTest<ConverterTestDbContext>
 {
-    public static IEnumerable<object[]> Data => new List<object[]>
-                                                { new object[] { 1, 2, 3 },
-                                                  new object[] { -4, -6, -10 },
-                                                  new object[] { -2, 2, 0 },
-                                                  new object[] { int.MinValue, -1, int.MaxValue } };
-
     [Theory]
     [AutoMockData]
     public void CollectionStringSplitConverter_should_convert_to_and_from_string_list(List<string> firstList, List<string> secondList)
@@ -51,7 +46,7 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
                                   (e, v) => e.IntCollection = v,
                                   firstIntList,
                                   secondIntList,
-                                  t => ((string)(object)t.IntCollection).Contains(secondIntList[1].ToString()));
+                                  t => ((string)(object)t.IntCollection).Contains(secondIntList[1].ToString(CultureInfo.CurrentCulture)));
     }
 
     [Theory]
@@ -62,7 +57,7 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
                                   (e, v) => e.DatesCollection = v,
                                   firstDateTimeList,
                                   secondDateTimeList,
-                                  t => ((string)(object)t.DatesCollection).Contains(Uri.EscapeDataString(secondDateTimeList[1].ToString())));
+                                  t => ((string)(object)t.DatesCollection).Contains(Uri.EscapeDataString(secondDateTimeList[1].ToString(CultureInfo.CurrentCulture))));
     }
 
     private void ValidateConverterEntities<TValue>(Func<ConverterTestEntity, ICollection<TValue>> entityPropertyFunc,
@@ -92,12 +87,12 @@ public class ConverterTestDbContext(DbContextOptions<ConverterTestDbContext> opt
 {
     public DbSet<ConverterTestEntity> TestEntities { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        builder.Entity<ConverterTestEntity>().Property(e => e.StringCollection).HasConversion(new CollectionStringSplitConverter<string>());
-        builder.Entity<ConverterTestEntity>().Property(e => e.IntCollection).HasConversion(new CollectionStringSplitConverter<int>());
-        builder.Entity<ConverterTestEntity>().Property(e => e.DatesCollection).HasConversion(new CollectionStringSplitConverter<DateTime>());
-        base.OnModelCreating(builder);
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.StringCollection).HasConversion(new CollectionStringSplitConverter<string>());
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.IntCollection).HasConversion(new CollectionStringSplitConverter<int>());
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.DatesCollection).HasConversion(new CollectionStringSplitConverter<DateTime>());
+        base.OnModelCreating(modelBuilder);
     }
 }
 

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 
 namespace Ploch.Data.EFCore.Tests;
@@ -44,13 +45,19 @@ public class GetStaticPropertyValueTests
         act.Should().Throw<InvalidOperationException>().WithMessage("*not of*type*");
     }
 
-    private class ClassWithStaticProperties
+    [SuppressMessage("Major Code Smell",
+                     "S1144:Unused private types or members should be removed",
+                     Justification = "All members are accessed via reflection through DbContextExtensions.GetStaticPropertyValue.")]
+    private static class ClassWithStaticProperties
     {
         public static string PublicValue { get; } = "public-value";
 
-        public static string? NullValue { get; } = null;
+        public static string? NullValue { get; }
 
         // ReSharper disable once UnusedMember.Local
+        [SuppressMessage("CodeQuality",
+                         "IDE0051:Remove unused private members",
+                         Justification = "Accessed via reflection by GetStaticPropertyValue_should_return_value_of_private_static_property.")]
         private static int PrivateValue { get; } = 42;
     }
 }
