@@ -20,7 +20,7 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
     /// <summary>
     ///     Gets the handler used to record entity access for auditing purposes.
     /// </summary>
-    protected IAuditEntityHandler AuditEntityHandler { get; } = auditEntityHandler;
+    protected IAuditEntityHandler AuditEntityHandler { get; } = auditEntityHandler ?? throw new ArgumentNullException(nameof(auditEntityHandler));
 
     /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default) =>

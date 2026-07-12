@@ -45,6 +45,22 @@ public class GetStaticPropertyValueTests
         act.Should().Throw<InvalidOperationException>().WithMessage("*not of*type*");
     }
 
+    [Fact]
+    public void GetStaticPropertyValue_should_throw_ArgumentNullException_when_type_is_null()
+    {
+        var act = () => ((Type)null!).GetStaticPropertyValue<string>("PublicValue");
+
+        act.Should().Throw<ArgumentNullException>().WithParameterName("type");
+    }
+
+    [Fact]
+    public void GetStaticPropertyValue_should_throw_ArgumentNullException_when_property_name_is_null()
+    {
+        var act = () => typeof(ClassWithStaticProperties).GetStaticPropertyValue<string>(null!);
+
+        act.Should().Throw<ArgumentNullException>().WithParameterName("propertyName");
+    }
+
     [SuppressMessage("Major Code Smell",
                      "S1144:Unused private types or members should be removed",
                      Justification = "All members are accessed via reflection through DbContextExtensions.GetStaticPropertyValue.")]

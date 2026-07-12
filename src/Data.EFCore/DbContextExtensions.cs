@@ -74,12 +74,18 @@ public static class DbContextExtensions
     /// <returns>
     ///     The value of the static property, or <see langword="default" /> when the stored value is <see langword="null" />.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown if <paramref name="type" /> or <paramref name="propertyName" /> is null.
+    /// </exception>
     /// <exception cref="InvalidOperationException">
     ///     Thrown when the property is not found on <paramref name="type" />, or when its value is not of type
     ///     <typeparamref name="TValue" />.
     /// </exception>
     public static TValue? GetStaticPropertyValue<TValue>(this Type type, string propertyName)
     {
+        ArgumentNullException.ThrowIfNull(type);
+        ArgumentNullException.ThrowIfNull(propertyName);
+
         // Accessing non-public static properties is the documented purpose of this helper —
         // callers explicitly opt in by naming the property (see GetStaticPropertyValueTests).
 #pragma warning disable S3011 // Reflection should not be used to increase accessibility
