@@ -42,11 +42,16 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_int_list(List<int> firstIntList, List<int> secondIntList)
     {
+        // Search for the complete serialised list rather than a single element: a short digit
+        // substring such as "4" can also match inside another entity's values (e.g. "147"),
+        // which made this test fail intermittently depending on the generated data.
+        var serialisedSecondList = string.Join(",", secondIntList.Select(v => v.ToString(CultureInfo.CurrentCulture)));
+
         ValidateConverterEntities(e => e.IntCollection,
                                   (e, v) => e.IntCollection = v,
                                   firstIntList,
                                   secondIntList,
-                                  t => ((string)(object)t.IntCollection).Contains(secondIntList[1].ToString(CultureInfo.CurrentCulture)));
+                                  t => ((string)(object)t.IntCollection).Contains(serialisedSecondList));
     }
 
     [Theory]
