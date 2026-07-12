@@ -45,7 +45,7 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
 
         foreach (var entity in result)
         {
-            AuditEntityHandler.HandleAccess(entity);
+            _ = AuditEntityHandler.HandleAccess(entity);
         }
 
         return result;
@@ -96,7 +96,7 @@ public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntity
 
         if (result != null)
         {
-            AuditEntityHandler.HandleAccess(result);
+            _ = AuditEntityHandler.HandleAccess(result);
         }
 
         return result;
