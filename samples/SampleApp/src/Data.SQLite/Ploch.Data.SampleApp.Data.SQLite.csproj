@@ -7,6 +7,10 @@
   <ItemGroup>
     <PackageReference Include="Ploch.Data.EFCore.SqLite" />
     <PackageReference Include="Ploch.Data.EFCore" />
+    <!-- Overrides the vulnerable SQLitePCLRaw 2.1.x pulled transitively through the
+         published Ploch.Data packages (GHSA-2m69-gcr7-jv3q). Remove once the consumed
+         Ploch.Data.EFCore.SqLite package version carries the override itself. -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Ploch.Data.SampleApp.Data.csproj" />
