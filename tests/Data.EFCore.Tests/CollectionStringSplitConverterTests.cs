@@ -45,7 +45,10 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         // Search for the complete serialised list rather than a single element: a short digit
         // substring such as "4" can also match inside another entity's values (e.g. "147"),
         // which made this test fail intermittently depending on the generated data.
-        var serialisedSecondList = string.Join(",", secondIntList.Select(v => v.ToString(CultureInfo.CurrentCulture)));
+        // Mirror the converter's write format exactly (Uri.EscapeDataString per element,
+        // string.Empty for default values) so the expected string cannot diverge from the
+        // stored value regardless of the generated data.
+        var serialisedSecondList = string.Join(",", secondIntList.Select(v => v != 0 ? Uri.EscapeDataString(v.ToString(CultureInfo.CurrentCulture)) : string.Empty));
 
         ValidateConverterEntities(e => e.IntCollection,
                                   (e, v) => e.IntCollection = v,
