@@ -58,7 +58,7 @@ public static class DbContextExtensions
             throw new InvalidOperationException($"Entity type '{entityType.Name}' was not found in the context.");
         }
 
-        var setMethod = typeof(DbContext).GetMethods().First(m => m.Name == nameof(Set) && m.ContainsGenericParameters && m.GetParameters().Length == 0);
+        var setMethod = typeof(DbContext).GetMethods().First(m => m.Name == nameof(DbContext.Set) && m.ContainsGenericParameters && m.GetParameters().Length == 0);
 
         var genericSetMethod = setMethod.MakeGenericMethod(entityType);
 
