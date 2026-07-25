@@ -42,9 +42,9 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_int_list(List<int> firstIntList, List<int> secondIntList)
     {
-        // Search for the complete serialised list rather than a single element: a short digit
-        // substring such as "4" can also match inside another entity's values (e.g. "147"),
-        // which made this test fail intermittently depending on the generated data.
+        // Match the complete serialised list exactly rather than searching for a single
+        // element: a short digit substring such as "4" can also match inside another
+        // entity's values (e.g. "147"), which made this test fail intermittently.
         // Mirror the converter's write format exactly (Uri.EscapeDataString per element,
         // string.Empty for default values) so the expected string cannot diverge from the
         // stored value regardless of the generated data.
@@ -54,7 +54,7 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
                                   (e, v) => e.IntCollection = v,
                                   firstIntList,
                                   secondIntList,
-                                  t => ((string)(object)t.IntCollection).Contains(serialisedSecondList));
+                                  t => (string)(object)t.IntCollection == serialisedSecondList);
     }
 
     [Theory]
