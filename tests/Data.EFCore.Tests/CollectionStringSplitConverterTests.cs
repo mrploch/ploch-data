@@ -61,11 +61,16 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_datetime_list(List<DateTime> firstDateTimeList, List<DateTime> secondDateTimeList)
     {
+        // Match the complete serialised list exactly, mirroring the converter's write format
+        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
+        // single element could match the wrong entity if the generated lists share a value.
+        var serialisedSecondList = string.Join(",", secondDateTimeList.Select(v => v != default ? Uri.EscapeDataString(v.ToString(CultureInfo.CurrentCulture)) : string.Empty));
+
         ValidateConverterEntities(e => e.DatesCollection,
                                   (e, v) => e.DatesCollection = v,
                                   firstDateTimeList,
                                   secondDateTimeList,
-                                  t => ((string)(object)t.DatesCollection).Contains(Uri.EscapeDataString(secondDateTimeList[1].ToString(CultureInfo.CurrentCulture))));
+                                  t => (string)(object)t.DatesCollection == serialisedSecondList);
     }
 
     private void ValidateConverterEntities<TValue>(Func<ConverterTestEntity, ICollection<TValue>> entityPropertyFunc,
