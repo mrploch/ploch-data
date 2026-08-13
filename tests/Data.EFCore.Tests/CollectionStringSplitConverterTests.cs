@@ -19,8 +19,13 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         DbContext.TestEntities.Add(new() { StringCollection = secondList });
         DbContext.SaveChanges();
 
+        // Match the complete serialised list exactly, mirroring the converter's write format
+        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
+        // single element could match the wrong entity if the generated lists share a value.
+        var serialisedSecondList = string.Join(",", secondList.Select(v => v != null ? Uri.EscapeDataString(v) : string.Empty));
+
         var entity = DbContext.TestEntities.Skip(1).First();
-        var queriedEntity = DbContext.TestEntities.FirstOrDefault(t => ((string)(object)t.StringCollection).Contains(secondList[1]));
+        var queriedEntity = DbContext.TestEntities.FirstOrDefault(t => (string)(object)t.StringCollection == serialisedSecondList);
 
         entity.Should().BeEquivalentTo(queriedEntity);
         entity.StringCollection.Should().HaveCount(secondList.Count);
@@ -31,11 +36,16 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_string_list(List<string> firstStringList, List<string> secondStringList)
     {
+        // Match the complete serialised list exactly, mirroring the converter's write format
+        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
+        // single element could match the wrong entity if the generated lists share a value.
+        var serialisedSecondList = string.Join(",", secondStringList.Select(v => v != null ? Uri.EscapeDataString(v) : string.Empty));
+
         ValidateConverterEntities(e => e.StringCollection,
                                   (e, v) => e.StringCollection = v,
                                   firstStringList,
                                   secondStringList,
-                                  t => ((string)(object)t.StringCollection).Contains(secondStringList[1]));
+                                  t => (string)(object)t.StringCollection == serialisedSecondList);
     }
 
     [Theory]
