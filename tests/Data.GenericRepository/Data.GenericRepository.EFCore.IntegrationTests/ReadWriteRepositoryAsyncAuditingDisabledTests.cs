@@ -6,12 +6,6 @@ namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 
 public class ReadWriteRepositoryAsyncAuditingDisabledTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {
-    protected override void ConfigureServices(IServiceCollection services)
-    {
-        base.ConfigureServices(services);
-        services.Configure<RepositoriesConfiguration>(static configuration => configuration.EnableAuditing = false);
-    }
-
     [Fact]
     public async Task UpdateAsync_should_apply_supplied_creation_audit_values_when_auditing_is_disabled()
     {
@@ -45,5 +39,11 @@ public class ReadWriteRepositoryAsyncAuditingDisabledTests : GenericRepositoryDa
         updatedBlog.CreatedTime!.Value.Should().BeCloseTo(newCreatedTime, TimeSpan.FromMilliseconds(1));
         updatedBlog.CreatedBy.Should().Be("new-creator");
         updatedBlog.ModifiedTime.Should().BeNull("auditing is disabled, so the modification timestamp is not set");
+    }
+
+    protected override void ConfigureServices(IServiceCollection services)
+    {
+        base.ConfigureServices(services);
+        services.Configure<RepositoriesConfiguration>(static configuration => configuration.EnableAuditing = false);
     }
 }
