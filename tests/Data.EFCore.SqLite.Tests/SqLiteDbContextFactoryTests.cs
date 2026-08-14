@@ -155,13 +155,11 @@ public class SqLiteDbContextFactoryTests
         }
     }
 
-    private sealed class LifecycleIntegrationTestFactory : SqLiteDbContextFactory<LifecycleIntegrationTestDbContext, LifecycleIntegrationTestFactory>
-    {
-        public LifecycleIntegrationTestFactory(Func<DbContextOptions<LifecycleIntegrationTestDbContext>, LifecycleIntegrationTestDbContext> dbContextCreator,
-                                               Func<string> connectionStringFunc)
-            : base(dbContextCreator, connectionStringFunc)
-        { }
-    }
+    private sealed class LifecycleIntegrationTestFactory(
+        Func<DbContextOptions<LifecycleIntegrationTestDbContext>, LifecycleIntegrationTestDbContext> dbContextCreator,
+        Func<string> connectionStringFunc)
+        : SqLiteDbContextFactory<LifecycleIntegrationTestDbContext, LifecycleIntegrationTestFactory>(dbContextCreator, connectionStringFunc)
+    { }
 
     private sealed class TestSqLiteDbContextFactory : SqLiteDbContextFactory<TestDbContext, TestSqLiteDbContextFactory>
     {

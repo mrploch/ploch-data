@@ -36,7 +36,7 @@ public class DbContextExtensionsTests : DataIntegrationTest<TestDbContext>
     [Fact]
     public void FindEntityType_should_find_requested_type_in_db_context()
     {
-        DbContext.FindEntityType(nameof(TestEntity)).Should().NotBeNull().And.Be(typeof(TestEntity));
+        DbContext.FindEntityType(nameof(TestEntity)).Should().NotBeNull().And.Be<TestEntity>();
     }
 
     [Fact]
@@ -57,8 +57,8 @@ public class DbContextExtensionsTests : DataIntegrationTest<TestDbContext>
         DbContext.ContainsEntityType(typeof(NonExistingEntity)).Should().BeFalse();
     }
 
-#pragma warning disable S2094 - we need to test the exception
-    private class NonExistingEntity
+#pragma warning disable S2094 // Classes should not be empty — a marker type absent from the model is needed for the negative tests
+    private sealed class NonExistingEntity
 #pragma warning restore S2094
     { }
 }

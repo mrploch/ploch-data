@@ -21,7 +21,7 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
     /// </remarks>
     /// <param name="separator">Separator to be used when converting the collection to string.</param>
     /// <param name="convertNulls">Include null values in the conversion.</param>
-    /// <param name="mappingHints">Optional mapping hints to pass to the baase converter.</param>
+    /// <param name="mappingHints">Optional mapping hints to pass to the base converter.</param>
 #pragma warning disable SA1003 // Symbols should be spaced correctly - : should not appear at the end of the line - line is too long
     public CollectionStringSplitConverter(string separator = ",", bool convertNulls = true, ConverterMappingHints? mappingHints = null) :
 #pragma warning restore SA1003

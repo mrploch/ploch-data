@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +11,6 @@ namespace Ploch.Data.EFCore.Tests;
 
 public class CollectionStringSplitConverterTests : DataIntegrationTest<ConverterTestDbContext>
 {
-    public static IEnumerable<object[]> Data => new List<object[]>
-                                                { new object[] { 1, 2, 3 },
-                                                  new object[] { -4, -6, -10 },
-                                                  new object[] { -2, 2, 0 },
-                                                  new object[] { int.MinValue, -1, int.MaxValue } };
-
     [Theory]
     [AutoMockData]
     public void CollectionStringSplitConverter_should_convert_to_and_from_string_list(List<string> firstList, List<string> secondList)
@@ -24,8 +19,13 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         DbContext.TestEntities.Add(new() { StringCollection = secondList });
         DbContext.SaveChanges();
 
+        // Match the complete serialised list exactly, mirroring the converter's write format
+        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
+        // single element could match the wrong entity if the generated lists share a value.
+        var serialisedSecondList = string.Join(",", secondList.Select(v => v != null ? Uri.EscapeDataString(v) : string.Empty));
+
         var entity = DbContext.TestEntities.Skip(1).First();
-        var queriedEntity = DbContext.TestEntities.FirstOrDefault(t => ((string)(object)t.StringCollection).Contains(secondList[1]));
+        var queriedEntity = DbContext.TestEntities.FirstOrDefault(t => (string)(object)t.StringCollection == serialisedSecondList);
 
         entity.Should().BeEquivalentTo(queriedEntity);
         entity.StringCollection.Should().HaveCount(secondList.Count);
@@ -36,33 +36,51 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_string_list(List<string> firstStringList, List<string> secondStringList)
     {
+        // Match the complete serialised list exactly, mirroring the converter's write format
+        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
+        // single element could match the wrong entity if the generated lists share a value.
+        var serialisedSecondList = string.Join(",", secondStringList.Select(v => v != null ? Uri.EscapeDataString(v) : string.Empty));
+
         ValidateConverterEntities(e => e.StringCollection,
                                   (e, v) => e.StringCollection = v,
                                   firstStringList,
                                   secondStringList,
-                                  t => ((string)(object)t.StringCollection).Contains(secondStringList[1]));
+                                  t => (string)(object)t.StringCollection == serialisedSecondList);
     }
 
     [Theory]
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_int_list(List<int> firstIntList, List<int> secondIntList)
     {
+        // Match the complete serialised list exactly rather than searching for a single
+        // element: a short digit substring such as "4" can also match inside another
+        // entity's values (e.g. "147"), which made this test fail intermittently.
+        // Mirror the converter's write format exactly (Uri.EscapeDataString per element,
+        // string.Empty for default values) so the expected string cannot diverge from the
+        // stored value regardless of the generated data.
+        var serialisedSecondList = string.Join(",", secondIntList.Select(v => v != 0 ? Uri.EscapeDataString(v.ToString(CultureInfo.CurrentCulture)) : string.Empty));
+
         ValidateConverterEntities(e => e.IntCollection,
                                   (e, v) => e.IntCollection = v,
                                   firstIntList,
                                   secondIntList,
-                                  t => ((string)(object)t.IntCollection).Contains(secondIntList[1].ToString()));
+                                  t => (string)(object)t.IntCollection == serialisedSecondList);
     }
 
     [Theory]
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_datetime_list(List<DateTime> firstDateTimeList, List<DateTime> secondDateTimeList)
     {
+        // Match the complete serialised list exactly, mirroring the converter's write format
+        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
+        // single element could match the wrong entity if the generated lists share a value.
+        var serialisedSecondList = string.Join(",", secondDateTimeList.Select(v => v != default ? Uri.EscapeDataString(v.ToString(CultureInfo.CurrentCulture)) : string.Empty));
+
         ValidateConverterEntities(e => e.DatesCollection,
                                   (e, v) => e.DatesCollection = v,
                                   firstDateTimeList,
                                   secondDateTimeList,
-                                  t => ((string)(object)t.DatesCollection).Contains(Uri.EscapeDataString(secondDateTimeList[1].ToString())));
+                                  t => (string)(object)t.DatesCollection == serialisedSecondList);
     }
 
     private void ValidateConverterEntities<TValue>(Func<ConverterTestEntity, ICollection<TValue>> entityPropertyFunc,
@@ -92,12 +110,12 @@ public class ConverterTestDbContext(DbContextOptions<ConverterTestDbContext> opt
 {
     public DbSet<ConverterTestEntity> TestEntities { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        builder.Entity<ConverterTestEntity>().Property(e => e.StringCollection).HasConversion(new CollectionStringSplitConverter<string>());
-        builder.Entity<ConverterTestEntity>().Property(e => e.IntCollection).HasConversion(new CollectionStringSplitConverter<int>());
-        builder.Entity<ConverterTestEntity>().Property(e => e.DatesCollection).HasConversion(new CollectionStringSplitConverter<DateTime>());
-        base.OnModelCreating(builder);
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.StringCollection).HasConversion(new CollectionStringSplitConverter<string>());
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.IntCollection).HasConversion(new CollectionStringSplitConverter<int>());
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.DatesCollection).HasConversion(new CollectionStringSplitConverter<DateTime>());
+        base.OnModelCreating(modelBuilder);
     }
 }
 

@@ -157,7 +157,9 @@ csharp_style_prefer_utf8_string_literals = true:suggestion
 csharp_style_throw_expression = true:suggestion
 
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
-csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
+# IDE0058 activation is deliberately kept at 'silent' (the .NET default) — see the
+# dotnet_diagnostic.IDE0058 entry near the end of this file for the full rationale.
+csharp_style_unused_value_expression_statement_preference = discard_variable:silent
 
 csharp_style_var_elsewhere = true:warning
 csharp_style_var_for_built_in_types = true:warning
@@ -706,8 +708,14 @@ resharper_wrap_before_first_type_parameter_constraint = false
 # for the abstract base class + virtual ConfigureServices pattern used in test infrastructure.
 dotnet_diagnostic.CC0067.severity = none
 
-# Test project overrides
-[tests/**/*.cs]
-# IDE0058: Expression value is never used — test assertions and fluent API chains
-# intentionally discard return values.
+# IDE0058 ("Expression value is never used") is intentionally disabled repo-wide, matching
+# ploch-common and the Microsoft repos (dotnet/runtime and dotnet/aspnetcore leave it at its
+# 'silent' default; dotnet/roslyn disables it explicitly). Fluent/chained configuration APIs
+# (DbContextOptionsBuilder.UseSqlite, IServiceCollection.Add*, guard extensions) return values
+# that callers idiomatically ignore — 52 call sites across 13 src/ files fire this rule — and
+# IDE0058 offers no per-method/per-type exclusion (see dotnet/roslyn#57297, #47832 — open
+# feature requests). Per-call-site `_ = method()` discards are NOT an acceptable fix — they add
+# noise without intent. Was previously disabled only for tests/**, which let the build emit it
+# for src/, SonarCloud then imported the diagnostics as external issues on PR #99, and discards
+# were added in response (commit 6f2d38f); those discards have been removed.
 dotnet_diagnostic.IDE0058.severity = none

@@ -24,8 +24,8 @@ public abstract class SqlServerDbContextFactory<TDbContext, TFactory> : BaseDbCo
     /// </summary>
     /// <param name="dbContextCreator">Function to create an instance of DbContext.</param>
     /// <param name="connectionStringFunc">Function to return the connection string.</param>
-    protected SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc) :
-        base(dbContextCreator, connectionStringFunc)
+    protected SqlServerDbContextFactory(Func<DbContextOptions<TDbContext>, TDbContext> dbContextCreator, Func<string> connectionStringFunc)
+        : base(dbContextCreator, connectionStringFunc)
     { }
 
     /// <summary>

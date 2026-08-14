@@ -18,26 +18,17 @@ namespace Ploch.Data.EFCore.SqLite;
 ///         Implements <see cref="IDisposable" /> to release the shared connection when testing is complete.
 ///     </para>
 /// </remarks>
-public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
+/// <param name="options">SqLite connection options. Defaults to <see cref="SqLiteConnectionOptions.InMemory" />.</param>
+/// <param name="dbContextOptionsAction">Action to execute on the SqLite DbContext options builder.</param>
+public class SqLiteDbContextConfigurator(SqLiteConnectionOptions? options = null, Action<SqliteDbContextOptionsBuilder>? dbContextOptionsAction = null)
+    : IDbContextConfigurator, IDisposable
 {
     // Cannot use the new System.Threading.Lock because we also target .NET 8.
     // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
     private readonly object _connectionLock = new();
-    private readonly Action<SqliteDbContextOptionsBuilder>? _dbContextOptionsAction;
-    private readonly SqLiteConnectionOptions _options;
+    private readonly SqLiteConnectionOptions _options = options ?? SqLiteConnectionOptions.InMemory;
     private bool _disposed;
     private SqliteConnection? _sharedConnection;
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="SqLiteDbContextConfigurator" /> class.
-    /// </summary>
-    /// <param name="options">SqLite connection options. Defaults to <see cref="SqLiteConnectionOptions.InMemory" />.</param>
-    /// <param name="dbContextOptionsAction">Action to execute on the SqLite DbContext options builder.</param>
-    public SqLiteDbContextConfigurator(SqLiteConnectionOptions? options = null, Action<SqliteDbContextOptionsBuilder>? dbContextOptionsAction = null)
-    {
-        _options = options ?? SqLiteConnectionOptions.InMemory;
-        _dbContextOptionsAction = dbContextOptionsAction;
-    }
 
     /// <summary>
     ///     Configures the given DbContextOptionsBuilder to use SQLite as the database provider.
@@ -57,11 +48,11 @@ public class SqLiteDbContextConfigurator : IDbContextConfigurator, IDisposable
                 _sharedConnection ??= CreateAndOpenConnection(connectionString);
             }
 
-            optionsBuilder.UseSqlite(_sharedConnection, _dbContextOptionsAction);
+            optionsBuilder.UseSqlite(_sharedConnection, dbContextOptionsAction);
         }
         else
         {
-            optionsBuilder.UseSqlite(connectionString, _dbContextOptionsAction);
+            optionsBuilder.UseSqlite(connectionString, dbContextOptionsAction);
         }
     }
 

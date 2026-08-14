@@ -17,5 +17,5 @@ public class RepositoriesConfiguration
     ///     When enabled, the repository will track when entities are accessed or queried.
     /// </summary>
     /// <value><c>true</c> to enable access auditing; otherwise, <c>false</c>. Default is <c>false</c>.</value>
-    public bool AuditAccess { get; set; } = false;
+    public bool AuditAccess { get; set; }
 }

@@ -9,9 +9,6 @@ public class SqlServerTests : DataIntegrationTest<TestDbContext>
     public SqlServerTests() : base(new SqlServerDbContextConfigurator(builder =>
         {
             builder.DataSource = "localhost,1401";
-
-            // TODO: How to rename the database? When DB name is provided here but it doesn't yet exist, the connection faile
-            //builder.InitialCatalog = $"Ploch{Guid.NewGuid()}";
             builder.UserID = "sa";
             builder.Password = "P@ssw0rd";
             builder.TrustServerCertificate = true;
