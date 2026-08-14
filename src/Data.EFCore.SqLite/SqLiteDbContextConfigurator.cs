@@ -48,11 +48,11 @@ public class SqLiteDbContextConfigurator(SqLiteConnectionOptions? options = null
                 _sharedConnection ??= CreateAndOpenConnection(connectionString);
             }
 
-            _ = optionsBuilder.UseSqlite(_sharedConnection, dbContextOptionsAction);
+            optionsBuilder.UseSqlite(_sharedConnection, dbContextOptionsAction);
         }
         else
         {
-            _ = optionsBuilder.UseSqlite(connectionString, dbContextOptionsAction);
+            optionsBuilder.UseSqlite(connectionString, dbContextOptionsAction);
         }
     }
 
