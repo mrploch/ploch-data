@@ -81,6 +81,12 @@ public class ReadWriteRepository<TEntity, TId>(DbContext dbContext, IAuditEntity
 
         auditEntityHandler.HandleModification(entity);
 
-        DbContext.Entry(exist).CurrentValues.SetValues(entity);
+        var entry = DbContext.Entry(exist);
+        entry.CurrentValues.SetValues(entity);
+
+        if (auditEntityHandler.IsAuditingEnabled)
+        {
+            CreationAuditPropertyProtector.RestoreCreationAuditValues(entry);
+        }
     }
 }

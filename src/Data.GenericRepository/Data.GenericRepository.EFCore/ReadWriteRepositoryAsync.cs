@@ -72,6 +72,7 @@ public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditE
         await DeleteAsync(entity, cancellationToken);
     }
 
+    /// <inheritdoc />
     public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         entity.NotNull();
@@ -83,6 +84,13 @@ public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditE
         }
 
         _auditEntityHandler.HandleModification(entity);
-        DbContext.Entry(exist).CurrentValues.SetValues(entity);
+
+        var entry = DbContext.Entry(exist);
+        entry.CurrentValues.SetValues(entity);
+
+        if (_auditEntityHandler.IsAuditingEnabled)
+        {
+            CreationAuditPropertyProtector.RestoreCreationAuditValues(entry);
+        }
     }
 }

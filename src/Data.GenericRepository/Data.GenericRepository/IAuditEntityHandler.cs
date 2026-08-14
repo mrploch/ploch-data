@@ -6,6 +6,15 @@ namespace Ploch.Data.GenericRepository;
 public interface IAuditEntityHandler
 {
     /// <summary>
+    ///     Gets a value indicating whether entity auditing is enabled.
+    /// </summary>
+    /// <value>
+    ///     <see langword="true" /> if auditing operations (setting audit properties and protecting
+    ///     creation-audit properties during updates) should be performed; otherwise, <see langword="false" />.
+    /// </value>
+    bool IsAuditingEnabled { get; }
+
+    /// <summary>
     ///     Handles the creation of an entity by performing audit-related operations.
     /// </summary>
     /// <param name="entity">

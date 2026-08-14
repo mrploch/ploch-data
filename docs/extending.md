@@ -298,6 +298,10 @@ public class CustomAuditHandler : IAuditEntityHandler
         _userService = userService;
     }
 
+    // Gates audit behaviour, including the creation-audit protection applied
+    // by Update/UpdateAsync. Return false to disable auditing entirely.
+    public bool IsAuditingEnabled => true;
+
     public void HandleCreation(object entity)
     {
         if (entity is IHasCreatedTime created)

@@ -29,6 +29,126 @@ public class ReadWriteRepositoryAsyncAuditTests : GenericRepositoryDataIntegrati
     }
 
     [Fact]
+    public async Task UpdateAsync_should_preserve_creation_audit_properties_on_partial_detached_update()
+    {
+        // Arrange — seed via the plain DbContext with known creation-audit values; the repository
+        // write path is the code under test, so it must not be used for seeding.
+        var createdTime = DateTimeOffset.UtcNow.AddDays(-1);
+        var blog = new Blog { Name = "Original Name", CreatedTime = createdTime, CreatedBy = "original-creator" };
+        DbContext.Blogs.Add(blog);
+        await DbContext.SaveChangesAsync();
+        DbContext.ChangeTracker.Clear();
+
+        // Act — a partial detached entity supplies only Id and Name; every other property is at its default.
+        var unitOfWork = CreateUnitOfWork();
+        await unitOfWork.Repository<Blog, int>().UpdateAsync(new Blog { Id = blog.Id, Name = "Updated Name" });
+        await unitOfWork.CommitAsync();
+
+        // Assert — verify via a fresh DbContext so values are re-hydrated from the database.
+        var rootDbContext = CreateRootDbContext();
+        var updatedBlog = await rootDbContext.Set<Blog>().FindAsync(blog.Id);
+        updatedBlog.Should().NotBeNull();
+        updatedBlog!.Name.Should().Be("Updated Name");
+        updatedBlog.CreatedTime.Should().NotBeNull("a partial detached update must not blank the creation timestamp");
+        updatedBlog.CreatedTime!.Value.Should().BeCloseTo(createdTime, TimeSpan.FromMilliseconds(1));
+        updatedBlog.CreatedBy.Should().Be("original-creator", "a partial detached update must not blank the creator");
+        updatedBlog.ModifiedTime.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_should_ignore_caller_supplied_creation_audit_values()
+    {
+        // Arrange
+        var createdTime = DateTimeOffset.UtcNow.AddDays(-2);
+        var blog = new Blog { Name = "Original Name", CreatedTime = createdTime, CreatedBy = "original-creator" };
+        DbContext.Blogs.Add(blog);
+        await DbContext.SaveChangesAsync();
+        DbContext.ChangeTracker.Clear();
+
+        // Act — a fully-formed detached entity deliberately supplies different creation-audit values.
+        var tamperedBlog = new Blog
+        {
+            Id = blog.Id,
+            Name = "Updated Name",
+            CreatedTime = DateTimeOffset.UtcNow,
+            CreatedBy = "someone-else"
+        };
+        var unitOfWork = CreateUnitOfWork();
+        await unitOfWork.Repository<Blog, int>().UpdateAsync(tamperedBlog);
+        await unitOfWork.CommitAsync();
+
+        // Assert — creation audit is immutable through the repository; the supplied values are ignored.
+        var rootDbContext = CreateRootDbContext();
+        var updatedBlog = await rootDbContext.Set<Blog>().FindAsync(blog.Id);
+        updatedBlog.Should().NotBeNull();
+        updatedBlog!.Name.Should().Be("Updated Name");
+        updatedBlog.CreatedTime.Should().NotBeNull();
+        updatedBlog.CreatedTime!.Value.Should().BeCloseTo(createdTime, TimeSpan.FromMilliseconds(1));
+        updatedBlog.CreatedBy.Should().Be("original-creator");
+    }
+
+    [Fact]
+    public async Task UpdateAsync_should_keep_null_creation_audit_values_when_caller_supplies_them()
+    {
+        // Arrange — an entity persisted without creation-audit values (e.g. imported data).
+        var blog = new Blog { Name = "Original Name" };
+        DbContext.Blogs.Add(blog);
+        await DbContext.SaveChangesAsync();
+        DbContext.ChangeTracker.Clear();
+
+        // Act — the caller attempts to backfill creation-audit values through UpdateAsync.
+        var updateBlog = new Blog
+        {
+            Id = blog.Id,
+            Name = "Updated Name",
+            CreatedTime = DateTimeOffset.UtcNow,
+            CreatedBy = "backfiller"
+        };
+        var unitOfWork = CreateUnitOfWork();
+        await unitOfWork.Repository<Blog, int>().UpdateAsync(updateBlog);
+        await unitOfWork.CommitAsync();
+
+        // Assert — creation audit stays exactly as persisted, including null.
+        var rootDbContext = CreateRootDbContext();
+        var updatedBlog = await rootDbContext.Set<Blog>().FindAsync(blog.Id);
+        updatedBlog.Should().NotBeNull();
+        updatedBlog!.Name.Should().Be("Updated Name");
+        updatedBlog.CreatedTime.Should().BeNull();
+        updatedBlog.CreatedBy.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_should_ignore_creation_audit_changes_on_tracked_entity()
+    {
+        // Arrange
+        var createdTime = DateTimeOffset.UtcNow.AddDays(-3);
+        var blog = new Blog { Name = "Original Name", CreatedTime = createdTime, CreatedBy = "original-creator" };
+        DbContext.Blogs.Add(blog);
+        await DbContext.SaveChangesAsync();
+        DbContext.ChangeTracker.Clear();
+
+        // Act — fetch-modify-update on the same tracked instance, mutating creation audit directly.
+        var unitOfWork = CreateUnitOfWork();
+        var repository = unitOfWork.Repository<Blog, int>();
+        var trackedBlog = await repository.GetByIdAsync(blog.Id);
+        trackedBlog.Should().NotBeNull();
+        trackedBlog!.Name = "Updated Name";
+        trackedBlog.CreatedTime = DateTimeOffset.UtcNow;
+        trackedBlog.CreatedBy = "someone-else";
+        await repository.UpdateAsync(trackedBlog);
+        await unitOfWork.CommitAsync();
+
+        // Assert — the direct mutation of creation audit is ignored; the persisted values are kept.
+        var rootDbContext = CreateRootDbContext();
+        var updatedBlog = await rootDbContext.Set<Blog>().FindAsync(blog.Id);
+        updatedBlog.Should().NotBeNull();
+        updatedBlog!.Name.Should().Be("Updated Name");
+        updatedBlog.CreatedTime.Should().NotBeNull();
+        updatedBlog.CreatedTime!.Value.Should().BeCloseTo(createdTime, TimeSpan.FromMilliseconds(1));
+        updatedBlog.CreatedBy.Should().Be("original-creator");
+    }
+
+    [Fact]
     public async Task Add_and_CommitAsync_should_update_created_time_audit_property()
     {
         var unitOfWork = CreateUnitOfWork();

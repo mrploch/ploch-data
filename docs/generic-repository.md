@@ -151,6 +151,18 @@ await repository.UpdateAsync(existing);
 
 **Note:** `UpdateAsync` throws `EntityNotFoundException` if the entity does not exist.
 
+**Update semantics:** `UpdateAsync` (and the synchronous `Update`) applies **every** scalar
+property of the supplied entity to the stored entity. Partial updates are not supported — any
+property left unset on a detached entity is written to the store with its default value, so prefer
+the fetch-modify-update pattern shown above.
+
+The exception is creation audit: when auditing is enabled (`RepositoriesConfiguration.EnableAuditing`,
+the default), for entities implementing `IHasCreatedTime` or `IHasCreatedBy` the persisted
+`CreatedTime` and `CreatedBy` values are preserved and cannot be changed through
+`Update`/`UpdateAsync` — creation audit is write-once, set when the entity is added. To
+deliberately amend creation-audit data (e.g. backfilling imported rows), use the `DbContext`
+directly or disable auditing.
+
 ### DeleteAsync
 
 By entity reference or by ID:
