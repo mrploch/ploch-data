@@ -719,3 +719,11 @@ dotnet_diagnostic.CC0067.severity = none
 # for src/, SonarCloud then imported the diagnostics as external issues on PR #99, and discards
 # were added in response (commit 6f2d38f); those discards have been removed.
 dotnet_diagnostic.IDE0058.severity = none
+
+# CC0061 ("async method should end in Async") conflicts with the repository's test naming
+# convention (<Method>_should_<behaviour> — see .claude/rules/writing-dotnet-tests.md), which
+# deliberately omits the Async suffix from test method names. Disabled for test code only;
+# production code keeps the Async-suffix convention and the rule active. Refs: #88 (PR #100
+# SonarCloud findings; 56 pre-existing instances on main all stem from test methods).
+[tests/**.cs]
+dotnet_diagnostic.CC0061.severity = none

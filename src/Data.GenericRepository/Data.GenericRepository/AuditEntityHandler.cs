@@ -14,13 +14,16 @@ namespace Ploch.Data.GenericRepository;
 /// <param name="configuration">Configuration options for repositories, including auditing settings.</param>
 public class AuditEntityHandler(IUserInfoProvider userInfoProvider, TimeProvider timeProvider, IOptions<RepositoriesConfiguration> configuration) : IAuditEntityHandler
 {
+    /// <inheritdoc />
+    public bool IsAuditingEnabled => configuration.Value.EnableAuditing;
+
     /// <summary>
     ///     Handles the creation auditing for an entity by setting creation time and creator information.
     /// </summary>
     /// <param name="entity">The entity being created that may implement auditing interfaces.</param>
     public void HandleCreation(object entity)
     {
-        if (configuration.Value.EnableAuditing)
+        if (IsAuditingEnabled)
         {
             if (entity is IHasCreatedTime createdTimeEntity)
             {
@@ -40,7 +43,7 @@ public class AuditEntityHandler(IUserInfoProvider userInfoProvider, TimeProvider
     /// <param name="entity">The entity being modified that may implement auditing interfaces.</param>
     public void HandleModification(object entity)
     {
-        if (configuration.Value.EnableAuditing)
+        if (IsAuditingEnabled)
         {
             if (entity is IHasModifiedTime modifiedTimeEntity)
             {

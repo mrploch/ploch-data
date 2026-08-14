@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### Fixed
+
+- **Repository updates no longer blank creation-audit properties on partial detached updates** —
+  `ReadWriteRepositoryAsync<TEntity, TId>.UpdateAsync` and `ReadWriteRepository<TEntity, TId>.Update`
+  used `CurrentValues.SetValues`, which copies every scalar from the supplied entity. Passing a
+  partial detached entity (e.g. `new Entity { Id = id, Name = "x" }`) silently overwrote the
+  persisted `CreatedTime` and `CreatedBy` values with defaults. The persisted values are now
+  restored after the copy, and the properties are excluded from the update.
+  See `change-log/issue-88-preserve-creation-audit-on-update.md`. (#88)
+
+  **Behavioural change:** when auditing is enabled (`RepositoriesConfiguration.EnableAuditing`,
+  the default), creation-audit properties (`IHasCreatedTime.CreatedTime`,
+  `IHasCreatedBy.CreatedBy`) are now write-once through the repository — values supplied to
+  `Update`/`UpdateAsync` are ignored and the persisted values are kept. To deliberately amend
+  creation-audit data (e.g. backfilling imported rows), use the `DbContext` directly or disable
+  auditing. With auditing disabled, updates keep plain full-entity semantics. All other properties
+  keep full-entity update semantics: any property left unset on the supplied entity is still
+  written to the store with its default value.
+
+  **Breaking change:** `IAuditEntityHandler` gained a new `IsAuditingEnabled` property. Custom
+  implementations of the interface must implement it.
+
 ### Security
 
 - **Fixed vulnerable transitive `SQLitePCLRaw.lib.e_sqlite3` (high severity,

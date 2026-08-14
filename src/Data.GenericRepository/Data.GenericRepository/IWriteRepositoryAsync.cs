@@ -34,6 +34,20 @@ public interface IWriteRepositoryAsync<TEntity, in TId>
     /// <summary>
     ///     Asynchronously updates the specified entity in the repository.
     /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         The update applies every scalar property of <paramref name="entity" /> to the stored entity.
+    ///         Partial updates are not supported: any property the caller leaves unset is written to the
+    ///         store with its default value. Use the fetch-modify-update pattern to change a subset of
+    ///         properties safely.
+    ///     </para>
+    ///     <para>
+    ///         Creation-audit properties are the exception. When auditing is enabled, for entities
+    ///         implementing <see cref="IHasCreatedTime" /> or <see cref="IHasCreatedBy" />, the persisted
+    ///         <c>CreatedTime</c> and <c>CreatedBy</c> values are preserved and cannot be changed
+    ///         through this method — creation audit is write-once, set when the entity is added.
+    ///     </para>
+    /// </remarks>
     /// <param name="entity">The entity to update.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
