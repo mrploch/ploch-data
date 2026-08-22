@@ -43,9 +43,9 @@ take no `query` parameter at all.
 
 # Impact
 
-**Breaking (v4.0).** Three of the four consequences below are compile-time breaks. The fourth — a
-three-argument positional `GetPage` call — still compiles and changes meaning; it is called out
-separately under "One call shape rebinds silently" and is the one to audit for.
+**Breaking (v4.0).** The three consequences below are compile-time breaks. A further class of
+`GetPage` call still compiles and changes meaning; it is called out separately under "Some `GetPage`
+calls rebind silently" and is the one to audit for.
 
 1. **Positional `GetAll` callers.** `GetAll(q => q.Include(...))` no longer compiles — the first
    parameter is now the predicate. Fix by naming the argument: `GetAll(onDbSet: q => q.Include(...))`.
@@ -62,7 +62,7 @@ separately under "One call shape rebinds silently" and is the one to audit for.
    `Count()` and `Count(Expression<Func<TEntity, bool>>?)` are different metadata methods even
    though source calls to `Count()` still compile.
 
-### ⚠️ Some `GetPage` calls rebind silently — how to audit for them
+## ⚠️ Some `GetPage` calls rebind silently — how to audit for them
 
 `sortBy` is `Expression<Func<TEntity, object>>`, and a `bool`-bodied **lambda** converts to it
 implicitly (the `bool` boxes). So a pre-4.0 predicate passed *positionally in third position* now
@@ -70,7 +70,7 @@ binds to `sortBy` instead of `query`, and the call still compiles:
 
 ````csharp
 // Before 4.0 — filters to published posts.
-// Since 4.0  — orders by a boxed bool and returns EVERY row, unfiltered.
+// Since 4.0  — orders by a boxed bool and returns an UNFILTERED page.
 repository.GetPage(1, 20, post => post.IsPublished);
 
 // Fix — name the argument.
@@ -101,8 +101,10 @@ repository.GetPage(1, 20, post => post.IsPublished, q => q.Include(...)); // CS0
 ````
 
 So: **grep for `GetPage(` with a positional third argument that is a lambda; the argument count is
-irrelevant.** Calls that pass a typed `Expression<Func<T, bool>>` variable, or that already name
-their arguments, are unaffected. `GetAll` and `Count` have no equivalent hazard — see below.
+irrelevant.** Calls that already name their arguments are unaffected. Calls passing a typed
+`Expression<Func<T, bool>>` variable positionally are *not* silently rebound, but they are not
+unaffected either — they stop compiling, and still need the argument named
+(`GetPage(1, 20, query: predicate)`). `GetAll` and `Count` have no equivalent hazard — see below.
 
 # Design notes
 
@@ -130,37 +132,49 @@ their arguments, are unaffected. `GetAll` and `Count` have no equivalent hazard 
 `sortBy` had **no test coverage at all** before this change — on `GetPageQuery`, `GetPageAsync`, or
 anywhere else. That gap is now closed.
 
-Five tests were filtering through `onDbSet` and have been rewritten so the shaping they pass is
+Five tests were filtering through `onDbSet`. **Three were rewritten** so the shaping they pass is
 something `onDbSet` is actually for, with the filtering moved to `query`:
 
 - `ReadRepositoryTests.Find_with_OnDbSet_action_should_apply_the_shaping_to_the_query` — the
   predicate now matches three rows so the `OrderByDescending` passed through `onDbSet` decides the
   result, making the shaping observable.
-- `ReadRepositoryTests.GetPage_should_return_a_page_of_entities_with_includes_using_query` — filter
-  in `query`, ordering in the new `sortBy`, `onDbSet` left doing only eager loading.
 - `QueryableRepositoryTests.GetPageQuery_with_onDbSet_should_apply_the_shaping_to_the_query` — the
   `Where` became an `OrderByDescending`; the page size now does the narrowing.
 - `ReadWriteRepositoryAsyncAdditionalTests.GetByIdAsync_with_onDbSet_should_apply_the_shaping_to_the_query`
   — asserts `AsNoTracking` leaves the returned entity `Detached`. Ordering is not observable for a
   by-id lookup, so shaping is demonstrated through tracking behaviour instead.
-- Two `..._should_return_null_when_filter_excludes_entity` tests were **deleted** rather than
-  rewritten: they asserted that a filter passed through `onDbSet` could suppress a by-id hit, which
-  is precisely the behaviour this change documents as unsupported. Deleting them would have left the
-  `onDbSet != null` branch of `GetById`/`GetByIdAsync` — which resolves through
-  `onDbSet(DbSet).FirstOrDefault(e => Equals(e.Id, id))` rather than `DbSet.Find(id)` — with no
-  not-found coverage at all, since the existing `..._should_return_null_when_entity_does_not_exist`
-  tests take the null-`onDbSet` branch. Replacements covering that branch were added for both the
-  sync and async repositories, shaping with `AsNoTracking` and letting the missing id produce the
-  null.
 
-Six tests added for the widened surface:
+**Two were deleted** rather than rewritten — both `..._should_return_null_when_filter_excludes_entity`.
+They asserted that a filter passed through `onDbSet` could suppress a by-id hit, which is precisely
+the behaviour this change documents as unsupported. Deleting them alone would have left the
+`onDbSet != null` branch of `GetById`/`GetByIdAsync` — which resolves through
+`onDbSet(DbSet).FirstOrDefault(e => Equals(e.Id, id))` rather than `DbSet.Find(id)` — with no
+not-found coverage at all, since the surviving `..._should_return_null_when_entity_does_not_exist`
+tests take the null-`onDbSet` branch. Replacements covering that branch were added for both the sync
+and async repositories, shaping with `AsNoTracking` and letting the missing id produce the null.
+
+One further test was restructured without changing what it covers:
+`ReadRepositoryTests.GetPage_should_return_a_page_of_entities_with_includes_using_query` now passes
+its filter in `query`, its ordering in the new `sortBy`, and leaves `onDbSet` doing only eager
+loading. (Its `sortBy` is there for deterministic paging, not as `sortBy` coverage — ascending by
+`Id` matches the natural row order, so it would pass even if `sortBy` were ignored. The dedicated
+descending-sort tests below are the ones that actually cover it.)
+
+**Eight tests added:**
 
 - `GetAll_should_filter_the_entities_using_the_query`
 - `GetAll_should_apply_the_query_and_the_shaping_together` — proves `query` narrows *and* `onDbSet`
   eager-loads in the same call
 - `Count_should_count_only_the_entities_matching_the_query`
-- `GetPage_should_order_the_results_using_sortBy`
-- `GetPageQuery_with_sortBy_should_order_the_results`
+- `GetPage_should_order_the_results_using_sortBy` — sorts **descending** on purpose; ascending by
+  `Id` coincides with SQLite's natural rowid order, so an ascending assertion would pass even with
+  `sortBy` ignored entirely
+- `GetPageQuery_with_sortBy_should_order_the_results` — likewise descending
 - `GetByIdAsync_should_return_null_when_the_id_does_not_exist`
+- `GetByIdAsync_with_onDbSet_should_return_null_when_the_id_does_not_exist`
+- `GetById_with_onDbSet_should_return_null_when_the_id_does_not_exist`
 
-Full suite: 218 tests across 8 projects, all passing.
+Net `[Fact]` count: +8 added, −2 deleted, 3 renamed in place.
+
+Full suite: **220 tests across 8 projects, all passing.** SonarCloud reports 100% coverage on new
+code for this change.

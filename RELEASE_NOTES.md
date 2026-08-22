@@ -15,7 +15,9 @@
   **Breaking change:** the new parameters shift positions on the synchronous interface.
 
   - `GetAll(q => q.Include(...))` no longer compiles; use `GetAll(onDbSet: q => q.Include(...))`.
-  - `GetPage(1, 20, predicate, onDbSet)` no longer compiles; name the arguments.
+  - `GetPage(1, 20, predicate, q => q.Include(...))` — four positional arguments ending in a shaping
+    lambda — no longer compiles; name the arguments. Note that *not every* positional `GetPage` call
+    fails loudly; see the warning below.
   - Custom `IReadRepository<TEntity>` implementations must update `GetAll`, `GetPage`, and `Count`.
     This is also a binary break — `Count()` and `Count(Expression<Func<TEntity, bool>>?)` are
     different metadata methods even though source calls to `Count()` still compile.
@@ -27,7 +29,7 @@
   ```csharp
   repository.GetPage(1, 20, post => post.IsPublished);
   // before: filtered to published posts
-  // now:    orders by a boxed bool and returns every row, UNFILTERED
+  // now:    orders by a boxed bool and returns an UNFILTERED page
   //
   // fix:    repository.GetPage(1, 20, query: post => post.IsPublished);
   ```
