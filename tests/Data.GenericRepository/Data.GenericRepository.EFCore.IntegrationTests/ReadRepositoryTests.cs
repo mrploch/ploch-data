@@ -17,7 +17,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         // Act — exercise the read repository (the code under test).
         var repository = CreateReadRepository<BlogPost, int>();
-        var blogPosts = repository.GetAll(query => query.Include(e => e.Tags).Include(e => e.Categories).ThenInclude(c => c.Children));
+        var blogPosts = repository.GetAll(onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories).ThenInclude(c => c.Children));
 
         // Assert — GetAll's return value is the observable output of the feature under test.
         blogPosts.Should().HaveCount(2);
@@ -119,16 +119,18 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
         var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(CreateRootDbContext, 20);
 
         var repository = CreateReadRepository<BlogPost, int>();
+
+        // Filtering goes through `query`; `sortBy` makes the page deterministic (without an explicit
+        // order the DB may return filtered rows in any order and the index-based assertion below
+        // would be flaky); `onDbSet` is left to do only what it is for — eager loading.
         var blogPosts = repository.GetPage(2,
                                            3,
+                                           sortBy: post => post.Id,
 #pragma warning disable SA1117 // Parameters should be placed on the same line
-                                           query => query.Name == "Blog post 5" || query.Name == "Blog post 6" || query.Name == "Blog post 7" || query.Name == "Blog post 8" ||
-                                                    query.Name == "Blog post 9" || query.Name == "Blog post 10",
+                                           query: post => post.Name == "Blog post 5" || post.Name == "Blog post 6" || post.Name == "Blog post 7" ||
+                                                          post.Name == "Blog post 8" || post.Name == "Blog post 9" || post.Name == "Blog post 10",
 #pragma warning restore SA1117
-
-                                           // Explicit OrderBy so page contents are deterministic — without it, the
-                                           // DB may return filtered rows in any order and the index-based assertion below would be flaky.
-                                           query => query.OrderBy(e => e.Id).Include(e => e.Tags).Include(e => e.Categories));
+                                           onDbSet: query => query.Include(e => e.Tags).Include(e => e.Categories));
 
         blogPosts.Should().HaveCount(3);
 
@@ -196,7 +198,7 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
     }
 
     [Fact]
-    public async Task Find_with_OnDbSet_action_should_query_repository_for_first_entity_and_return_it()
+    public async Task Find_with_OnDbSet_action_should_apply_the_shaping_to_the_query()
     {
         // Arrange — seed via a separate context (see GetAll_should_return_entities_with_includes
         // for why the read must not share the seed context's change tracker).
@@ -204,11 +206,78 @@ public class ReadRepositoryTests : GenericRepositoryDataIntegrationTest<TestDbCo
 
         var repository = CreateReadRepository<BlogPostTag, int>();
 
-        var blogPostTag = repository.FindFirst(postTag => postTag.Name.Contains(tags[3].Name) || postTag.Name.Contains(tags[4].Name) || postTag.Name.Contains(tags[5].Name),
-                                               blogPostTags => blogPostTags.Where(tag => tag.Name.Contains(tags[4].Name)));
+        // The predicate matches three rows, so the ordering applied through onDbSet decides which
+        // one FindFirst returns — that is what makes the shaping observable. Filtering stays in
+        // `query`; onDbSet is never used to narrow the result set.
+        var blogPostTag = repository.FindFirst(postTag => postTag.Name == tags[3].Name || postTag.Name == tags[4].Name || postTag.Name == tags[5].Name,
+                                               blogPostTags => blogPostTags.OrderByDescending(tag => tag.Id));
 
         blogPostTag.Should().NotBeNull();
-        blogPostTag.Should().BeEquivalentTo(tags[4]);
+        blogPostTag.Should().BeEquivalentTo(tags[5], options => options.WithEntityEquivalencyOptions());
+    }
+
+    [Fact]
+    public async Task GetAll_should_filter_the_entities_using_the_query()
+    {
+        // Arrange — seed via a separate context (see GetAll_should_return_entities_with_includes
+        // for why the read must not share the seed context's change tracker).
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(CreateRootDbContext, 20);
+
+        var repository = CreateReadRepository<BlogPost, int>();
+        var blogPosts = repository.GetAll(post => post.Id > posts[14].Id);
+
+        blogPosts.Should().HaveCount(5);
+        blogPosts.Should().OnlyContain(post => post.Id > posts[14].Id);
+    }
+
+    [Fact]
+    public async Task GetAll_should_apply_the_query_and_the_shaping_together()
+    {
+        // Arrange — seed via a separate context (see GetAll_should_return_entities_with_includes
+        // for why the read must not share the seed context's change tracker).
+        var (_, blogPost1, _) = await RepositoryHelper.AddAsyncTestBlogEntitiesAsync(CreateRootDbContext);
+
+        var repository = CreateReadRepository<BlogPost, int>();
+        var blogPosts = repository.GetAll(post => post.Id == blogPost1.Id, query => query.Include(post => post.Tags));
+
+        // `query` narrowed the result set to the right entity — assert the identity explicitly, not
+        // just the count, so a mis-composed predicate returning the *other* post is caught here
+        // rather than surviving on an incidental difference in tag counts.
+        blogPosts.Should().ContainSingle();
+        blogPosts[0].Id.Should().Be(blogPost1.Id);
+
+        // …and `onDbSet` eager-loaded the navigation collection.
+        blogPosts[0].Tags.Should().NotBeEmpty().And.HaveCount(blogPost1.Tags.Count);
+    }
+
+    [Fact]
+    public async Task Count_should_count_only_the_entities_matching_the_query()
+    {
+        // Arrange — seed via a separate context (see GetAll_should_return_entities_with_includes
+        // for why the read must not share the seed context's change tracker).
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(CreateRootDbContext, 20);
+
+        var repository = CreateReadRepository<BlogPost, int>();
+
+        repository.Count(post => post.Id > posts[14].Id).Should().Be(5);
+        repository.Count(post => post.Id < posts[0].Id).Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GetPage_should_order_the_results_using_sortBy()
+    {
+        // Arrange — seed via a separate context (see GetAll_should_return_entities_with_includes
+        // for why the read must not share the seed context's change tracker).
+        var (_, posts) = await RepositoryHelper.AddAsyncTestBlogEntitiesWithManyPostsAsync(CreateRootDbContext, 20);
+
+        // Sort descending on purpose. Ascending by Id coincides with the natural insertion/rowid
+        // order, so an ascending assertion would still pass if sortBy were ignored entirely.
+        var expectedSecondPageIds = posts.Select(post => post.Id).OrderDescending().Skip(5).Take(5).ToList();
+
+        var repository = CreateReadRepository<BlogPost, int>();
+        var blogPosts = repository.GetPage(2, 5, sortBy: post => -post.Id);
+
+        blogPosts.Select(post => post.Id).Should().Equal(expectedSecondPageIds);
     }
 
     [Fact]

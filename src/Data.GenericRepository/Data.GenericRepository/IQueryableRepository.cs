@@ -23,7 +23,11 @@ public interface IQueryableRepository<TEntity>
     /// <param name="pageSize">The size of the page to get.</param>
     /// <param name="sortBy">Sort by property selector.</param>
     /// <param name="query">A LINQ expression to filter the entities.</param>
-    /// <param name="onDbSet">Action to perform on DbSet on the query - for example, Include.</param>
+    /// <param name="onDbSet">
+    ///     An optional function used to <em>shape</em> the query — for example eager loading with
+    ///     <c>Include</c> / <c>ThenInclude</c>, ordering, or <c>AsNoTracking</c>. Do not filter here; express
+    ///     filtering with <paramref name="query" /> instead.
+    /// </param>
     /// <returns>A queryable collection of entities for the specified page.</returns>
     IQueryable<TEntity> GetPageQuery(int pageNumber,
                                      int pageSize,

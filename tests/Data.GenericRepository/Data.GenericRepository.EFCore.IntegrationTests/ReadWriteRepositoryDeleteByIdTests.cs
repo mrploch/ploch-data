@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTests.Model;
@@ -83,17 +83,23 @@ public class ReadWriteRepositoryDeleteByIdTests : GenericRepositoryDataIntegrati
     }
 
     [Fact]
-    public async Task GetById_with_onDbSet_should_return_null_when_filter_excludes_entity()
+    public async Task GetById_with_onDbSet_should_return_null_when_the_id_does_not_exist()
     {
         // Arrange — seed via a separate context so the read genuinely queries the database.
         await using (var seedContext = CreateRootDbContext())
         {
-            await seedContext.TestEntities.AddAsync(new() { Id = 1, Name = "Excluded" });
+            await seedContext.TestEntities.AddAsync(new() { Id = 1, Name = "Present" });
             await seedContext.SaveChangesAsync();
         }
 
         var repository = CreateReadRepository<TestEntity, int>();
-        var result = repository.GetById(1, q => q.Where(e => e.Name == "NonExistent"));
+
+        // Covers the onDbSet != null branch, which resolves the entity through
+        // `onDbSet(DbSet).FirstOrDefault(e => Equals(e.Id, id))` rather than `DbSet.Find(id)`.
+        // Its not-found path would otherwise be untested: the sibling
+        // GetById_should_return_null_when_entity_does_not_exist test takes the null-onDbSet branch.
+        // onDbSet shapes here (AsNoTracking) and does not filter — the null comes from the id.
+        var result = repository.GetById(999, q => q.AsNoTracking());
 
         result.Should().BeNull();
     }

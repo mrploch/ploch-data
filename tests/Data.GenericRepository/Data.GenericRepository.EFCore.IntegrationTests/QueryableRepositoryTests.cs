@@ -80,7 +80,7 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
     }
 
     [Fact]
-    public async Task GetPageQuery_with_onDbSet_should_apply_custom_query()
+    public async Task GetPageQuery_with_onDbSet_should_apply_the_shaping_to_the_query()
     {
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
@@ -93,12 +93,34 @@ public class QueryableRepositoryTests : GenericRepositoryDataIntegrationTest<Tes
 
         var queryableRepo = CreateQueryableRepository<TestEntity>();
 
-        // Request all 10 items in one page, but the onDbSet filter limits to IDs <= 3
-        var pageQuery = queryableRepo.GetPageQuery(1, 10, onDbSet: q => q.Where(e => e.Id <= 3));
+        // onDbSet shapes the query — here by ordering it. Narrowing the result set is `query`'s job,
+        // so the page size is what limits the result to 3, not the shaping.
+        var pageQuery = queryableRepo.GetPageQuery(1, 3, onDbSet: q => q.OrderByDescending(e => e.Id));
 
         var result = pageQuery.ToList();
-        result.Should().HaveCount(3);
-        result.Should().OnlyContain(e => e.Id <= 3);
+        result.Select(e => e.Id).Should().Equal(10, 9, 8);
+    }
+
+    [Fact]
+    public async Task GetPageQuery_with_sortBy_should_order_the_results()
+    {
+        using var unitOfWork = CreateUnitOfWork();
+        var repository = unitOfWork.Repository<TestEntity, int>();
+        for (var i = 1; i <= 10; i++)
+        {
+            await repository.AddAsync(new() { Id = i, Name = $"Entity{i}" });
+        }
+
+        await unitOfWork.CommitAsync();
+
+        var queryableRepo = CreateQueryableRepository<TestEntity>();
+
+        // Sort descending on purpose. Ascending by Id coincides with SQLite's natural rowid order,
+        // so an ascending assertion would still pass if sortBy were ignored entirely.
+        var pageQuery = queryableRepo.GetPageQuery(2, 3, sortBy: e => -e.Id);
+
+        var result = pageQuery.ToList();
+        result.Select(e => e.Id).Should().Equal(7, 6, 5);
     }
 
     [Fact]
