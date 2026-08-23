@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Ploch.Data.Model;
 
@@ -24,9 +23,8 @@ public class ReadRepository<TEntity>(DbContext dbContext) : QueryableRepository<
     public TEntity? GetById(object[] keyValues) => DbSet.Find(keyValues);
 
     /// <inheritdoc />
-    public TEntity? FindFirst(Expression<Func<TEntity, bool>> query,
-                              Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
-                              CancellationToken cancellationToken = default) => onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
+    public TEntity? FindFirst(Expression<Func<TEntity, bool>> query, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) =>
+        onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
 
     /// <inheritdoc />
     public IList<TEntity> GetAll(Expression<Func<TEntity, bool>>? query = null, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
