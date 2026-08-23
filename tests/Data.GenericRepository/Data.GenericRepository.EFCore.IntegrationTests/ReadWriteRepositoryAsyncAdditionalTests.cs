@@ -102,28 +102,61 @@ public class ReadWriteRepositoryAsyncAdditionalTests : GenericRepositoryDataInte
     }
 
     [Fact]
-    public async Task GetByIdAsync_with_onDbSet_should_return_entity()
+    public async Task GetByIdAsync_with_onDbSet_should_apply_the_shaping_to_the_query()
     {
+        // Arrange — seed via the plain DbContext, per the integration-testing rule against using the
+        // feature under test to set up its own fixture.
+        await DbContext.TestEntities.AddAsync(new() { Id = 1, Name = "WithOnDbSet" });
+        await DbContext.SaveChangesAsync();
+
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new() { Id = 1, Name = "WithOnDbSet" });
-        await unitOfWork.CommitAsync();
 
-        var result = await repository.GetByIdAsync(1, q => q.Where(e => e.Name.Contains("WithOnDbSet")));
+        // AsNoTracking is a shaping operation, and its effect is observable: the returned instance
+        // is not tracked. Filtering is deliberately not exercised here — onDbSet is not a filter,
+        // and a by-id lookup has nothing left to narrow.
+        var result = await repository.GetByIdAsync(1, q => q.AsNoTracking());
 
         result.Should().NotBeNull();
         result!.Name.Should().Be("WithOnDbSet");
+
+        // DELIBERATE deviation from the "verify via a fresh CreateRootDbContext()" rule — do not
+        // "fix" this to use one. `DbContext.Entry(x)` reports Detached for any instance that context
+        // is not tracking, so a *fresh* context would report Detached no matter what, making the
+        // assertion tautological. It is discriminating only against the context that seeded the row:
+        // if onDbSet were ignored, GetByIdAsync would fall back to DbSet.FindAsync, whose local-cache
+        // short-circuit returns the already-tracked instance in the Unchanged state and fails here.
+        DbContext.Entry(result).State.Should().Be(EntityState.Detached);
     }
 
     [Fact]
-    public async Task GetByIdAsync_with_onDbSet_should_return_null_when_filter_excludes_entity()
+    public async Task GetByIdAsync_should_return_null_when_the_id_does_not_exist()
     {
+        await DbContext.TestEntities.AddAsync(new() { Id = 1, Name = "Present" });
+        await DbContext.SaveChangesAsync();
+
         using var unitOfWork = CreateUnitOfWork();
         var repository = unitOfWork.Repository<TestEntity, int>();
-        await repository.AddAsync(new() { Id = 1, Name = "Excluded" });
-        await unitOfWork.CommitAsync();
 
-        var result = await repository.GetByIdAsync(1, q => q.Where(e => e.Name == "NonExistent"));
+        var result = await repository.GetByIdAsync(999);
+
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_with_onDbSet_should_return_null_when_the_id_does_not_exist()
+    {
+        await DbContext.TestEntities.AddAsync(new() { Id = 1, Name = "Present" });
+        await DbContext.SaveChangesAsync();
+
+        using var unitOfWork = CreateUnitOfWork();
+        var repository = unitOfWork.Repository<TestEntity, int>();
+
+        // Covers the onDbSet != null branch, which resolves the entity through
+        // `onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id))` rather than `DbSet.FindAsync`.
+        // Its not-found path would otherwise be untested. onDbSet shapes here (AsNoTracking) and
+        // does not filter — the null comes from the id genuinely not existing.
+        var result = await repository.GetByIdAsync(999, q => q.AsNoTracking());
 
         result.Should().BeNull();
     }

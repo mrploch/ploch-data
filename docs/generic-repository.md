@@ -226,9 +226,9 @@ public class CreateOrderUseCase(IUnitOfWork unitOfWork)
 | Multiple entity types, atomic transaction needed | Inject `IUnitOfWork` |
 | Need explicit commit/rollback control | Inject `IUnitOfWork` |
 
-## Eager Loading with onDbSet
+## Shaping the Query with onDbSet
 
-Several read methods accept an `onDbSet` parameter of type `Func<IQueryable<TEntity>, IQueryable<TEntity>>`. Use this to chain `.Include()` and `.ThenInclude()` calls:
+Several read methods accept an `onDbSet` parameter of type `Func<IQueryable<TEntity>, IQueryable<TEntity>>`. Use it to **shape** the query — chain `.Include()` and `.ThenInclude()` calls, apply an ordering, or switch to `.AsNoTracking()`:
 
 ````csharp
 var article = await repository.GetByIdAsync(articleId,
@@ -239,7 +239,26 @@ var article = await repository.GetByIdAsync(articleId,
         .Include(a => a.Properties));
 ````
 
-This pattern is available on `GetByIdAsync`, `FindFirstAsync`, `GetAllAsync`, and `GetPageAsync`.
+This pattern is available on the asynchronous `GetByIdAsync`, `FindFirstAsync`, `GetAllAsync`, and `GetPageAsync`, on their synchronous counterparts `GetById`, `FindFirst`, `GetAll`, and `GetPage`, and on `GetPageQuery`.
+
+### Do not filter with onDbSet
+
+`onDbSet` is not a filter. Express filtering with the `query` parameter, which every read method except `GetById`/`GetByIdAsync` provides:
+
+````csharp
+// Correct — query filters, onDbSet shapes.
+var posts = await repository.GetAllAsync(
+    query: post => post.IsPublished,
+    onDbSet: q => q.Include(post => post.Tags));
+
+// Wrong — filtering smuggled through the shaping parameter.
+var posts = await repository.GetAllAsync(
+    onDbSet: q => q.Where(post => post.IsPublished).Include(post => post.Tags));
+````
+
+Both forms happen to return the same rows for `GetAllAsync`, but the second obscures the intent, cannot be composed with a caller-supplied predicate, and breaks down entirely on `GetById`/`GetByIdAsync`. Those two look an entity up by its primary key and deliberately take **no** `query` parameter — a filter applied through `onDbSet` there silently turns a found entity into `null`. When a by-id lookup needs an extra predicate, use `FindFirst`/`FindFirstAsync` instead.
+
+Supplying `onDbSet` to `GetById`/`GetByIdAsync` also changes how the entity is fetched: without it the entity may be served straight from the change tracker without touching the database, whereas with it a database query is always executed.
 
 ## DI Registration
 

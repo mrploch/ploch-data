@@ -369,6 +369,12 @@ coverage.xml
 
 # Rider specific files
 
+# Ignore the whole JetBrains settings folder. Nothing under .idea is shared: code
+# style is governed by .editorconfig, and no runConfigurations or inspectionProfiles
+# are committed. The per-file rules below predate this and are kept only so existing
+# clones see no behavioural change; see #108 for collapsing them.
+.idea/
+
 # Default ignored files
 **/.idea*/shelf/
 **/.idea*/workspace.xml

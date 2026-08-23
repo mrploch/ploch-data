@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ploch.Data.GenericRepository.EFCore.Specification;
 
+/// <summary>
+///     Provides Ardalis.Specification integration for the generic repositories, allowing a query to be expressed as a
+///     reusable <see cref="ISpecification{T}" /> instead of an inline predicate.
+/// </summary>
 public static class ReadRepositoryAsyncExtensions
 {
     /// <summary>

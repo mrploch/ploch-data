@@ -29,21 +29,32 @@ public class ReadRepository<TEntity>(DbContext dbContext) : QueryableRepository<
                               CancellationToken cancellationToken = default) => onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
 
     /// <inheritdoc />
-    public IList<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) => onDbSet == null ? [.. Entities] : onDbSet(Entities).ToList();
+    public IList<TEntity> GetAll(Expression<Func<TEntity, bool>>? query = null, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
+    {
+        var queryable = onDbSet != null ? onDbSet(Entities) : Entities;
+
+        if (query != null)
+        {
+            queryable = queryable.Where(query);
+        }
+
+        return [.. queryable];
+    }
 
     /// <inheritdoc />
     public IList<TEntity> GetPage(int pageNumber,
                                   int pageSize,
+                                  Expression<Func<TEntity, object>>? sortBy = null,
                                   Expression<Func<TEntity, bool>>? query = null,
                                   Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) =>
-        [.. GetPageQuery(pageNumber, pageSize, query: query, onDbSet: onDbSet)];
+        [.. GetPageQuery(pageNumber, pageSize, sortBy, query, onDbSet)];
 
     /// <inheritdoc />
-    public int Count() => Entities.Count();
+    public int Count(Expression<Func<TEntity, bool>>? query = null) => query == null ? Entities.Count() : Entities.Count(query);
 }
 
 /// <summary>
-///     Provides a! repository that allows reading entities of type <typeparamref name="TEntity" />
+///     Provides a repository that allows reading entities of type <typeparamref name="TEntity" />
 ///     with a specified identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <typeparam name="TEntity">The entity type.</typeparam>

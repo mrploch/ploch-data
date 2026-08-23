@@ -2,6 +2,48 @@
 
 ## Unreleased
 
+### Changed
+
+- **Synchronous read repositories gained the `query` and `sortBy` parameters their async
+  counterparts already had** — `IReadRepository<TEntity>.GetAll` and `.Count` offered no way to
+  filter, leaving `onDbSet` (intended for eager loading and other query *shaping*) as the only
+  lever, and `.GetPage` was missing the `sortBy` that `GetPageAsync` provides. All three now match
+  the asynchronous signatures. XML documentation on every method carrying `onDbSet` now states the
+  contract explicitly: shape the query with it, never filter.
+  See `change-log/issue-77-query-parameter-on-sync-read-methods.md`. (#77)
+
+  **Breaking change:** the new parameters shift positions on the synchronous interface.
+
+  - `GetAll(q => q.Include(...))` no longer compiles; use `GetAll(onDbSet: q => q.Include(...))`.
+  - `GetPage(1, 20, predicate, q => q.Include(...))` — four positional arguments ending in a shaping
+    lambda — no longer compiles; name the arguments. Note that *not every* positional `GetPage` call
+    fails loudly; see the warning below.
+  - Custom `IReadRepository<TEntity>` implementations must update `GetAll`, `GetPage`, and `Count`.
+    This is also a binary break — `Count()` and `Count(Expression<Func<TEntity, bool>>?)` are
+    different metadata methods even though source calls to `Count()` still compile.
+
+  **⚠️ Some `GetPage` calls change meaning without a compiler error.** `sortBy` is
+  `Expression<Func<TEntity, object>>`, which a `bool`-bodied lambda converts to implicitly (the
+  `bool` boxes), so a pre-4.0 predicate in third position now binds to `sortBy`:
+
+  ```csharp
+  repository.GetPage(1, 20, post => post.IsPublished);
+  // before: filtered to published posts
+  // now:    orders by a boxed bool and returns an UNFILTERED page
+  //
+  // fix:    repository.GetPage(1, 20, query: post => post.IsPublished);
+  ```
+
+  **Audit by the third argument, not the argument count.** Any `GetPage` call whose third argument
+  is positional *and is a lambda* rebinds silently, however many arguments follow and whether or not
+  they are named — including `GetPage(1, 20, pred, null)` and
+  `GetPage(1, 20, pred, onDbSet: q => q.Include(...))`, the latter being the style this library's own
+  docs and tests used before 4.0. Passing a typed `Expression<Func<T, bool>>` variable in third
+  position fails to compile instead (`Expression<T>` is invariant), as does a fourth positional
+  shaping lambda. `GetAll` and `Count` have no equivalent hazard — every positional `GetAll`
+  migration is a hard compile error. Full detail and the safe/unsafe shape list are in
+  `change-log/issue-77-query-parameter-on-sync-read-methods.md`.
+
 ### Fixed
 
 - **Repository updates no longer blank creation-audit properties on partial detached updates** —

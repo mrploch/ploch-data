@@ -30,7 +30,9 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// </summary>
     /// <param name="query">A LINQ expression to filter the entities.</param>
     /// <param name="onDbSet">
-    ///     An optional function to apply additional LINQ operations on the queryable collection of entities.
+    ///     An optional function used to <em>shape</em> the query — for example eager loading with
+    ///     <c>Include</c> / <c>ThenInclude</c>, ordering, or <c>AsNoTracking</c>. Do not filter here; express
+    ///     filtering with <paramref name="query" /> instead.
     /// </param>
     /// <param name="cancellationToken">A token that can be used to cancel the asynchronous operation.</param>
     /// <returns>
@@ -46,7 +48,11 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     ///     Asynchronously gets all entities from the repository.
     /// </summary>
     /// <param name="query">A LINQ expression to filter the entities.</param>
-    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
+    /// <param name="onDbSet">
+    ///     An optional function used to <em>shape</em> the query — for example eager loading with
+    ///     <c>Include</c> / <c>ThenInclude</c>, ordering, or <c>AsNoTracking</c>. Do not filter here; express
+    ///     filtering with <paramref name="query" /> instead.
+    /// </param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a list of all entities.</returns>
     /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
@@ -61,7 +67,11 @@ public interface IReadRepositoryAsync<TEntity> : IQueryableRepository<TEntity>
     /// <param name="pageSize">The size of the page to get.</param>
     /// <param name="sortBy">A Sort By expression.</param>
     /// <param name="query">A LINQ expression to filter the entities.</param>
-    /// <param name="onDbSet">Action to perform on DbSet on the query - for example Include.</param>
+    /// <param name="onDbSet">
+    ///     An optional function used to <em>shape</em> the query — for example eager loading with
+    ///     <c>Include</c> / <c>ThenInclude</c>, ordering, or <c>AsNoTracking</c>. Do not filter here; express
+    ///     filtering with <paramref name="query" /> instead.
+    /// </param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result contains a list of entities for the
@@ -99,9 +109,20 @@ public interface IReadRepositoryAsync<TEntity, in TId> : IReadRepositoryAsync<TE
     ///     Asynchronously gets the entity with the specified identifier.
     /// </summary>
     /// <param name="id">The identifier of the entity to be found.</param>
-    /// <param name="onDbSet">Action to perform on DbSet upon the query, like .Include.</param>
+    /// <param name="onDbSet">
+    ///     An optional function used to <em>shape</em> the query — for example eager loading with
+    ///     <c>Include</c> / <c>ThenInclude</c>, ordering, or <c>AsNoTracking</c>. Do not filter here: this method
+    ///     looks an entity up by its identifier, and a filter applied through this parameter would silently turn a
+    ///     found entity into <see langword="null" />. Use <see cref="IReadRepositoryAsync{TEntity}.FindFirstAsync" />
+    ///     or <see cref="IReadRepositoryAsync{TEntity}.GetAllAsync" /> when an additional predicate is required.
+    /// </param>
     /// <param name="cancellationToken">A <see cref="CancellationToken" /> to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the entity found, or null.</returns>
     /// <exception cref="OperationCanceledException">If the <see cref="CancellationToken" /> is canceled.</exception>
+    /// <remarks>
+    ///     Supplying <paramref name="onDbSet" /> also changes how the entity is retrieved: without it the entity may
+    ///     be served from the change tracker without querying the database, whereas with it a database query is
+    ///     always executed.
+    /// </remarks>
     Task<TEntity?> GetByIdAsync(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null, CancellationToken cancellationToken = default);
 }

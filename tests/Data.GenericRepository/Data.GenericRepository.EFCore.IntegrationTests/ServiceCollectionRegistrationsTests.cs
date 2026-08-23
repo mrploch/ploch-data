@@ -196,12 +196,17 @@ public class ServiceCollectionRegistrationsTests
         public Blog? FindFirst(Expression<Func<Blog, bool>> query, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null, CancellationToken cancellationToken = default) =>
             throw new NotImplementedException();
 
-        public IList<Blog> GetAll(Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) => throw new NotImplementedException();
-
-        public IList<Blog> GetPage(int pageNumber, int pageSize, Expression<Func<Blog, bool>>? query = null, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) =>
+        public IList<Blog> GetAll(Expression<Func<Blog, bool>>? query = null, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) =>
             throw new NotImplementedException();
 
-        public int Count() => throw new NotImplementedException();
+        public IList<Blog> GetPage(int pageNumber,
+                                   int pageSize,
+                                   Expression<Func<Blog, object>>? sortBy = null,
+                                   Expression<Func<Blog, bool>>? query = null,
+                                   Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) =>
+            throw new NotImplementedException();
+
+        public int Count(Expression<Func<Blog, bool>>? query = null) => throw new NotImplementedException();
 
         public Blog Add(Blog entity) => throw new NotImplementedException();
 
