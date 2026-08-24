@@ -94,12 +94,15 @@ workspace consumes the synchronous `FindFirst` at all.**
 
 ## Tests
 
-No new tests. Nothing executable changed: the removed parameter was never read, so runtime behaviour is
-identical, and a test asserting that a parameter no longer exists would only be re-testing the compiler.
+No new tests. No executable code changed: the removed parameter was never read, so for any caller
+recompiled against 4.0 the query behaviour is identical. (That is a statement about *query* behaviour,
+not about every runtime outcome — an old binary run against the new assembly without recompiling fails
+with `MissingMethodException`, as described above.) A test asserting that a parameter no longer exists
+would only be re-testing the compiler.
 
 The existing coverage is what matters and it still passes:
 
-- `ReadRepositoryTests.Find_should_query_and_return_the_first_hit` and
+- `ReadRepositoryTests.Find_should_query_repository_for_first_entity_and_return_it` and
   `Find_with_OnDbSet_action_should_apply_the_shaping_to_the_query` — behaviour of `FindFirst`.
 - `ServiceCollectionRegistrationsTests` — compiles the `CustomBlogRepository` stub, which is the real
   guard here: if the interface and the implementation had drifted apart, this project would not build.

@@ -31,8 +31,10 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     /// </param>
     /// <returns>The first entity that matches the query, or null if none found.</returns>
     /// <remarks>
-    ///     This method executes synchronously and therefore takes no <see cref="System.Threading.CancellationToken" />.
-    ///     Use <see cref="IReadRepositoryAsync{TEntity}.FindFirstAsync" /> when cancellation is required.
+    ///     This method deliberately takes no <see cref="System.Threading.CancellationToken" />. It executes the
+    ///     query through the synchronous <c>FirstOrDefault</c>, which offers no way to observe one, so a token
+    ///     could not be honoured even if it were supplied. Use
+    ///     <see cref="IReadRepositoryAsync{TEntity}.FindFirstAsync" /> when cancellation is required.
     /// </remarks>
     TEntity? FindFirst(Expression<Func<TEntity, bool>> query, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);
 
