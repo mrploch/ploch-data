@@ -18,8 +18,13 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
     : QueryableRepository<TEntity>(dbContext), IReadRepositoryAsync<TEntity> where TEntity : class
 {
     /// <summary>
-    ///     Gets the handler used to record entity access for auditing purposes.
+    ///     Gets the audit handler supplied to this repository, available to derived types.
     /// </summary>
+    /// <remarks>
+    ///     This class does not invoke it. Reads are not audited, so no handler method is called on a read path;
+    ///     the property exists for derived repositories that also write, such as
+    ///     <see cref="ReadWriteRepositoryAsync{TEntity, TId}" />.
+    /// </remarks>
     protected IAuditEntityHandler AuditEntityHandler { get; } = auditEntityHandler ?? throw new ArgumentNullException(nameof(auditEntityHandler));
 
     /// <inheritdoc />
@@ -41,14 +46,7 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
             queryable = queryable.Where(query);
         }
 
-        var result = await queryable.ToListAsync(cancellationToken).ConfigureAwait(false);
-
-        foreach (var entity in result)
-        {
-            AuditEntityHandler.HandleAccess(entity);
-        }
-
-        return result;
+        return await queryable.ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -89,16 +87,8 @@ public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntity
                                              Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
                                              CancellationToken cancellationToken = default)
     {
-        var result =
-            onDbSet == null ?
-                await DbSet.FindAsync([id], cancellationToken) :
-                await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
-
-        if (result != null)
-        {
-            AuditEntityHandler.HandleAccess(result);
-        }
-
-        return result;
+        return onDbSet == null ?
+                   await DbSet.FindAsync([id], cancellationToken) :
+                   await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
     }
 }

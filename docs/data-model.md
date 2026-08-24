@@ -127,6 +127,12 @@ classDiagram
 | `IHasAccessedBy` | `LastAccessedBy` only | You need the accessing user |
 | `IHasAuditProperties` | All timestamps + all user fields | Full audit trail |
 
+> **Access properties are yours to populate.** `IAuditEntityHandler` fills creation and modification
+> properties when an entity is added or updated through a repository, but **reads are deliberately not
+> audited** — no handler method is invoked on a read path, so `AccessedTime` and `LastAccessedBy` are never
+> written by the repositories. Set them yourself if you need them. See
+> `change-log/issue-104-remove-handleaccess.md`.
+
 ### Usage Example
 
 ````csharp

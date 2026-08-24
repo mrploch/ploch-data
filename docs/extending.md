@@ -317,8 +317,6 @@ public class CustomAuditHandler : IAuditEntityHandler
         if (entity is IHasModifiedBy modifiedBy)
             modifiedBy.LastModifiedBy = _userService.GetCurrentUserId();
     }
-
-    public bool HandleAccess(object entity) => false;
 }
 
 // Register after AddRepositories to override the default

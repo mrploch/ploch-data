@@ -1,8 +1,12 @@
 namespace Ploch.Data.GenericRepository;
 
 /// <summary>
-///     Defines methods for handling audit-related operations on entities, such as creation, modification, and access.
+///     Defines methods for handling audit-related operations on entities when they are created or modified.
 /// </summary>
+/// <remarks>
+///     Reads are deliberately not audited. Repositories invoke no handler method when an entity is read, so
+///     implementations are never called on a read path and audit properties are never written during a query.
+/// </remarks>
 public interface IAuditEntityHandler
 {
     /// <summary>
@@ -42,27 +46,4 @@ public interface IAuditEntityHandler
     ///     </para>
     /// </remarks>
     void HandleModification(object entity);
-
-    /// <summary>
-    ///     Handles the access of the specified entity, typically for auditing purposes.
-    /// </summary>
-    /// <param name="entity">
-    ///     The entity being accessed. This object may be inspected or used to perform audit-related operations,
-    ///     such as logging access details or verifying permissions.
-    /// </param>
-    /// <returns>
-    ///     A boolean value indicating whether there was any change to the entity as part of this method.
-    /// </returns>
-    /// <remarks>
-    ///     <para>
-    ///         This method is intended to perform operations related to auditing or access control when an entity is accessed.
-    ///         Ensure that the provided <paramref name="entity" /> is not <c>null</c>.
-    ///     </para>
-    ///     <para>
-    ///         It is called by the repository when an entity is accessed, such as when it is read from the database.
-    ///         It informs the repository whether the entity has been modified as a result of this operation so that the entity
-    ///         can be updated in the data source.
-    ///     </para>
-    /// </remarks>
-    bool HandleAccess(object entity);
 }
