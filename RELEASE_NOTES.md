@@ -23,9 +23,13 @@
     Deleting it is housekeeping, not a compile requirement.
   - Any **direct call** through the interface — `handler.HandleAccess(...)` where `handler` is typed as
     `IAuditEntityHandler` — no longer compiles.
+  - A **direct call on the shipped concrete handler** — `handler.HandleAccess(...)` where `handler` is typed
+    as `AuditEntityHandler` — also no longer compiles (`CS1061`). The public method was removed from the class
+    as well as from the interface.
 
-  **Behavioural change, only if you wrote your own handler.** With the shipped `AuditEntityHandler` nothing
-  changes — its `HandleAccess` returned `false` and touched nothing, so no read was ever audited. But a
+  **Behavioural change, only if you wrote your own handler.** With the shipped `AuditEntityHandler` no
+  *runtime behaviour* changes — its `HandleAccess` returned `false` and touched nothing, so no read was ever
+  audited. (Compilation is a separate matter: see the concrete-caller row above.) But a
   *custom* handler whose `HandleAccess` did real work — stamping a property, logging, throwing — **stops being
   invoked on asynchronous reads**. If you relied on that, move the behaviour to the call site or to a
   `DbContext` interceptor; the repositories no longer offer a read hook.

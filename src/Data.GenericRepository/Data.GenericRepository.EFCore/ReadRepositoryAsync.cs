@@ -88,7 +88,7 @@ public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntity
                                              CancellationToken cancellationToken = default)
     {
         return onDbSet == null ?
-                   await DbSet.FindAsync([id], cancellationToken) :
-                   await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken);
+                   await DbSet.FindAsync([id], cancellationToken).ConfigureAwait(false) :
+                   await onDbSet(DbSet).FirstOrDefaultAsync(e => Equals(e.Id, id), cancellationToken).ConfigureAwait(false);
     }
 }

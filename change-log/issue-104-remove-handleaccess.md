@@ -62,6 +62,14 @@ nothing.
 `AuditEntityHandler` was the only implementor of the interface in this repository; every other type merely
 consumes it by constructor injection.
 
+### One incidental fix
+
+`GetByIdAsync` awaited `FindAsync` / `FirstOrDefaultAsync` **without** `ConfigureAwait(false)`, while
+`GetAllAsync` in the same class used it. That predates this change; it was flagged by a reviewer on the exact
+lines this change rewrote, and is fixed here rather than left behind. In a library the missing
+`ConfigureAwait(false)` is a real deadlock hazard for callers with a `SynchronizationContext` (classic
+ASP.NET, UI apps), and this only brings the method into line with its sibling — it is not a new policy.
+
 ## Impact
 
 **Breaking** for anyone with a custom `IAuditEntityHandler`:
@@ -71,7 +79,8 @@ consumes it by constructor injection.
 | **Explicit** implementations — `bool IAuditEntityHandler.HandleAccess(object entity)` | **Source break** — `CS0539`: the interface has no such member to implement. Delete it. |
 | **Implicit** implementations — `public bool HandleAccess(object entity)` | **Compiles unchanged.** The member stops being an interface implementation and becomes an ordinary public method that nothing calls. Removing it is housekeeping, not a compile requirement. |
 | Callers of `handler.HandleAccess(...)` through the interface | **Source break** — the member no longer exists on `IAuditEntityHandler`. |
-| Consumers using the shipped `AuditEntityHandler` | **No behavioural change** — its `HandleAccess` returned `false` and touched nothing, so no read was ever audited. |
+| Callers of `handler.HandleAccess(...)` on the **concrete** `AuditEntityHandler` | **Source break** — `CS1061`. The `public bool HandleAccess(object)` method was removed from the class, not merely from the interface. |
+| Consumers using the shipped `AuditEntityHandler` | **No change in runtime behaviour** — its `HandleAccess` returned `false` and touched nothing, so no read was ever audited. Compilation is a separate matter; see the concrete-caller row above. |
 | Consumers whose **custom** handler did real work in `HandleAccess` | **Behavioural change** — stamping, logging or throwing inside `HandleAccess` no longer happens, because asynchronous reads no longer invoke it. Move that behaviour to the call site or to a `DbContext` interceptor. |
 | Everyone else | None. |
 

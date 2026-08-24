@@ -130,8 +130,28 @@ classDiagram
 > **Access properties are yours to populate.** `IAuditEntityHandler` fills creation and modification
 > properties when an entity is added or updated through a repository, but **reads are deliberately not
 > audited** — no handler method is invoked on a read path, so `AccessedTime` and `LastAccessedBy` are never
-> written by the repositories. Set them yourself if you need them. See
-> `change-log/issue-104-remove-handleaccess.md`.
+> written by the repositories. See `change-log/issue-104-remove-handleaccess.md`.
+
+If you need access tracking, stamp it at the point of use and persist it deliberately — a read on its own
+never writes:
+
+````csharp
+var article = await repository.GetByIdAsync(id, cancellationToken: cancellationToken);
+
+if (article is not null)
+{
+    article.AccessedTime = timeProvider.GetUtcNow();
+    article.LastAccessedBy = currentUser.Identity?.Name;
+
+    // The read did not mark the entity dirty, so the change must be saved explicitly.
+    await repository.UpdateAsync(article, cancellationToken);
+    await unitOfWork.CommitAsync(cancellationToken);
+}
+````
+
+Be deliberate about doing this on a read path: it turns every read into a write, which costs a round trip and
+can contend with other writers. A `DbContext` interceptor or an outbox is usually a better fit when access
+tracking is needed across the board.
 
 ### Usage Example
 
