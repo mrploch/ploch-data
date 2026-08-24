@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
 using Ploch.Data.Model;
 
 namespace Ploch.Data.GenericRepository;
@@ -30,11 +29,14 @@ public interface IReadRepository<TEntity> : IQueryableRepository<TEntity>
     ///     <c>Include</c> / <c>ThenInclude</c>, ordering, or <c>AsNoTracking</c>. Do not filter here; express
     ///     filtering with <paramref name="query" /> instead.
     /// </param>
-    /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>The first entity that matches the query, or null if none found.</returns>
-    TEntity? FindFirst(Expression<Func<TEntity, bool>> query,
-                       Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null,
-                       CancellationToken cancellationToken = default);
+    /// <remarks>
+    ///     This method deliberately takes no <see cref="System.Threading.CancellationToken" />. It executes the
+    ///     query through the synchronous <c>FirstOrDefault</c>, which offers no way to observe one, so a token
+    ///     could not be honoured even if it were supplied. Use
+    ///     <see cref="IReadRepositoryAsync{TEntity}.FindFirstAsync" /> when cancellation is required.
+    /// </remarks>
+    TEntity? FindFirst(Expression<Func<TEntity, bool>> query, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null);
 
     /// <summary>
     ///     Gets all entities from the repository, optionally filtered by a query.

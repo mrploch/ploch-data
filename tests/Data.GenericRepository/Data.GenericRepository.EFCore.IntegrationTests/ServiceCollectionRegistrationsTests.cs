@@ -193,7 +193,7 @@ public class ServiceCollectionRegistrationsTests
     private sealed class CustomBlogRepository(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
         : ReadWriteRepositoryAsync<Blog, int>(dbContext, auditEntityHandler), ICustomBlogRepository
     {
-        public Blog? FindFirst(Expression<Func<Blog, bool>> query, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null, CancellationToken cancellationToken = default) =>
+        public Blog? FindFirst(Expression<Func<Blog, bool>> query, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) =>
             throw new NotImplementedException();
 
         public IList<Blog> GetAll(Expression<Func<Blog, bool>>? query = null, Func<IQueryable<Blog>, IQueryable<Blog>>? onDbSet = null) =>

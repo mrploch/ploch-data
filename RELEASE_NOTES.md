@@ -4,6 +4,33 @@
 
 ### Changed
 
+- **`IReadRepository<TEntity>.FindFirst` no longer takes a `CancellationToken`** — the parameter was
+  declared but silently ignored: the synchronous `DbSet.FirstOrDefault` has no overload that accepts a
+  token, so a caller passing one got no cancellation and no error. It was also the only synchronous
+  method on the interface to advertise cancellation — `GetAll`, `GetPage`, `Count` and `GetById` never
+  did. Advertising cooperative cancellation that cannot be delivered is worse than not advertising it,
+  so the parameter is gone rather than partially honoured. `FindFirstAsync` is unaffected and still
+  takes a token, which it genuinely uses.
+  See `change-log/issue-102-remove-unused-cancellationtoken-from-findfirst.md`. (#102)
+
+  **Breaking change**, and it lands differently for implementors than for callers:
+
+  | Who | Source | Binary |
+  |---|---|---|
+  | Anyone **implementing** `IReadRepository<TEntity>` (or `IReadWriteRepository<TEntity, TId>`) directly | **Breaks** — `CS0535`, whether or not the token was ever used | Breaks |
+  | Callers writing `FindFirst(predicate)` or `FindFirst(predicate, onDbSet)` | Compiles unchanged | **Breaks until recompiled** — optional arguments are baked in at the call site, so existing IL still calls the three-parameter method |
+  | Callers passing the token (positionally or as `cancellationToken:`) | **Breaks** — `CS1501` / `CS1739` | Breaks |
+  | Types deriving from `ReadRepository<TEntity>` / `ReadWriteRepository<TEntity, TId>` without redeclaring the method | Compiles unchanged | Unaffected — no `FindFirst` method is emitted in the derived assembly; it inherits the updated base implementation |
+
+  Unlike the `GetPage` change below, **nothing rebinds silently**: no call site keeps compiling while
+  quietly changing meaning. Source breaks — implementors, and callers that pass a token — fail the build
+  outright. The rest is binary-only: existing compiled callers of the one- and two-argument forms keep
+  compiling from source and simply need rebuilding against 4.0, which a major version already requires.
+  Implementors must delete the parameter from their own signature. Test doubles and mock setups written
+  against the three-parameter form
+  (`Setup(r => r.FindFirst(It.IsAny<...>(), It.IsAny<...>(), It.IsAny<CancellationToken>()))`)
+  also need updating.
+
 - **Synchronous read repositories gained the `query` and `sortBy` parameters their async
   counterparts already had** — `IReadRepository<TEntity>.GetAll` and `.Count` offered no way to
   filter, leaving `onDbSet` (intended for eager loading and other query *shaping*) as the only
