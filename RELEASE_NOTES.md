@@ -38,6 +38,25 @@
   the hazard, because a handler that stamps a property would still be invoked on async reads, still persist
   incidentally when the entity happens to be tracked, and still lose the stamp on `AsNoTracking` paths.
 
+- **`ReadRepositoryAsync` no longer takes an `IAuditEntityHandler`** — with `HandleAccess` gone (#104), the
+  async read repositories required a dependency they never called, and threw `ArgumentNullException` when it
+  was not supplied. Both constructors now take only the `DbContext`, matching the synchronous
+  `ReadRepository<TEntity>`. The `protected AuditEntityHandler` property (added alongside #104 within this
+  same unreleased cycle — it never shipped) is removed with it: nothing in the library read it, and
+  `ReadWriteRepositoryAsync` keeps its own reference for `HandleCreation` / `HandleModification`.
+  See `change-log/issue-111-drop-audit-handler-from-read-repository.md`. (#111)
+
+  **Breaking change**, though narrower than it looks:
+
+  | Who | Effect |
+  |---|---|
+  | Consumers resolving repositories through DI (`AddRepositories`, `AddDbContextWithRepositories`, `IUnitOfWork`) | **None** — the container simply satisfies the smaller constructor. `IAuditEntityHandler` remains registered for the write repositories. |
+  | Subclasses of `ReadRepositoryAsync<TEntity>` / `ReadRepositoryAsync<TEntity, TId>` forwarding the handler to `base(...)` | **Source break** — `CS1729`, no two-argument constructor. Stop forwarding; inject your own handler if your subclass needs one. |
+  | Direct `new ReadRepositoryAsync<...>(dbContext, handler)` calls | **Source break** — `CS1729`. Drop the second argument. |
+  | Subclasses of `ReadWriteRepositoryAsync<TEntity, TId>` (the documented extension pattern) | **None** — its two-argument constructor is unchanged, and it still fails fast with `ArgumentNullException` on a `null` handler (the guard moved from the base class into `ReadWriteRepositoryAsync` itself). |
+  | Compiled assemblies calling the removed two-argument constructor | **Binary break** — `MissingMethodException` until recompiled, which the major version already requires. |
+  | Anyone reading the `protected AuditEntityHandler` property | **Source break** — but the property never appeared in a released version, so this can only affect builds against the unreleased 4.0 branch. |
+
 ### Changed
 
 - **`IReadRepository<TEntity>.FindFirst` no longer takes a `CancellationToken`** — the parameter was
