@@ -6,6 +6,34 @@ namespace Ploch.Data.GenericRepository.EFCore.IntegrationTests;
 public class ReadWriteRepositoryAsyncAuditTests : GenericRepositoryDataIntegrationTest<TestDbContext>
 {
     [Fact]
+    public async Task Reads_should_not_write_access_audit_properties()
+    {
+        // Arrange — seed via the plain DbContext with the access-audit properties explicitly unset.
+        // The read path is the code under test, so it must not be used for seeding.
+        var blog = new Blog { Name = "Never accessed" };
+        DbContext.Blogs.Add(blog);
+        await DbContext.SaveChangesAsync();
+        DbContext.ChangeTracker.Clear();
+
+        // Act — exercise both read paths that used to call IAuditEntityHandler.HandleAccess (#104).
+        using var unitOfWork = CreateUnitOfWork();
+        var repository = unitOfWork.Repository<Blog, int>();
+
+        (await repository.GetAllAsync()).Should().ContainSingle();
+        (await repository.GetByIdAsync(blog.Id)).Should().NotBeNull();
+        await unitOfWork.CommitAsync();
+
+        // Assert — reads are not audited: nothing stamped the access properties, and nothing persisted.
+        // Verified through a fresh context so a change-tracked in-memory value cannot mask a missing write.
+        var rootDbContext = CreateRootDbContext();
+        var persisted = await rootDbContext.Blogs.FindAsync(blog.Id);
+
+        persisted.Should().NotBeNull();
+        persisted.AccessedTime.Should().BeNull();
+        persisted.LastAccessedBy.Should().BeNull();
+    }
+
+    [Fact]
     public async Task Update_and_CommitAsync_should_set_modified_time_audit_property()
     {
         var unitOfWork = CreateUnitOfWork();

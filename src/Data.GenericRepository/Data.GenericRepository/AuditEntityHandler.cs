@@ -56,11 +56,4 @@ public class AuditEntityHandler(IUserInfoProvider userInfoProvider, TimeProvider
             }
         }
     }
-
-    /// <summary>
-    ///     Handles access control for an entity.
-    /// </summary>
-    /// <param name="entity">The entity being accessed.</param>
-    /// <returns>A boolean value indicating whether access is granted. Currently always returns false.</returns>
-    public bool HandleAccess(object entity) => false;
 }

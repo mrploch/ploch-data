@@ -105,14 +105,6 @@ public class AuditEntityHandlerTests
     }
 
     [Fact]
-    public void HandleAccess_should_return_false()
-    {
-        var handler = new AuditEntityHandler(_userInfoProviderMock.Object, _timeProvider, _enabledConfig);
-
-        handler.HandleAccess(new()).Should().BeFalse();
-    }
-
-    [Fact]
     public void HandleCreation_should_handle_null_user_info_provider_gracefully()
     {
         _userInfoProviderMock.Setup(p => p.GetCurrentUserInfo()).Returns((ClaimsPrincipal?)null);

@@ -2,6 +2,42 @@
 
 ## Unreleased
 
+### Removed
+
+- **`IAuditEntityHandler.HandleAccess` is gone — reads are not audited** — the method was documented as
+  being called whenever an entity was read, and as telling the repository whether the entity had been
+  modified "so that the entity can be updated in the data source". Neither held up: synchronous reads never
+  called it while asynchronous reads did, the return value was discarded at both call sites, and the shipped
+  `AuditEntityHandler.HandleAccess` was hard-coded to `false`, so the feature was documented but never
+  implemented. Rather than wire it up, read auditing is dropped: no handler method is invoked on a read path,
+  and `AccessedTime` / `LastAccessedBy` are never written by the repositories — set them yourself if you need
+  them. `HandleCreation` and `HandleModification` are unchanged.
+  See `change-log/issue-104-remove-handleaccess.md`. (#104)
+
+  **Breaking change**, though how it lands depends on how the member was implemented:
+
+  - An **explicit** implementation (`bool IAuditEntityHandler.HandleAccess(object entity)`) fails to compile
+    — `CS0539`, the interface no longer has that member. Delete it.
+  - An **implicit** implementation (`public bool HandleAccess(object entity)`) keeps compiling. It simply
+    stops being an interface implementation and becomes an ordinary public method that nothing ever calls.
+    Deleting it is housekeeping, not a compile requirement.
+  - Any **direct call** through the interface — `handler.HandleAccess(...)` where `handler` is typed as
+    `IAuditEntityHandler` — no longer compiles.
+  - A **direct call on the shipped concrete handler** — `handler.HandleAccess(...)` where `handler` is typed
+    as `AuditEntityHandler` — also no longer compiles (`CS1061`). The public method was removed from the class
+    as well as from the interface.
+
+  **Behavioural change, only if you wrote your own handler.** With the shipped `AuditEntityHandler` no
+  *runtime behaviour* changes — its `HandleAccess` returned `false` and touched nothing, so no read was ever
+  audited. (Compilation is a separate matter: see the concrete-caller row above.) But a
+  *custom* handler whose `HandleAccess` did real work — stamping a property, logging, throwing — **stops being
+  invoked on asynchronous reads**. If you relied on that, move the behaviour to the call site or to a
+  `DbContext` interceptor; the repositories no longer offer a read hook.
+
+  Changing the return type to `void` was considered and rejected: it removes the misleading signal but leaves
+  the hazard, because a handler that stamps a property would still be invoked on async reads, still persist
+  incidentally when the entity happens to be tracked, and still lose the stamp on `AsNoTracking` paths.
+
 ### Changed
 
 - **`IReadRepository<TEntity>.FindFirst` no longer takes a `CancellationToken`** — the parameter was
