@@ -24,12 +24,13 @@ extension point for consumer subclasses, or remove parameter and property togeth
 
 - Nothing in the library reads it — the one derived type that audits (`ReadWriteRepositoryAsync`) takes and
   stores its own handler, which is the pattern a consumer subclass with audit needs should follow too.
-- It never shipped: it was added in the #104 change (PR #112) inside the same unreleased 4.0 cycle, so no
-  released consumer can be depending on it.
+- It never shipped: it was introduced by #99 inside the same unreleased 4.0 cycle (the #104 change, PR #112,
+  only rewrote its documentation), so no released consumer can be depending on it.
 - An unused protected member on a read-only type is an invitation to misuse: it implies reads participate in
   auditing, which #104 just established they deliberately do not.
 
-v4.0 is the window; the same cycle already changed this type's read signatures via #77 and #102.
+v4.0 is the window; the same cycle already reshaped the repository read surface — #77 and #102 on the
+synchronous API, #104 on this type's read behaviour.
 
 ## Change
 

@@ -41,8 +41,9 @@
 - **`ReadRepositoryAsync` no longer takes an `IAuditEntityHandler`** — with `HandleAccess` gone (#104), the
   async read repositories required a dependency they never called, and threw `ArgumentNullException` when it
   was not supplied. Both constructors now take only the `DbContext`, matching the synchronous
-  `ReadRepository<TEntity>`. The `protected AuditEntityHandler` property (added alongside #104 within this
-  same unreleased cycle — it never shipped) is removed with it: nothing in the library read it, and
+  `ReadRepository<TEntity>`. The `protected AuditEntityHandler` property (introduced by #99 within this
+  same unreleased cycle — it never shipped; #104 only rewrote its documentation) is removed with it:
+  nothing in the library read it, and
   `ReadWriteRepositoryAsync` keeps its own reference for `HandleCreation` / `HandleModification`.
   See `change-log/issue-111-drop-audit-handler-from-read-repository.md`. (#111)
 
