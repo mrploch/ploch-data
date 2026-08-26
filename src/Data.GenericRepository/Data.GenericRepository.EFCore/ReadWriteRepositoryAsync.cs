@@ -21,9 +21,9 @@ namespace Ploch.Data.GenericRepository.EFCore;
 /// <param name="dbContext">The <see cref="DbContext" /> to use for reading and writing entities.</param>
 /// <param name="auditEntityHandler">The handler for setting audit properties on entities during creation and modification.</param>
 public class ReadWriteRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : ReadRepositoryAsync<TEntity, TId>(dbContext, auditEntityHandler), IReadWriteRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
+    : ReadRepositoryAsync<TEntity, TId>(dbContext), IReadWriteRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
 {
-    private readonly IAuditEntityHandler _auditEntityHandler = auditEntityHandler;
+    private readonly IAuditEntityHandler _auditEntityHandler = auditEntityHandler.NotNull();
 
     /// <inheritdoc />
     public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)

@@ -14,19 +14,14 @@ namespace Ploch.Data.GenericRepository.EFCore;
 ///     <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity}" />
-public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : QueryableRepository<TEntity>(dbContext), IReadRepositoryAsync<TEntity> where TEntity : class
+/// <remarks>
+///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity}" /> class.
+///     Reads are not audited, so no audit handler is required; repositories that also write, such as
+///     <see cref="ReadWriteRepositoryAsync{TEntity, TId}" />, take their own <see cref="IAuditEntityHandler" />.
+/// </remarks>
+/// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+public class ReadRepositoryAsync<TEntity>(DbContext dbContext) : QueryableRepository<TEntity>(dbContext), IReadRepositoryAsync<TEntity> where TEntity : class
 {
-    /// <summary>
-    ///     Gets the audit handler supplied to this repository, available to derived types.
-    /// </summary>
-    /// <remarks>
-    ///     This class does not invoke it. Reads are not audited, so no handler method is called on a read path;
-    ///     the property exists for derived repositories that also write, such as
-    ///     <see cref="ReadWriteRepositoryAsync{TEntity, TId}" />.
-    /// </remarks>
-    protected IAuditEntityHandler AuditEntityHandler { get; } = auditEntityHandler ?? throw new ArgumentNullException(nameof(auditEntityHandler));
-
     /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(object[] keyValues, CancellationToken cancellationToken = default) =>
         await DbSet.FindAsync(keyValues, cancellationToken).ConfigureAwait(false);
@@ -79,8 +74,12 @@ public class ReadRepositoryAsync<TEntity>(DbContext dbContext, IAuditEntityHandl
 ///     identifier type from a <see cref="DbContext" />.
 /// </summary>
 /// <inheritdoc cref="IReadRepositoryAsync{TEntity, TId}" />
-public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext, IAuditEntityHandler auditEntityHandler)
-    : ReadRepositoryAsync<TEntity>(dbContext, auditEntityHandler), IReadRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
+/// <remarks>
+///     Initializes a new instance of the <see cref="ReadRepositoryAsync{TEntity, TId}" /> class.
+/// </remarks>
+/// <param name="dbContext">The <see cref="DbContext" /> to use for reading entities.</param>
+public class ReadRepositoryAsync<TEntity, TId>(DbContext dbContext)
+    : ReadRepositoryAsync<TEntity>(dbContext), IReadRepositoryAsync<TEntity, TId> where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />
     public async Task<TEntity?> GetByIdAsync(TId id,
