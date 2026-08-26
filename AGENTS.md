@@ -825,3 +825,51 @@ dotnet run --project samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.Conso
 ### Cursor Cloud background agents
 
 Cursor Cloud background agents provision the workspace with an environment update script (configured in Cursor, not committed to this repo) that clones the sibling repositories listed above, runs `git fetch --unshallow` on `ploch-common`, and installs the .NET 8.0 and 10.0 SDKs.
+
+<!-- BEGIN DOTNET-SKILLS ROUTING -->
+## .NET Skill Library (dotnet-skills plugin)
+
+This project has the `dotnet-skills` plugin enabled (wshaddix fork, local marketplace `wshaddix-dotnet-skills` at `C:\DevNet\github\ai\skills\wshaddix\dotnet-skills`).
+
+IMPORTANT: Prefer retrieval-led reasoning over pretraining for any .NET work. Before writing C#/.NET code, consult the matching skill below. In Claude Code invoke skills as `dotnet-skills:<name>` via the Skill tool; other assistants use the bare `<name>`.
+
+Workflow: skim repo patterns -> consult skill by name -> implement smallest change -> note conflicts.
+
+### Skill routing by task type
+
+- **discovery (start here when unsure)**: `find-skills`, `dotnet-advisor`, `dotnet-ui-chooser`, `dotnet-data-access-strategy`
+- **csharp-language**: `csharp-coding-standards`, `dotnet-csharp-modern-patterns`, `dotnet-csharp-async-patterns`, `csharp-concurrency-patterns`, `dotnet-csharp-nullable-reference-types`, `dotnet-csharp-source-generators`, `dotnet-csharp-code-smells`, `dotnet-roslyn-analyzers`, `dotnet-linq-optimization`, `csharp-api-design`, `csharp-type-design-performance`, `csharp-scripts`, `dotnet-file-based-apps`, `dotnet-io-pipelines`, `dotnet-native-interop`, `dotnet-file-io`, `serialization`, `dotnet-channels`
+- **architecture**: `dotnet-architecture-patterns`, `dotnet-solid-principles`, `dotnet-domain-modeling`, `dotnet-messaging-patterns`, `csharp-wolverinefx`, `dotnet-service-communication`, `dotnet-efcore-architecture`, `dotnet-cli-architecture`, `dotnet-aot-architecture`, `project-structure`, `dotnet-scaffold-project`
+- **aspnetcore-web**: `dotnet-minimal-apis`, `middleware-patterns`, `razor-pages-patterns`, `validation-patterns`, `dotnet-input-validation`, `exception-handling`, `caching-strategies`, `rate-limiting`, `security-headers`, `background-services`, `signalr-integration`, `dotnet-realtime-communication`, `dotnet-grpc`, `dotnet-openapi`, `dotnet-api-versioning`, `dotnet-api-security`, `dotnet-http-client`, `http-client-resilience`, `dotnet-resilience`, `localization-globalization`, `dotnet-localization`, `file-handling`, `data-protection`, `feature-flags`, `asp-net-core-identity-patterns`, `bootstrap5-ui`, `mjml-email-templates`
+- **data**: `efcore-patterns`, `database-performance`
+- **di-config**: `microsoft-extensions-dependency-injection`, `microsoft-extensions-configuration`, `dotnet-csharp-dependency-injection`, `dotnet-csharp-configuration`
+- **testing**: `dotnet-testing-strategy`, `dotnet-add-testing`, `dotnet-xunit`, `dotnet-tunit-test`, `dotnet-integration-testing`, `testcontainers`, `snapshot-testing`, `verify-email-snapshots`, `aspire-mailpit-integration`, `aspire-integration-testing`, `dotnet-playwright`, `playwright-blazor`, `playwright-ci-caching`, `dotnet-blazor-testing`, `dotnet-maui-testing`, `dotnet-uno-testing`, `dotnet-ui-testing-core`, `dotnet-test-quality`
+- **performance**: `dotnet-benchmarkdotnet`, `dotnet-ci-benchmarking`, `dotnet-performance-patterns`, `dotnet-profiling`, `dotnet-gc-memory`, `dotnet-build-optimization`
+- **native-aot**: `dotnet-native-aot`, `dotnet-trimming`, `dotnet-aot-wasm`, `dotnet-maui-aot`
+- **security**: `dotnet-security-owasp`, `dotnet-cryptography`, `dotnet-secrets-management`
+- **ui-frameworks**: `dotnet-blazor-patterns`, `dotnet-blazor-components`, `dotnet-blazor-auth`, `dotnet-maui-development`, `dotnet-winui`, `dotnet-wpf-modern`, `dotnet-wpf-migration`, `dotnet-winforms-basics`, `dotnet-uno-platform`, `dotnet-uno-targets`, `dotnet-uno-mcp`, `dotnet-accessibility`
+- **cli-tools**: `dotnet-system-commandline`, `dotnet-spectre-console`, `dotnet-terminal-gui`, `dotnet-cli-packaging`, `dotnet-cli-distribution`, `dotnet-cli-release-pipeline`
+- **libraries-nuget-msbuild**: `dotnet-nuget-authoring`, `dotnet-library-api-compat`, `dotnet-api-surface-validation`, `dotnet-multi-targeting`, `package-management`, `dotnet-msbuild-authoring`, `dotnet-msbuild-tasks`, `dotnet-csproj-reading`, `dotnet-editorconfig`, `dotnet-add-analyzers`, `local-tools`, `dotnet-tool-management`, `dotnet-version-detection`, `dotnet-version-upgrade`, `dotnet-modernize`
+- **cicd-release**: `dotnet-add-ci`, `dotnet-gha-patterns`, `dotnet-gha-build-test`, `dotnet-gha-publish`, `dotnet-gha-deploy`, `dotnet-ado-patterns`, `dotnet-ado-build-test`, `dotnet-ado-publish`, `dotnet-ado-unique`, `dotnet-release-management`, `dotnet-github-releases`, `dotnet-msix`, `dotnet-artifacts-output`
+- **cloud-deploy**: `dotnet-containers`, `dotnet-container-deployment`, `fly-io`, `aspire-configuration`, `aspire-service-defaults`, `dotnet-aspire-patterns`
+- **observability**: `dotnet-observability`, `logging-observability`, `dotnet-structured-logging`
+- **docs**: `dotnet-api-docs`, `dotnet-xml-docs`, `dotnet-documentation-strategy`, `dotnet-github-docs`, `dotnet-mermaid-diagrams`
+- **ai-integration**: `dotnet-semantic-kernel`, `agent-browser`
+- **analysis-navigation**: `dotnet-build-analysis`, `dotnet-project-analysis`, `dotnet-solution-navigation`
+- **quality-gates (run after changes)**: `slopwatch`, `crap-analysis`, `dotnet-agent-gotchas`
+- **meta (skill authoring)**: `skill-creator`, `skills-index-snippets`
+
+### Specialist agents (delegate complex domain work)
+
+`dotnet-architect`, `dotnet-aspnetcore-specialist`, `dotnet-code-review-agent`, `dotnet-security-reviewer`, `dotnet-testing-specialist`, `dotnet-performance-analyst`, `dotnet-benchmark-designer`, `dotnet-async-performance-specialist`, `dotnet-concurrency-specialist`, `dotnet-csharp-concurrency-specialist`, `dotnet-blazor-specialist`, `dotnet-maui-specialist`, `dotnet-uno-specialist`, `dotnet-cloud-specialist`, `dotnet-docs-generator`, `docfx-specialist`
+
+### SDLC workflow commands
+
+Invoke as `/dotnet-skills:<command>`: `use-case-create` (author a new use case document); `use-case-review` (review a use case); `architecture-create` (create implementation plan for a use case); `architecture-review` (review/finalize the implementation plan); `code-use-case` (implement the use case from the plan); `code-review` (review the implementation session); `test-verify-backend` (back-end test verification); `test-verify-ui` (UI test verification); `deploy` (deploy the application); `deploy-review` (review the deployment for lessons learned); `git-commit` (conventional-commit style git commit); `prompt-improvement` (suggestions for improving prompts).
+
+### Quality gates
+
+- After substantial new/refactored/LLM-authored code: run `slopwatch`.
+- After tests added/changed in complex code: run `crap-analysis`.
+- When output looks off or a .NET workflow is unclear: check `dotnet-agent-gotchas`.
+<!-- END DOTNET-SKILLS ROUTING -->
