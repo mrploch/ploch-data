@@ -20,11 +20,12 @@ public class ReadRepository<TEntity>(DbContext dbContext) : QueryableRepository<
     where TEntity : class
 {
     /// <inheritdoc />
+    // GetById deliberately queries DbSet rather than Entities: Find is defined on DbSet<TEntity> only, not on IQueryable<TEntity>.
     public TEntity? GetById(object[] keyValues) => DbSet.Find(keyValues);
 
     /// <inheritdoc />
     public TEntity? FindFirst(Expression<Func<TEntity, bool>> query, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null) =>
-        onDbSet == null ? DbSet.FirstOrDefault(query) : onDbSet(DbSet).FirstOrDefault(query);
+        onDbSet == null ? Entities.FirstOrDefault(query) : onDbSet(Entities).FirstOrDefault(query);
 
     /// <inheritdoc />
     public IList<TEntity> GetAll(Expression<Func<TEntity, bool>>? query = null, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
@@ -66,6 +67,7 @@ public class ReadRepository<TEntity, TId>(DbContext dbContext) : ReadRepository<
     where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />
+    // GetById deliberately queries DbSet rather than Entities: Find is defined on DbSet<TEntity> only, not on IQueryable<TEntity>.
     public TEntity? GetById(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         return onDbSet == null ? DbSet.Find(id) : onDbSet(DbSet).FirstOrDefault(e => Equals(e.Id, id));
