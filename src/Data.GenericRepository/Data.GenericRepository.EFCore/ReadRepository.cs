@@ -20,7 +20,12 @@ public class ReadRepository<TEntity>(DbContext dbContext) : QueryableRepository<
     where TEntity : class
 {
     /// <inheritdoc />
-    // GetById deliberately queries DbSet rather than Entities: Find is defined on DbSet<TEntity> only, not on IQueryable<TEntity>.
+    /// <remarks>
+    ///     This is the one read path that deliberately queries <see cref="QueryableRepository{TEntity}.DbSet" />
+    ///     rather than <see cref="QueryableRepository{TEntity}.Entities" />: <c>Find</c> is defined on
+    ///     <see cref="DbSet{TEntity}" /> only, not on <see cref="IQueryable{T}" />. Any query shaping applied
+    ///     to <see cref="QueryableRepository{TEntity}.Entities" /> therefore does not affect this method.
+    /// </remarks>
     public TEntity? GetById(object[] keyValues) => DbSet.Find(keyValues);
 
     /// <inheritdoc />
@@ -67,9 +72,14 @@ public class ReadRepository<TEntity, TId>(DbContext dbContext) : ReadRepository<
     where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />
-    // The parameterless path deliberately queries DbSet rather than Entities: Find is defined on
-    // DbSet<TEntity> only, not on IQueryable<TEntity>. The shaped path composes on Entities like
-    // every other non-Find read.
+    /// <remarks>
+    ///     The two paths deliberately differ in what they query. When <paramref name="onDbSet" /> is
+    ///     <see langword="null" /> the lookup uses <c>Find</c>, which is defined on
+    ///     <see cref="DbSet{TEntity}" /> only and not on <see cref="IQueryable{T}" />, so any query shaping
+    ///     applied to <see cref="QueryableRepository{TEntity}.Entities" /> does not affect it. The shaped
+    ///     path composes on <see cref="QueryableRepository{TEntity}.Entities" />, like every other
+    ///     non-<c>Find</c> read in the hierarchy.
+    /// </remarks>
     public TEntity? GetById(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
         return onDbSet == null ? DbSet.Find(id) : onDbSet(Entities).FirstOrDefault(e => Equals(e.Id, id));
