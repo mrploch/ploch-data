@@ -33,6 +33,17 @@ namespace Ploch.Data.EFCore;
 ///         limitation below.
 ///     </para>
 ///     <para>
+///         <b>The separator must contain at least one character that
+///         <see cref="Uri.EscapeDataString(string)" /> escapes.</b> Escaping is what keeps a
+///         separator occurring inside an element from being mistaken for a delimiter, but the
+///         RFC 3986 <i>unreserved</i> characters — <c>A-Z</c>, <c>a-z</c>, <c>0-9</c>, <c>-</c>,
+///         <c>.</c>, <c>_</c> and <c>~</c> — are passed through unescaped. A separator drawn only
+///         from that set is therefore unsafe: with <c>separator: "-"</c> the element <c>"a-b"</c>
+///         is written as <c>a-b</c> and read back as two elements. The default <c>","</c> is safe
+///         (it escapes to <c>%2C</c>), as is any separator containing a reserved character. This is
+///         not currently validated — see the tracked follow-up.
+///     </para>
+///     <para>
 ///         Known limitations, tracked for a future format revision:
 ///         a <see cref="string" /> element that is empty is indistinguishable from
 ///         <see langword="null" /> and reads back as <see langword="null" />; a collection holding a
@@ -61,7 +72,12 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
     /// <remarks>
     ///     Converts a collection of values to a delimited string and vice versa.
     /// </remarks>
-    /// <param name="separator">Separator to be used when converting the collection to string.</param>
+    /// <param name="separator">
+    ///     Separator to be used when converting the collection to string. It must contain at least
+    ///     one character that <see cref="Uri.EscapeDataString(string)" /> escapes, or an element
+    ///     containing the separator will be split into several on read — see the remarks on
+    ///     <see cref="CollectionStringSplitConverter{TValue}" />. The default <c>","</c> is safe.
+    /// </param>
     /// <param name="convertNulls">Include null values in the conversion.</param>
     /// <param name="mappingHints">Optional mapping hints to pass to the base converter.</param>
 #pragma warning disable SA1003 // Symbols should be spaced correctly - : should not appear at the end of the line - line is too long

@@ -324,6 +324,38 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         ((ICollection<string>)converter.ConvertFromProvider(string.Empty)!).Should().BeEmpty();
     }
 
+    [Fact]
+    public void CollectionStringSplitConverter_should_keep_elements_intact_when_the_separator_is_escapable()
+    {
+        // Escaping is what protects a separator occurring inside an element. The default "," is
+        // escaped to %2C, so an element containing a comma survives.
+        var converter = new CollectionStringSplitConverter<string>();
+
+        var encoded = (string)converter.ConvertToProvider(new List<string> { "a,b", "c" })!;
+        var decoded = (ICollection<string>)converter.ConvertFromProvider(encoded)!;
+
+        encoded.Should().Be("a%2Cb,c");
+        decoded.Should().Equal("a,b", "c");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_currently_split_elements_when_given_an_unreserved_separator()
+    {
+        // Pins a KNOWN LIMITATION, tracked in #123. Uri.EscapeDataString passes the RFC 3986
+        // unreserved characters (A-Z a-z 0-9 - . _ ~) through unescaped, so a separator drawn only
+        // from that set is indistinguishable from the same character inside an element. The
+        // constructor does not validate this today, so "a-b" is written as "a-b" and read back as
+        // two elements. Asserted rather than skipped so the behaviour cannot drift unnoticed, and
+        // expected to change to a constructor guard when #123 is fixed.
+        var converter = new CollectionStringSplitConverter<string>("-");
+
+        var encoded = (string)converter.ConvertToProvider(new List<string> { "a-b" })!;
+        var decoded = (ICollection<string>)converter.ConvertFromProvider(encoded)!;
+
+        encoded.Should().Be("a-b");
+        decoded.Should().Equal("a", "b");
+    }
+
     private static ConverterTestEntity CreateFullyPopulatedEntity()
     {
         // Every collection is populated so that a test which exercises one property is not also
