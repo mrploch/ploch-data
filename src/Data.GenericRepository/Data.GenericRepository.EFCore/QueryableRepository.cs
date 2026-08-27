@@ -18,6 +18,13 @@ namespace Ploch.Data.GenericRepository.EFCore;
 public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepository<TEntity> where TEntity : class
 {
     /// <inheritdoc />
+    /// <remarks>
+    ///     <see cref="Entities" /> is the single query entry point for all read paths in the repository
+    ///     hierarchy. Read methods should compose their queries on top of this property rather than
+    ///     accessing <see cref="DbSet" /> directly, so that any future query-shaping applied here
+    ///     (for example, filtering or tracking behaviour) affects every read consistently. The only
+    ///     exception is <c>Find</c>-based key lookups, which require <see cref="DbSet" /> itself.
+    /// </remarks>
     public IQueryable<TEntity> Entities => DbSet;
 
     /// <summary>
