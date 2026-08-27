@@ -129,6 +129,60 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
                        });
     }
 
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_string_elements_containing_the_separator()
+    {
+        // The writer escapes each element (a comma becomes %2C); the reader must therefore split
+        // the payload BEFORE unescaping the segments, or an element containing the separator is
+        // torn apart on read.
+        var strings = new List<string> { "alpha,beta", "gamma", "de,l,ta" };
+        var entity = CreateFullyPopulatedEntity();
+        entity.StringCollection = strings;
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.StringCollection.Should().Equal(strings);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_an_empty_value_typed_collection()
+    {
+        // An empty collection is stored as an empty string; the reader must map it back to an
+        // empty collection instead of trying to convert a single empty segment to TValue.
+        var entity = CreateFullyPopulatedEntity();
+        entity.IntCollection = new List<int>();
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.IntCollection.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_default_elements_as_defaults()
+    {
+        // The writer stores default values as empty segments ("1,,2"); the reader maps an empty
+        // segment back to default(TValue) instead of throwing FormatException.
+        var ints = new List<int> { 1, 0, 2 };
+        var entity = CreateFullyPopulatedEntity();
+        entity.IntCollection = ints;
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.IntCollection.Should().Equal(ints);
+    }
+
     private static ConverterTestEntity CreateFullyPopulatedEntity()
     {
         // Every collection is populated with non-default values: an empty collection is stored

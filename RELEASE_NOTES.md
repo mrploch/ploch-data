@@ -13,7 +13,13 @@
   path additionally failed to materialise value-typed collections at all — it cast a lazy
   `Select` iterator of `object` directly to `ICollection<TValue>`, throwing `InvalidCastException`
   the first time an entity was actually loaded from the database rather than served from the
-  change tracker; elements are now converted individually and materialised into a list. (#97)
+  change tracker; elements are now converted individually and materialised into a list. Two more
+  read-path defects fixed in the same pass: the payload was unescaped **before** splitting, so an
+  element containing the separator (written escaped, e.g. `%2C`) was torn apart on read — segments
+  are now unescaped individually after the split; and an empty collection (stored as an empty
+  string) or a default element (stored as an empty segment) threw `FormatException` for value-typed
+  elements — they now map back to an empty collection and `default(TValue)` respectively,
+  mirroring the write side. (#97)
 
 ### Removed
 

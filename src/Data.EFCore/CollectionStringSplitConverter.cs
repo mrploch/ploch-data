@@ -33,10 +33,13 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
                                    values.Select(v => !Equals(v, default(TValue))
                                                      ? Uri.EscapeDataString(Convert.ToString(v, CultureInfo.InvariantCulture)!)
                                                      : string.Empty)),
-             s => Uri.UnescapeDataString(s)
-                     .Split(separator, StringSplitOptions.None)
-                     .Select(v => (TValue)Convert.ChangeType(v, typeof(TValue), CultureInfo.InvariantCulture))
-                     .ToList(),
+             s => s.Length == 0
+                 ? new List<TValue>()
+                 : s.Split(separator, StringSplitOptions.None)
+                    .Select(v => v.Length == 0
+                                ? default(TValue)!
+                                : (TValue)Convert.ChangeType(Uri.UnescapeDataString(v), typeof(TValue), CultureInfo.InvariantCulture))
+                    .ToList(),
              convertNulls,
              mappingHints)
 #pragma warning restore EF1001
