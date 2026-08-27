@@ -829,13 +829,15 @@ Cursor Cloud background agents provision the workspace with an environment updat
 <!-- BEGIN DOTNET-SKILLS ROUTING -->
 ## .NET Skill Library (dotnet-skills plugin)
 
-This project has the `dotnet-skills` plugin enabled (wshaddix fork, local marketplace `wshaddix-dotnet-skills` at `C:\DevNet\github\ai\skills\wshaddix\dotnet-skills`).
+This project has the `dotnet-skills` plugin enabled (wshaddix fork, local marketplace `wshaddix-dotnet-skills`; the marketplace installation path is environment-specific and is not part of this repository).
+
+If the plugin is not available in the current environment, skip this section and fall back to the normal repository guidance — the routing index is an enhancement, not a prerequisite for working on this repo.
 
 IMPORTANT: Prefer retrieval-led reasoning over pretraining for any .NET work. Before writing C#/.NET code, consult the matching skill below. In Claude Code invoke skills as `dotnet-skills:<name>` via the Skill tool; other assistants use the bare `<name>`.
 
 Workflow: skim repo patterns -> consult skill by name -> implement smallest change -> note conflicts.
 
-### Skill routing by task type
+### Skill routing by task type (curated subset of the 167 enabled skills)
 
 - **discovery (start here when unsure)**: `find-skills`, `dotnet-advisor`, `dotnet-ui-chooser`, `dotnet-data-access-strategy`
 - **csharp-language**: `csharp-coding-standards`, `dotnet-csharp-modern-patterns`, `dotnet-csharp-async-patterns`, `csharp-concurrency-patterns`, `dotnet-csharp-nullable-reference-types`, `dotnet-csharp-source-generators`, `dotnet-csharp-code-smells`, `dotnet-roslyn-analyzers`, `dotnet-linq-optimization`, `csharp-api-design`, `csharp-type-design-performance`, `csharp-scripts`, `dotnet-file-based-apps`, `dotnet-io-pipelines`, `dotnet-native-interop`, `dotnet-file-io`, `serialization`, `dotnet-channels`
