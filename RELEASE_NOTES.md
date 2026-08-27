@@ -2,6 +2,60 @@
 
 ## Unreleased
 
+### Fixed
+
+- **`CollectionStringSplitConverter<TValue>` now writes with the invariant culture** — values were
+  serialised with `ToString()` (current culture) but deserialised with `CultureInfo.InvariantCulture`,
+  so round-trips under cultures such as `pl-PL` or `de-DE` corrupted data or threw `FormatException`.
+  Both directions now agree on the invariant culture. **Behavioural change:** values are now always
+  written invariantly; data previously written under a non-invariant current culture was already
+  unreadable by the converter's invariant read path, so the practical impact is positive. The read
+  path additionally failed to materialise value-typed collections at all — it cast a lazy
+  `Select` iterator of `object` directly to `ICollection<TValue>`, throwing `InvalidCastException`
+  the first time an entity was actually loaded from the database rather than served from the
+  change tracker; elements are now converted individually and materialised into a list. Two more
+  read-path defects fixed in the same pass: the payload was unescaped **before** splitting, so an
+  element containing the separator (written escaped, e.g. `%2C`) was torn apart on read — segments
+  are now unescaped individually after the split; and an empty payload threw `FormatException` for
+  value-typed elements instead of producing an empty collection. An empty *segment* also decodes to
+  `default(TValue)` rather than throwing — that path now exists only to read payloads written by
+  earlier versions, because the writer no longer produces empty segments for non-`null` elements
+  (see the next entry). (#97)
+
+- **A one-element collection holding `default(TValue)` no longer vanishes on read** — the write path
+  stored *any* element equal to `default(TValue)` as an empty segment, so a collection of exactly one
+  such element serialised to the empty payload, which is indistinguishable from an empty collection.
+  `[0]`, `[false]`, `[0m]` and `[default(DateTime)]` all silently reloaded as `[]` — data loss with no
+  exception. Elements are now written verbatim rather than being collapsed when they equal the type
+  default, so for **value-typed elements** the encoding is now cardinality-preserving: every
+  non-`null` value writes at least one character, the writer never emits an empty segment, and an
+  empty payload means exactly an empty collection. (Cardinality is preserved, which is not the same
+  as every value surviving intact — `DateTime` is a value type and still loses sub-second precision,
+  as noted under Known limitations.) Reference-typed elements are unchanged — an empty
+  segment still means `null` *or* the empty string, and still reads back as `null` (see Known
+  limitations). (#97)
+
+  **Breaking change — on-disk format.** Value-typed collections containing default elements are
+  encoded differently: `[1, 0, 2]` was stored as `"1,,2"` and is now stored as `"1,0,2"`;
+  `[true, false]` was `"True,"` and is now `"True,False"`. Rows written before and after this change
+  therefore use different encodings for the same value, and stored values get slightly longer — which
+  matters only for a column with a tight `MaxLength`.
+
+  The read path is unchanged and still decodes an empty segment to `default(TValue)`, so legacy
+  *multi-element* payloads such as `"1,,2"` remain readable and still yield `[1, 0, 2]`. Legacy
+  *single-default* rows are not recoverable: `[0]` was written as the empty payload, which is
+  indistinguishable from an empty collection and still decodes to `[]`. That is the defect being
+  fixed, not a regression — and in practice the blast radius is small, because before this release
+  the converter's read path threw `InvalidCastException` for *every* payload, so no such data could
+  previously be read back at all.
+
+  **Known limitations** (documented on the type, tracked in #121): an empty `string` element is
+  indistinguishable from `null` and reads back as `null`; a collection holding a single empty-or-null
+  string reads back empty; `DateTime` elements lose sub-second precision and `DateTimeKind`, because
+  the invariant general format has neither a fractional-seconds field nor an offset; and a `TValue`
+  outside `Convert.ChangeType`'s supported set (`Guid`, enums, `Nullable<T>`) serialises but throws
+  `InvalidCastException` on read.
+
 ### Removed
 
 - **`IAuditEntityHandler.HandleAccess` is gone — reads are not audited** — the method was documented as
