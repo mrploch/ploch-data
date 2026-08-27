@@ -67,9 +67,11 @@ public class ReadRepository<TEntity, TId>(DbContext dbContext) : ReadRepository<
     where TEntity : class, IHasId<TId>
 {
     /// <inheritdoc />
-    // GetById deliberately queries DbSet rather than Entities: Find is defined on DbSet<TEntity> only, not on IQueryable<TEntity>.
+    // The parameterless path deliberately queries DbSet rather than Entities: Find is defined on
+    // DbSet<TEntity> only, not on IQueryable<TEntity>. The shaped path composes on Entities like
+    // every other non-Find read.
     public TEntity? GetById(TId id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? onDbSet = null)
     {
-        return onDbSet == null ? DbSet.Find(id) : onDbSet(DbSet).FirstOrDefault(e => Equals(e.Id, id));
+        return onDbSet == null ? DbSet.Find(id) : onDbSet(Entities).FirstOrDefault(e => Equals(e.Id, id));
     }
 }

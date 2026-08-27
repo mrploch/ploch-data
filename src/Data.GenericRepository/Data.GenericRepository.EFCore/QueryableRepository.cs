@@ -23,7 +23,7 @@ public class QueryableRepository<TEntity>(DbContext dbContext) : IQueryableRepos
     ///     hierarchy. Read methods should compose their queries on top of this property rather than
     ///     accessing <see cref="DbSet" /> directly, so that any future query-shaping applied here
     ///     (for example, filtering or tracking behaviour) affects every read consistently. The only
-    ///     exception is <c>Find</c>-based lookups, which require <see cref="DbSet" /> itself.
+    ///     exception is <c>Find</c>-based key lookups, which require <see cref="DbSet" /> itself.
     /// </remarks>
     public IQueryable<TEntity> Entities => DbSet;
 
