@@ -9,6 +9,10 @@ namespace Ploch.Data.EFCore;
 /// <summary>
 ///     Converts a collection of values to a delimited string and vice versa.
 /// </summary>
+/// <remarks>
+///     Values are serialised and deserialised using <see cref="CultureInfo.InvariantCulture" />,
+///     so round-trips are stable regardless of the current thread culture.
+/// </remarks>
 /// <typeparam name="TValue">The type of the elements in the collection.</typeparam>
 public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection<TValue>, string>
 {
@@ -26,10 +30,13 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
     public CollectionStringSplitConverter(string separator = ",", bool convertNulls = true, ConverterMappingHints? mappingHints = null) :
 #pragma warning restore SA1003
         base(values => string.Join(separator,
-                                   values.Select(v => !Equals(v, default(TValue)) ? Uri.EscapeDataString(v!.ToString()!) : string.Empty)),
-             s => (ICollection<TValue>)Uri.UnescapeDataString(s)
-                                          .Split(separator, StringSplitOptions.None)
-                                          .Select(v => Convert.ChangeType(v, typeof(TValue), CultureInfo.InvariantCulture)),
+                                   values.Select(v => !Equals(v, default(TValue))
+                                                     ? Uri.EscapeDataString(Convert.ToString(v, CultureInfo.InvariantCulture)!)
+                                                     : string.Empty)),
+             s => Uri.UnescapeDataString(s)
+                     .Split(separator, StringSplitOptions.None)
+                     .Select(v => (TValue)Convert.ChangeType(v, typeof(TValue), CultureInfo.InvariantCulture))
+                     .ToList(),
              convertNulls,
              mappingHints)
 #pragma warning restore EF1001

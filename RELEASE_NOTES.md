@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Fixed
+
+- **`CollectionStringSplitConverter<TValue>` now writes with the invariant culture** — values were
+  serialised with `ToString()` (current culture) but deserialised with `CultureInfo.InvariantCulture`,
+  so round-trips under cultures such as `pl-PL` or `de-DE` corrupted data or threw `FormatException`.
+  Both directions now agree on the invariant culture. **Behavioural change:** values are now always
+  written invariantly; data previously written under a non-invariant current culture was already
+  unreadable by the converter's invariant read path, so the practical impact is positive. The read
+  path additionally failed to materialise value-typed collections at all — it cast a lazy
+  `Select` iterator of `object` directly to `ICollection<TValue>`, throwing `InvalidCastException`
+  the first time an entity was actually loaded from the database rather than served from the
+  change tracker; elements are now converted individually and materialised into a list. (#97)
+
 ### Removed
 
 - **`IAuditEntityHandler.HandleAccess` is gone — reads are not audited** — the method was documented as

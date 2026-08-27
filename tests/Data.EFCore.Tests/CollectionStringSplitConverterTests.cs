@@ -58,7 +58,7 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         // Mirror the converter's write format exactly (Uri.EscapeDataString per element,
         // string.Empty for default values) so the expected string cannot diverge from the
         // stored value regardless of the generated data.
-        var serialisedSecondList = string.Join(",", secondIntList.Select(v => v != 0 ? Uri.EscapeDataString(v.ToString(CultureInfo.CurrentCulture)) : string.Empty));
+        var serialisedSecondList = string.Join(",", secondIntList.Select(v => v != 0 ? Uri.EscapeDataString(v.ToString(CultureInfo.InvariantCulture)) : string.Empty));
 
         ValidateConverterEntities(e => e.IntCollection,
                                   (e, v) => e.IntCollection = v,
@@ -74,13 +74,88 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         // Match the complete serialised list exactly, mirroring the converter's write format
         // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
         // single element could match the wrong entity if the generated lists share a value.
-        var serialisedSecondList = string.Join(",", secondDateTimeList.Select(v => v != default ? Uri.EscapeDataString(v.ToString(CultureInfo.CurrentCulture)) : string.Empty));
+        var serialisedSecondList = string.Join(",", secondDateTimeList.Select(v => v != default ? Uri.EscapeDataString(v.ToString(CultureInfo.InvariantCulture)) : string.Empty));
 
         ValidateConverterEntities(e => e.DatesCollection,
                                   (e, v) => e.DatesCollection = v,
                                   firstDateTimeList,
                                   secondDateTimeList,
                                   t => (string)(object)t.DatesCollection == serialisedSecondList);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_datetime_list_under_non_invariant_culture()
+    {
+        // de-DE formats dates as "15.03.2024 13:45:30". Before the invariant-culture fix the
+        // write path used the current culture while the read path parsed invariantly, so a
+        // round-trip under a non-invariant culture corrupted data or threw FormatException.
+        RunWithCulture("de-DE",
+                       () =>
+                       {
+                           var dates = new List<DateTime> { new(2024, 3, 15, 13, 45, 30), new(2025, 12, 1, 8, 5, 59) };
+                           var entity = CreateFullyPopulatedEntity();
+                           entity.DatesCollection = dates;
+
+                           DbContext.TestEntities.Add(entity);
+                           DbContext.SaveChanges();
+                           DbContext.ChangeTracker.Clear();
+
+                           var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+                           reloaded.DatesCollection.Should().Equal(dates);
+                       });
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_decimal_list_under_non_invariant_culture()
+    {
+        // de-DE uses a comma as the decimal separator ("1234,56"). Before the invariant-culture
+        // fix the write path produced culture-specific strings that the invariant read path could
+        // not parse back, so a round-trip under a non-invariant culture threw FormatException.
+        RunWithCulture("de-DE",
+                       () =>
+                       {
+                           var decimals = new List<decimal> { 1234.56m, 0.5m, 42m };
+                           var entity = CreateFullyPopulatedEntity();
+                           entity.DecimalCollection = decimals;
+
+                           DbContext.TestEntities.Add(entity);
+                           DbContext.SaveChanges();
+                           DbContext.ChangeTracker.Clear();
+
+                           var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+                           reloaded.DecimalCollection.Should().Equal(decimals);
+                       });
+    }
+
+    private static ConverterTestEntity CreateFullyPopulatedEntity()
+    {
+        // Every collection is populated with non-default values: an empty collection is stored
+        // as an empty string, which the converter's read path would then fail to parse back for
+        // the value-typed collections when the whole entity is materialised from the database.
+        return new()
+        {
+            StringCollection = new List<string> { "alpha", "beta" },
+            IntCollection = new List<int> { 1, 2 },
+            DatesCollection = new List<DateTime> { new(2024, 1, 2, 3, 4, 5) },
+            DecimalCollection = new List<decimal> { 1.5m },
+        };
+    }
+
+    private static void RunWithCulture(string cultureName, Action action)
+    {
+        var originalCulture = CultureInfo.CurrentCulture;
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureName);
+
+        try
+        {
+            action();
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = originalCulture;
+        }
     }
 
     private void ValidateConverterEntities<TValue>(Func<ConverterTestEntity, ICollection<TValue>> entityPropertyFunc,
@@ -115,6 +190,7 @@ public class ConverterTestDbContext(DbContextOptions<ConverterTestDbContext> opt
         modelBuilder.Entity<ConverterTestEntity>().Property(e => e.StringCollection).HasConversion(new CollectionStringSplitConverter<string>());
         modelBuilder.Entity<ConverterTestEntity>().Property(e => e.IntCollection).HasConversion(new CollectionStringSplitConverter<int>());
         modelBuilder.Entity<ConverterTestEntity>().Property(e => e.DatesCollection).HasConversion(new CollectionStringSplitConverter<DateTime>());
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.DecimalCollection).HasConversion(new CollectionStringSplitConverter<decimal>());
         base.OnModelCreating(modelBuilder);
     }
 }
@@ -129,4 +205,6 @@ public class ConverterTestEntity : IHasId<int>
     public virtual ICollection<int> IntCollection { get; set; } = new List<int>();
 
     public virtual ICollection<DateTime> DatesCollection { get; set; } = new List<DateTime>();
+
+    public virtual ICollection<decimal> DecimalCollection { get; set; } = new List<decimal>();
 }
