@@ -154,7 +154,7 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         // An empty collection is stored as an empty string; the reader must map it back to an
         // empty collection instead of trying to convert a single empty segment to TValue.
         var entity = CreateFullyPopulatedEntity();
-        entity.IntCollection = new List<int>();
+        entity.IntCollection = [];
 
         DbContext.TestEntities.Add(entity);
         DbContext.SaveChanges();
@@ -190,10 +190,10 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         // the value-typed collections when the whole entity is materialised from the database.
         return new()
         {
-            StringCollection = new List<string> { "alpha", "beta" },
-            IntCollection = new List<int> { 1, 2 },
-            DatesCollection = new List<DateTime> { new(2024, 1, 2, 3, 4, 5) },
-            DecimalCollection = new List<decimal> { 1.5m },
+            StringCollection = ["alpha", "beta"],
+            IntCollection = [1, 2],
+            DatesCollection = [new(2024, 1, 2, 3, 4, 5)],
+            DecimalCollection = [1.5m],
         };
     }
 
@@ -260,5 +260,5 @@ public class ConverterTestEntity : IHasId<int>
 
     public virtual ICollection<DateTime> DatesCollection { get; set; } = new List<DateTime>();
 
-    public virtual ICollection<decimal> DecimalCollection { get; set; } = new List<decimal>();
+    public virtual ICollection<decimal> DecimalCollection { get; set; } = [];
 }

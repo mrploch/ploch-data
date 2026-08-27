@@ -37,7 +37,7 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
                  ? new List<TValue>()
                  : s.Split(separator, StringSplitOptions.None)
                     .Select(v => v.Length == 0
-                                ? default(TValue)!
+                                ? default!
                                 : (TValue)Convert.ChangeType(Uri.UnescapeDataString(v), typeof(TValue), CultureInfo.InvariantCulture))
                     .ToList(),
              convertNulls,
