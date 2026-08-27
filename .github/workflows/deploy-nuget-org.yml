@@ -94,11 +94,13 @@ jobs:
           /d:sonar.coverage.exclusions="**/tests/**,**/*.Tests/**,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/samples/**,**/*.ps1"
         continue-on-error: true
 
-      # Build and Test (always runs regardless of SonarCloud status)
+      # Build and Test (always runs regardless of SonarCloud status).
+      # Release configuration is mandatory here: the packages produced by this
+      # build are what the final step publishes to NuGet.org.
       - name: Build
-        run: dotnet build ./Ploch.Data.slnx --no-restore
+        run: dotnet build ./Ploch.Data.slnx --no-restore -c Release
       - name: Test Coverage
-        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build -c Release --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
 
       # SonarCloud end (runs even after test failures, only if begin succeeded).
       # Fails the job loudly if post-processing fails — silent failures here led
@@ -140,4 +142,4 @@ jobs:
       - name: Publish NuGet package
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
-        run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
+        run: dotnet nuget push ./**/*.nupkg --source https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
