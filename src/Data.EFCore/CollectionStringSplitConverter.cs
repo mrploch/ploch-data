@@ -142,6 +142,11 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
     ///     whether escaping merely <i>changes</i> the separator is not sufficient: <c>%2C</c> escapes
     ///     to <c>%252C</c> yet still collides with the escaped form of <c>,</c>.
     /// </remarks>
+    /// <param name="separator">The separator to test.</param>
+    /// <returns>
+    ///     <see langword="true" /> if at least one character of <paramref name="separator" /> cannot
+    ///     appear in escaped element data; otherwise <see langword="false" />.
+    /// </returns>
     private static bool ContainsCharacterOutsideEscapedOutput(string separator) => separator.Any(character => !IsEscapedOutputCharacter(character));
 
     private static bool IsEscapedOutputCharacter(char character) =>
@@ -164,16 +169,18 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
 
         if (value.Length == 0)
         {
-            return new List<TValue>();
+            return [];
         }
 
         // Empty entries must be preserved — an empty segment is how a null element is encoded — so
         // this relies on Split's default StringSplitOptions.None. Passing it explicitly would be
         // redundant (S3254); removing entries here would silently drop nulls.
-        return value.Split(separator)
+        return
+        [
+            .. value.Split(separator)
                     .Select(v => v.Length == 0
                                 ? default!
-                                : (TValue)Convert.ChangeType(Uri.UnescapeDataString(v), typeof(TValue), CultureInfo.InvariantCulture))
-                    .ToList();
+                                : (TValue)Convert.ChangeType(Uri.UnescapeDataString(v), typeof(TValue), CultureInfo.InvariantCulture)),
+        ];
     }
 }
