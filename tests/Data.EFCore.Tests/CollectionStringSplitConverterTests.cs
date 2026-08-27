@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq.Expressions;
 using FluentAssertions;
@@ -19,9 +19,13 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         DbContext.TestEntities.Add(new() { StringCollection = secondList });
         DbContext.SaveChanges();
 
-        // Match the complete serialised list exactly, mirroring the converter's write format
-        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
-        // single element could match the wrong entity if the generated lists share a value.
+        // Without this the queries below are satisfied from the change tracker's identity map and
+        // the converter's read path is never invoked.
+        DbContext.ChangeTracker.Clear();
+
+        // Match the complete serialised list exactly, mirroring the converter's write format —
+        // every element is escaped, and only a null element becomes an empty segment. Searching
+        // for a single element could match the wrong entity if the generated lists share a value.
         var serialisedSecondList = string.Join(",", secondList.Select(v => v != null ? Uri.EscapeDataString(v) : string.Empty));
 
         var entity = DbContext.TestEntities.Skip(1).First();
@@ -36,9 +40,9 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_string_list(List<string> firstStringList, List<string> secondStringList)
     {
-        // Match the complete serialised list exactly, mirroring the converter's write format
-        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
-        // single element could match the wrong entity if the generated lists share a value.
+        // Match the complete serialised list exactly, mirroring the converter's write format —
+        // every element is escaped, and only a null element becomes an empty segment. Searching
+        // for a single element could match the wrong entity if the generated lists share a value.
         var serialisedSecondList = string.Join(",", secondStringList.Select(v => v != null ? Uri.EscapeDataString(v) : string.Empty));
 
         ValidateConverterEntities(e => e.StringCollection,
@@ -55,10 +59,10 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         // Match the complete serialised list exactly rather than searching for a single
         // element: a short digit substring such as "4" can also match inside another
         // entity's values (e.g. "147"), which made this test fail intermittently.
-        // Mirror the converter's write format exactly (Uri.EscapeDataString per element,
-        // string.Empty for default values) so the expected string cannot diverge from the
-        // stored value regardless of the generated data.
-        var serialisedSecondList = string.Join(",", secondIntList.Select(v => v != 0 ? Uri.EscapeDataString(v.ToString(CultureInfo.InvariantCulture)) : string.Empty));
+        // Mirror the converter's write format exactly — every element is escaped, and only a
+        // null element becomes an empty segment, which an int can never be — so the expected
+        // string cannot diverge from the stored value regardless of the generated data.
+        var serialisedSecondList = string.Join(",", secondIntList.Select(v => Uri.EscapeDataString(v.ToString(CultureInfo.InvariantCulture))));
 
         ValidateConverterEntities(e => e.IntCollection,
                                   (e, v) => e.IntCollection = v,
@@ -71,10 +75,18 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [AutoMockData]
     public void CollectionStringSplitConverter_should_handle_datetime_list(List<DateTime> firstDateTimeList, List<DateTime> secondDateTimeList)
     {
-        // Match the complete serialised list exactly, mirroring the converter's write format
-        // (Uri.EscapeDataString per element, string.Empty for default values) — searching for a
-        // single element could match the wrong entity if the generated lists share a value.
-        var serialisedSecondList = string.Join(",", secondDateTimeList.Select(v => v != default ? Uri.EscapeDataString(v.ToString(CultureInfo.InvariantCulture)) : string.Empty));
+        // Truncate to whole seconds. The converter serialises via Convert.ToString, whose invariant
+        // general format has no fractional-seconds component, so sub-second precision cannot survive
+        // a round-trip — a known limitation tracked in #121. AutoFixture generates sub-second
+        // precision, so without this the fixture would assert a guarantee the format does not make.
+        firstDateTimeList = [.. firstDateTimeList.Select(TruncateToSeconds)];
+        secondDateTimeList = [.. secondDateTimeList.Select(TruncateToSeconds)];
+
+        // Match the complete serialised list exactly, mirroring the converter's write format —
+        // every element is escaped, and only a null element becomes an empty segment, which a
+        // DateTime can never be. Searching for a single element could match the wrong entity if
+        // the generated lists share a value.
+        var serialisedSecondList = string.Join(",", secondDateTimeList.Select(v => Uri.EscapeDataString(v.ToString(CultureInfo.InvariantCulture))));
 
         ValidateConverterEntities(e => e.DatesCollection,
                                   (e, v) => e.DatesCollection = v,
@@ -92,7 +104,16 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         RunWithCulture("de-DE",
                        () =>
                        {
-                           var dates = new List<DateTime> { new(2024, 3, 15, 13, 45, 30), new(2025, 12, 1, 8, 5, 59) };
+                           // Kind is Unspecified deliberately: the converter serialises via
+                           // Convert.ToString, which carries no offset, so a round-trip cannot
+                           // preserve DateTimeKind. Asserting against Unspecified keeps the
+                           // expectation honest rather than relying on DateTime equality
+                           // ignoring Kind.
+                           var dates = new List<DateTime>
+                           {
+                               new(2024, 3, 15, 13, 45, 30, DateTimeKind.Unspecified),
+                               new(2025, 12, 1, 8, 5, 59, DateTimeKind.Unspecified),
+                           };
                            var entity = CreateFullyPopulatedEntity();
                            entity.DatesCollection = dates;
 
@@ -168,8 +189,9 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [Fact]
     public void CollectionStringSplitConverter_should_round_trip_default_elements_as_defaults()
     {
-        // The writer stores default values as empty segments ("1,,2"); the reader maps an empty
-        // segment back to default(TValue) instead of throwing FormatException.
+        // Only a null element is written as an empty segment, so a zero is written verbatim
+        // ("1,0,2") and reads straight back. The reader's empty-segment branch still maps to
+        // default(TValue), which keeps payloads written by earlier versions ("1,,2") readable.
         var ints = new List<int> { 1, 0, 2 };
         var entity = CreateFullyPopulatedEntity();
         entity.IntCollection = ints;
@@ -183,19 +205,141 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         reloaded.IntCollection.Should().Equal(ints);
     }
 
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_a_single_default_valued_element()
+    {
+        // Regression guard for the cardinality defect: while the writer stored any element equal
+        // to default(TValue) as an empty segment, a one-element collection holding that default
+        // serialised to the empty payload — indistinguishable from an empty collection — and
+        // silently reloaded as empty. Writing every non-null element verbatim gives the empty
+        // payload exactly one meaning.
+        var entity = CreateFullyPopulatedEntity();
+        entity.IntCollection = [0];
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.IntCollection.Should().Equal(0);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_a_single_default_valued_decimal_element()
+    {
+        // The same cardinality guard for a second value type, so the fix cannot regress for one
+        // TValue while passing for another.
+        var entity = CreateFullyPopulatedEntity();
+        entity.DecimalCollection = [0m];
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.DecimalCollection.Should().Equal(0m);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_write_null_string_elements_as_empty_segments()
+    {
+        // Pins the one format invariant the converter guarantees: an empty segment means the
+        // element was null. A null element survives a round-trip exactly.
+        var strings = new List<string> { "alpha", null!, "beta" };
+        var entity = CreateFullyPopulatedEntity();
+        entity.StringCollection = strings;
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.StringCollection.Should().Equal(strings);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_read_an_empty_string_element_back_as_null_until_the_format_is_revised()
+    {
+        // Pins a KNOWN LIMITATION rather than desired behaviour: an empty string element is written
+        // as an empty segment, which is also the encoding for null, so it reads back as null.
+        // Tracked in #121.
+        //
+        // Deliberately asserted rather than skipped. A skipped test protects nothing today, whereas
+        // this one fails the moment the behaviour drifts. The name says "until the format is
+        // revised" so that whoever fixes #121 knows this test is expected to change with it and
+        // does not mistake the failure for a regression.
+        var entity = CreateFullyPopulatedEntity();
+        entity.StringCollection = ["alpha", string.Empty];
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.StringCollection.Should().Equal("alpha", null);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_still_read_payloads_written_in_the_legacy_empty_segment_encoding()
+    {
+        // Pins the backward-compatibility claim made in RELEASE_NOTES. Earlier versions wrote any
+        // element equal to default(TValue) as an empty segment, so [1, 0, 2] was stored as "1,,2".
+        // The read path is unchanged and must keep decoding that, even though the writer now
+        // produces "1,0,2". Exercised through the converter directly rather than through EF,
+        // because the payload cannot be produced by the current writer.
+        var converter = new CollectionStringSplitConverter<int>();
+
+        var decoded = (ICollection<int>)converter.ConvertFromProvider("1,,2")!;
+
+        decoded.Should().Equal(1, 0, 2);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_write_a_default_element_verbatim_rather_than_as_an_empty_segment()
+    {
+        // The write half of the same compatibility story: the new encoding is "1,0,2", not "1,,2".
+        var converter = new CollectionStringSplitConverter<int>();
+
+        var encoded = (string)converter.ConvertToProvider(new List<int> { 1, 0, 2 })!;
+
+        encoded.Should().Be("1,0,2");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_read_a_single_empty_or_null_string_collection_back_as_empty_until_the_format_is_revised()
+    {
+        // Pins the residual half of the cardinality hole that this change did NOT close, so it is
+        // covered rather than merely described in prose. For a reference type an empty segment is
+        // produced by both null and "", so a one-element collection holding either is
+        // indistinguishable from an empty collection. Tracked in #121, and expected to change when
+        // that is fixed.
+        var converter = new CollectionStringSplitConverter<string>();
+
+        ((string)converter.ConvertToProvider(new List<string> { string.Empty })!).Should().BeEmpty();
+        ((string)converter.ConvertToProvider(new List<string> { null! })!).Should().BeEmpty();
+        ((ICollection<string>)converter.ConvertFromProvider(string.Empty)!).Should().BeEmpty();
+    }
+
     private static ConverterTestEntity CreateFullyPopulatedEntity()
     {
-        // Every collection is populated with non-default values: an empty collection is stored
-        // as an empty string, which the converter's read path would then fail to parse back for
-        // the value-typed collections when the whole entity is materialised from the database.
+        // Every collection is populated so that a test which exercises one property is not also
+        // silently exercising the empty-collection path on the others. Each test overwrites the
+        // single collection it cares about.
         return new()
         {
             StringCollection = ["alpha", "beta"],
             IntCollection = [1, 2],
-            DatesCollection = [new(2024, 1, 2, 3, 4, 5)],
+            DatesCollection = [new(2024, 1, 2, 3, 4, 5, DateTimeKind.Unspecified)],
             DecimalCollection = [1.5m],
         };
     }
+
+    private static DateTime TruncateToSeconds(DateTime value) =>
+        new(value.Ticks - (value.Ticks % TimeSpan.TicksPerSecond), DateTimeKind.Unspecified);
 
     private static void RunWithCulture(string cultureName, Action action)
     {
@@ -226,6 +370,11 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         DbContext.TestEntities.Add(converterTestEntity1);
         DbContext.TestEntities.Add(converterTestEntity2);
         DbContext.SaveChanges();
+
+        // Without this the query is satisfied from the change tracker's identity map, so the
+        // converter's read path is never invoked and the assertions below only compare an entity
+        // with itself. Clearing forces a real materialisation from the database.
+        DbContext.ChangeTracker.Clear();
 
         var queriedEntity = DbContext.TestEntities.FirstOrDefault(findEntityExpression);
 
