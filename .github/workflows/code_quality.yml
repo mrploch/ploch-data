@@ -10,6 +10,10 @@ jobs:
       contents: write
       pull-requests: write
       checks: write
+      # Required by github/codeql-action/upload-sarif below. Declaring an explicit permissions
+      # block drops every scope not listed to none, so without this the SARIF upload fails with
+      # 403 and the Qodana results never reach code scanning.
+      security-events: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -19,7 +23,11 @@ jobs:
         with:
           args: --baseline,./qodana.sarif.json
         env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          # The secret is named QODANA_TOKEN_1681345019 in this repository; there is no secret
+          # called QODANA_TOKEN at either repository or organisation level, so the previous
+          # reference expanded to an empty string and the scan ran unauthenticated. The
+          # environment variable must keep its name — that is what the action reads.
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1681345019 }}
       - uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json

@@ -94,16 +94,23 @@ jobs:
           /d:sonar.cs.opencover.reportsPaths="**/CoverageResults/coverage.opencover.xml"
           /d:sonar.exclusions="**/tests/**,**/*.Tests/**,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/Migrations/**,**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/.github/**,**/*.yml,**/*.yaml"
           /d:sonar.coverage.exclusions="**/tests/**,**/*.Tests/**,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/samples/**,**/*.ps1"
-        # continue-on-error justified (#82): keeps a Sonar token, quota or configuration problem
-        # from blocking the build and tests, which are the job's primary purpose. The End step is
-        # gated on this step's outcome, and the warning step below makes the skip visible rather
-        # than silent — a silent Begin failure is what hid ~3 weeks of unanalysed builds.
+        # continue-on-error justified (#82): this workflow's purpose is publishing to NuGet.org,
+        # and a Sonar token, quota or outage problem must not strand a release. Note the
+        # consequence, which differs from the CI workflow: because the publish step's default
+        # success() condition is still met, packages ship even when no analysis ran. That is
+        # deliberate — gating a release on SonarCloud availability would let an outage block
+        # shipping — but it does mean the warning step below is the only signal that a published
+        # release went unanalysed.
         continue-on-error: true
 
       # Surfaces a skipped analysis as a warning annotation on the run. Without this the job is
       # green and indistinguishable from one where SonarCloud actually ran (#82).
       - name: Warn if SonarCloud analysis did not run
-        if: always() && steps.sonar-begin.outcome != 'success'
+        # Not always(): that fires on a cancelled run too, emitting a spurious warning for a
+        # job the user stopped deliberately. !cancelled() means "regardless of earlier failures,
+        # but honour cancellation". Written as an expression because a bare leading '!' is a YAML
+        # tag indicator and fails to parse.
+        if: ${{ !cancelled() && steps.sonar-begin.outcome != 'success' }}
         run: |
           echo "::warning title=SonarCloud analysis skipped::SonarScanner Begin did not succeed (outcome: ${{ steps.sonar-begin.outcome }}), so no analysis was submitted for this run. Check the SonarScanner Begin step's log, and the steps before it — Begin reports 'skipped' when an earlier step failed."
 
@@ -143,6 +150,7 @@ jobs:
       # DocumentationSite is currently excluded from the solution (docfx incompatible with .NET 10).
       # Only deploy GitHub Pages if the _site output was actually produced.
       - name: Deploy GitHub Pages
+        id: pages
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         if: ${{ github.ref == 'refs/heads/main' && hashFiles('DocumentationSite/_site/**') != '' }}
         # continue-on-error justified (#82): a best-effort documentation deploy. It is already
@@ -152,6 +160,15 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./DocumentationSite/_site
+
+      # Same reasoning as the Sonar warning above: continue-on-error keeps the failure
+      # non-fatal, but it must not also make it invisible. The step is currently unreachable
+      # (DocumentationSite is excluded from the solution, so hashFiles finds nothing), which is
+      # exactly why it is worth wiring up now rather than when docs return.
+      - name: Warn if the documentation deploy failed
+        if: ${{ !cancelled() && steps.pages.outcome == 'failure' }}
+        run: |
+          echo "::warning title=GitHub Pages deploy failed::The documentation deploy did not succeed. The build is green because this step is best-effort, but the published documentation is stale. Check the Deploy GitHub Pages step's log."
       # Publish all NuGet packages to NuGet.org
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
       # If you retry a failed workflow, already published packages will be skipped without error.
