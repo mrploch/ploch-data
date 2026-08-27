@@ -76,8 +76,6 @@ jobs:
         # silent — Begin then fails too, End is skipped by its outcome gate, and the "SonarCloud
         # analysis did not run" step below emits a warning annotation.
         continue-on-error: true
-      - name: Install dotnet-coverage
-        run: dotnet tool install --global dotnet-coverage
       # Note: analysis settings (coverage paths, exclusions) are passed inline
       # via /d: arguments. The .NET edition of the SonarScanner does not read
       # sonar-project.properties — that file would actively fail post-processing.
@@ -107,7 +105,7 @@ jobs:
       - name: Warn if SonarCloud analysis did not run
         if: always() && steps.sonar-begin.outcome != 'success'
         run: |
-          echo "::warning title=SonarCloud analysis skipped::SonarScanner Begin did not succeed (outcome: ${{ steps.sonar-begin.outcome }}), so no analysis was submitted for this run. The build and tests still ran. Check the SonarScanner Begin step's log."
+          echo "::warning title=SonarCloud analysis skipped::SonarScanner Begin did not succeed (outcome: ${{ steps.sonar-begin.outcome }}), so no analysis was submitted for this run. Check the SonarScanner Begin step's log, and the steps before it — Begin reports 'skipped' when an earlier step failed."
 
       # Build and Test (always runs regardless of SonarCloud status).
       # Release configuration is mandatory here: the packages produced by this
