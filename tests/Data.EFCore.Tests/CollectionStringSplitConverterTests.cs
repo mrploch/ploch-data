@@ -346,15 +346,40 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
     [InlineData("x")]
     [InlineData("7")]
     [InlineData("a-b")]
-    public void CollectionStringSplitConverter_constructor_should_reject_a_separator_that_escaping_leaves_unchanged(string separator)
+    [InlineData("%")]
+    [InlineData("%2C")]
+    [InlineData("%20")]
+    [InlineData("~._-")]
+    public void CollectionStringSplitConverter_constructor_should_reject_a_separator_that_can_occur_in_escaped_data(string separator)
     {
-        // Uri.EscapeDataString passes the RFC 3986 unreserved characters (A-Z a-z 0-9 - . _ ~)
-        // through unescaped, so a separator drawn only from that set cannot be distinguished from
-        // the same character inside an element: "a-b" would be written as "a-b" and read back as
-        // two elements. Previously accepted and silently corrupting; now rejected at construction.
+        // Escaped element data is drawn from exactly two sources: the RFC 3986 unreserved
+        // characters (A-Z a-z 0-9 - . _ ~) emitted literally, and percent-triplets, which introduce
+        // '%'. A separator built only from those can appear inside an element and tear it apart:
+        //   "-"   -> the element "a-b" is written as "a-b"
+        //   "%"   -> an element containing a space is written as "a%20b"
+        //   "%2C" -> an element containing a comma is written as "a%2Cb" — the separator's spelling
+        // Testing only whether escaping *changes* the separator is not enough, because "%2C"
+        // escapes to "%252C" and would have passed such a check.
         var act = () => new CollectionStringSplitConverter<string>(separator);
 
         act.Should().Throw<ArgumentException>().WithParameterName(nameof(separator));
+    }
+
+    [Theory]
+    [InlineData(",", "a,b")]
+    [InlineData(";", "a;b")]
+    [InlineData("|", "a|b")]
+    public void CollectionStringSplitConverter_should_not_tear_an_element_that_contains_the_separator(string separator, string element)
+    {
+        // The property the guard exists to protect: an element containing the separator survives,
+        // because the separator is escaped inside the element but not between elements.
+        var converter = new CollectionStringSplitConverter<string>(separator);
+
+        var encoded = (string)converter.ConvertToProvider(new List<string> { element, "tail" })!;
+        var decoded = (ICollection<string>)converter.ConvertFromProvider(encoded)!;
+
+        encoded.Should().Contain(separator);
+        decoded.Should().Equal(element, "tail");
     }
 
     [Theory]

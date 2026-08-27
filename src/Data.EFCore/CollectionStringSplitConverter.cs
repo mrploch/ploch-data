@@ -39,15 +39,16 @@ namespace Ploch.Data.EFCore;
 ///         limitation below.
 ///     </para>
 ///     <para>
-///         <b>The separator must contain at least one character that
-///         <see cref="Uri.EscapeDataString(string)" /> escapes</b>, and this is enforced by the
-///         constructor. Escaping is what keeps a separator occurring inside an element from being
-///         mistaken for a delimiter, but the RFC 3986 <i>unreserved</i> characters — <c>A-Z</c>,
-///         <c>a-z</c>, <c>0-9</c>, <c>-</c>, <c>.</c>, <c>_</c> and <c>~</c> — are passed through
-///         unescaped. A separator drawn only from that set is therefore unsafe: with
-///         <c>separator: "-"</c> the element <c>"a-b"</c> would be written as <c>a-b</c> and read
-///         back as two elements. The default <c>","</c> is safe (it escapes to <c>%2C</c>), as is
-///         any separator containing a reserved character.
+///         <b>The separator must contain at least one character that cannot occur in escaped
+///         element data</b>, and this is enforced by the constructor. Escaped data is drawn from
+///         exactly two sources: the RFC 3986 <i>unreserved</i> characters — <c>A-Z</c>, <c>a-z</c>,
+///         <c>0-9</c>, <c>-</c>, <c>.</c>, <c>_</c>, <c>~</c> — emitted literally, and
+///         percent-triplets, which introduce <c>%</c>. A separator built only from those characters
+///         can appear inside an element and would tear it apart on read: with <c>separator: "-"</c>
+///         the element <c>"a-b"</c> would be written as <c>a-b</c>, and with <c>separator: "%2C"</c>
+///         an element containing a comma would be written as <c>a%2Cb</c> — the separator's own
+///         spelling. The default <c>","</c> is safe, as is any separator containing a reserved
+///         character such as <c>;</c> or <c>|</c>.
 ///     </para>
 ///     <para>
 ///         Known limitations, tracked for a future format revision:
@@ -111,24 +112,40 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
 
     private static void ValidateSeparator(string separator)
     {
-        if (separator is null)
-        {
-            throw new ArgumentNullException(nameof(separator));
-        }
+        ArgumentNullException.ThrowIfNull(separator);
 
         if (separator.Length == 0)
         {
             throw new ArgumentException("The separator must not be empty.", nameof(separator));
         }
 
-        if (Uri.EscapeDataString(separator) == separator)
+        if (!ContainsCharacterOutsideEscapedOutput(separator))
         {
-            throw new ArgumentException($"The separator \"{separator}\" contains no character that Uri.EscapeDataString escapes, so an element " +
-                                        "containing the separator could not be distinguished from a delimiter on read. Use a separator containing " +
-                                        "a reserved character, such as the default \",\".",
+            throw new ArgumentException($"The separator \"{separator}\" consists only of characters that can appear in escaped element data, so an " +
+                                        "element could not be distinguished from a delimiter on read. Uri.EscapeDataString emits the unreserved " +
+                                        "characters A-Z, a-z, 0-9, '-', '.', '_' and '~' literally, and '%' as the escape introducer. The separator " +
+                                        "must contain at least one character outside that set — the default \",\" does.",
                                         nameof(separator));
         }
     }
+
+    /// <summary>
+    ///     Determines whether the separator contains a character that can never occur in escaped
+    ///     element data, which is what makes it safe as a delimiter.
+    /// </summary>
+    /// <remarks>
+    ///     <see cref="Uri.EscapeDataString(string)" /> output is drawn from exactly two sources: the
+    ///     RFC 3986 unreserved characters, emitted literally, and percent-triplets, which introduce
+    ///     <c>%</c> and hexadecimal digits. A separator built only from those characters can appear
+    ///     inside an escaped element — <c>%</c> occurs in every escaped character, and <c>%2C</c>
+    ///     is exactly how a comma is escaped — so splitting on it would tear elements apart. Testing
+    ///     whether escaping merely <i>changes</i> the separator is not sufficient: <c>%2C</c> escapes
+    ///     to <c>%252C</c> yet still collides with the escaped form of <c>,</c>.
+    /// </remarks>
+    private static bool ContainsCharacterOutsideEscapedOutput(string separator) => separator.Any(character => !IsEscapedOutputCharacter(character));
+
+    private static bool IsEscapedOutputCharacter(char character) =>
+        char.IsAsciiLetterOrDigit(character) || character == '-' || character == '.' || character == '_' || character == '~' || character == '%';
 
     private static string? Serialize(ICollection<TValue>? values, string separator) =>
         values is null
@@ -138,7 +155,7 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
                                             ? Uri.EscapeDataString(Convert.ToString(v, CultureInfo.InvariantCulture)!)
                                             : string.Empty));
 
-    private static ICollection<TValue>? Deserialize(string? value, string separator)
+    private static List<TValue>? Deserialize(string? value, string separator)
     {
         if (value is null)
         {
@@ -150,7 +167,10 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
             return new List<TValue>();
         }
 
-        return value.Split(separator, StringSplitOptions.None)
+        // Empty entries must be preserved — an empty segment is how a null element is encoded — so
+        // this relies on Split's default StringSplitOptions.None. Passing it explicitly would be
+        // redundant (S3254); removing entries here would silently drop nulls.
+        return value.Split(separator)
                     .Select(v => v.Length == 0
                                 ? default!
                                 : (TValue)Convert.ChangeType(Uri.UnescapeDataString(v), typeof(TValue), CultureInfo.InvariantCulture))
