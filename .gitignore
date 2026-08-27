@@ -373,7 +373,7 @@ coverage.xml
 # style is governed by .editorconfig, and no runConfigurations or inspectionProfiles
 # are committed. The historical per-file .idea rules were collapsed into this
 # single rule in #108.
-.idea/
+.idea*/
 
 **/codestream.xml
 codestream.xml
