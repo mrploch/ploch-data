@@ -9,3 +9,12 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+
+  # Workflow actions are pinned to full commit SHAs for supply-chain hardening, which
+  # means they no longer follow a moving tag and would otherwise never be updated.
+  # Dependabot understands the "# vX.Y.Z" comment beside each SHA and raises PRs that
+  # bump both the SHA and the comment together.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
