@@ -1,4 +1,4 @@
-﻿name: Qodana
+name: Qodana
 on:
   workflow_dispatch:
 
@@ -28,6 +28,6 @@ jobs:
           # reference expanded to an empty string and the scan ran unauthenticated. The
           # environment variable must keep its name — that is what the action reads.
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1681345019 }}
-      - uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
+      - uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
