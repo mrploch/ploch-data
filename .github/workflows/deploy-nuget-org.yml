@@ -12,9 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "The branch name is ${{ github.repository }}"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          # NBGV needs the full history to compute commit height.
           fetch-depth: 0
+          # Do not leave the job token in .git/config, where any later repository-controlled
+          # command could read it. Nothing here pushes: the sibling repositories are cloned over
+          # plain public HTTPS, and the Pages deploy takes its token as an explicit input.
+          persist-credentials: false
       - name: Clone mrploch-development (shared build config)
         run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
       - name: Clone ploch-common (project references)
@@ -24,7 +29,7 @@ jobs:
         run: docker run --name sqlserver -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server
 
       - name: Wait for SQL Server container
-        uses: jakejarvis/wait-action@master
+        uses: jakejarvis/wait-action@919fc193e07906705e5b7a50f90ea9e74d20b2b0 # v0.1.1
         with:
           time: '5s'
 
@@ -35,12 +40,12 @@ jobs:
           else
             echo "DocumentationSite directory not found, skipping"
           fi
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: 'zulu'
           java-version: '17'
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: |
             8.0.x
@@ -71,9 +76,11 @@ jobs:
       # SonarCloud setup (non-blocking)
       - name: Install SonarCloud Scanner
         run: dotnet tool install --global dotnet-sonarscanner
+        # continue-on-error justified (#82): SonarCloud is deliberately non-blocking here, so a
+        # transient NuGet outage installing the tool must not fail the build. A failure is not
+        # silent — Begin then fails too, End is skipped by its outcome gate, and the "SonarCloud
+        # analysis did not run" step below emits a warning annotation.
         continue-on-error: true
-      - name: Install dotnet-coverage
-        run: dotnet tool install --global dotnet-coverage
       # Note: analysis settings (coverage paths, exclusions) are passed inline
       # via /d: arguments. The .NET edition of the SonarScanner does not read
       # sonar-project.properties — that file would actively fail post-processing.
@@ -86,13 +93,31 @@ jobs:
           /k:"${{ env.SONAR_PROJECT_KEY }}"
           /o:"${{ env.SONAR_ORGANIZATION }}"
           /v:"${{ steps.nbgv-version.outputs.nuget_version }}"
-          /d:sonar.login="$SONAR_TOKEN"
+          /d:sonar.token="$SONAR_TOKEN"
           /d:sonar.host.url="https://sonarcloud.io"
           /d:sonar.projectBaseDir="${{ github.workspace }}"
           /d:sonar.cs.opencover.reportsPaths="**/CoverageResults/coverage.opencover.xml"
           /d:sonar.exclusions="**/tests/**,**/*.Tests/**,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/Migrations/**,**/*.ps1,**/docs/**,**/DocumentationSite/**,**/*.md,**/.github/**,**/*.yml,**/*.yaml"
           /d:sonar.coverage.exclusions="**/tests/**,**/*.Tests/**,**/*.IntegrationTests/**,**/*.IntegrationTesting/**,**/samples/**,**/*.ps1"
+        # continue-on-error justified (#82): this workflow's purpose is publishing to NuGet.org,
+        # and a Sonar token, quota or outage problem must not strand a release. Note the
+        # consequence, which differs from the CI workflow: because the publish step's default
+        # success() condition is still met, packages ship even when no analysis ran. That is
+        # deliberate — gating a release on SonarCloud availability would let an outage block
+        # shipping — but it does mean the warning step below is the only signal that a published
+        # release went unanalysed.
         continue-on-error: true
+
+      # Surfaces a skipped analysis as a warning annotation on the run. Without this the job is
+      # green and indistinguishable from one where SonarCloud actually ran (#82).
+      - name: Warn if SonarCloud analysis did not run
+        # Not always(): that fires on a cancelled run too, emitting a spurious warning for a
+        # job the user stopped deliberately. !cancelled() means "regardless of earlier failures,
+        # but honour cancellation". Written as an expression because a bare leading '!' is a YAML
+        # tag indicator and fails to parse.
+        if: ${{ !cancelled() && steps.sonar-begin.outcome != 'success' }}
+        run: |
+          echo "::warning title=SonarCloud analysis skipped::SonarScanner Begin did not succeed (outcome: ${{ steps.sonar-begin.outcome }}), so no analysis was submitted for this run. Check the SonarScanner Begin step's log, and the steps before it — Begin reports 'skipped' when an earlier step failed."
 
       # Build and Test (always runs regardless of SonarCloud status).
       # Release configuration is mandatory here: the packages produced by this
@@ -109,11 +134,11 @@ jobs:
         if: always() && steps.sonar-begin.outcome == 'success'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
       - name: Upload Test Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: test-results
           path: |
@@ -121,7 +146,7 @@ jobs:
             **/TestResults/*.trx
       - name: Upload Coverage Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: code-coverage
           path: |
@@ -130,12 +155,25 @@ jobs:
       # DocumentationSite is currently excluded from the solution (docfx incompatible with .NET 10).
       # Only deploy GitHub Pages if the _site output was actually produced.
       - name: Deploy GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        id: pages
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         if: ${{ github.ref == 'refs/heads/main' && hashFiles('DocumentationSite/_site/**') != '' }}
+        # continue-on-error justified (#82): a best-effort documentation deploy. It is already
+        # conditional on the _site output existing, and a Pages failure must not fail a build whose
+        # packages are otherwise good.
         continue-on-error: true
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./DocumentationSite/_site
+
+      # Same reasoning as the Sonar warning above: continue-on-error keeps the failure
+      # non-fatal, but it must not also make it invisible. The step is currently unreachable
+      # (DocumentationSite is excluded from the solution, so hashFiles finds nothing), which is
+      # exactly why it is worth wiring up now rather than when docs return.
+      - name: Warn if the documentation deploy failed
+        if: ${{ !cancelled() && steps.pages.outcome == 'failure' }}
+        run: |
+          echo "::warning title=GitHub Pages deploy failed::The documentation deploy did not succeed. The build is green because this step is best-effort, but the published documentation is stale. Check the Deploy GitHub Pages step's log."
       # Publish all NuGet packages to NuGet.org
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
       # If you retry a failed workflow, already published packages will be skipped without error.

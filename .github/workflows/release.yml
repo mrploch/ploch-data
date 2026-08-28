@@ -66,7 +66,7 @@ jobs:
       # GH_TOKEN (PAT) is configured separately before push steps, because it is the
       # only token that can trigger subsequent workflows when pushing commits.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
@@ -80,12 +80,12 @@ jobs:
         run: docker run --name sqlserver -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@ssw0rd' -p 1401:1433 -d mcr.microsoft.com/mssql/server
 
       - name: Wait for SQL Server container
-        uses: jakejarvis/wait-action@master
+        uses: jakejarvis/wait-action@919fc193e07906705e5b7a50f90ea9e74d20b2b0 # v0.1.1
         with:
           time: '5s'
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -188,7 +188,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: release-test-results
           path: |
@@ -277,7 +277,7 @@ jobs:
 
       - name: Create GitHub Release
         if: success()
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
           name: "Release ${{ steps.version.outputs.nuget_version }}"
