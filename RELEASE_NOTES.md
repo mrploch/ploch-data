@@ -4,6 +4,29 @@
 
 ### Fixed
 
+- **`CollectionStringSplitConverter<TValue>` no longer throws on a `null` collection** — `convertNulls`
+  defaults to `true`, so EF Core invokes the conversion lambdas for nulls instead of short-circuiting
+  them, but neither lambda handled null: a `null` collection threw `ArgumentNullException` out of
+  `Enumerable.Select` during `SaveChanges`, and a `NULL` column would have thrown
+  `NullReferenceException` on read. `null` now maps to `null` in both directions. A side benefit is
+  that a `null` collection is now distinguishable from an empty one — the former is a `NULL` column,
+  the latter the empty string. (#122)
+
+  **Behavioural change:** a property mapped with this converter must be declared nullable if it is to
+  hold `null`; a non-nullable property still maps to a `NOT NULL` column, which correctly rejects it.
+
+- **`CollectionStringSplitConverter<TValue>` now rejects a separator that escaping leaves unchanged**
+  — escaping is what keeps a separator occurring *inside* an element from being read as a delimiter,
+  but `Uri.EscapeDataString` passes the RFC 3986 unreserved characters (`A-Z a-z 0-9 - . _ ~`)
+  through unchanged. With `separator: "-"` the element `"a-b"` was written as `a-b` and read back as
+  two elements — silent corruption with no exception. (#123)
+
+  **Breaking change:** the constructor now throws `ArgumentException` for a separator consisting only
+  of unreserved characters (for example `"-"`, `"."`, `"_"`, `"~"`, or any alphanumeric string) and
+  for an empty separator, and `ArgumentNullException` for a `null` separator. Callers passing such a
+  separator were already corrupting any element containing it, so the exception replaces data loss
+  rather than working behaviour. The default `","` is unaffected.
+
 - **`CollectionStringSplitConverter<TValue>` now writes with the invariant culture** — values were
   serialised with `ToString()` (current culture) but deserialised with `CultureInfo.InvariantCulture`,
   so round-trips under cultures such as `pl-PL` or `de-DE` corrupted data or threw `FormatException`.

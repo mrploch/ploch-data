@@ -338,22 +338,146 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         decoded.Should().Equal("a,b", "c");
     }
 
-    [Fact]
-    public void CollectionStringSplitConverter_should_currently_split_elements_when_given_an_unreserved_separator()
+    [Theory]
+    [InlineData("-")]
+    [InlineData(".")]
+    [InlineData("_")]
+    [InlineData("~")]
+    [InlineData("x")]
+    [InlineData("7")]
+    [InlineData("a-b")]
+    [InlineData("%")]
+    [InlineData("%2C")]
+    [InlineData("%20")]
+    [InlineData("~._-")]
+    public void CollectionStringSplitConverter_constructor_should_reject_a_separator_that_can_occur_in_escaped_data(string separator)
     {
-        // Pins a KNOWN LIMITATION, tracked in #123. Uri.EscapeDataString passes the RFC 3986
-        // unreserved characters (A-Z a-z 0-9 - . _ ~) through unescaped, so a separator drawn only
-        // from that set is indistinguishable from the same character inside an element. The
-        // constructor does not validate this today, so "a-b" is written as "a-b" and read back as
-        // two elements. Asserted rather than skipped so the behaviour cannot drift unnoticed, and
-        // expected to change to a constructor guard when #123 is fixed.
-        var converter = new CollectionStringSplitConverter<string>("-");
+        // Escaped element data is drawn from exactly two sources: the RFC 3986 unreserved
+        // characters (A-Z a-z 0-9 - . _ ~) emitted literally, and percent-triplets, which introduce
+        // '%'. A separator built only from those can appear inside an element and tear it apart:
+        //   "-"   -> the element "a-b" is written as "a-b"
+        //   "%"   -> an element containing a space is written as "a%20b"
+        //   "%2C" -> an element containing a comma is written as "a%2Cb" — the separator's spelling
+        // Testing only whether escaping *changes* the separator is not enough, because "%2C"
+        // escapes to "%252C" and would have passed such a check.
+        var act = () => new CollectionStringSplitConverter<string>(separator);
 
-        var encoded = (string)converter.ConvertToProvider(new List<string> { "a-b" })!;
+        act.Should().Throw<ArgumentException>().WithParameterName(nameof(separator));
+    }
+
+    [Theory]
+    [InlineData(",", "a,b")]
+    [InlineData(";", "a;b")]
+    [InlineData("|", "a|b")]
+    public void CollectionStringSplitConverter_should_not_tear_an_element_that_contains_the_separator(string separator, string element)
+    {
+        // The property the guard exists to protect: an element containing the separator survives,
+        // because the separator is escaped inside the element but not between elements.
+        var converter = new CollectionStringSplitConverter<string>(separator);
+
+        var encoded = (string)converter.ConvertToProvider(new List<string> { element, "tail" })!;
         var decoded = (ICollection<string>)converter.ConvertFromProvider(encoded)!;
 
-        encoded.Should().Be("a-b");
-        decoded.Should().Equal("a", "b");
+        encoded.Should().Contain(separator);
+        decoded.Should().Equal(element, "tail");
+    }
+
+    [Theory]
+    [InlineData(",")]
+    [InlineData(";")]
+    [InlineData("|")]
+    [InlineData("::")]
+    public void CollectionStringSplitConverter_constructor_should_accept_a_separator_containing_an_escapable_character(string separator)
+    {
+        // The mirror of the guard: any separator escaping changes is safe, because an occurrence
+        // inside an element is escaped and therefore cannot be mistaken for a delimiter.
+        var converter = new CollectionStringSplitConverter<string>(separator);
+
+        var encoded = (string)converter.ConvertToProvider(new List<string> { $"a{separator}b", "c" })!;
+        var decoded = (ICollection<string>)converter.ConvertFromProvider(encoded)!;
+
+        decoded.Should().Equal($"a{separator}b", "c");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_constructor_should_reject_an_empty_separator()
+    {
+        var act = () => new CollectionStringSplitConverter<string>(string.Empty);
+
+        act.Should().Throw<ArgumentException>().WithParameterName("separator");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_constructor_should_reject_a_null_separator()
+    {
+        var act = () => new CollectionStringSplitConverter<string>(null!);
+
+        act.Should().Throw<ArgumentNullException>().WithParameterName("separator");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_round_trip_a_null_collection_as_null()
+    {
+        // convertNulls defaults to true, so EF invokes the converter for nulls rather than
+        // short-circuiting them. Both lambdas previously assumed a non-null argument, so a null
+        // collection threw ArgumentNullException out of Enumerable.Select during SaveChanges and a
+        // NULL column would have thrown NullReferenceException on read. Null now maps to null in
+        // both directions, which also makes a null collection distinguishable from an empty one.
+        var converter = new CollectionStringSplitConverter<string>();
+
+        converter.ConvertToProvider(null).Should().BeNull();
+        converter.ConvertFromProvider(null).Should().BeNull();
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_distinguish_a_null_collection_from_an_empty_one()
+    {
+        var converter = new CollectionStringSplitConverter<int>();
+
+        converter.ConvertToProvider(null).Should().BeNull();
+        converter.ConvertToProvider(new List<int>()).Should().Be(string.Empty);
+
+        converter.ConvertFromProvider(null).Should().BeNull();
+        ((ICollection<int>)converter.ConvertFromProvider(string.Empty)!).Should().BeEmpty();
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_save_and_reload_a_null_collection_on_an_optional_property()
+    {
+        // The end-to-end form of the null guard. This is the path that threw, as a
+        // DbUpdateException wrapping "ArgumentNullException: Value cannot be null. (Parameter
+        // 'source')" from Enumerable.Select inside SaveChanges. It uses the nullable property
+        // because the converter now writes SQL NULL for a null collection, which a NOT NULL column
+        // correctly rejects.
+        var entity = CreateFullyPopulatedEntity();
+        entity.OptionalStringCollection = null;
+
+        DbContext.TestEntities.Add(entity);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        var reloaded = DbContext.TestEntities.Single(t => t.Id == entity.Id);
+
+        reloaded.OptionalStringCollection.Should().BeNull();
+        reloaded.IntCollection.Should().Equal(1, 2);
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_distinguish_null_from_empty_on_an_optional_property_end_to_end()
+    {
+        // A null collection and an empty one must remain distinguishable after a database
+        // round-trip, not merely at the converter level.
+        var withNull = CreateFullyPopulatedEntity();
+        withNull.OptionalStringCollection = null;
+        var withEmpty = CreateFullyPopulatedEntity();
+        withEmpty.OptionalStringCollection = [];
+
+        DbContext.TestEntities.AddRange(withNull, withEmpty);
+        DbContext.SaveChanges();
+        DbContext.ChangeTracker.Clear();
+
+        DbContext.TestEntities.Single(t => t.Id == withNull.Id).OptionalStringCollection.Should().BeNull();
+        DbContext.TestEntities.Single(t => t.Id == withEmpty.Id).OptionalStringCollection.Should().NotBeNull().And.BeEmpty();
     }
 
     private static ConverterTestEntity CreateFullyPopulatedEntity()
@@ -426,6 +550,14 @@ public class ConverterTestDbContext(DbContextOptions<ConverterTestDbContext> opt
         modelBuilder.Entity<ConverterTestEntity>().Property(e => e.IntCollection).HasConversion(new CollectionStringSplitConverter<int>());
         modelBuilder.Entity<ConverterTestEntity>().Property(e => e.DatesCollection).HasConversion(new CollectionStringSplitConverter<DateTime>());
         modelBuilder.Entity<ConverterTestEntity>().Property(e => e.DecimalCollection).HasConversion(new CollectionStringSplitConverter<decimal>());
+
+        // CS8620: the property is ICollection<string>? while the converter is declared over the
+        // non-nullable ICollection<string>. The variance is safe here precisely because of the
+        // change under test — the converter now maps null to null in both directions rather than
+        // throwing, which is what makes it usable for an optional property at all.
+#pragma warning disable CS8620
+        modelBuilder.Entity<ConverterTestEntity>().Property(e => e.OptionalStringCollection).HasConversion(new CollectionStringSplitConverter<string>());
+#pragma warning restore CS8620
         base.OnModelCreating(modelBuilder);
     }
 }
@@ -442,4 +574,11 @@ public class ConverterTestEntity : IHasId<int>
     public virtual ICollection<DateTime> DatesCollection { get; set; } = new List<DateTime>();
 
     public virtual ICollection<decimal> DecimalCollection { get; set; } = [];
+
+    /// <summary>
+    ///     Declared nullable on purpose, so EF Core maps it to a nullable column and the converter's
+    ///     null handling can be exercised end to end. The non-nullable properties above map to
+    ///     NOT NULL columns, where a null collection is correctly rejected by the database.
+    /// </summary>
+    public virtual ICollection<string>? OptionalStringCollection { get; set; }
 }
