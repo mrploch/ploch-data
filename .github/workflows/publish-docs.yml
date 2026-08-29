@@ -76,8 +76,13 @@ jobs:
       # Loading the whole solution instead fails differently - Ploch.Common arrives both
       # as a ProjectReference and as a transitive NuGet package, which is CS1704.
       # Building first and reading the output sidesteps both. See issue #139.
+      # -p:UsePlochProjectReferences=true is load-bearing, not cosmetic: it makes the
+      # SampleApp consume the sibling clones via ProjectReference instead of the published
+      # Ploch.* packages. Without it, restore would need an authenticated GitHub Packages
+      # feed that this workflow deliberately does not configure. build-dotnet.yml passes
+      # the same property for the same reason.
       - name: Build the solution (docfx reads the compiled output)
-        run: dotnet build ./Ploch.Data.slnx -c Release
+        run: dotnet build ./Ploch.Data.slnx -c Release -p:UsePlochProjectReferences=true
 
       - name: Build documentation site
         # --warningsAsErrors is deliberately not set yet: the first generated build will

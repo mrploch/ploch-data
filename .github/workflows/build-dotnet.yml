@@ -231,14 +231,16 @@ jobs:
       # are otherwise good, but the warning below keeps it from being invisible.
       - name: Build documentation (smoke test)
         id: docfx
-        if: always()
+        # Gated on success(): a failed main build cannot produce a working docs build
+        # either - they compile the same code - so running it anyway would only add a
+        # duplicate, confusing failure. The tools are already restored earlier in the job.
+        if: success()
         continue-on-error: true
         run: |
-          dotnet tool restore
           # docfx reads the compiled Release assemblies and their XML doc files (see
           # publish-docs.yml for why source-based extraction cannot work here). The main
           # build above is Debug, so Release output has to be produced for the docs.
-          dotnet build ./Ploch.Data.slnx -c Release --no-restore -p:UsePlochProjectReferences=true
+          dotnet build ./Ploch.Data.slnx -c Release -p:UsePlochProjectReferences=true
           dotnet docfx DocumentationSite/docfx.json
 
       - name: Warn if the documentation build failed
