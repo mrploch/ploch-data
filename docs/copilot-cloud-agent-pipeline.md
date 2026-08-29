@@ -125,13 +125,26 @@ Inputs:
 - `model` -- top-level task model
 - `custom_agent` -- optional override if you want a different custom agent identifier
 - `wait_for_completion` -- optionally poll until the task finishes or waits for input
+- `timeout_minutes` -- poll timeout, 1 to 180 minutes, used only when `wait_for_completion` is true
 
 Behavior:
 
 - `plan-only` launches planning work without opening a PR
 - `full-followup-pr` launches the full pipeline and asks Copilot to open a follow-up remediation PR instead of assuming it can mutate the existing PR branch directly
-- the workflow first tries the current Agent Tasks API with `custom_agent`
-- if GitHub rejects `custom_agent`, the workflow retries without that field and keeps the instructions in `problem_statement`
+- the workflow first tries the Agent Tasks API with `custom_agent`
+- if GitHub rejects `custom_agent`, the workflow retries without that field; the same instructions still reach the agent because they live in the `prompt` body
+
+Polling and timeouts (`wait_for_completion: true`):
+
+- the workflow polls `GET /agents/repos/{owner}/{repo}/tasks/{task_id}` every 30 seconds
+- `completed` and `waiting_for_user` end the poll successfully
+- `failed`, `timed_out` and `cancelled` fail the step immediately
+- reaching `timeout_minutes` without a terminal state **fails the step** -- it does not report success
+- the `Wait for completion` step publishes these outputs, written before the step fails so a timeout is still diagnosable:
+  - `status` -- `timeout` on timeout, otherwise the terminal task state
+  - `timed_out` -- `true` or `false`
+  - `final_state` -- the last observed task state
+  - `task_html_url`, `session_head_ref`, `generated_pr_ids`
 
 Required secret:
 
@@ -139,18 +152,32 @@ Required secret:
 
 ### REST API orchestration
 
-If you want a strict pipeline, create separate tasks with the Agent Tasks API. The task creation endpoint supports:
+If you want a strict pipeline, create separate tasks with the Agent Tasks API and poll each one to completion before starting the next stage.
 
-- `event_content`
-- `problem_statement`
-- `model`
-- `custom_agent`
-- `base_ref`
-- `create_pull_request`
-- `event_url`
-- `event_identifiers`
+Create a task with `POST /agents/repos/{owner}/{repo}/tasks`. Per the
+[Agent Tasks REST reference](https://docs.github.com/en/rest/agent-tasks/agent-tasks) the request body
+supports exactly these fields:
 
-Use that to run each stage separately and poll for completion before starting the next stage.
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `prompt` | string | yes | The full instruction for the agent |
+| `model` | string | no | For example `gpt-5.3-codex`, `claude-opus-4.6` |
+| `custom_agent` | string | no | The `.github/agents/<name>.agent.md` filename without its extension |
+| `create_pull_request` | boolean | no | Defaults to `false` |
+| `base_ref` | string | no | Base branch for a new branch or pull request |
+| `head_ref` | string | no | Existing branch or pull request head |
+
+There is no `event_content`, `problem_statement`, `event_type`, `event_url` or `event_identifiers`
+field. Any pull request number, URL or repository identifier the agent needs must be written into
+`prompt`, which is what `copilot-pr-pipeline.yml` does.
+
+Poll a task with `GET /agents/repos/{owner}/{repo}/tasks/{task_id}`. Documented `state` values are
+`queued`, `in_progress`, `idle`, `waiting_for_user`, `completed`, `failed`, `timed_out` and
+`cancelled`.
+
+Authentication must be a user token -- a personal access token, an OAuth app token, or a GitHub App
+user-to-server token. GitHub App installation access tokens are not supported, which is why the
+workflow needs the `COPILOT_AGENT_PAT` secret rather than the built-in `GITHUB_TOKEN`.
 
 ## Recommended operating policy
 
