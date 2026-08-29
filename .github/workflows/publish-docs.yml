@@ -1,0 +1,100 @@
+# Builds the docfx API documentation site and deploys it to GitHub Pages.
+#
+# Deployment is deliberately split out of build-dotnet.yml: the docs deploy needs
+# `pages: write` and `id-token: write`, and scoping those to a dedicated workflow keeps
+# the main build on least privilege. build-dotnet.yml keeps a non-blocking docfx smoke
+# test so a docs break is caught on the pull request rather than after merge.
+#
+# This mirrors the working setup in mrploch/ploch-common (publish-docs.yml) so both
+# repositories publish documentation the same way.
+name: Publish Docs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Least privilege: read the repository, write only what the Pages deployment needs.
+# `id-token: write` is required by actions/deploy-pages, which authenticates to the
+# Pages API with a short-lived OIDC token rather than a long-lived secret.
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. In-progress runs are NOT cancelled: a half-finished Pages
+# deployment is worse than a slightly delayed one.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  publish-docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # docfx reads git metadata for "improve this doc" links, and NBGV needs the
+          # full history to compute commit height.
+          fetch-depth: 0
+          # Nothing here pushes — the sibling repositories are cloned over plain public
+          # HTTPS and the Pages deploy authenticates via OIDC — so the job token has no
+          # reason to remain in .git/config.
+          persist-credentials: false
+
+      # docfx loads the real .csproj files through Roslyn, so the project graph must
+      # restore. Three src projects reference ploch-common by relative path and
+      # Directory.Packages.props imports from mrploch-development.
+      - name: Clone mrploch-development (shared build config)
+        run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
+      - name: Clone ploch-common (project references)
+        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          # Matches Directory.Build.props <TargetFrameworkVersions>net8.0;net10.0</...>.
+          # docfx has to load every target framework the projects declare.
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Restore .NET tools (docfx is pinned in .config/dotnet-tools.json)
+        run: dotnet tool restore
+
+      # docfx extracts API metadata from the COMPILED assemblies and their XML doc files,
+      # not from the .csproj sources. That is deliberate: three src projects reference
+      # ploch-common by relative path, and docfx's per-project Roslyn load cannot resolve
+      # ProjectReferences that point outside the metadata glob (it emits
+      # "project reference without a matching metadata reference" and then CS0234).
+      # Loading the whole solution instead fails differently - Ploch.Common arrives both
+      # as a ProjectReference and as a transitive NuGet package, which is CS1704.
+      # Building first and reading the output sidesteps both. See issue #139.
+      # -p:UsePlochProjectReferences=true is load-bearing, not cosmetic: it makes the
+      # SampleApp consume the sibling clones via ProjectReference instead of the published
+      # Ploch.* packages. Without it, restore would need an authenticated GitHub Packages
+      # feed that this workflow deliberately does not configure. build-dotnet.yml passes
+      # the same property for the same reason.
+      - name: Build the solution (docfx reads the compiled output)
+        run: dotnet build ./Ploch.Data.slnx -c Release -p:UsePlochProjectReferences=true
+
+      - name: Build documentation site
+        # --warningsAsErrors is deliberately not set yet: the first generated build will
+        # surface pre-existing XML-comment warnings that need their own cleanup pass.
+        # Tightening this is tracked separately so a docs warning cannot silently rot.
+        run: dotnet docfx DocumentationSite/docfx.json
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: DocumentationSite/_site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

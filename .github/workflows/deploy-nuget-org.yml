@@ -33,13 +33,6 @@ jobs:
         with:
           time: '5s'
 
-      - name: Copy documentation files
-        run: |
-          if [ -d "./DocumentationSite" ]; then
-            cp ./README.md ./DocumentationSite/index.md
-          else
-            echo "DocumentationSite directory not found, skipping"
-          fi
       - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: 'zulu'
@@ -152,28 +145,6 @@ jobs:
           path: |
             **/CoverageResults/*.xml
 
-      # DocumentationSite is currently excluded from the solution (docfx incompatible with .NET 10).
-      # Only deploy GitHub Pages if the _site output was actually produced.
-      - name: Deploy GitHub Pages
-        id: pages
-        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
-        if: ${{ github.ref == 'refs/heads/main' && hashFiles('DocumentationSite/_site/**') != '' }}
-        # continue-on-error justified (#82): a best-effort documentation deploy. It is already
-        # conditional on the _site output existing, and a Pages failure must not fail a build whose
-        # packages are otherwise good.
-        continue-on-error: true
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./DocumentationSite/_site
-
-      # Same reasoning as the Sonar warning above: continue-on-error keeps the failure
-      # non-fatal, but it must not also make it invisible. The step is currently unreachable
-      # (DocumentationSite is excluded from the solution, so hashFiles finds nothing), which is
-      # exactly why it is worth wiring up now rather than when docs return.
-      - name: Warn if the documentation deploy failed
-        if: ${{ !cancelled() && steps.pages.outcome == 'failure' }}
-        run: |
-          echo "::warning title=GitHub Pages deploy failed::The documentation deploy did not succeed. The build is green because this step is best-effort, but the published documentation is stale. Check the Deploy GitHub Pages step's log."
       # Publish all NuGet packages to NuGet.org
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
       # If you retry a failed workflow, already published packages will be skipped without error.
