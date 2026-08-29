@@ -197,9 +197,12 @@
     <Project Path="tests/Data.GenericRepository/Data.GenericRepository.Tests/Ploch.Data.GenericRepository.Tests.csproj" />
   </Folder>
   <Project Path="src/Data.EFCore.IntegrationTesting.FluentAssertions/Ploch.Data.EFCore.IntegrationTesting.FluentAssertions.csproj" />
-  <!-- DocumentationSite excluded: docfx.console 2.59.4 is incompatible with .NET 10.
-       Upgrade to modern docfx dotnet tool to re-enable. -->
-  <!-- <Project Path="DocumentationSite/DocumentationSite.csproj" /> -->
+  <!-- DocumentationSite is intentionally not a solution project. The documentation site is
+       built by docfx, which runs as a local .NET tool (pinned in .config/dotnet-tools.json)
+       and reads the src/ projects directly - it needs no MSBuild project of its own. The
+       previous DocumentationSite.csproj existed only to host the deprecated docfx.console
+       package, which could not target .NET 10; removing it is what unblocked documentation
+       publishing. See .github/workflows/publish-docs.yml and issue #139. -->
   <Project Path="src/Data.EFCore.IntegrationTesting/Ploch.Data.EFCore.IntegrationTesting.csproj" />
   <Project Path="src/Data.EFCore.SqLite/Ploch.Data.EFCore.SqLite.csproj" />
   <Project Path="src/Data.EFCore.SqlServer/Ploch.Data.EFCore.SqlServer.csproj" />
