@@ -224,7 +224,13 @@ jobs:
           EOF
           fi
 
-          jq -n             --arg prompt "$(cat /tmp/prompt.txt)"             --arg model "$INPUT_MODEL"             --arg custom_agent "$RESOLVED_CUSTOM_AGENT"             --arg base_ref "$PR_BASE_REF"             --argjson create_pull_request "$CREATE_PULL_REQUEST"             '{
+          jq -n \
+            --arg prompt "$(cat /tmp/prompt.txt)" \
+            --arg model "$INPUT_MODEL" \
+            --arg custom_agent "$RESOLVED_CUSTOM_AGENT" \
+            --arg base_ref "$PR_BASE_REF" \
+            --argjson create_pull_request "$CREATE_PULL_REQUEST" \
+            '{
                 prompt: $prompt,
                 model: $model,
                 custom_agent: $custom_agent,
@@ -311,8 +317,12 @@ jobs:
           set -euo pipefail
 
           STATUS_FILE=/tmp/task-status.json
+          POLL_FILE=/tmp/task-status-poll.json
           DEADLINE=$(( $(date +%s) + (INPUT_TIMEOUT_MINUTES * 60) ))
           POLL_INTERVAL=30
+
+          # Seed the file so the post-loop jq reads valid JSON even if every poll fails.
+          printf '{}' > "$STATUS_FILE"
 
           # Assume a timeout until a terminal state is actually observed. The loop is
           # entered unconditionally so that at least one poll always happens, even when
@@ -320,31 +330,51 @@ jobs:
           TIMED_OUT=true
 
           while true; do
-            STATUS=$(curl -sS -o "$STATUS_FILE" -w "%{http_code}"               -H "Accept: application/vnd.github+json"               -H "Authorization: Bearer $GH_TOKEN"               -H "X-GitHub-Api-Version: $GITHUB_API_VERSION"               "https://api.github.com/agents/repos/${GITHUB_REPOSITORY}/tasks/${TASK_ID}")
+            NOW=$(date +%s)
+            REMAINING=$(( DEADLINE - NOW ))
 
-            if [ "$STATUS" != "200" ]; then
-              echo "::error::Unable to read task status for ${TASK_ID} (HTTP $STATUS)."
-              cat "$STATUS_FILE"
-              exit 1
+            # Bound every request so a stalled connection cannot outlive the deadline.
+            MAX_TIME="$POLL_INTERVAL"
+            if [ "$REMAINING" -gt 0 ] && [ "$REMAINING" -lt "$POLL_INTERVAL" ]; then
+              MAX_TIME="$REMAINING"
             fi
 
-            STATE=$(jq -r '.state // "unknown"' "$STATUS_FILE")
-            echo "Current task state: $STATE"
+            CURL_RC=0
+            HTTP_STATUS=$(curl -sS -o "$POLL_FILE" -w "%{http_code}" \
+              --connect-timeout 10 --max-time "$MAX_TIME" \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "X-GitHub-Api-Version: $GITHUB_API_VERSION" \
+              "https://api.github.com/agents/repos/${GITHUB_REPOSITORY}/tasks/${TASK_ID}") || CURL_RC=$?
 
-            case "$STATE" in
-              completed|waiting_for_user)
-                if [ "$STATE" = "waiting_for_user" ]; then
-                  echo "::notice::Copilot task is waiting for user input."
-                fi
-                TIMED_OUT=false
-                break
-                ;;
-              failed|timed_out|cancelled)
-                echo "::error::Copilot task ended in state '$STATE'."
-                cat "$STATUS_FILE"
-                exit 1
-                ;;
-            esac
+            if [ "$CURL_RC" -ne 0 ]; then
+              # A stalled or aborted request is retried rather than fatal; the deadline
+              # check below still bounds the total wait.
+              echo "::warning::Status request for task ${TASK_ID} did not complete (curl exit ${CURL_RC}); retrying until the deadline."
+            elif [ "$HTTP_STATUS" != "200" ]; then
+              echo "::error::Unable to read task status for ${TASK_ID} (HTTP $HTTP_STATUS)."
+              cat "$POLL_FILE"
+              exit 1
+            else
+              cp "$POLL_FILE" "$STATUS_FILE"
+              STATE=$(jq -r '.state // "unknown"' "$STATUS_FILE")
+              echo "Current task state: $STATE"
+
+              case "$STATE" in
+                completed|waiting_for_user)
+                  if [ "$STATE" = "waiting_for_user" ]; then
+                    echo "::notice::Copilot task is waiting for user input."
+                  fi
+                  TIMED_OUT=false
+                  break
+                  ;;
+                failed|timed_out|cancelled)
+                  echo "::error::Copilot task ended in state '$STATE'."
+                  cat "$STATUS_FILE"
+                  exit 1
+                  ;;
+              esac
+            fi
 
             NOW=$(date +%s)
             if [ "$NOW" -ge "$DEADLINE" ]; then

@@ -136,13 +136,19 @@ Behavior:
 
 Polling and timeouts (`wait_for_completion: true`):
 
-- the workflow polls `GET /agents/repos/{owner}/{repo}/tasks/{task_id}` every 30 seconds
+- the workflow polls `GET /agents/repos/{owner}/{repo}/tasks/{task_id}` every 30 seconds, shortening
+  only the final interval so the last poll lands on the deadline rather than past it
+- each status request is bounded by `--connect-timeout 10` and a `--max-time` no larger than the
+  remaining budget, so a stalled connection cannot outlive `timeout_minutes`; a request that does
+  not complete is retried rather than failing the step
 - `completed` and `waiting_for_user` end the poll successfully
 - `failed`, `timed_out` and `cancelled` fail the step immediately
 - reaching `timeout_minutes` without a terminal state **fails the step** -- it does not report success
 - the `Wait for completion` step publishes these outputs, written before the step fails so a timeout is still diagnosable:
   - `status` -- `timeout` on timeout, otherwise the terminal task state
-  - `timed_out` -- `true` or `false`
+  - `timed_out` -- the string `true` or `false`. Actions step outputs are always strings, so a
+    non-empty `false` is truthy in an `if:` expression; compare explicitly with
+    `steps.wait.outputs.timed_out == 'true'` or wrap it in `fromJSON(...)`
   - `final_state` -- the last observed task state
   - `task_html_url`, `session_head_ref`, `generated_pr_ids`
 
