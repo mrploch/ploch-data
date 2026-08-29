@@ -7,8 +7,11 @@ namespace Ploch.Data.Model.CommonTypes;
 /// </summary>
 /// <typeparam name="TId">The type of the ID property.</typeparam>
 /// <typeparam name="TValue">The type of the Value property.</typeparam>
+// CA1716: "Property" matches a keyword in Visual Basic. The name is central to the public API
+// of this library and renaming it would be a breaking change for no practical benefit.
 #pragma warning disable CA1716 // Identifiers should not match keywords
 public class Property<TId, TValue> : IHasId<TId>, INamed, IHasValue<TValue>
+#pragma warning restore CA1716
 {
     /// <inheritdoc cref="IHasId{TId}.Id" />
     [Key]
@@ -25,6 +28,7 @@ public class Property<TId, TValue> : IHasId<TId>, INamed, IHasValue<TValue>
 ///     Represents a property with an <see cref="int" /> Id.
 /// </summary>
 /// <typeparam name="TValue">The type of the Value property.</typeparam>
+// CA1716: see the note on Property<TId, TValue> above.
 #pragma warning disable CA1716 // Identifiers should not match keywords
 public class Property<TValue> : Property<int, TValue>
 #pragma warning restore CA1716
