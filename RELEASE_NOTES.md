@@ -234,6 +234,25 @@
   version that EF Core still pulls transitively. All packages depending on the SQLite provider
   resolve the patched native SQLite library. See `change-log/issue-91-vulnerable-sqlitepclraw.md`. (#91)
 
+### Documented
+
+- **The nullability contract of the model properties is now stated explicitly** — `INamed.Name`,
+  `IHasId<TId>.Id` and `IHasValue<TValue>.Value` are annotated as non-nullable, but the common types
+  in `Ploch.Data.Model` (`Property<TId, TValue>`, `Tag<TId>`, `Category<TCategory, TId>`, `Image`)
+  initialise them with `= null!` / `= default!`. A freshly constructed entity therefore carries
+  `null` (or `default(T)`) until the caller assigns a value or Entity Framework Core materialises the
+  entity, and a deliberate null-forgiving assignment can set the property back to `null`. The
+  null-forgiving initialiser exists so that the compiler accepts the EF Core materialisation path,
+  on which the ORM populates the property after construction.
+
+  This is a **documentation-only** change: the runtime behaviour and the public API signatures are
+  unchanged for v4.0. Making the properties `required` was rejected because it breaks construction
+  without an object initialiser; annotating them as `string?` was rejected because it pushes null
+  checks onto every consumer and weakens the model interfaces that exist to standardise these
+  property shapes; and a runtime guard on the setter was rejected because entities in this workspace
+  are plain data carriers with no business logic. Assigning a value before the entity is used or
+  persisted remains the caller's responsibility. (#131)
+
 ## v2.1 — NBGV Versioning and Release Pipeline
 
 ### Overview

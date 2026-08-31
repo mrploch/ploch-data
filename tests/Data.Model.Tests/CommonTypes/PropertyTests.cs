@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using AutoFixture.Xunit3;
 using FluentAssertions;
 using Ploch.Data.Model;
@@ -84,8 +84,10 @@ public class PropertyTests
     {
         // Name is declared as a non-nullable string initialised with the null-forgiving `= null!`,
         // which silences the compiler for the EF Core materialisation path but leaves the property
-        // genuinely null until something assigns it. Pinning that here so the discrepancy between
-        // the declared type and the runtime value is a documented contract, not a surprise.
+        // genuinely null until something assigns it. Issue #131 settled this as the deliberate
+        // contract for v4.0: the runtime behaviour is unchanged and the discrepancy between the
+        // declared type and the runtime value is now stated in the XML docs on INamed.Name, so this
+        // test pins documented behaviour rather than an open question.
         var property = new Property<int, string>();
 
         property.Name.Should().BeNull();
@@ -126,12 +128,14 @@ public class PropertyTests
     [Fact]
     public void Name_should_accept_null()
     {
-        // Characterises the absence of a runtime guard; it is not an endorsement of passing null.
+        // Pins the deliberate absence of a runtime guard; it is not an endorsement of passing null.
         // Name is declared non-nullable, so a consumer can only reach this state through a
-        // deliberate null-forgiving override — it cannot happen by accident under NRT. The test
-        // exists so that adding validation later is a conscious, visible change. Whether the
-        // nullability contract on INamed.Name should be tightened before v4.0 is tracked
-        // separately in issue #131.
+        // deliberate null-forgiving override — it cannot happen by accident under NRT. Issue #131
+        // decided against tightening the contract for v4.0: `required` would break construction
+        // without an object initialiser, `string?` would push null checks onto every consumer, and
+        // a setter guard is barred by the plain-data-carrier rule for entities. The behaviour is
+        // instead documented on INamed.Name, and this test keeps any later change to it conscious
+        // and visible.
         var property = new Property<int, string> { Name = "colour" };
         property.Name.Should().Be("colour");
 
