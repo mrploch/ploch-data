@@ -12,8 +12,22 @@ namespace Ploch.Data.EFCore.IntegrationTesting;
 /// <remarks>
 ///     <para>
 ///         The harness exists to give callers a single, unambiguous ownership contract. Disposing the
-///         harness releases all four resources in the correct order — context, scope, connection, root
-///         provider — so a test never has to remember which of them it is responsible for.
+///         harness releases the database context, the initial scope and the root service provider, in
+///         that order, and the shared connection last.
+///     </para>
+///     <para>
+///         <strong>The connection is owned only when the harness created it</strong> — that is, when the
+///         harness came from
+///         <see cref="DbContextServicesRegistrationHelper.BuildHarness{TDbContext}(IServiceCollection,string)" />.
+///         When the harness came from the
+///         <see cref="DbContextServicesRegistrationHelper.BuildHarness{TDbContext}(IServiceCollection,IDbContextConfigurator)" />
+///         overload the connection belongs to the configurator, so the caller must still dispose the
+///         configurator itself; the harness deliberately leaves that connection alone.
+///     </para>
+///     <para>
+///         Disposal is resilient: a failure releasing one resource does not prevent the remaining ones
+///         from being released. Every failure is surfaced afterwards, aggregated when more than one
+///         resource failed.
 ///     </para>
 ///     <para>
 ///         Obtain an instance from
@@ -23,7 +37,7 @@ namespace Ploch.Data.EFCore.IntegrationTesting;
 ///     <example>
 ///         <code>
 ///         using var harness = DbContextServicesRegistrationHelper.BuildHarness&lt;MyDbContext&gt;(services);
-///         var repository = harness.ScopedServiceProvider.GetRequiredService&lt;IMyRepository&gt;();
+///         var context = harness.ScopedServiceProvider.GetRequiredService&lt;MyDbContext&gt;();
 ///         </code>
 ///     </example>
 /// </remarks>
@@ -72,9 +86,15 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
     public TDbContext DbContext { get; }
 
     /// <summary>
-    ///     Asynchronously releases the root provider, the initial scope, the shared connection and the database context.
+    ///     Asynchronously releases the database context, the initial scope, the root service provider and,
+    ///     when the harness created it, the shared connection.
     /// </summary>
+    /// <remarks>
+    ///     The root provider is released <em>before</em> the shared connection so that singletons whose own
+    ///     disposal touches the database still observe an open connection.
+    /// </remarks>
     /// <returns>A <see cref="ValueTask" /> that completes when every owned resource has been released.</returns>
+    /// <exception cref="AggregateException">Thrown when releasing more than one owned resource failed.</exception>
     public async ValueTask DisposeAsync()
     {
         if (_disposed)
@@ -84,35 +104,25 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
 
         _disposed = true;
 
-        await DbContext.DisposeAsync().ConfigureAwait(false);
+        var failures = new List<Exception>();
 
-        if (_scope is IAsyncDisposable asyncScope)
-        {
-            await asyncScope.DisposeAsync().ConfigureAwait(false);
-        }
-        else
-        {
-            _scope.Dispose();
-        }
+        await DisposeSafelyAsync(DbContext, failures).ConfigureAwait(false);
+        await DisposeSafelyAsync(_scope, failures).ConfigureAwait(false);
+        await DisposeSafelyAsync(RootServiceProvider, failures).ConfigureAwait(false);
+        await DisposeSafelyAsync(_connection, failures).ConfigureAwait(false);
 
-        if (_connection is not null)
-        {
-            await _connection.DisposeAsync().ConfigureAwait(false);
-        }
-
-        if (RootServiceProvider is IAsyncDisposable asyncRoot)
-        {
-            await asyncRoot.DisposeAsync().ConfigureAwait(false);
-        }
-        else if (RootServiceProvider is IDisposable disposableRoot)
-        {
-            disposableRoot.Dispose();
-        }
+        Rethrow(failures);
     }
 
     /// <summary>
-    ///     Releases the root provider, the initial scope, the shared connection and the database context.
+    ///     Releases the database context, the initial scope, the root service provider and, when the harness
+    ///     created it, the shared connection.
     /// </summary>
+    /// <remarks>
+    ///     The root provider is released <em>before</em> the shared connection so that singletons whose own
+    ///     disposal touches the database still observe an open connection.
+    /// </remarks>
+    /// <exception cref="AggregateException">Thrown when releasing more than one owned resource failed.</exception>
     public void Dispose()
     {
         if (_disposed)
@@ -122,14 +132,14 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
 
         _disposed = true;
 
-        DbContext.Dispose();
-        _scope.Dispose();
-        _connection?.Dispose();
+        var failures = new List<Exception>();
 
-        if (RootServiceProvider is IDisposable disposableRoot)
-        {
-            disposableRoot.Dispose();
-        }
+        DisposeSafely(DbContext, failures);
+        DisposeSafely(_scope, failures);
+        DisposeSafely(RootServiceProvider, failures);
+        DisposeSafely(_connection, failures);
+
+        Rethrow(failures);
     }
 
     /// <summary>
@@ -145,5 +155,60 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
         rootProvider = RootServiceProvider;
         scopedProvider = ScopedServiceProvider;
         dbContext = DbContext;
+    }
+
+    // CA1031 is suppressed deliberately on the two helpers below: a disposal chain must continue past a
+    // failing resource, otherwise one failure leaks every resource queued behind it. Nothing is swallowed —
+    // every collected failure is rethrown by Rethrow once the chain has finished.
+#pragma warning disable CA1031
+    internal static void DisposeSafely(object? resource, List<Exception> failures)
+    {
+        try
+        {
+            (resource as IDisposable)?.Dispose();
+        }
+        catch (Exception exception)
+        {
+            failures.Add(exception);
+        }
+    }
+
+    internal static async ValueTask DisposeSafelyAsync(object? resource, List<Exception> failures)
+    {
+        try
+        {
+            switch (resource)
+            {
+                case IAsyncDisposable asyncDisposable:
+                    await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+
+                    break;
+                case IDisposable disposable:
+                    disposable.Dispose();
+
+                    break;
+                default:
+                    // Null, or a resource that owns nothing to release.
+                    break;
+            }
+        }
+        catch (Exception exception)
+        {
+            failures.Add(exception);
+        }
+    }
+#pragma warning restore CA1031
+
+    private static void Rethrow(List<Exception> failures)
+    {
+        switch (failures.Count)
+        {
+            case 0:
+                return;
+            case 1:
+                throw failures[0];
+            default:
+                throw new AggregateException("Releasing the test database harness failed for more than one resource.", failures);
+        }
     }
 }

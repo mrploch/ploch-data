@@ -34,12 +34,60 @@ The `bool useScopedProvider` parameter was **kept** rather than replaced with ex
 `CreateRepositoryInNewScope<T, TId>()` helpers: these types ship in published packages, and fixing
 the parameter's semantics is not a breaking change while removing it would be.
 
+Construction is now failure-safe: if `BuildServiceProvider()`, the scoped `TDbContext` resolution,
+`OpenConnection()` or `EnsureCreated()` throws, everything already created is released — context,
+scope, root provider, then the harness-owned connection — before the original exception propagates.
+Cleanup failures are collected and dropped on purpose so they cannot mask the failure that aborted
+construction.
+
+Disposal is now failure-safe in the same way: a resource that throws no longer strands the resources
+queued behind it, and the collected failures are rethrown afterwards (aggregated when more than one).
+The root provider is released **before** the shared connection, so a singleton whose own `Dispose`
+touches the database still observes an open connection.
+
+`BuildHarness(IServiceCollection, string)` now also registers `IDbContextFactory<TDbContext>`, which
+only the configurator overload did. Without it, a harness built from the connection-string overload
+could not serve factory-based helpers such as `CreateRootDbContext()`.
+
+`DataIntegrationTest<TDbContext>.CreateScope()` synchronises its scope list, so a test that fans out
+concurrently cannot corrupt it, and the unbounded accumulation of scopes is documented on the method.
+
+## Ownership: what the harness does *not* own
+
+The harness owns the shared SQLite connection **only** on the connection-string overload, which is
+the overload that creates it. On the `IDbContextConfigurator` overload — the one
+`DataIntegrationTest` actually uses — the connection belongs to the configurator and the harness
+receives `connection: null`, so the caller must dispose the configurator too.
+`DataIntegrationTest.Dispose` does. The class remarks and `docs/integration-testing.md` previously
+claimed unconditional ownership of all four resources; both now state the qualification.
+
+## The tuple overloads deliberately do not expose the harness
+
+Issue #80 asked for the tuple method to route through the wrapper "so the harness is reachable".
+It routes through it; it does **not** return it, and that sub-requirement is consciously not
+implemented. Returning it would change the signature the overload exists to preserve, and it is not
+needed for cleanup: the returned `RootProvider` owns the scope behind `ScopedProvider` and the
+context resolved from it, so disposing the root provider releases the whole graph — which is what
+`TestDbContextHarnessTests.BuildDbContextAndServiceProvider_should_return_the_harness_references`
+does. Callers who want the explicit ownership contract call `BuildHarness` directly. This is stated
+in the XML documentation on both tuple overloads rather than left implicit.
+
 # Impact
 
-- No breaking API changes. No existing test passed `useScopedProvider: false`, so no existing
-  behaviour moves.
-- New tests: `TestDbContextHarnessTests` (7) covering construction, deconstruction, idempotent
-  synchronous and asynchronous disposal, and the legacy tuple path;
-  `RepositoryScopeLifetimeTests` (5) pinning the scoped-versus-fresh-scope resolution semantics.
+- No breaking API changes: every signature is preserved, and replacing the get-only auto-properties
+  with computed get-only properties is both source- and binary-compatible.
+- **The behavioural contract of `useScopedProvider: false` does move**, for consumers of the
+  published `Ploch.Data.GenericRepository.EFCore.IntegrationTesting` package even though no test in
+  this repository passed `false`. A downstream test that resolved a repository with `false` used to
+  get a root-cached instance sharing the test's `DbContext` and change tracker, and now gets an
+  independent `DbContext` that cannot see tracked-but-unsaved entities.
+  `RepositoryScopeLifetimeTests.UnscopedResolution_should_return_a_distinct_unit_of_work_for_every_call`
+  pins exactly that instance-identity flip. This is called out in `RELEASE_NOTES.md` under
+  "Changed behaviour (no API break)" so downstream repositories are warned.
+- New tests: `TestDbContextHarnessTests` (11) covering construction, deconstruction, idempotent
+  synchronous and asynchronous disposal, the legacy tuple path, the context-factory registration, the
+  configurator overload's connection ownership, failure during preparation, and the
+  `InvalidOperationException` initialisation guard; `RepositoryScopeLifetimeTests` (5) pinning the
+  scoped-versus-fresh-scope resolution semantics.
 
 Refs: #80

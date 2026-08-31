@@ -13,9 +13,10 @@ public class RepositoryScopeLifetimeTests : GenericRepositoryDataIntegrationTest
     [Fact]
     public void ScopedResolution_should_return_the_same_unit_of_work_for_the_shared_scope()
     {
-        // Act
-        using var first = CreateUnitOfWork();
-        using var second = CreateUnitOfWork();
+        // Act — no `using`: the instance is owned by the shared test scope, which disposes it at
+        // teardown. Disposing it here would release a container-owned service early.
+        var first = CreateUnitOfWork();
+        var second = CreateUnitOfWork();
 
         // Assert — the default scope is shared, so the scoped registration yields one instance.
         first.Should().BeSameAs(second);

@@ -2,16 +2,31 @@
 
 ## Unreleased
 
+### Changed behaviour (no API break)
+
+- **`GenericRepositoryDataIntegrationTest<TDbContext>`: `useScopedProvider: false` now means "a new
+  scope", not "the root container".** Every signature is unchanged, so this is not a compile-time
+  break, but the observable behaviour of the `false` overloads moves for consumers of
+  `Ploch.Data.GenericRepository.EFCore.IntegrationTesting`. A downstream test that resolved a
+  repository with `false` previously got a root-cached instance sharing the test's `DbContext` and
+  change tracker; it now gets an independent `DbContext` and will no longer observe entities that
+  are tracked but not yet saved. If a test relied on that sharing, either drop the `false` argument
+  to use the shared scope or save before reading. No test inside this repository passed `false`.
+  (#80)
+
 ### Added
 
 - **`TestDbContextHarness<TDbContext>`** (`Ploch.Data.EFCore.IntegrationTesting`) — a single
   `IDisposable`/`IAsyncDisposable` owner for everything an integration-test database build creates:
-  the root service provider, the initial service scope, the shared SQLite connection and the initial
-  `DbContext`. Obtain one from the new
-  `DbContextServicesRegistrationHelper.BuildHarness<TDbContext>(…)` overloads. The existing
-  `BuildDbContextAndServiceProvider` tuple overloads are unchanged and now route through the
-  harness, so there is one construction path; they still hand back references without ownership, so
-  prefer `BuildHarness`. (#80)
+  the root service provider, the initial service scope, the initial `DbContext` and — on the
+  connection-string overload, which creates it — the shared SQLite connection. On the
+  `IDbContextConfigurator` overload the connection belongs to the configurator, so the caller still
+  disposes the configurator; `DataIntegrationTest<TDbContext>` does that for you. Disposal is
+  resilient: one failing resource does not strand the rest, and failures are rethrown afterwards.
+  Obtain a harness from the new `DbContextServicesRegistrationHelper.BuildHarness<TDbContext>(…)`
+  overloads. The existing `BuildDbContextAndServiceProvider` tuple overloads are unchanged and now
+  route through the harness, so there is one construction path; they still hand back references
+  without ownership, so prefer `BuildHarness`. (#80)
 
 - **`DataIntegrationTest<TDbContext>.CreateScope()`** — creates a dependency-injection scope from
   the root provider and disposes it with the test. Use it when a test needs genuinely independent
@@ -35,7 +50,12 @@
   sibling checkout. The two generations landed in the same output folder and the TestingSupport
   assemblies failed to bind, making `dotnet test -c Release` red. `UseProjectReferences` now
   defaults to `true` in all configurations; pass `-p:UseProjectReferences=false` to restore
-  `PackageReference` resolution. (#95)
+  `PackageReference` resolution. Because a `ProjectReference`-resolved pack would write the sibling
+  checkout's `Ploch.Common` version into the nuspec — a version that does not exist on nuget.org —
+  `release.yml` and `deploy-nuget-org.yml` now pack in a dedicated step with
+  `-p:UseProjectReferences=false` and publish only from that output, so the shipped packages keep
+  declaring the central `Ploch.Common` versions. Pinning the `ploch-common` clone to a released tag
+  remains tracked in #67. (#95)
 
 - **`CollectionStringSplitConverter<TValue>` no longer throws on a `null` collection** — `convertNulls`
   defaults to `true`, so EF Core invokes the conversion lambdas for nulls instead of short-circuiting

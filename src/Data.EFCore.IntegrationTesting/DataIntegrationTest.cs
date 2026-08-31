@@ -42,7 +42,10 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     /// <summary>
     ///     Gets the configured instance of the database context.
     /// </summary>
-    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Part of the public API.")]
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the test harness has not been initialised — that is, when the
+    ///     <see cref="DataIntegrationTest{TDbContext}" /> constructor has not completed.
+    /// </exception>
     protected TDbContext DbContext => Harness.DbContext;
 
     /// <summary>
@@ -97,12 +100,26 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///         <typeparamref name="TDbContext" /> with its own change tracker, for example — rather than the
     ///         instances shared through <see cref="ScopedServiceProvider" />.
     ///     </para>
+    ///     <para>
+    ///         Every scope is retained until the test instance is disposed; nothing is released early. A test
+    ///         that calls this — directly, or indirectly through a <c>useScopedProvider: false</c> resolution —
+    ///         in a long loop therefore holds one scope and one <typeparamref name="TDbContext" /> per iteration.
+    ///         Dispose the returned scope yourself as well if that matters; disposal here is idempotent.
+    ///     </para>
+    ///     <para>
+    ///         Tracking is synchronised, so this is safe to call concurrently from a test that fans out with
+    ///         <see cref="Task.WhenAll(System.Collections.Generic.IEnumerable{Task})" /> or similar.
+    ///     </para>
     /// </remarks>
     /// <returns>A new scope whose lifetime is bound to this test instance.</returns>
     protected IServiceScope CreateScope()
     {
         var scope = RootServiceProvider.CreateScope();
-        _additionalScopes.Add(scope);
+
+        lock (_additionalScopes)
+        {
+            _additionalScopes.Add(scope);
+        }
 
         return scope;
     }
@@ -177,22 +194,43 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
 
         if (disposing)
         {
-            // Dispose the scopes this test created before the harness, whose disposal cascades
-            // through the root provider that owns them.
-            foreach (var scope in _additionalScopes)
+            IServiceScope[] scopes;
+
+            lock (_additionalScopes)
             {
-                scope.Dispose();
+                scopes = [.. _additionalScopes];
+                _additionalScopes.Clear();
             }
 
-            _additionalScopes.Clear();
+            // Dispose the scopes this test created before the harness, whose disposal cascades
+            // through the root provider that owns them. A failing scope must not strand the harness
+            // or the configurator, so each release is guarded and the failures are surfaced at the end.
+            var failures = new List<Exception>();
+
+            foreach (var scope in scopes)
+            {
+                TestDbContextHarness<TDbContext>.DisposeSafely(scope, failures);
+            }
 
             // The harness owns the initial scope, the database context and the root provider,
             // and releases them in the correct order.
-            _harness?.Dispose();
+            TestDbContextHarness<TDbContext>.DisposeSafely(_harness, failures);
 
-            if (_dbContextConfigurator is IDisposable disposableConfigurator)
+            // The harness never owns the configurator's connection, so the configurator is released here.
+            TestDbContextHarness<TDbContext>.DisposeSafely(_dbContextConfigurator, failures);
+
+            if (failures.Count == 1)
             {
-                disposableConfigurator.Dispose();
+                _disposed = true;
+
+                throw failures[0];
+            }
+
+            if (failures.Count > 1)
+            {
+                _disposed = true;
+
+                throw new AggregateException("Releasing the integration-test resources failed for more than one resource.", failures);
             }
         }
 

@@ -14,9 +14,19 @@ public static class DbContextServicesRegistrationHelper
     ///     scope, the shared SQLite connection and the prepared database context.
     /// </summary>
     /// <remarks>
-    ///     Prefer this over <see cref="BuildDbContextAndServiceProvider{TDbContext}(IServiceCollection,string)" />: the
-    ///     harness is a single <see cref="IDisposable" /> that releases every one of those resources, whereas the tuple
-    ///     leaves ownership to the caller.
+    ///     <para>
+    ///         Prefer this over <see cref="BuildDbContextAndServiceProvider{TDbContext}(IServiceCollection,string)" />: the
+    ///         harness is a single <see cref="IDisposable" /> that releases every one of those resources, whereas the tuple
+    ///         leaves ownership to the caller.
+    ///     </para>
+    ///     <para>
+    ///         This overload registers both <c>DbContext</c> and <c>IDbContextFactory</c> against the shared connection, so
+    ///         a harness built here supports factory-based helpers such as
+    ///         <see cref="DataIntegrationTest{TDbContext}.CreateRootDbContext" />.
+    ///     </para>
+    ///     <para>
+    ///         The connection created here is owned by the returned harness, and is released when the harness is disposed.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
@@ -34,6 +44,10 @@ public static class DbContextServicesRegistrationHelper
         serviceCollection.AddSingleton(connection);
         serviceCollection.AddDbContext<TDbContext>(builder => builder.UseSqlite(connection));
 
+        // Registered for parity with the configurator overload so that factory-based helpers work
+        // identically whichever overload built the harness.
+        serviceCollection.AddDbContextFactory<TDbContext>(builder => builder.UseSqlite(connection));
+
         return CreateProviderAndPrepareDbContext<TDbContext>(serviceCollection, connection);
     }
 
@@ -41,15 +55,22 @@ public static class DbContextServicesRegistrationHelper
     ///     Builds a <see cref="TestDbContextHarness{TDbContext}" /> using a custom DbContext configurator.
     /// </summary>
     /// <remarks>
-    ///     Prefer this over
-    ///     <see cref="BuildDbContextAndServiceProvider{TDbContext}(IServiceCollection,IDbContextConfigurator)" />: the
-    ///     harness is a single <see cref="IDisposable" /> that releases the root provider, the initial scope and the
-    ///     database context, whereas the tuple leaves ownership to the caller.
+    ///     <para>
+    ///         Prefer this over
+    ///         <see cref="BuildDbContextAndServiceProvider{TDbContext}(IServiceCollection,IDbContextConfigurator)" />: the
+    ///         harness is a single <see cref="IDisposable" /> that releases the root provider, the initial scope and the
+    ///         database context, whereas the tuple leaves ownership to the caller.
+    ///     </para>
+    ///     <para>
+    ///         <strong>The database connection is not owned by the harness on this path.</strong> It belongs to
+    ///         <paramref name="dbContextConfigurator" />, so a caller using a configurator that owns a shared connection —
+    ///         <c>SqLiteDbContextConfigurator</c>, for instance — must dispose the configurator in addition to the harness.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
     /// <param name="dbContextConfigurator">The configurator responsible for setting up the DbContext options.</param>
-    /// <returns>A harness owning every resource created for the test.</returns>
+    /// <returns>A harness owning every resource created for the test, except the configurator and its connection.</returns>
     public static TestDbContextHarness<TDbContext> BuildHarness<TDbContext>(IServiceCollection serviceCollection,
                                                                            IDbContextConfigurator dbContextConfigurator) where TDbContext : DbContext
     {
@@ -64,6 +85,12 @@ public static class DbContextServicesRegistrationHelper
     /// <summary>
     ///     Builds a DbContext and IServiceProvider for integration testing.
     /// </summary>
+    /// <remarks>
+    ///     This overload hands back three references but no ownership, and deliberately does not expose the
+    ///     <see cref="TestDbContextHarness{TDbContext}" /> it is built on — see the remarks on
+    ///     <see cref="BuildDbContextAndServiceProvider{TDbContext}(IServiceCollection,IDbContextConfigurator)" />.
+    ///     Use <see cref="BuildHarness{TDbContext}(IServiceCollection,string)" /> when ownership matters.
+    /// </remarks>
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
     /// <param name="connectionString">The database connection string. Default is an in-memory SQLite database.</param>
@@ -80,9 +107,19 @@ public static class DbContextServicesRegistrationHelper
     ///     Builds a DbContext and IServiceProvider for integration testing using a custom DbContext configurator.
     /// </summary>
     /// <remarks>
-    ///     This overload hands back three references but no ownership: the caller remains responsible for disposing the
-    ///     root provider, the scope behind <c>ScopedProvider</c> and the returned context. Prefer
-    ///     <see cref="BuildHarness{TDbContext}(IServiceCollection,IDbContextConfigurator)" />, which owns all of them.
+    ///     <para>
+    ///         This overload hands back three references but no ownership: the caller remains responsible for disposing the
+    ///         root provider, the scope behind <c>ScopedProvider</c> and the returned context. Prefer
+    ///         <see cref="BuildHarness{TDbContext}(IServiceCollection,IDbContextConfigurator)" />, which owns all of them.
+    ///     </para>
+    ///     <para>
+    ///         The <see cref="TestDbContextHarness{TDbContext}" /> this overload is implemented on is intentionally not
+    ///         returned. Exposing it would change the signature these callers depend on, and it is not needed for cleanup:
+    ///         the returned <c>RootProvider</c> owns the scope behind <c>ScopedProvider</c> and the context resolved from
+    ///         it, so disposing the root provider releases the whole graph. Callers who want the explicit ownership
+    ///         contract should call <see cref="BuildHarness{TDbContext}(IServiceCollection,IDbContextConfigurator)" />
+    ///         directly rather than this overload.
+    ///     </para>
     /// </remarks>
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
@@ -103,16 +140,40 @@ public static class DbContextServicesRegistrationHelper
     private static TestDbContextHarness<TDbContext> CreateProviderAndPrepareDbContext<TDbContext>(IServiceCollection serviceCollection, SqliteConnection? connection)
         where TDbContext : DbContext
     {
-        var serviceProvider = serviceCollection.BuildServiceProvider();
-        var scope = serviceProvider.CreateScope();
-        var testDbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
-        testDbContext.Database.OpenConnection();
-        testDbContext.Database.EnsureCreated();
+        ServiceProvider? serviceProvider = null;
+        IServiceScope? scope = null;
+        TDbContext? testDbContext = null;
 
-        // The harness exposes the scoped service provider so that repositories resolved by tests
-        // share the same DbContext instance (and its change tracker).
-        // The shared connection in SqLiteDbContextConfigurator ensures all DbContext instances
-        // (including those in UnitOfWork child scopes) access the same in-memory database.
-        return new TestDbContextHarness<TDbContext>(serviceProvider, scope, testDbContext, connection);
+        try
+        {
+            serviceProvider = serviceCollection.BuildServiceProvider();
+            scope = serviceProvider.CreateScope();
+            testDbContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
+            testDbContext.Database.OpenConnection();
+            testDbContext.Database.EnsureCreated();
+
+            // The harness exposes the scoped service provider so that repositories resolved by tests
+            // share the same DbContext instance (and its change tracker).
+            // The shared connection in SqLiteDbContextConfigurator ensures all DbContext instances
+            // (including those in UnitOfWork child scopes) access the same in-memory database.
+            return new TestDbContextHarness<TDbContext>(serviceProvider, scope, testDbContext, connection);
+        }
+        catch
+        {
+            // Construction failed part-way — most commonly in EnsureCreated() on a bad model — so nothing
+            // will ever receive the harness that would have released these. Release what was created, in the
+            // same order the harness uses. Failures here are collected and dropped on purpose: the exception
+            // that aborted construction is the useful one and must not be masked by a cleanup failure.
+            var cleanupFailures = new List<Exception>();
+
+            TestDbContextHarness<TDbContext>.DisposeSafely(testDbContext, cleanupFailures);
+            TestDbContextHarness<TDbContext>.DisposeSafely(scope, cleanupFailures);
+            TestDbContextHarness<TDbContext>.DisposeSafely(serviceProvider, cleanupFailures);
+
+            // Null on the configurator path, where the connection belongs to the configurator.
+            TestDbContextHarness<TDbContext>.DisposeSafely(connection, cleanupFailures);
+
+            throw;
+        }
     }
 }
