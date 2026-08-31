@@ -165,4 +165,15 @@ jobs:
           # rotating the nuget.org key in one place left the other publishing with a stale
           # key - a 401 discovered at release time. Both workflows now read the same secret.
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: dotnet nuget push ./**/*.nupkg --source https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
+        # Filter out any test packages rather than pushing a broad `./**/*.nupkg` glob,
+        # matching the selection release.yml already uses so the two publishing paths cannot
+        # diverge on what they consider publishable.
+        run: |
+          PKGS=$(find . -name '*.nupkg' -not -path '*/test*' -not -path '*/Test*')
+          if [ -z "$PKGS" ]; then
+            echo "::error::No .nupkg files were produced by the build."
+            exit 1
+          fi
+          echo "$PKGS" | while read -r pkg; do
+            dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
+          done

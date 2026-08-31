@@ -71,6 +71,7 @@ re-run, having first confirmed nothing has been published against it.
 | `GH_TOKEN` | Pushing the tag and the version-bump commit. A PAT is required because the built-in job token cannot trigger downstream workflows |
 | `NUGET_API_KEY` | Publishing packages and symbols to nuget.org. This is the canonical name — `deploy-nuget-org.yml` uses the same secret |
 | `GH_PACKAGES_TOKEN` | Restoring `Ploch.*` packages from GitHub Packages |
+| `GITHUB_TOKEN` (built-in) | Creating the GitHub release and reading it back in the verification step. Both rely on the workflow-level `contents: write` declared at the top of `release.yml` — a permissions error on either step points here, not at a repository secret |
 
 `GH_TOKEN` is written into the git remote URL only for the duration of each individual push and
 is removed immediately afterwards, so it never sits in `.git/config` for the rest of the job.

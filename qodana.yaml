@@ -8,8 +8,10 @@ dotnet:
 exclude:
   - name: All
     paths:
-      # Test projects live under tests/, not src/, in this repository. The previous
-      # `src/**/*Tests/**` pattern matched nothing.
-      - tests/**
-      - samples/**
-      - DocumentationSite/**
+      # Qodana's exclude.paths takes plain relative directory paths, not globs. The
+      # previous value was `src/**/*Tests/**`, which was wrong twice over: test projects
+      # live under tests/, not src/, and the glob syntax is not interpreted. Directory
+      # paths are used here so the exclusion actually applies.
+      - tests
+      - samples
+      - DocumentationSite
