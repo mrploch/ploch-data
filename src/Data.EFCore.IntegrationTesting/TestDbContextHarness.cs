@@ -159,7 +159,8 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
 
     // CA1031 is suppressed deliberately on the two helpers below: a disposal chain must continue past a
     // failing resource, otherwise one failure leaks every resource queued behind it. Nothing is swallowed —
-    // every collected failure is rethrown by Rethrow once the chain has finished.
+    // every collected failure is rethrown by Rethrow once the chain has finished, and the IsNonFatal filter
+    // keeps process-level failures propagating immediately instead of being aggregated.
 #pragma warning disable CA1031
     internal static void DisposeSafely(object? resource, List<Exception> failures)
     {
@@ -167,7 +168,7 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
         {
             (resource as IDisposable)?.Dispose();
         }
-        catch (Exception exception)
+        catch (Exception exception) when (IsNonFatal(exception))
         {
             failures.Add(exception);
         }
@@ -192,12 +193,34 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
                     break;
             }
         }
-        catch (Exception exception)
+        catch (Exception exception) when (IsNonFatal(exception))
         {
             failures.Add(exception);
         }
     }
 #pragma warning restore CA1031
+
+    /// <summary>
+    ///     Determines whether an exception is safe to collect and continue past, rather than one that must
+    ///     abandon the disposal chain immediately.
+    /// </summary>
+    /// <remarks>
+    ///     A failing <see cref="IDisposable" /> is an ordinary, recoverable event during test teardown and is
+    ///     worth aggregating. A process-level failure is not: continuing to release resources after one is
+    ///     pointless, and deferring it behind an <see cref="AggregateException" /> only obscures it.
+    /// </remarks>
+    /// <param name="exception">The exception raised while releasing a resource.</param>
+    /// <returns>
+    ///     <see langword="true" /> when the exception may be collected; <see langword="false" /> when it must
+    ///     propagate immediately.
+    /// </returns>
+    private static bool IsNonFatal(Exception exception) =>
+        exception switch
+        {
+            OutOfMemoryException or StackOverflowException or AccessViolationException or AppDomainUnloadedException or BadImageFormatException
+                or CannotUnloadAppDomainException or InvalidProgramException => false,
+            _ => true
+        };
 
     private static void Rethrow(List<Exception> failures)
     {
