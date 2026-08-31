@@ -71,13 +71,24 @@ namespace Ploch.Data.EFCore;
 ///         separator containing a reserved character such as <c>;</c> or <c>|</c>.
 ///     </para>
 ///     <para>
-///         <typeparamref name="TValue" /> may be <see cref="string" />, any <see cref="IConvertible" />
-///         type (the numeric primitives, <see cref="bool" />, <see cref="char" />,
-///         <see cref="decimal" /> and <see cref="DateTime" />), <see cref="Guid" />,
+///         <typeparamref name="TValue" /> may be <see cref="string" />, one of the built-in primitives
+///         <see cref="Convert.ChangeType(object, Type, IFormatProvider)" /> can produce from a string
+///         (<see cref="bool" />, <see cref="char" />, the integral and floating-point types and
+///         <see cref="decimal" />), <see cref="DateTime" />, <see cref="Guid" />,
 ///         <see cref="TimeSpan" />, <see cref="DateTimeOffset" />, <see cref="DateOnly" />,
 ///         <see cref="TimeOnly" />, any enum, or a <see cref="Nullable{T}" /> of any of those. A type
 ///         outside that set throws <see cref="NotSupportedException" /> on both write and read rather
 ///         than serialising into something that cannot be read back.
+///     </para>
+///     <para>
+///         Support is decided from the <i>declared</i> element type, not from the runtime value, so a
+///         converter closed over an unsupported type fails on write even when the value it is handed
+///         happens to be encodable. Implementing <see cref="IConvertible" /> is not sufficient:
+///         conversion on read runs against the stored <see cref="string" />, whose own
+///         <see cref="IConvertible" /> implementation recognises only the built-in primitives and
+///         throws <see cref="InvalidCastException" /> for a user-defined target. Deciding eligibility
+///         from the runtime value instead would let <c>CollectionStringSplitConverter&lt;object&gt;</c>
+///         write a row that could never be read — the failure mode this revision removes.
 ///     </para>
 /// </remarks>
 /// <typeparam name="TValue">The type of the elements in the collection.</typeparam>
@@ -102,6 +113,27 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
     ///     type is ever encoded or decoded.
     /// </summary>
     private static readonly Type ElementType = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
+
+    /// <summary>
+    ///     Whether <see cref="ElementType" /> can be both written and read back, decided once per
+    ///     closed construction. Checked on both conversion paths so that a converter declared over an
+    ///     unsupported type fails identically whichever direction is exercised first.
+    /// </summary>
+    // S2743: a separate value per closed construction is precisely the intent here — support depends
+    // on TValue, while the shared decoder table it consults stays in the non-generic
+    // CollectionElementCodec. Sonar cannot see the TValue dependency only because it reaches the type
+    // parameter through ElementType rather than through typeof(TValue) directly.
+#pragma warning disable S2743
+    private static readonly bool IsElementTypeSupported = CollectionElementCodec.IsSupported(ElementType);
+#pragma warning restore S2743
+
+    /// <summary>
+    ///     Whether <typeparamref name="TValue" /> can hold <see langword="null" /> at all — true for a
+    ///     reference type or a <see cref="Nullable{T}" />, false for a bare value type. A payload
+    ///     carrying the <c>n</c> tag for a type that cannot represent <see langword="null" /> is
+    ///     rejected rather than silently decoded as <c>default(TValue)</c>.
+    /// </summary>
+    private static readonly bool CanRepresentNull = !typeof(TValue).IsValueType || Nullable.GetUnderlyingType(typeof(TValue)) is not null;
 
 #pragma warning disable EF1001
     /// <summary>
@@ -190,6 +222,8 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
             return null;
         }
 
+        EnsureElementTypeSupported();
+
         var builder = new StringBuilder(FormatHeader);
 
         foreach (var value in values)
@@ -215,6 +249,8 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
         {
             return null;
         }
+
+        EnsureElementTypeSupported();
 
         if (!value.StartsWith(FormatHeader, StringComparison.Ordinal))
         {
@@ -250,12 +286,40 @@ public class CollectionStringSplitConverter<TValue> : ValueConverter<ICollection
         return values;
     }
 
+    /// <summary>
+    ///     Rejects a <typeparamref name="TValue" /> that cannot be round-tripped, before any payload
+    ///     is produced or interpreted.
+    /// </summary>
+    /// <remarks>
+    ///     The check is on the declared element type rather than on the runtime value, because the
+    ///     read path has only the declared type to work from. Deciding write eligibility from the
+    ///     runtime value alone would let <c>CollectionStringSplitConverter&lt;object&gt;</c> — or a
+    ///     converter over a custom <see cref="IConvertible" /> — write a row it could never read,
+    ///     which is the very failure mode this format revision exists to remove.
+    /// </remarks>
+    /// <exception cref="NotSupportedException">
+    ///     Thrown when <see cref="ElementType" /> has no round-trip encoding.
+    /// </exception>
+    private static void EnsureElementTypeSupported()
+    {
+        if (!IsElementTypeSupported)
+        {
+            throw new NotSupportedException(CollectionElementCodec.UnsupportedMessage(ElementType));
+        }
+    }
+
     private static TValue DecodeSegment(string segment)
     {
         if (segment.Length > 0)
         {
             if (segment[0] == NullTag && segment.Length == 1)
             {
+                if (!CanRepresentNull)
+                {
+                    throw new FormatException($"The stored value contains a null element, but {typeof(TValue)} cannot represent null. Decoding it as " +
+                                              "default would silently substitute a real value for a null, so the payload is rejected instead.");
+                }
+
                 return default!;
             }
 

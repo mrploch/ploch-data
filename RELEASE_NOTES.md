@@ -44,6 +44,15 @@
   `null` case is carried by the tag. A `TValue` outside that set now throws `NotSupportedException`
   **on write**, naming the type, instead of writing something unreadable.
 
+  Support is judged from the **declared** element type, not from the runtime value, so a converter
+  closed over an unsupported type fails even when the value it is handed happens to be encodable —
+  `CollectionStringSplitConverter<object>` can no longer write a string element it would be unable to
+  read back. Implementing `IConvertible` is not by itself sufficient: decoding converts the stored
+  `string`, and `string`'s own `IConvertible` implementation recognises only the built-in primitives,
+  throwing `InvalidCastException` for a user-defined target. Reading a payload whose `n` tag marks a
+  `null` element is likewise rejected when `TValue` cannot represent `null`, rather than quietly
+  yielding `default(TValue)`.
+
   **Breaking change — on-disk format, and legacy payloads are rejected.** A non-`null` payload that
   does not begin with `!1` throws `FormatException`. Reading legacy payloads best-effort was considered
   and rejected: under the old rules an empty segment meant `null` **and** `string.Empty`, so a

@@ -67,7 +67,7 @@ Encoding is no longer `Convert.ToString` for everything:
 | `Guid` | `"D"` | Canonical form |
 | `DateOnly`, `TimeOnly` | `"O"` | Round-trip forms |
 | enum | member name | `Enum.Parse` reads it back |
-| everything else `IConvertible` | invariant string | Unchanged behaviour |
+| the built-in primitives (`bool`, `char`, the integral and floating-point types, `decimal`) | invariant string | Unchanged behaviour |
 | anything else | — | `NotSupportedException` |
 
 `Nullable<T>` is handled by decoding through `Nullable.GetUnderlyingType`, because the `null` case is
@@ -76,6 +76,21 @@ special case in the codec.
 
 An unsupported `TValue` now throws `NotSupportedException` **on write**, naming the type, rather than
 serialising into something that throws `InvalidCastException` on every subsequent read.
+
+Crucially, that decision is made from the **declared** element type rather than from the runtime value.
+`Encode` dispatches on the value it is handed, but `Decode` has only `TValue` to work from, so judging
+write eligibility by the runtime value alone would leave the asymmetry that defect 4 is about:
+`CollectionStringSplitConverter<object>` would write a `string` element happily and then fail on every
+read, because `object` does not implement `IConvertible`. For the same reason the convertible fallback
+is restricted to the primitives `Convert.ChangeType` can actually produce *from a string* rather than
+to anything implementing `IConvertible` — conversion runs against the stored string, whose own
+`IConvertible` implementation throws `InvalidCastException` for a user-defined target, so a custom
+`IConvertible` type would otherwise write and then prove unreadable.
+
+Symmetrically, a payload whose `n` tag marks a `null` element is rejected with `FormatException` when
+`TValue` cannot represent `null`. The write path can never produce that combination, so it only arises
+from corrupt or hand-edited data; decoding it as `default(TValue)` would substitute a real `0` for a
+`null` silently, which is the same class of quiet misread this revision exists to remove.
 
 The codec lives in a non-generic `internal static CollectionElementCodec`. Holding its decoder table in
 the generic converter would allocate a separate copy per closed construction for no benefit (Sonar

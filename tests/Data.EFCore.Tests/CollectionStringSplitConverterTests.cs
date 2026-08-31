@@ -370,6 +370,60 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         act.Should().Throw<NotSupportedException>().WithMessage("*Uri*");
     }
 
+    [Fact]
+    public void CollectionStringSplitConverter_should_reject_a_declared_element_type_whose_runtime_value_is_encodable()
+    {
+        // Encode dispatches on the runtime value, Decode on the declared type. Without a check on the
+        // declared type, TValue = object writes a string element happily and then fails on every read,
+        // because object does not implement IConvertible so Decode has no way back. That is the exact
+        // write-succeeds/read-fails shape #121 set out to eliminate, so the write must fail instead.
+        var converter = new CollectionStringSplitConverter<object>();
+
+        var write = () => converter.ConvertToProvider(new List<object> { "a" });
+
+        write.Should().Throw<NotSupportedException>().WithMessage("*Object*");
+
+        // The read path rejects it identically, rather than only failing once a payload exists.
+        var read = () => converter.ConvertFromProvider("!1,va");
+
+        read.Should().Throw<NotSupportedException>().WithMessage("*Object*");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_reject_a_custom_iconvertible_element_type()
+    {
+        // Implementing IConvertible is not enough to be decodable: Convert.ChangeType runs against the
+        // stored string, and string's own IConvertible implementation throws InvalidCastException for
+        // any user-defined target. Such a type used to write and then fail on read.
+        var converter = new CollectionStringSplitConverter<ConverterTestConvertible>();
+
+        var act = () => converter.ConvertToProvider(new List<ConverterTestConvertible> { new() });
+
+        act.Should().Throw<NotSupportedException>().WithMessage("*ConverterTestConvertible*");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_reject_a_null_element_for_a_non_nullable_element_type()
+    {
+        // The write path can never produce "n" for a non-nullable value type, so this only arises from
+        // corrupt or hand-edited data. Decoding it as default(TValue) would substitute a real 0 for a
+        // null silently — the same class of quiet misread the format revision exists to prevent.
+        var converter = new CollectionStringSplitConverter<int>();
+
+        var act = () => converter.ConvertFromProvider("!1,v1,n");
+
+        act.Should().Throw<FormatException>().WithMessage("*null*");
+    }
+
+    [Fact]
+    public void CollectionStringSplitConverter_should_still_accept_a_null_element_for_a_nullable_element_type()
+    {
+        // The guard above must not disturb the nullable case, where "n" is the normal encoding.
+        var converter = new CollectionStringSplitConverter<int?>();
+
+        RoundTrip(converter, new List<int?> { 1, null }).Should().Equal(1, null);
+    }
+
     [Theory]
     [InlineData("1,0,2")]
     [InlineData("1,,2")]
@@ -696,6 +750,48 @@ public enum ConverterTestStatus
 
     /// <summary>A second ordinary member.</summary>
     Retired = 2,
+}
+
+/// <summary>
+///     A user-defined type that implements <see cref="IConvertible" /> but that
+///     <see cref="Convert.ChangeType(object, Type, IFormatProvider)" /> cannot produce from a string,
+///     so it must be rejected on write rather than written and then found unreadable.
+/// </summary>
+public sealed class ConverterTestConvertible : IConvertible
+{
+    public TypeCode GetTypeCode() => TypeCode.Object;
+
+    public string ToString(IFormatProvider? provider) => "convertible";
+
+    public bool ToBoolean(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public byte ToByte(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public char ToChar(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public DateTime ToDateTime(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public decimal ToDecimal(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public double ToDouble(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public short ToInt16(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public int ToInt32(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public long ToInt64(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public sbyte ToSByte(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public float ToSingle(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public object ToType(Type conversionType, IFormatProvider? provider) => throw new NotSupportedException();
+
+    public ushort ToUInt16(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public uint ToUInt32(IFormatProvider? provider) => throw new NotSupportedException();
+
+    public ulong ToUInt64(IFormatProvider? provider) => throw new NotSupportedException();
 }
 
 public class ConverterTestEntity : IHasId<int>

@@ -42,6 +42,43 @@ internal static class CollectionElementCodec
         };
 
     /// <summary>
+    ///     The types <see cref="Convert.ChangeType(object, Type, IFormatProvider)" /> can actually
+    ///     produce <i>from a <see cref="string" /></i>.
+    /// </summary>
+    /// <remarks>
+    ///     Implementing <see cref="IConvertible" /> is not sufficient to be decodable. Conversion runs
+    ///     against the <i>source</i> string, so <see cref="Convert.ChangeType(object, Type, IFormatProvider)" />
+    ///     dispatches to <see cref="string" />'s own implementation, which recognises only this fixed
+    ///     set and throws <see cref="InvalidCastException" /> for any other target — including a
+    ///     user-defined type that implements <see cref="IConvertible" />. Testing assignability to
+    ///     <see cref="IConvertible" /> would therefore accept types that can be written but never read.
+    /// </remarks>
+    private static readonly HashSet<Type> ConvertibleTargets =
+        [
+            typeof(bool), typeof(char), typeof(sbyte), typeof(byte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long),
+            typeof(ulong), typeof(float), typeof(double), typeof(decimal),
+        ];
+
+    /// <summary>
+    ///     Determines whether an element of the supplied type can be both written and read back
+    ///     faithfully.
+    /// </summary>
+    /// <remarks>
+    ///     This is keyed on the <i>declared</i> element type, which is what the read path has to work
+    ///     from. <see cref="Encode" /> dispatches on the runtime value, so without this check a
+    ///     converter declared over an unsupported type — <see cref="object" />, an interface, or a
+    ///     custom <see cref="IConvertible" /> — could write a payload it is then unable to read.
+    /// </remarks>
+    /// <param name="elementType">
+    ///     The element type, already unwrapped from <see cref="Nullable{T}" /> by the caller.
+    /// </param>
+    /// <returns>
+    ///     <see langword="true" /> if the type round-trips; otherwise <see langword="false" />.
+    /// </returns>
+    internal static bool IsSupported(Type elementType) =>
+        Decoders.ContainsKey(elementType) || elementType.IsEnum || ConvertibleTargets.Contains(elementType);
+
+    /// <summary>
     ///     Encodes a non-<see langword="null" /> element as the text stored in a value segment.
     /// </summary>
     /// <param name="value">The element to encode.</param>
@@ -88,7 +125,7 @@ internal static class CollectionElementCodec
             return Enum.Parse(elementType, text);
         }
 
-        if (typeof(IConvertible).IsAssignableFrom(elementType))
+        if (ConvertibleTargets.Contains(elementType))
         {
             return Convert.ChangeType(text, elementType, CultureInfo.InvariantCulture);
         }
@@ -103,6 +140,8 @@ internal static class CollectionElementCodec
     /// <param name="elementType">The unsupported element type.</param>
     /// <returns>The exception message.</returns>
     internal static string UnsupportedMessage(Type elementType) =>
-        $"Elements of type {elementType} are not supported by CollectionStringSplitConverter. Supported element types are string, the IConvertible " +
-        "primitives, Guid, TimeSpan, DateTime, DateTimeOffset, DateOnly, TimeOnly, any enum, and Nullable of any of those.";
+        $"Elements of type {elementType} are not supported by CollectionStringSplitConverter. Supported element types are string, the built-in " +
+        "primitives (bool, char, the integral and floating-point types, decimal), Guid, TimeSpan, DateTime, DateTimeOffset, DateOnly, TimeOnly, any " +
+        "enum, and Nullable of any of those. Implementing IConvertible is not sufficient: a value is decoded by converting the stored string, which " +
+        "cannot produce a user-defined target type.";
 }
