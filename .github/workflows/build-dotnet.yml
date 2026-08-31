@@ -16,6 +16,10 @@ on:
 #                      deployment lives in publish-docs.yml, which owns `pages: write`.
 #   packages: write  - the two `dotnet nuget push --source github` steps at the end of
 #                      this job publish prerelease and PR packages to GitHub Packages.
+#                      Today they pass GH_PACKAGES_TOKEN explicitly via -k, so the job
+#                      token is not strictly required for them; the scope is declared so
+#                      that dropping that PAT in favour of the built-in token - the
+#                      direction GitHub recommends - does not silently start 403ing.
 # `checks: write` is deliberately NOT granted here: the test reporter runs in
 # test_report.yml, which declares its own `checks: write` on its workflow_run trigger.
 permissions:

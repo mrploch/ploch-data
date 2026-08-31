@@ -18,6 +18,20 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          # Nothing in this workflow pushes, so the job token has no reason to stay in
+          # .git/config.
+          persist-credentials: false
+
+      # Ploch.Data.slnx references three projects under ../ploch-common by relative path,
+      # and Directory.Packages.props imports five .props files from ../mrploch-development
+      # unconditionally. Without these clones the solution cannot be evaluated at all, so
+      # pointing Qodana at the right solution file is necessary but not sufficient. The
+      # build workflows clone the same two siblings for the same reason.
+      - name: Clone mrploch-development (shared build config)
+        run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
+      - name: Clone ploch-common (project references)
+        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
+
       - name: 'Qodana Scan'
         id: qodana
         uses: JetBrains/qodana-action@491da5246a31d74fe3fe86db365d16e4d4edfb91 # v2025.1.0
@@ -38,12 +52,29 @@ jobs:
           # reference expanded to an empty string and the scan ran unauthenticated. The
           # environment variable must keep its name — that is what the action reads.
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1681345019 }}
+      # A scan that fails early enough - bad configuration, authentication, a container that
+      # never starts - produces no SARIF at all, and upload-sarif errors on a missing file.
+      # That would turn the whole point of `if: always()` into a different failure, so the
+      # upload is gated on the file actually existing and its absence is reported instead.
+      - name: Check whether a SARIF report was produced
+        id: sarif
+        if: always()
+        run: |
+          SARIF="${{ runner.temp }}/qodana/results/qodana.sarif.json"
+          if [ -f "$SARIF" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "SARIF report found at $SARIF"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=No SARIF produced::The Qodana scan produced no SARIF report at $SARIF, so there is nothing to upload to code scanning. Check the 'Qodana Scan' step log."
+          fi
+
       # `if: always()` is what makes this step observable at all. Until it was added the scan
       # failed on every recorded run and this step was skipped, so no SARIF had ever reached
       # code scanning and the pinned action version was unexercised (issue #138). Uploading
       # a partial SARIF from a failed scan is strictly better than uploading nothing.
       - name: Upload SARIF to code scanning
-        if: always()
+        if: ${{ always() && steps.sarif.outputs.found == 'true' }}
         uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
