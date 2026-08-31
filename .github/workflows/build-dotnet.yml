@@ -8,6 +8,20 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+
+# Least privilege (issue #128). Declaring any permissions block drops every scope not
+# listed to none, so each entry below is load-bearing:
+#   contents: read   - checkout of this repository. Nothing here pushes: the sibling
+#                      repositories are cloned over plain public HTTPS, and the docs
+#                      deployment lives in publish-docs.yml, which owns `pages: write`.
+#   packages: write  - the two `dotnet nuget push --source github` steps at the end of
+#                      this job publish prerelease and PR packages to GitHub Packages.
+# `checks: write` is deliberately NOT granted here: the test reporter runs in
+# test_report.yml, which declares its own `checks: write` on its workflow_run trigger.
+permissions:
+  contents: read
+  packages: write
+
 env:
   SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
   SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}

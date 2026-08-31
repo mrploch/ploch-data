@@ -4,6 +4,16 @@
 name: Build, test and deploy to nuget.org
 on:
   workflow_dispatch:
+
+# Least privilege (issue #128). Declaring any permissions block drops every scope not
+# listed to none, and `contents: read` is all this job needs: it checks out the
+# repository, clones the sibling repositories over plain public HTTPS, and publishes to
+# nuget.org with an explicit API key. Nothing here pushes to the repository, publishes to
+# GitHub Packages (the GitHub Packages source is added for *restore* and authenticates
+# with GH_PACKAGES_TOKEN, not GITHUB_TOKEN), or writes a check run.
+permissions:
+  contents: read
+
 env:
   SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
   SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
@@ -150,5 +160,9 @@ jobs:
       # If you retry a failed workflow, already published packages will be skipped without error.
       - name: Publish NuGet package
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
+          # NUGET_API_KEY is the canonical secret name (issue #126). This workflow used to
+          # read the near-identical NUGET_APIKEY while release.yml read NUGET_API_KEY, so
+          # rotating the nuget.org key in one place left the other publishing with a stale
+          # key - a 401 discovered at release time. Both workflows now read the same secret.
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./**/*.nupkg --source https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
