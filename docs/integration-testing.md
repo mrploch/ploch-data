@@ -88,10 +88,16 @@ Extends `DataIntegrationTest<TDbContext>` with helper methods for creating repos
 | `CreateReadRepository<TEntity, TId>(bool useScopedProvider = true)`           | `IReadRepository<TEntity, TId>`           |
 | `CreateReadWriteRepository<TEntity, TId>(bool useScopedProvider = true)`      | `IReadWriteRepository<TEntity, TId>`      |
 
-All helper methods use the scoped provider by default. Pass `false` to resolve from the root provider.
+All helper methods use the test's default scope, so every service they return shares one `DbContext` and one change tracker. Pass `useScopedProvider: false` to resolve from a **fresh scope** instead -- each such call gets its own scope, so the returned unit of work or repository has an independent `DbContext`. Those scopes are tracked by `DataIntegrationTest<TDbContext>` and disposed with the test, so no cleanup is needed.
 
-TODO: Explain more when to use scoped and root - but also fix how the DbContext can be created new each time by using IDbContextFactory:
-This needs to be fixed in tests.
+Use the default (`true`) when the test wants to observe the effects of a repository through the same change tracker. Use `false` when the test needs to prove that something reached the database rather than the tracker -- although `CreateRootDbContext()` is usually the better tool for that, because it returns a context built by `IDbContextFactory<TDbContext>` outside any scope.
+
+For an independent scope from which several services must be resolved together, call `CreateScope()` directly:
+
+````csharp
+var scope = CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<MyDbContext>();
+````
 
 The `AddRepositories<TDbContext>()` call is made automatically in `ConfigureServices`.
 
@@ -250,7 +256,18 @@ This static helper class builds the service provider and prepares the DbContext 
 2. Builds the service provider.
 3. Opens the database connection.
 4. Calls `EnsureCreated()` to apply the schema.
-5. Returns both the scoped service provider and the DbContext instance.
+5. Returns a `TestDbContextHarness<TDbContext>` owning everything it created.
+
+### TestDbContextHarness\<TDbContext\>
+
+`BuildHarness<TDbContext>(...)` is the preferred entry point. The returned harness is a single `IDisposable`/`IAsyncDisposable` that owns the root service provider, the initial scope, the shared SQLite connection and the initial `DbContext`, and exposes them as `RootServiceProvider`, `ScopedServiceProvider` and `DbContext`:
+
+````csharp
+await using var harness = DbContextServicesRegistrationHelper.BuildHarness<MyDbContext>(services);
+var repository = harness.ScopedServiceProvider.GetRequiredService<IReadWriteRepositoryAsync<Blog, int>>();
+````
+
+The older `BuildDbContextAndServiceProvider<TDbContext>(...)` overloads still return the `(RootProvider, ScopedProvider, DbContext)` tuple and are implemented on top of `BuildHarness`. They hand back references but no ownership, so the caller must dispose the parts itself -- prefer `BuildHarness`.
 
 ## Testing Patterns
 

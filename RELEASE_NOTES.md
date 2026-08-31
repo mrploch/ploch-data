@@ -2,7 +2,40 @@
 
 ## Unreleased
 
+### Added
+
+- **`TestDbContextHarness<TDbContext>`** (`Ploch.Data.EFCore.IntegrationTesting`) — a single
+  `IDisposable`/`IAsyncDisposable` owner for everything an integration-test database build creates:
+  the root service provider, the initial service scope, the shared SQLite connection and the initial
+  `DbContext`. Obtain one from the new
+  `DbContextServicesRegistrationHelper.BuildHarness<TDbContext>(…)` overloads. The existing
+  `BuildDbContextAndServiceProvider` tuple overloads are unchanged and now route through the
+  harness, so there is one construction path; they still hand back references without ownership, so
+  prefer `BuildHarness`. (#80)
+
+- **`DataIntegrationTest<TDbContext>.CreateScope()`** — creates a dependency-injection scope from
+  the root provider and disposes it with the test. Use it when a test needs genuinely independent
+  scoped services, such as a second `DbContext` with its own change tracker. (#80)
+
 ### Fixed
+
+- **`GenericRepositoryDataIntegrationTest` no longer resolves scoped services from the root
+  container** — `CreateUnitOfWork(useScopedProvider: false)` and the `Create…Repository…(false)`
+  overloads returned services resolved straight from the root provider. Repositories and
+  `IUnitOfWork` are registered as scoped, so root resolution promoted them to de-facto singletons
+  and shared one `DbContext` — and its change tracker — across operations meant to be independent.
+  They now resolve from a fresh scope that is disposed with the test. The `useScopedProvider`
+  parameter is deliberately retained, so this is a behavioural fix, not an API break. `DbContext`,
+  `ScopedServiceProvider` and `RootServiceProvider` additionally throw `InvalidOperationException`
+  naming the initialisation requirement when the harness has not been built. (#80)
+
+- **Cross-repo `ploch-common` references are now consistent in every configuration** — Release
+  builds resolved `Ploch.Common` from the 3.x package feed while the test projects resolved the
+  unpublished `Ploch.TestingSupport.XUnit3.*` projects (and therefore `Ploch.Common` 4.0.x) from the
+  sibling checkout. The two generations landed in the same output folder and the TestingSupport
+  assemblies failed to bind, making `dotnet test -c Release` red. `UseProjectReferences` now
+  defaults to `true` in all configurations; pass `-p:UseProjectReferences=false` to restore
+  `PackageReference` resolution. (#95)
 
 - **`CollectionStringSplitConverter<TValue>` no longer throws on a `null` collection** — `convertNulls`
   defaults to `true`, so EF Core invokes the conversion lambdas for nulls instead of short-circuiting

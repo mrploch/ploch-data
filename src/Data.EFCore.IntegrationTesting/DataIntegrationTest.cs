@@ -13,7 +13,9 @@ namespace Ploch.Data.EFCore.IntegrationTesting;
 /// <typeparam name="TDbContext">The type of database context.</typeparam>
 public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbContext : DbContext
 {
+    private readonly List<IServiceScope> _additionalScopes = [];
     private readonly IDbContextConfigurator? _dbContextConfigurator;
+    private readonly TestDbContextHarness<TDbContext>? _harness;
     private bool _disposed;
 
     /// <summary>
@@ -34,21 +36,24 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
         dbContextConfigurator ??= new SqLiteDbContextConfigurator(SqLiteConnectionOptions.InMemory);
         _dbContextConfigurator = dbContextConfigurator;
 
-        (RootServiceProvider, ScopedServiceProvider, DbContext) =
-            DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TDbContext>(serviceCollection, dbContextConfigurator);
+        _harness = DbContextServicesRegistrationHelper.BuildHarness<TDbContext>(serviceCollection, dbContextConfigurator);
     }
 
     /// <summary>
     ///     Gets the configured instance of the database context.
     /// </summary>
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Part of the public API.")]
-    protected TDbContext DbContext { get; }
+    protected TDbContext DbContext => Harness.DbContext;
 
     /// <summary>
     ///     Provides access to the configured service provider.
     ///     This is used to resolve dependencies and services required during integration testing.
     /// </summary>
-    protected IServiceProvider ScopedServiceProvider { get; }
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the test harness has not been initialised — that is, when the
+    ///     <see cref="DataIntegrationTest{TDbContext}" /> constructor has not completed.
+    /// </exception>
+    protected IServiceProvider ScopedServiceProvider => Harness.ScopedServiceProvider;
 
     /// <summary>
     ///     Gets the root (non-scoped) service provider.
@@ -58,7 +63,16 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     outside the default test scope. For most test code, prefer
     ///     <see cref="ScopedServiceProvider" /> instead.
     /// </remarks>
-    protected IServiceProvider RootServiceProvider { get; }
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the test harness has not been initialised — that is, when the
+    ///     <see cref="DataIntegrationTest{TDbContext}" /> constructor has not completed.
+    /// </exception>
+    protected IServiceProvider RootServiceProvider => Harness.RootServiceProvider;
+
+    private TestDbContextHarness<TDbContext> Harness =>
+        _harness ??
+        throw new InvalidOperationException("The test database harness has not been initialised. The DataIntegrationTest<TDbContext> constructor must " +
+                                            "complete before the service providers or the database context are used.");
 
     /// <summary>
     ///     Disposes of the resources used by the current instance of the
@@ -68,6 +82,29 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     {
         Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    ///     Creates a new dependency-injection scope from <see cref="RootServiceProvider" />.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         The scope is tracked by this class and disposed when the test instance is disposed, so callers
+    ///         do not have to dispose it themselves.
+    ///     </para>
+    ///     <para>
+    ///         Use this when a test needs services with genuinely independent scoped lifetimes — a separate
+    ///         <typeparamref name="TDbContext" /> with its own change tracker, for example — rather than the
+    ///         instances shared through <see cref="ScopedServiceProvider" />.
+    ///     </para>
+    /// </remarks>
+    /// <returns>A new scope whose lifetime is bound to this test instance.</returns>
+    protected IServiceScope CreateScope()
+    {
+        var scope = RootServiceProvider.CreateScope();
+        _additionalScopes.Add(scope);
+
+        return scope;
     }
 
     /// <summary>
@@ -140,20 +177,18 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
 
         if (disposing)
         {
-            DbContext.Dispose();
-
-            // Dispose the scope first for fine-grained ordering, then the root — the root
-            // would cascade-dispose its scopes anyway, but explicit ordering is cheaper than
-            // relying on container semantics across providers.
-            if (ScopedServiceProvider is IDisposable disposableScope)
+            // Dispose the scopes this test created before the harness, whose disposal cascades
+            // through the root provider that owns them.
+            foreach (var scope in _additionalScopes)
             {
-                disposableScope.Dispose();
+                scope.Dispose();
             }
 
-            if (RootServiceProvider is IDisposable disposableRoot)
-            {
-                disposableRoot.Dispose();
-            }
+            _additionalScopes.Clear();
+
+            // The harness owns the initial scope, the database context and the root provider,
+            // and releases them in the correct order.
+            _harness?.Dispose();
 
             if (_dbContextConfigurator is IDisposable disposableConfigurator)
             {
