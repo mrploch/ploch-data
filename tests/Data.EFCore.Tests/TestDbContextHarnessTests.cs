@@ -109,6 +109,10 @@ public class TestDbContextHarnessTests
         scopedProvider.Should().NotBeSameAs(rootProvider);
         dbContext.Should().BeSameAs(scopedProvider.GetRequiredService<TestDbContext>());
 
+        // Cleanup — the tuple overload hands back no ownership. The root provider does not track the child
+        // scope it created, so the scope must be disposed first and the root provider second; disposing only
+        // the root would leave the scoped context alive. This is the gap BuildHarness closes.
+        ((IDisposable)scopedProvider).Dispose();
         ((IDisposable)rootProvider).Dispose();
     }
 

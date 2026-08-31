@@ -65,12 +65,15 @@ claimed unconditional ownership of all four resources; both now state the qualif
 
 Issue #80 asked for the tuple method to route through the wrapper "so the harness is reachable".
 It routes through it; it does **not** return it, and that sub-requirement is consciously not
-implemented. Returning it would change the signature the overload exists to preserve, and it is not
-needed for cleanup: the returned `RootProvider` owns the scope behind `ScopedProvider` and the
-context resolved from it, so disposing the root provider releases the whole graph — which is what
+implemented: returning it would change the signature the overload exists to preserve.
+
+The consequence is stated plainly rather than glossed. Cleanup is entirely the caller's job and takes
+two disposals in order, because the root provider does **not** track the child scope it created —
+disposing `RootProvider` alone leaves the scoped `TDbContext` undisposed. Callers must dispose
+`ScopedProvider` first and `RootProvider` second, which is what
 `TestDbContextHarnessTests.BuildDbContextAndServiceProvider_should_return_the_harness_references`
-does. Callers who want the explicit ownership contract call `BuildHarness` directly. This is stated
-in the XML documentation on both tuple overloads rather than left implicit.
+now does. That ordering is documented in the XML comments on both tuple overloads and in
+`docs/integration-testing.md`, and it is precisely the footgun `BuildHarness` removes.
 
 # Impact
 

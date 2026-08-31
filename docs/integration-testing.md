@@ -289,7 +289,16 @@ using var harness = DbContextServicesRegistrationHelper.BuildHarness<MyDbContext
 
 Disposal is resilient in both directions: a failure releasing one resource does not stop the others from being released, and the failures are rethrown afterwards (aggregated if more than one). The root provider is released *before* the shared connection, so a singleton whose own disposal touches the database still sees an open connection.
 
-The older `BuildDbContextAndServiceProvider<TDbContext>(...)` overloads still return the `(RootProvider, ScopedProvider, DbContext)` tuple and are implemented on top of `BuildHarness`. They hand back references but no ownership, so the caller must dispose the parts itself -- prefer `BuildHarness`.
+The older `BuildDbContextAndServiceProvider<TDbContext>(...)` overloads still return the `(RootProvider, ScopedProvider, DbContext)` tuple and are implemented on top of `BuildHarness`. They hand back references but no ownership, so the caller must dispose the parts itself -- and in the right order. The root provider does **not** track the child scope it created, so disposing `RootProvider` alone leaves the scoped `DbContext` undisposed:
+
+````csharp
+var (rootProvider, scopedProvider, dbContext) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<MyDbContext>(services);
+// ...
+((IDisposable)scopedProvider).Dispose();   // release the child scope and its DbContext first
+((IDisposable)rootProvider).Dispose();     // then the root provider and its singletons
+````
+
+Prefer `BuildHarness`, which orders the whole chain for you.
 
 ## Testing Patterns
 

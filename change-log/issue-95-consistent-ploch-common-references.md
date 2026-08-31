@@ -2,7 +2,7 @@
 
 `UnitOfWorkRepositoryAsyncSQLiteInMemoryTests` failed on every local `dotnet test -c Release` run with:
 
-```
+```text
 System.IO.FileNotFoundException: Could not load file or assembly 'Ploch.Common, Version=4.0.31.43865'
    at Ploch.TestingSupport.XUnit3.AutoMoq.AutoDataCommonCustomization.Customize(IFixture fixture)
 ```

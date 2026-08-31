@@ -89,7 +89,9 @@ public static class DbContextServicesRegistrationHelper
     ///     This overload hands back three references but no ownership, and deliberately does not expose the
     ///     <see cref="TestDbContextHarness{TDbContext}" /> it is built on — see the remarks on
     ///     <see cref="BuildDbContextAndServiceProvider{TDbContext}(IServiceCollection,IDbContextConfigurator)" />.
-    ///     Use <see cref="BuildHarness{TDbContext}(IServiceCollection,string)" /> when ownership matters.
+    ///     The caller must dispose <c>ScopedProvider</c> and then <c>RootProvider</c>; disposing the root alone does not
+    ///     release the child scope. Use <see cref="BuildHarness{TDbContext}(IServiceCollection,string)" /> when
+    ///     ownership matters.
     /// </remarks>
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>
     /// <param name="serviceCollection">The service collection to which the DbContext is added.</param>
@@ -108,17 +110,19 @@ public static class DbContextServicesRegistrationHelper
     /// </summary>
     /// <remarks>
     ///     <para>
-    ///         This overload hands back three references but no ownership: the caller remains responsible for disposing the
-    ///         root provider, the scope behind <c>ScopedProvider</c> and the returned context. Prefer
+    ///         This overload hands back three references but no ownership: the caller remains responsible for disposing
+    ///         the scope behind <c>ScopedProvider</c> and then the root provider, in that order. Prefer
     ///         <see cref="BuildHarness{TDbContext}(IServiceCollection,IDbContextConfigurator)" />, which owns all of them.
     ///     </para>
     ///     <para>
     ///         The <see cref="TestDbContextHarness{TDbContext}" /> this overload is implemented on is intentionally not
-    ///         returned. Exposing it would change the signature these callers depend on, and it is not needed for cleanup:
-    ///         the returned <c>RootProvider</c> owns the scope behind <c>ScopedProvider</c> and the context resolved from
-    ///         it, so disposing the root provider releases the whole graph. Callers who want the explicit ownership
-    ///         contract should call <see cref="BuildHarness{TDbContext}(IServiceCollection,IDbContextConfigurator)" />
-    ///         directly rather than this overload.
+    ///         returned: exposing it would change the signature these callers depend on. The consequence is that cleanup
+    ///         is entirely the caller's job, and it takes two disposals in order — the root provider does <em>not</em>
+    ///         track the child scope it created, so disposing <c>RootProvider</c> alone leaves the scoped
+    ///         <typeparamref name="TDbContext" /> undisposed. Dispose <c>ScopedProvider</c> (cast to
+    ///         <see cref="IDisposable" />) first, then <c>RootProvider</c>. Callers who would rather not remember that
+    ///         should call <see cref="BuildHarness{TDbContext}(IServiceCollection,IDbContextConfigurator)" /> directly,
+    ///         which orders the whole chain for them.
     ///     </para>
     /// </remarks>
     /// <typeparam name="TDbContext">The type of the DbContext to configure.</typeparam>

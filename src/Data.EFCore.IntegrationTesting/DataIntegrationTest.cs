@@ -17,6 +17,7 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     private readonly IDbContextConfigurator? _dbContextConfigurator;
     private readonly TestDbContextHarness<TDbContext>? _harness;
     private bool _disposed;
+    private bool _teardownStarted;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DataIntegrationTest{TDbContext}" /> class.
@@ -108,20 +109,34 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
     ///     </para>
     ///     <para>
     ///         Tracking is synchronised, so this is safe to call concurrently from a test that fans out with
-    ///         <see cref="Task.WhenAll(System.Collections.Generic.IEnumerable{Task})" /> or similar.
+    ///         <see cref="Task.WhenAll(System.Collections.Generic.IEnumerable{Task})" /> or similar. Once
+    ///         teardown has begun, a scope can no longer be registered — it would be created after the
+    ///         disposal snapshot was taken and would therefore never be released — so this method throws
+    ///         instead of handing back a scope nothing will clean up.
     ///     </para>
     /// </remarks>
     /// <returns>A new scope whose lifetime is bound to this test instance.</returns>
+    /// <exception cref="ObjectDisposedException">Thrown when the test instance is being, or has been, disposed.</exception>
     protected IServiceScope CreateScope()
     {
         var scope = RootServiceProvider.CreateScope();
 
         lock (_additionalScopes)
         {
-            _additionalScopes.Add(scope);
+            if (!_teardownStarted)
+            {
+                _additionalScopes.Add(scope);
+
+                return scope;
+            }
         }
 
-        return scope;
+        // Registration lost the race with teardown. Release the orphan rather than leaking it, then fail
+        // loudly: a caller that reaches this has a scope-creating operation outliving the test.
+        scope.Dispose();
+
+        throw new ObjectDisposedException(GetType().FullName,
+                                          "Cannot create a dependency-injection scope: the integration test is being disposed, so the scope would never be released.");
     }
 
     /// <summary>
@@ -198,6 +213,10 @@ public abstract class DataIntegrationTest<TDbContext> : IDisposable where TDbCon
 
             lock (_additionalScopes)
             {
+                // Set inside the lock and before the snapshot, so a CreateScope() call that is already
+                // waiting on this lock cannot append a scope after the snapshot has been taken and have it
+                // silently escape disposal.
+                _teardownStarted = true;
                 scopes = [.. _additionalScopes];
                 _additionalScopes.Clear();
             }

@@ -47,6 +47,9 @@ This note captures a maintainer-focused map of the repository: packages, structu
 
 ## Useful Commands
 
-- Restore/build/tests (packages available, no sibling repos): `dotnet test Ploch.Data.slnx -p:UseProjectReferences=false`
+- Restore/build (packages available, no sibling repos): `dotnet build Ploch.Data.slnx -p:UseProjectReferences=false`.
+  Build only — `dotnet test` is **not** available in this mode. The test projects reference the unpublished
+  `Ploch.TestingSupport.XUnit3.*` projects unconditionally, so running tests always requires the sibling
+  `ploch-common` checkout; without it the run fails to bind `Ploch.Common` (issue #95).
 - NUKE pipeline: `./build.sh` (uses `build/_build.csproj`)
 - SampleApp: `dotnet build Ploch.Data.SampleApp.slnx` (standalone package mode) or `dotnet build Ploch.Data.slnx -p:UsePlochProjectReferences=true` (solution mode)
