@@ -1,8 +1,15 @@
 version: "1.0"
 linter: jetbrains/qodana-dotnet:latest
 dotnet:
-  solution: Ploch.Common.sln
+  # This was `Ploch.Common.sln` - a solution file that has never existed in this repository;
+  # it was copied verbatim from a sibling repo. Qodana could not open it, which is why the
+  # scan failed on every recorded run of code_quality.yml (issue #138).
+  solution: Ploch.Data.slnx
 exclude:
   - name: All
     paths:
-      - src/**/*Tests/**
+      # Test projects live under tests/, not src/, in this repository. The previous
+      # `src/**/*Tests/**` pattern matched nothing.
+      - tests/**
+      - samples/**
+      - DocumentationSite/**
