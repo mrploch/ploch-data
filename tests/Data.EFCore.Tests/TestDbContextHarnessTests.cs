@@ -13,7 +13,7 @@ public class TestDbContextHarnessTests
     [Fact]
     public void BuildHarness_should_expose_a_usable_database_context_and_providers()
     {
-        // Arrange & Act
+        // Arrange and Act
         using var harness = DbContextServicesRegistrationHelper.BuildHarness<TestDbContext>(new ServiceCollection());
 
         // Assert
@@ -101,7 +101,7 @@ public class TestDbContextHarnessTests
     {
         // The legacy tuple overload is routed through the harness; it must keep returning the same
         // three references so existing callers are unaffected.
-        // Arrange & Act
+        // Arrange and Act
         var (rootProvider, scopedProvider, dbContext) = DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(new ServiceCollection());
 
         // Assert
@@ -166,7 +166,7 @@ public class TestDbContextHarnessTests
     [Fact]
     public void DataIntegrationTest_members_should_throw_when_the_harness_is_not_initialised()
     {
-        // Arrange & Act — the derived type reads DbContext from ConfigureServices, which the base
+        // Arrange and Act — the derived type reads DbContext from ConfigureServices, which the base
         // constructor calls before the harness exists.
         var act = () => new HarnessReadDuringConstruction();
 
