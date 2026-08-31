@@ -16,8 +16,10 @@ public interface IHasTags<TTag, TTagId> where TTag : Tag<TTagId>
     /// <remarks>
     ///     The collection is annotated as non-nullable, but the interface cannot guarantee that an implementation
     ///     assigns it; an implementation that declares it without an initialiser holds <see langword="null" /> until the
-    ///     caller assigns a collection or an object-relational mapper materialises the entity. See
-    ///     <see cref="INamed.Name" /> for the same contract stated in full.
+    ///     caller assigns a collection. An object-relational mapper populates the collection only when it loads the
+    ///     navigation: materialising the entity on its own does not, so the collection remains <see langword="null" />
+    ///     when the navigation was not eagerly loaded. See <see cref="INamed.Name" /> for the same contract stated in
+    ///     full.
     /// </remarks>
     ICollection<TTag> Tags { get; set; }
 }
