@@ -4,6 +4,16 @@
 name: Build, test and deploy to nuget.org
 on:
   workflow_dispatch:
+
+# Least privilege (issue #128). Declaring any permissions block drops every scope not
+# listed to none, and `contents: read` is all this job needs: it checks out the
+# repository, clones the sibling repositories over plain public HTTPS, and publishes to
+# nuget.org with an explicit API key. Nothing here pushes to the repository, publishes to
+# GitHub Packages (the GitHub Packages source is added for *restore* and authenticates
+# with GH_PACKAGES_TOKEN, not GITHUB_TOKEN), or writes a check run.
+permissions:
+  contents: read
+
 env:
   SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
   SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
@@ -170,5 +180,23 @@ jobs:
       # produces via the unpublished Ploch.TestingSupport.XUnit3.* project references, out of the push.
       - name: Publish NuGet package
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
-        run: dotnet nuget push "./artifacts/packages/Ploch.Data.*.nupkg" --source https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
+          # NUGET_API_KEY is the canonical secret name (issue #126). This workflow used to
+          # read the near-identical NUGET_APIKEY while release.yml read NUGET_API_KEY, so
+          # rotating the nuget.org key in one place left the other publishing with a stale
+          # key - a 401 discovered at release time. Both workflows now read the same secret.
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        # Push only what the pack step above produced. A broad `find . -name '*.nupkg'` would
+        # also pick up the bin/ nupkgs from the Release build, which carry
+        # ProjectReference-resolved dependency versions, and the sibling ploch-common packages
+        # produced via the unpublished Ploch.TestingSupport.XUnit3.* project references - the
+        # unrestorable dependency graph issue #95 exists to prevent. The empty check keeps a
+        # silent no-op from passing as a successful publish.
+        run: |
+          PKGS=$(find ./artifacts/packages -name 'Ploch.Data.*.nupkg')
+          if [ -z "$PKGS" ]; then
+            echo "::error::No Ploch.Data.* .nupkg files were produced by the pack step."
+            exit 1
+          fi
+          echo "$PKGS" | while read -r pkg; do
+            dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
+          done
