@@ -215,12 +215,13 @@ public sealed class TestDbContextHarness<TDbContext> : IDisposable, IAsyncDispos
     ///     propagate immediately.
     /// </returns>
     private static bool IsNonFatal(Exception exception) =>
-        exception switch
-        {
-            OutOfMemoryException or StackOverflowException or AccessViolationException or AppDomainUnloadedException or BadImageFormatException
-                or CannotUnloadAppDomainException or InvalidProgramException => false,
-            _ => true
-        };
+        exception is not OutOfMemoryException
+            and not StackOverflowException
+            and not AccessViolationException
+            and not AppDomainUnloadedException
+            and not BadImageFormatException
+            and not CannotUnloadAppDomainException
+            and not InvalidProgramException;
 
     private static void Rethrow(List<Exception> failures)
     {
