@@ -27,8 +27,12 @@ namespace Ploch.Data.EFCore.SqlServer.Tests;
 public sealed class SqlServerContainerFixture : IAsyncLifetime
 {
     /// <summary>
-    ///     The name of the database created for the test run.
+    ///     The name of the database created inside the test container.
     /// </summary>
+    /// <remarks>
+    ///     The container is thrown away after the test class, so a fixed name is unique per run in
+    ///     practice; the <c>IF DB_ID(...) IS NULL</c> guard in the creation statement is belt-and-braces.
+    /// </remarks>
     public const string DatabaseName = "PlochDataSqlServerTests";
 
     private const string ImageName = "mcr.microsoft.com/mssql/server:2022-latest";
@@ -42,7 +46,7 @@ public sealed class SqlServerContainerFixture : IAsyncLifetime
     public string? SkipReason { get; private set; }
 
     /// <summary>
-    ///     Gets the connection string pointing at the per-run database inside the container.
+    ///     Gets the connection string pointing at the database created inside the container.
     /// </summary>
     /// <remarks>Only meaningful when <see cref="SkipReason" /> is <see langword="null" />.</remarks>
     public string ConnectionString { get; private set; } = string.Empty;
@@ -61,7 +65,7 @@ public sealed class SqlServerContainerFixture : IAsyncLifetime
     }
 
     /// <summary>
-    ///     Starts the container and creates the per-run database.
+    ///     Starts the container and creates the test database inside it.
     /// </summary>
     /// <returns>A task that represents the asynchronous initialisation.</returns>
     public async ValueTask InitializeAsync()
@@ -85,7 +89,19 @@ public sealed class SqlServerContainerFixture : IAsyncLifetime
             return;
         }
 
-        ConnectionString = await CreateDatabaseAsync(_container.GetConnectionString());
+        try
+        {
+            ConnectionString = await CreateDatabaseAsync(_container.GetConnectionString());
+        }
+        catch
+        {
+            // The container is already running at this point and xUnit does not reliably call
+            // DisposeAsync on a fixture whose InitializeAsync threw, so it would otherwise leak.
+            await _container.DisposeAsync();
+            _container = null;
+
+            throw;
+        }
     }
 
     /// <summary>

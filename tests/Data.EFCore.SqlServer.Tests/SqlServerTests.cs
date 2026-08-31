@@ -19,19 +19,25 @@ public class SqlServerTests(SqlServerContainerFixture fixture) : IClassFixture<S
 
         var (rootServiceProvider, scopedServiceProvider, dbContext) = CreateDbContext();
 
-        using (rootServiceProvider)
-        using (scopedServiceProvider)
-        using (dbContext)
+        try
         {
             dbContext.TestEntities.ExecuteDelete();
 
             var dataSeeder = new TestDataSeeder(dbContext);
             dataSeeder.Execute();
 
-            var entities = dbContext.TestEntities.AsNoTracking().ToList();
+            // The seeding context must not be used for the assertion - a fresh context proves the
+            // rows reached the database instead of being served from the change tracker.
+            using var verificationDbContext = CreateVerificationDbContext(rootServiceProvider);
+
+            var entities = verificationDbContext.TestEntities.ToList();
             entities.Should().HaveCount(2);
             entities.Should().ContainSingle(e => e.Name == "Test1");
             entities.Should().ContainSingle(e => e.Name == "Test2");
+        }
+        finally
+        {
+            DisposeAll(dbContext, scopedServiceProvider, rootServiceProvider);
         }
     }
 
@@ -42,24 +48,48 @@ public class SqlServerTests(SqlServerContainerFixture fixture) : IClassFixture<S
 
         var (rootServiceProvider, scopedServiceProvider, dbContext) = CreateDbContext();
 
-        using (rootServiceProvider)
-        using (scopedServiceProvider)
-        using (dbContext)
+        try
         {
-            // Connecting with an Initial Catalog that does not exist fails, so reaching this point at
-            // all proves the fixture created the database before the DbContext opened its connection.
-            dbContext.Database.GetDbConnection().Database.Should().Be(SqlServerContainerFixture.DatabaseName);
-            dbContext.Database.CanConnect().Should().BeTrue();
+            // Ask the server which catalog the session is actually bound to, rather than reading the
+            // Initial Catalog back out of the connection string the fixture just built.
+            var databaseName = dbContext.Database.SqlQuery<string>($"SELECT DB_NAME() AS Value").Single();
+
+            databaseName.Should().Be(SqlServerContainerFixture.DatabaseName);
+        }
+        finally
+        {
+            DisposeAll(dbContext, scopedServiceProvider, rootServiceProvider);
         }
     }
 
-    private (IDisposable RootServiceProvider, IDisposable ScopedServiceProvider, TestDbContext DbContext) CreateDbContext()
+    private static TestDbContext CreateVerificationDbContext(IServiceProvider rootServiceProvider)
+    {
+        return rootServiceProvider.GetRequiredService<IDbContextFactory<TestDbContext>>().CreateDbContext();
+    }
+
+    /// <summary>
+    ///     Disposes the supplied objects that implement <see cref="IDisposable" />, in the order given.
+    /// </summary>
+    /// <remarks>
+    ///     <see cref="IServiceProvider" /> does not implement <see cref="IDisposable" />, so the concrete
+    ///     provider and scope are probed rather than cast - mirroring
+    ///     <c>DataIntegrationTest.Dispose(bool)</c>.
+    /// </remarks>
+    private static void DisposeAll(params object?[] candidates)
+    {
+        foreach (var candidate in candidates)
+        {
+            if (candidate is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+    }
+
+    private (IServiceProvider RootServiceProvider, IServiceProvider ScopedServiceProvider, TestDbContext DbContext) CreateDbContext()
     {
         var configurator = new SqlServerDbContextConfigurator(fixture.ConnectionString, builder => builder.EnableRetryOnFailure());
 
-        var (rootServiceProvider, scopedServiceProvider, dbContext) =
-            DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(new ServiceCollection(), configurator);
-
-        return ((IDisposable)rootServiceProvider, (IDisposable)scopedServiceProvider, dbContext);
+        return DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(new ServiceCollection(), configurator);
     }
 }
