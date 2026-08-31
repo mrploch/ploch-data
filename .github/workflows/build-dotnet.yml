@@ -145,9 +145,17 @@ jobs:
         run: |
           CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
           mkdir -p "$(dirname "$CONFIG")"
+          # The sibling repositories cloned above (ploch-common) have no NuGet.Config of their
+          # own, so they resolve their packages through this file. It must therefore still
+          # declare the public sources, not only the credentials, or their restore fails with
+          # NU1100 for every package.
           {
             echo '<?xml version="1.0" encoding="utf-8"?>'
             echo '<configuration>'
+            echo '  <packageSources>'
+            echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
+            echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
+            echo '  </packageSources>'
             echo '  <packageSourceCredentials>'
             echo '    <github>'
             echo '      <add key="Username" value="kploch" />'
