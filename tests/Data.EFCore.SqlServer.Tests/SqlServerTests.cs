@@ -77,12 +77,9 @@ public class SqlServerTests(SqlServerContainerFixture fixture) : IClassFixture<S
     /// </remarks>
     private static void DisposeAll(params object?[] candidates)
     {
-        foreach (var candidate in candidates)
+        foreach (var disposable in candidates.OfType<IDisposable>())
         {
-            if (candidate is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
+            disposable.Dispose();
         }
     }
 
