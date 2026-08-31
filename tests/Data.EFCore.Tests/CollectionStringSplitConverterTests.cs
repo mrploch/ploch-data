@@ -421,7 +421,9 @@ public class CollectionStringSplitConverterTests : DataIntegrationTest<Converter
         // The guard above must not disturb the nullable case, where "n" is the normal encoding.
         var converter = new CollectionStringSplitConverter<int?>();
 
-        RoundTrip(converter, new List<int?> { 1, null }).Should().Equal(1, null);
+        List<int?> values = [1, null];
+
+        RoundTrip(converter, values).Should().Equal(1, null);
     }
 
     [Theory]
