@@ -14,6 +14,7 @@ Comprehensive documentation for the Ploch.Data libraries -- a set of .NET packag
 | [Integration Testing](integration-testing.md) | Testing with in-memory SQLite, base test classes, and patterns |
 | [Extending the Libraries](extending.md) | Custom repositories, new providers, and extensibility points |
 | [Architecture Overview](architecture.md) | Package dependencies, high-level design, and layer diagrams |
+| [Releasing](releasing.md) | Release workflow runbook, including recovery from a partially-failed release |
 
 ## Package Overview
 
