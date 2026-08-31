@@ -1,33 +1,147 @@
 name: Qodana
+#
+# KNOWN BLOCKER - this workflow cannot currently produce results, and the cause is a
+# licence, not a configuration defect. Dispatch 33428446669 on this branch (the first run
+# ever to get past solution loading) failed with:
+#
+#   Your Qodana Cloud organization has Community license that doesn't support
+#   "Qodana for .NET" linter, please try one of the community linters instead
+#
+# The check happens before the solution is opened, so no SARIF can be produced no matter
+# how the scan is configured. Everything below - the correct solution file, the sibling
+# clones and their container mounts, the private-feed credentials, the exclude paths - is
+# necessary for a scan that runs, but none of it is sufficient while the linter itself is
+# unlicensed. Resolving that (a paid Qodana licence, or moving to a community linter) is
+# tracked separately; see issue #138. The observability wiring below is what surfaced this
+# at all: the job stays green, emits warnings and reports the scan outcome instead of
+# failing silently.
 on:
   workflow_dispatch:
 
 jobs:
   qodana:
-    timeout-minutes: 15
+    # A cold container scan of this solution is not a fast job: a plain
+    # `dotnet build -c Release` of Ploch.Data.slnx takes ~12 minutes locally, and Qodana
+    # additionally pulls the linter image, restores, and runs InspectCode over everything.
+    # A job-level timeout CANCELS the job, and cancellation skips `if: always()` steps -
+    # which would silently defeat the SARIF observability this workflow exists for
+    # (issue #138). Tighten this only once a successful dispatch has reported a real
+    # duration.
+    timeout-minutes: 60
     runs-on: ubuntu-latest
+    # Least privilege (issue #128). Declaring any permissions block drops every scope not
+    # listed to none, so each entry below is load-bearing:
+    #   contents: read         - checkout of this repository. Nothing in this workflow
+    #                            pushes, which is also why the checkout below sets
+    #                            persist-credentials: false.
+    #   security-events: write - required by github/codeql-action/upload-sarif below;
+    #                            without it the SARIF upload fails with 403 and the Qodana
+    #                            results never reach code scanning.
+    # `pull-requests: write` is deliberately NOT granted: the trigger is
+    # workflow_dispatch-only, so the Qodana action's PR-comment path can never engage.
+    # Re-add it if and when a pull_request trigger is introduced.
     permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-      # Required by github/codeql-action/upload-sarif below. Declaring an explicit permissions
-      # block drops every scope not listed to none, so without this the SARIF upload fails with
-      # 403 and the Qodana results never reach code scanning.
+      contents: read
       security-events: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          # Nothing in this workflow pushes, so the job token has no reason to stay in
+          # .git/config.
+          persist-credentials: false
+
+      # Ploch.Data.slnx references three projects under ../ploch-common by relative path,
+      # and Directory.Packages.props imports five .props files from ../mrploch-development
+      # unconditionally. Without these clones the solution cannot be evaluated at all, so
+      # pointing Qodana at the right solution file is necessary but not sufficient. The
+      # clone depths deliberately match build-dotnet.yml and release.yml: mrploch-development
+      # supplies only .props files and is never built, but ploch-common IS built and uses
+      # Nerdbank.GitVersioning, which cannot compute commit height from a shallow clone.
+      - name: Clone mrploch-development (shared build config)
+        run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
+      - name: Clone ploch-common (project references)
+        run: git clone https://github.com/mrploch/ploch-common.git ../ploch-common
+
       - name: 'Qodana Scan'
+        id: qodana
         uses: JetBrains/qodana-action@491da5246a31d74fe3fe86db365d16e4d4edfb91 # v2025.1.0
+        # The scan is deliberately non-blocking so that a Qodana failure still lets the
+        # upload-sarif step below run and publish whatever SARIF was produced. Without this
+        # the job aborts here and the upload never becomes observable (issue #138). The
+        # step's own outcome is surfaced by the warning step that follows.
+        continue-on-error: true
         with:
-          args: --baseline,./qodana.sarif.json
+          # Qodana analyses the project inside a container that bind-mounts only the project
+          # directory at /data/project. The two sibling clones above live one level ABOVE
+          # that directory on the runner, so without these extra mounts the unconditional
+          # `../mrploch-development/...` imports and the `../ploch-common/...` project
+          # references resolve to paths that do not exist inside the container and the
+          # clones are effectively invisible. Mounting them at /data/<name> makes
+          # /data/project/../<name> resolve exactly as it does on the runner.
+          #
+          # No `--baseline` here on purpose. The previous value was
+          # `--baseline,./qodana.sarif.json`, pointing at a 4 MB SARIF checked in at the
+          # repository root that was produced by QDNET 231 against a *different* solution
+          # (Ploch.Common). A baseline from another project cannot suppress anything
+          # meaningful here and only risks failing the scan, so the run is unbaselined.
+          # Reinstate a baseline only after a green scan of this repository has produced one.
+          args: -v,${{ github.workspace }}/../ploch-common:/data/ploch-common,-v,${{ github.workspace }}/../mrploch-development:/data/mrploch-development
         env:
           # The secret is named QODANA_TOKEN_1681345019 in this repository; there is no secret
           # called QODANA_TOKEN at either repository or organisation level, so the previous
           # reference expanded to an empty string and the scan ran unauthenticated. The
           # environment variable must keep its name — that is what the action reads.
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1681345019 }}
-      - uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
+          # Ploch.Data.slnx includes five SampleApp projects whose `Ploch.*` PackageReferences
+          # are source-mapped in NuGet.Config exclusively to the authenticated GitHub Packages
+          # feed, so a container with no credentials cannot restore them. Run 33428446669
+          # confirmed this from the scanner's own diagnostics: "private NuGet feed detected
+          # (NuGet.Config). Please set QODANA_NUGET_USER, QODANA_NUGET_PASSWORD,
+          # QODANA_NUGET_URL and QODANA_NUGET_NAME". These are the vendor-supported variables
+          # for exactly that case, so they are used here rather than a bespoke solution filter.
+          # NOT YET PROVEN TO WORK: run 33429634184 still logged that warning with all four
+          # set, and the licence failure below kills the run before restore, so there is no
+          # way to tell whether the credentials are actually consumed. Re-check this the
+          # first time a scan gets past the licence check (issue #151).
+          QODANA_NUGET_USER: kploch
+          QODANA_NUGET_PASSWORD: ${{ secrets.GH_PACKAGES_TOKEN }}
+          QODANA_NUGET_URL: https://nuget.pkg.github.com/mrploch/index.json
+          QODANA_NUGET_NAME: github
+
+      # A scan that fails early enough - bad configuration, authentication, a container that
+      # never starts - produces no SARIF at all, and upload-sarif errors on a missing file.
+      # That would turn the whole point of `if: always()` into a different failure, so the
+      # upload is gated on the file actually existing and its absence is reported instead.
+      - name: Check whether a SARIF report was produced
+        id: sarif
+        if: always()
+        env:
+          SARIF: ${{ runner.temp }}/qodana/results/qodana.sarif.json
+        run: |
+          if [ -f "$SARIF" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "SARIF report found at $SARIF"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=No SARIF produced::The Qodana scan produced no SARIF report at $SARIF, so there is nothing to upload to code scanning. Check the 'Qodana Scan' step log."
+          fi
+
+      # `if: always()` is what makes this step observable at all. Until it was added the scan
+      # failed on every recorded run and this step was skipped, so no SARIF had ever reached
+      # code scanning and the pinned action version was unexercised (issue #138). Uploading
+      # a partial SARIF from a failed scan is strictly better than uploading nothing.
+      - name: Upload SARIF to code scanning
+        if: ${{ always() && steps.sarif.outputs.found == 'true' }}
+        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4.37.8
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
+
+      # Keeps a failed scan visible rather than hiding it behind a green job. Not always():
+      # that would fire a spurious warning on a run the user cancelled deliberately.
+      - name: Warn if the Qodana scan did not succeed
+        if: ${{ !cancelled() && steps.qodana.outcome != 'success' }}
+        env:
+          QODANA_OUTCOME: ${{ steps.qodana.outcome }}
+        run: |
+          echo "::warning title=Qodana scan did not succeed::The Qodana Scan step reported '$QODANA_OUTCOME'. Any SARIF it managed to produce has still been uploaded. Check the 'Qodana Scan' step log."
