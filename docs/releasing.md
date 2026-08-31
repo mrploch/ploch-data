@@ -51,7 +51,25 @@ release that is otherwise missing:
    existing tag that points at `HEAD`, the NuGet pushes use `--skip-duplicate`, and the release
    action finds the existing draft and publishes it.
 
+   **Re-running is only safe while `main` has not advanced.** The tag step reuses an existing
+   tag *only* when it already points at `HEAD`; if anything has been merged to `main` since the
+   failed attempt, the tag now points at an older commit and the step fails with
+   `Tag v<version> exists but points to a different commit`. In that case do not re-run — follow
+   *A tag exists but points at the wrong commit* below.
+
 See [issue #137](https://github.com/mrploch/ploch-data/issues/137) for the analysis.
+
+### A tag exists but points at the wrong commit
+
+The release tag is immutable in intent but `main` moved on beneath it. Decide which commit the
+release is meant to describe:
+
+- **The original tagged commit** — publish the stranded draft from the Releases page rather than
+  re-running, so the release keeps matching the packages already on nuget.org.
+- **The current `main`** — delete the tag locally and remotely
+  (`git push origin :refs/tags/v<version>`), then re-run the workflow. Only do this when nothing
+  was published for that version; the NuGet packages cannot be withdrawn, so re-tagging a version
+  whose packages are already public leaves the two permanently inconsistent.
 
 ### The version-bump push failed
 

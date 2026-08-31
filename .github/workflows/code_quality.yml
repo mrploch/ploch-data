@@ -86,7 +86,7 @@ jobs:
           # (Ploch.Common). A baseline from another project cannot suppress anything
           # meaningful here and only risks failing the scan, so the run is unbaselined.
           # Reinstate a baseline only after a green scan of this repository has produced one.
-          args: -v,${{ runner.workspace }}/ploch-common:/data/ploch-common,-v,${{ runner.workspace }}/mrploch-development:/data/mrploch-development
+          args: -v,${{ github.workspace }}/../ploch-common:/data/ploch-common,-v,${{ github.workspace }}/../mrploch-development:/data/mrploch-development
         env:
           # The secret is named QODANA_TOKEN_1681345019 in this repository; there is no secret
           # called QODANA_TOKEN at either repository or organisation level, so the previous
@@ -100,6 +100,10 @@ jobs:
           # (NuGet.Config). Please set QODANA_NUGET_USER, QODANA_NUGET_PASSWORD,
           # QODANA_NUGET_URL and QODANA_NUGET_NAME". These are the vendor-supported variables
           # for exactly that case, so they are used here rather than a bespoke solution filter.
+          # NOT YET PROVEN TO WORK: run 33429634184 still logged that warning with all four
+          # set, and the licence failure below kills the run before restore, so there is no
+          # way to tell whether the credentials are actually consumed. Re-check this the
+          # first time a scan gets past the licence check (issue #151).
           QODANA_NUGET_USER: kploch
           QODANA_NUGET_PASSWORD: ${{ secrets.GH_PACKAGES_TOKEN }}
           QODANA_NUGET_URL: https://nuget.pkg.github.com/mrploch/index.json

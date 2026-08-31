@@ -416,11 +416,17 @@ jobs:
           git add version.json
           git add change-log/ || true
           git add samples/SampleApp/Directory.Packages.props || true
-          git diff --cached --quiet && echo "No changes to commit" || \
+          # An `A && B || C` list swallows a failed commit: C runs, the list still succeeds,
+          # and the step would go on to push WITHOUT the next development version committed.
+          # An explicit if/else stops the step instead.
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
             git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development
 
-          Update SampleApp to reference stable ${NUGET_VERSION} packages."
-            git remote set-url origin "https://x-access-token:${GH_TOKEN}@${REPO_URL#https://}"
+          Update SampleApp to reference stable ${NUGET_VERSION} packages." || exit 1
+          fi
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@${REPO_URL#https://}"
           if ! git push origin main 2>&1; then
             echo "::warning::Could not push version bump directly to main (branch protection). Create a PR to bump version.json to ${NEXT_DEV_VERSION}-prerelease manually."
             echo "push_failed=true" >> $GITHUB_OUTPUT
