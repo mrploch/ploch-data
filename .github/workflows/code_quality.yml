@@ -1,4 +1,20 @@
 name: Qodana
+#
+# KNOWN BLOCKER - this workflow cannot currently produce results, and the cause is a
+# licence, not a configuration defect. Dispatch 33428446669 on this branch (the first run
+# ever to get past solution loading) failed with:
+#
+#   Your Qodana Cloud organization has Community license that doesn't support
+#   "Qodana for .NET" linter, please try one of the community linters instead
+#
+# The check happens before the solution is opened, so no SARIF can be produced no matter
+# how the scan is configured. Everything below - the correct solution file, the sibling
+# clones and their container mounts, the private-feed credentials, the exclude paths - is
+# necessary for a scan that runs, but none of it is sufficient while the linter itself is
+# unlicensed. Resolving that (a paid Qodana licence, or moving to a community linter) is
+# tracked separately; see issue #138. The observability wiring below is what surfaced this
+# at all: the job stays green, emits warnings and reports the scan outcome instead of
+# failing silently.
 on:
   workflow_dispatch:
 
@@ -77,6 +93,17 @@ jobs:
           # reference expanded to an empty string and the scan ran unauthenticated. The
           # environment variable must keep its name — that is what the action reads.
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1681345019 }}
+          # Ploch.Data.slnx includes five SampleApp projects whose `Ploch.*` PackageReferences
+          # are source-mapped in NuGet.Config exclusively to the authenticated GitHub Packages
+          # feed, so a container with no credentials cannot restore them. Run 33428446669
+          # confirmed this from the scanner's own diagnostics: "private NuGet feed detected
+          # (NuGet.Config). Please set QODANA_NUGET_USER, QODANA_NUGET_PASSWORD,
+          # QODANA_NUGET_URL and QODANA_NUGET_NAME". These are the vendor-supported variables
+          # for exactly that case, so they are used here rather than a bespoke solution filter.
+          QODANA_NUGET_USER: kploch
+          QODANA_NUGET_PASSWORD: ${{ secrets.GH_PACKAGES_TOKEN }}
+          QODANA_NUGET_URL: https://nuget.pkg.github.com/mrploch/index.json
+          QODANA_NUGET_NAME: github
 
       # A scan that fails early enough - bad configuration, authentication, a container that
       # never starts - produces no SARIF at all, and upload-sarif errors on a missing file.
