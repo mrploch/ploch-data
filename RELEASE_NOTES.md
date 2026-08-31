@@ -237,13 +237,21 @@
 ### Documented
 
 - **The nullability contract of the model properties is now stated explicitly** — `INamed.Name`,
-  `IHasId<TId>.Id` and `IHasValue<TValue>.Value` are annotated as non-nullable, but the common types
-  in `Ploch.Data.Model` (`Property<TId, TValue>`, `Tag<TId>`, `Category<TCategory, TId>`, `Image`)
-  initialise them with `= null!` / `= default!`. A freshly constructed entity therefore carries
-  `null` (or `default(T)`) until the caller assigns a value or Entity Framework Core materialises the
-  entity, and a deliberate null-forgiving assignment can set the property back to `null`. The
-  null-forgiving initialiser exists so that the compiler accepts the EF Core materialisation path,
-  on which the ORM populates the property after construction.
+  `INamedReadOnly.Name`, `IHasId<TId>.Id` and `IHasValue<TValue>.Value` are annotated as
+  non-nullable, but the common types supplied in `Ploch.Data.Model` (`Property<TId, TValue>`,
+  `Tag<TId>`, `Category<TCategory, TId>`, `Image`) do not assign them at construction — the generic
+  ones use a null-forgiving initialiser (`= null!` or `= default!`) and a closed value-type property
+  such as `Image.Id` reaches the same state implicitly. A freshly constructed entity therefore
+  carries `null` (or `default(T)`) until the caller assigns a value or Entity Framework Core
+  materialises the entity, and a deliberate null-forgiving assignment can set the property back to
+  `null`. The null-forgiving initialiser exists so that the compiler accepts the EF Core
+  materialisation path, on which the ORM populates the property after construction. Validation
+  metadata is a separate concern from assignment behaviour: `Tag<TId>.Name` carries `[Required]`,
+  which constrains validation and the generated column rather than in-memory assignment.
+
+  The remarks describe the **supplied common types**, not a guarantee the interfaces impose on their
+  implementers: an implementation outside this library is free to be stricter, and the repository's
+  own test model does exactly that (`Blog.Name` is declared `required`).
 
   This is a **documentation-only** change: the runtime behaviour and the public API signatures are
   unchanged for v4.0. Making the properties `required` was rejected because it breaks construction

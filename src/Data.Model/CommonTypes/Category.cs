@@ -56,10 +56,7 @@ public class Category<TCategory, TId> : IHasId<TId>, INamed, IHierarchicalParent
     /// <summary>
     ///     The name of the category.
     /// </summary>
-    /// <remarks>
-    ///     Although annotated as non-nullable, the name is <see langword="null" /> until the caller assigns it or an
-    ///     object-relational mapper materialises the entity. See <see cref="INamed.Name" /> for the full contract.
-    /// </remarks>
+    /// <inheritdoc cref="INamed.Name" path="/remarks" />
     [MaxLength(128)]
     public string Name { get; set; } = default!;
 }

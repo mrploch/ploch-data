@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using AutoFixture.Xunit3;
 using FluentAssertions;
 using Ploch.Data.Model;
