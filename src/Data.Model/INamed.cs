@@ -23,10 +23,12 @@ public interface INamed : INamedReadOnly
     ///         Those types declare the property neither as <c>required</c> nor with a constructor or setter guard, so a
     ///         name is not enforced at construction time and a deliberate null-forgiving assignment can set the property
     ///         back to <see langword="null" />. Validation metadata is a separate concern from assignment behaviour:
-    ///         <see cref="CommonTypes.Tag{TId}" />, for example, annotates the property with
+    ///         <see cref="CommonTypes.Tag{TId}" />, alone among the supplied types, annotates the property with
     ///         <see cref="System.ComponentModel.DataAnnotations.RequiredAttribute" />, which constrains validation and
-    ///         the generated database column rather than in-memory assignment. Assigning a name before the entity is
-    ///         used or persisted is therefore the caller's responsibility.
+    ///         the generated database column rather than in-memory assignment &#8212; and with nullable reference types
+    ///         enabled Entity Framework Core already maps a non-nullable <c>string Name</c> to a <c>NOT NULL</c> column,
+    ///         so the attribute affects <c>DataAnnotations</c> validation more than the generated schema. Assigning a
+    ///         name before the entity is used or persisted is therefore the caller's responsibility.
     ///     </para>
     ///     <para>
     ///         Implementations outside this library are free to be stricter &#8212; declaring the property

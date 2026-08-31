@@ -53,10 +53,7 @@ public class Category<TCategory, TId> : IHasId<TId>, INamed, IHierarchicalParent
     /// </summary>
     public virtual TCategory? Parent { get; set; }
 
-    /// <summary>
-    ///     The name of the category.
-    /// </summary>
-    /// <inheritdoc cref="INamed.Name" path="/remarks" />
+    /// <inheritdoc cref="INamed.Name" />
     [MaxLength(128)]
     public string Name { get; set; } = default!;
 }

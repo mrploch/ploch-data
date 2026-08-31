@@ -237,11 +237,15 @@
 ### Documented
 
 - **The nullability contract of the model properties is now stated explicitly** — `INamed.Name`,
-  `INamedReadOnly.Name`, `IHasId<TId>.Id` and `IHasValue<TValue>.Value` are annotated as
+  `INamedReadOnly.Name`, `IHasTitle.Title`, `IHasTitleReadOnly.Title`, `IHasId<TId>.Id`,
+  `IGetOnlyId<TId>.Id`, `IHasValue<TValue>.Value` and `IHasTags<TTag, TTagId>.Tags` are annotated as
   non-nullable, but the common types supplied in `Ploch.Data.Model` (`Property<TId, TValue>`,
-  `Tag<TId>`, `Category<TCategory, TId>`, `Image`) do not assign them at construction — the generic
-  ones use a null-forgiving initialiser (`= null!` or `= default!`) and a closed value-type property
-  such as `Image.Id` reaches the same state implicitly. A freshly constructed entity therefore
+  `Tag<TId>`, `Category<TCategory, TId>`, `Image`) do not assign them at construction — a
+  reference-type or open generic property uses a null-forgiving initialiser (`= null!` or
+  `= default!`), while a closed value-type property such as `Image.Id` reaches the same state
+  implicitly. The same contract is now documented in Markdown as well: `docs/data-model.md` gains a
+  **Nullability contract** section referenced from the Interface Reference table, and the packaged
+  `Ploch.Data.Model` README explains the `= null!` in its Quick Start. A freshly constructed entity therefore
   carries `null` (or `default(T)`) until the caller assigns a value or Entity Framework Core
   materialises the entity, and a deliberate null-forgiving assignment can set the property back to
   `null`. The null-forgiving initialiser exists so that the compiler accepts the EF Core
