@@ -12,7 +12,7 @@
          These are only used in standalone mode (PackageReference).
          When UsePlochProjectReferences=true, ProjectReferences.props removes
          these PackageReferences and replaces them with ProjectReferences. -->
-    <PlochDataPackagesVersion>3.1.6-prerelease</PlochDataPackagesVersion>
+    <PlochDataPackagesVersion>3.1.39-prerelease</PlochDataPackagesVersion>
   </PropertyGroup>
 
   <ItemGroup Label="Ploch.Data packages (from NuGet / GitHub Packages feed)">
@@ -36,6 +36,10 @@
          2.1.11. Remove this version and the direct PackageReferences in the sample
          projects once the consumed Ploch.Data package versions carry the fix. -->
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Label="Ploch.CommandLine packages (from GitHub Packages feed)">
+    <PackageVersion Include="Ploch.CommandLine.Spectre" Version="1.0.4-prerelease" />
   </ItemGroup>
 
   <ItemGroup Label="Microsoft Extensions">
