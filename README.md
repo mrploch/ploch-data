@@ -82,6 +82,7 @@ Full documentation is available in the [docs/](docs/) folder:
 - [Integration Testing](docs/integration-testing.md) -- testing with in-memory SQLite, base test classes
 - [Extending the Libraries](docs/extending.md) -- custom repositories, new providers, extensibility
 - [Architecture Overview](docs/architecture.md) -- package dependencies and design
+- [Releasing](docs/releasing.md) -- release workflow runbook and failure recovery
 
 ## Sample Application
 
