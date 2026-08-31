@@ -17,9 +17,10 @@ public class SqlServerTests(SqlServerContainerFixture fixture) : IClassFixture<S
     {
         fixture.SkipIfUnavailable();
 
-        var (rootServiceProvider, dbContext) = CreateDbContext();
+        var (rootServiceProvider, scopedServiceProvider, dbContext) = CreateDbContext();
 
         using (rootServiceProvider)
+        using (scopedServiceProvider)
         using (dbContext)
         {
             dbContext.TestEntities.ExecuteDelete();
@@ -39,9 +40,10 @@ public class SqlServerTests(SqlServerContainerFixture fixture) : IClassFixture<S
     {
         fixture.SkipIfUnavailable();
 
-        var (rootServiceProvider, dbContext) = CreateDbContext();
+        var (rootServiceProvider, scopedServiceProvider, dbContext) = CreateDbContext();
 
         using (rootServiceProvider)
+        using (scopedServiceProvider)
         using (dbContext)
         {
             // Connecting with an Initial Catalog that does not exist fails, so reaching this point at
@@ -51,13 +53,13 @@ public class SqlServerTests(SqlServerContainerFixture fixture) : IClassFixture<S
         }
     }
 
-    private (ServiceProvider RootServiceProvider, TestDbContext DbContext) CreateDbContext()
+    private (IDisposable RootServiceProvider, IDisposable ScopedServiceProvider, TestDbContext DbContext) CreateDbContext()
     {
         var configurator = new SqlServerDbContextConfigurator(fixture.ConnectionString, builder => builder.EnableRetryOnFailure());
 
-        var (rootServiceProvider, _, dbContext) =
+        var (rootServiceProvider, scopedServiceProvider, dbContext) =
             DbContextServicesRegistrationHelper.BuildDbContextAndServiceProvider<TestDbContext>(new ServiceCollection(), configurator);
 
-        return ((ServiceProvider)rootServiceProvider, dbContext);
+        return ((IDisposable)rootServiceProvider, (IDisposable)scopedServiceProvider, dbContext);
     }
 }
