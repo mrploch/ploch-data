@@ -23,8 +23,10 @@ framework.
   `ExecuteAsync` overload, which is the seam the end-to-end tests drive.
 - Added `SampleAppCommandsTests`: end-to-end tests covering every command's success path, its not-found
   path, and its settings validation.
-- Changed the connection string to `DataSource=sampleapp.db`, so the database is created beside the app and
-  the sample can be run without first generating migrations. Added a `.gitignore` for the resulting file.
+- Changed the connection string to `DataSource=sampleapp.db`, a path relative to the process working
+  directory, so the sample can be run without first generating migrations. (`dotnet run --project ...` from
+  the repository root therefore creates `sampleapp.db` there, not next to the executable.) Added a
+  `.gitignore` for the resulting file.
 - Rewrote `samples/SampleApp/README.md` around a command reference and pointed it at the
   `Ploch.CommandLine.Spectre` and Spectre.Console.Cli documentation.
 

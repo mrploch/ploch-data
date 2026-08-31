@@ -13,10 +13,14 @@ namespace Ploch.Data.SampleApp.ConsoleApp.Commands;
 ///     direct repository injection — the end-to-end tour every other command exposes one step of.
 /// </summary>
 /// <param name="scopeFactory">The factory used to open a dependency-injection scope for the command.</param>
-public class DemoCommand(IServiceScopeFactory scopeFactory) : SampleAppCommand<DemoCommand.Settings>(scopeFactory)
+/// <remarks>
+///     The command takes the seeding options unchanged, so it uses <see cref="SeedDataSettings" /> directly
+///     rather than declaring a settings type of its own.
+/// </remarks>
+public class DemoCommand(IServiceScopeFactory scopeFactory) : SampleAppCommand<SeedDataSettings>(scopeFactory)
 {
     /// <inheritdoc />
-    protected override async Task<int> ExecuteAsync(IServiceProvider services, Settings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(IServiceProvider services, SeedDataSettings settings, CancellationToken cancellationToken)
     {
         AnsiConsole.Write(new Rule("[green]Ploch.Data Sample Application[/]").LeftJustified());
 
@@ -35,10 +39,13 @@ public class DemoCommand(IServiceScopeFactory scopeFactory) : SampleAppCommand<D
         AnsiConsole.Write(new Rule("Reading an article with eager loading").LeftJustified());
         var readRepository = services.GetRequiredService<IReadRepositoryAsync<Article, int>>();
         var loadedArticle = await readRepository.GetByIdAsync(articleId,
+                                                              // Three collection navigations in one query would multiply
+                                                              // rows together (a Cartesian explosion), so it is split.
                                                               onDbSet: query => query.Include(a => a.Author)
                                                                                      .Include(a => a.Categories)
                                                                                      .Include(a => a.Tags)
-                                                                                     .Include(a => a.Properties),
+                                                                                     .Include(a => a.Properties)
+                                                                                     .AsSplitQuery(),
                                                               cancellationToken);
 
         AnsiConsole.MarkupLine($"Loaded article: [green]{loadedArticle!.Title.EscapeMarkup()}[/]");
@@ -89,8 +96,4 @@ public class DemoCommand(IServiceScopeFactory scopeFactory) : SampleAppCommand<D
         return 0;
     }
 
-    /// <summary>
-    ///     Options accepted by the <c>demo</c> command, which are exactly the seeding options.
-    /// </summary>
-    public class Settings : SeedDataSettings;
 }

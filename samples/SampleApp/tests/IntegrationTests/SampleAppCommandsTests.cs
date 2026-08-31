@@ -174,7 +174,7 @@ public class SampleAppCommandsTests : GenericRepositoryDataIntegrationTest<Sampl
     [Fact]
     public async Task DemoCommand_should_run_the_whole_walkthrough_and_leave_the_expected_data_behind()
     {
-        var exitCode = await new DemoCommand(ScopeFactory).ExecuteAsync(new DemoCommand.Settings { AuthorName = "Ada Lovelace", FillerArticles = 4 });
+        var exitCode = await new DemoCommand(ScopeFactory).ExecuteAsync(new SeedDataSettings { AuthorName = "Ada Lovelace", FillerArticles = 4 });
 
         exitCode.Should().Be(0);
 

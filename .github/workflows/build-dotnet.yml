@@ -133,25 +133,34 @@ jobs:
       # The repository's own NuGet.Config already declares a source named "github", so a
       # "does a github source exist?" guard is always satisfied and would skip supplying the
       # credentials, leaving restore to fail with 401 the moment a Ploch.* package actually has
-      # to be downloaded from the feed. The credentials are therefore always (re)written, and
-      # into the *user-level* config: the repository config clears inherited package sources,
-      # but packageSourceCredentials are matched by source name across configuration files, so
+      # to be downloaded from the feed. The credentials are therefore always written, and into
+      # the *user-level* config: the repository config clears inherited package sources, but
+      # packageSourceCredentials are matched by source name across configuration files, so
       # credentials stored there still apply to the repository's "github" source.
+      #
+      # No secret is written to disk. NuGet expands %GH_PACKAGES_TOKEN% at restore time, and
+      # that variable is set only on the restore step below, so no later repository-controlled
+      # step (build, test, SonarScanner, docfx) can resolve the token out of this file.
       - name: Add GitHub Packages Source
-        env:
-          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: |
           CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
           mkdir -p "$(dirname "$CONFIG")"
-          if [ ! -f "$CONFIG" ]; then
-            echo '<configuration />' > "$CONFIG"
-          fi
-          # Removing first keeps the step idempotent: "add source" fails if the name is taken.
-          dotnet nuget remove source github --configfile "$CONFIG" || true
-          dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github --configfile "$CONFIG" "https://nuget.pkg.github.com/mrploch/index.json"
-
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<configuration>'
+            echo '  <packageSourceCredentials>'
+            echo '    <github>'
+            echo '      <add key="Username" value="kploch" />'
+            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+            echo '    </github>'
+            echo '  </packageSourceCredentials>'
+            echo '</configuration>'
+          } > "$CONFIG"
+          cat "$CONFIG"
       # Restore (UsePlochProjectReferences switches SampleApp from PackageReference to ProjectReference)
       - name: Restore dependencies
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet restore ./Ploch.Data.slnx -p:UsePlochProjectReferences=true
 
       # Capture the NBGV-computed package version so SonarScanner can pass it
@@ -251,6 +260,10 @@ jobs:
         # duplicate, confusing failure. The tools are already restored earlier in the job.
         if: success()
         continue-on-error: true
+        # This step builds without --no-restore, so it restores and therefore needs the
+        # feed credential resolved. Scoped to this step for the same reason as the restore.
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: |
           # docfx reads the compiled Release assemblies and their XML doc files (see
           # publish-docs.yml for why source-based extraction cannot work here). The main

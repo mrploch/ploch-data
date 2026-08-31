@@ -20,10 +20,13 @@ public class ShowArticleCommand(IServiceScopeFactory scopeFactory) : SampleAppCo
         var repository = services.GetRequiredService<IReadRepositoryAsync<Article, int>>();
 
         var article = await repository.GetByIdAsync(settings.Id,
+                                                   // Three collection navigations in one query would multiply rows
+                                                   // together (a Cartesian explosion), so the query is split.
                                                    onDbSet: query => query.Include(a => a.Author)
                                                                           .Include(a => a.Categories)
                                                                           .Include(a => a.Tags)
-                                                                          .Include(a => a.Properties),
+                                                                          .Include(a => a.Properties)
+                                                                          .AsSplitQuery(),
                                                    cancellationToken);
 
         if (article is null)
