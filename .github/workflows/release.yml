@@ -60,12 +60,17 @@ jobs:
           echo "GH_TOKEN is valid"
 
       # Use the default GITHUB_TOKEN for checkout — it always works and has read access.
-      # GH_TOKEN (PAT) is configured separately before push steps, because it is the
+      # GH_TOKEN (PAT) is configured separately, inside each push step, because it is the
       # only token that can trigger subsequent workflows when pushing commits.
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          # Do not leave the job token in .git/config where every later step in this job
+          # could read it (issue #128). Nothing between here and the push steps needs
+          # credentials: the sibling repositories are cloned over plain public HTTPS, and
+          # each push configures - and immediately removes - the PAT for itself.
+          persist-credentials: false
 
       - name: Clone mrploch-development (shared build config)
         run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
@@ -141,14 +146,15 @@ jobs:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
 
-      - name: Configure git
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      # Identity only. The PAT is deliberately NOT written into the remote URL here
+      # (issue #128): doing so left the credential in .git/config for the remainder of the
+      # job, readable by every later step including third-party actions. Each push step
+      # below now installs the PAT immediately before its push and removes it straight
+      # afterwards via a trap, so the credential's lifetime is a single git command.
+      - name: Configure git identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Configure the remote to use GH_TOKEN for push operations
-          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
 
       - name: Set release version
         run: |
@@ -198,8 +204,14 @@ jobs:
       - name: Create and push tag
         id: tag
         if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO_URL: https://github.com/${{ github.repository }}.git
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
         run: |
-          NUGET_VERSION="${{ steps.version.outputs.nuget_version }}"
+          # Scrub any credentialed remote URL on every exit path, including a failed push,
+          # so the PAT never outlives this step (issue #128).
+          trap 'git remote set-url origin "$REPO_URL"' EXIT
           TAG="v${NUGET_VERSION}"
           if git rev-parse "$TAG" >/dev/null 2>&1; then
             echo "Tag $TAG already exists, verifying it points to HEAD"
@@ -212,7 +224,9 @@ jobs:
             echo "Tag $TAG already points to HEAD, reusing it"
           else
             git tag -a "$TAG" -m "Release ${NUGET_VERSION}"
+            git remote set-url origin "https://x-access-token:${GH_TOKEN}@${REPO_URL#https://}"
             git push origin "$TAG"
+            git remote set-url origin "$REPO_URL"
           fi
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
@@ -272,6 +286,7 @@ jobs:
           ENDOFNOTES
 
       - name: Create GitHub Release
+        id: release
         if: success()
         uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3.0.2
         with:
@@ -280,6 +295,63 @@ jobs:
           body_path: /tmp/release-notes.md
           draft: false
           prerelease: false
+
+      # softprops/action-gh-release 2.5.0 and later no longer create a release atomically:
+      # createRelease always creates a DRAFT when `prerelease: false`, regardless of our
+      # explicit `draft: false`, and a second call (finalizeRelease) publishes it. If the
+      # run dies between the two, or finalizeRelease exhausts its three internal retries,
+      # the release is left unpublished - and the NuGet packages went public several steps
+      # earlier and cannot be withdrawn. Assert the end state so a stranded draft fails the
+      # workflow loudly instead of going unnoticed. Re-running the workflow recovers: the
+      # action finds the existing draft and publishes it. See issue #137.
+      - name: Verify the GitHub release is published
+        # Deliberately NOT success(): the stranded draft is created by a run in which the
+        # release action itself FAILS after createRelease but before finalizeRelease, and
+        # success() would skip this step in precisely that case.
+        #
+        # always(), not !cancelled(): a run CANCELLED mid-release - the operator hits Cancel,
+        # or the 6-hour job limit trips - is exactly "the run died between the two calls",
+        # and that is when a stranded draft most needs reporting. This is a safety assertion
+        # after an irreversible NuGet push, not a cosmetic warning, so the cancellation noise
+        # is worth paying for.
+        #
+        # `steps.release.outcome != 'skipped'` suppresses a false alarm: four steps between
+        # the tag and the release are gated on success(), so if the package push fails they
+        # all skip, the release action never runs, and an unguarded condition here would
+        # print "No release found ... the packages may already be published" - precisely
+        # backwards - on top of the genuine failure.
+        if: ${{ always() && steps.tag.outputs.tag != '' && steps.release.outcome != 'skipped' }}
+        env:
+          # The built-in job token suffices - the workflow already grants `contents: write`
+          # - and using it here avoids handing the long-lived PAT to another step.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          REPO: ${{ github.repository }}
+        run: |
+          # A missing release is a distinct outcome from a draft one, and only the second
+          # is recoverable by re-running: report them separately rather than letting an
+          # empty lookup masquerade as a draft.
+          # Keep stderr: an auth failure, a rate limit or a network blip is a different
+          # diagnosis from "the release does not exist", and discarding the message would
+          # collapse all three into the same misleading error at the most expensive possible
+          # moment - immediately after an irreversible NuGet push.
+          if ! IS_DRAFT=$(gh release view "$TAG" --repo "$REPO" --json isDraft --jq '.isDraft' 2>"$RUNNER_TEMP/gh-release-view.err"); then
+            LOOKUP_ERROR=$(cat "$RUNNER_TEMP/gh-release-view.err")
+            # `gh release view` finds drafts only through a fallback listing path, so query
+            # the API directly before concluding that no release exists at all.
+            DRAFT_FLAG=$(gh api "repos/$REPO/releases" --paginate --jq ".[] | select(.tag_name==\"$TAG\") | .draft" || true)
+            if [ "$DRAFT_FLAG" = "true" ]; then
+              echo "::error title=Release left as a draft::Release $TAG exists but is still a draft. The NuGet packages for this version are already public. Re-run this workflow to publish the draft, or publish it manually from the Releases page."
+              exit 1
+            fi
+            echo "::error title=Release lookup failed::Could not read the GitHub release for tag $TAG. gh reported: ${LOOKUP_ERROR:-<no output>}. If the NuGet packages for this version were already published, verify the release manually or re-run this workflow."
+            exit 1
+          fi
+          if [ "$IS_DRAFT" != "false" ]; then
+            echo "::error title=Release left as a draft::Release $TAG exists but is still a draft (isDraft=$IS_DRAFT). The NuGet packages for this version are already public. Re-run this workflow to publish the draft, or publish it manually from the Releases page."
+            exit 1
+          fi
+          echo "Release $TAG is published (isDraft=false)."
 
       - name: Compute next development version
         id: next
@@ -328,14 +400,25 @@ jobs:
         env:
           NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
           NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO_URL: https://github.com/${{ github.repository }}.git
         run: |
+          # As above: scrub the credentialed remote on every exit path (issue #128).
+          trap 'git remote set-url origin "$REPO_URL"' EXIT
           git add version.json
           git add change-log/ || true
           git add samples/SampleApp/Directory.Packages.props || true
-          git diff --cached --quiet && echo "No changes to commit" || \
+          # An `A && B || C` list swallows a failed commit: C runs, the list still succeeds,
+          # and the step would go on to push WITHOUT the next development version committed.
+          # An explicit if/else stops the step instead.
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
             git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development
 
-          Update SampleApp to reference stable ${NUGET_VERSION} packages."
+          Update SampleApp to reference stable ${NUGET_VERSION} packages." || exit 1
+          fi
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@${REPO_URL#https://}"
           if ! git push origin main 2>&1; then
             echo "::warning::Could not push version bump directly to main (branch protection). Create a PR to bump version.json to ${NEXT_DEV_VERSION}-prerelease manually."
             echo "push_failed=true" >> $GITHUB_OUTPUT
