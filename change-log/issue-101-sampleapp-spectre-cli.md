@@ -28,6 +28,24 @@ framework.
 - Rewrote `samples/SampleApp/README.md` around a command reference and pointed it at the
   `Ploch.CommandLine.Spectre` and Spectre.Console.Cli documentation.
 
+# Review follow-ups
+
+Changes made in response to the pull request review:
+
+- `SampleDataSeeder.SeedAsync` now performs a **single** `CommitAsync` after staging the whole sample data
+  set. It previously committed five times, which contradicted the method's own documentation and defeated
+  the point of demonstrating a unit of work — an interruption partway through left an author, categories or
+  tags behind without the articles that reference them.
+- `SampleAppCommand<TSettings>` ensures the database schema exists before a command queries it. Running a
+  read-only command such as `list` on a clean checkout previously opened an empty SQLite file and failed
+  with `SQLite Error 1: 'no such table: Articles'` instead of reporting an empty database. Seeding commands
+  still drop and recreate the database themselves.
+- `update --title` is validated against the 256-character limit that `[MaxLength(256)]` declares on
+  `Article.Title`. SQLite accepts an over-long value silently; SQL Server, which this sample also ships a
+  provider project for, does not.
+- The author and filler-article options shared by `demo` and `seed` are declared once in `SeedDataSettings`,
+  which both command settings classes now derive from.
+
 # Impact
 
 SampleApp only. No published Ploch.Data package changes behaviour, and no public API changed.

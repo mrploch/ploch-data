@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Data.GenericRepository;
@@ -91,28 +90,7 @@ public class DemoCommand(IServiceScopeFactory scopeFactory) : SampleAppCommand<D
     }
 
     /// <summary>
-    ///     Options accepted by the <c>demo</c> command.
+    ///     Options accepted by the <c>demo</c> command, which are exactly the seeding options.
     /// </summary>
-    public class Settings : CommandSettings
-    {
-        /// <summary>
-        ///     Gets the name given to the seeded author.
-        /// </summary>
-        [CommandOption("-a|--author <NAME>")]
-        [Description("Name of the author the seeded articles are attributed to.")]
-        [DefaultValue("Jane Smith")]
-        public string AuthorName { get; init; } = "Jane Smith";
-
-        /// <summary>
-        ///     Gets the number of additional filler articles created so that pagination has something to page over.
-        /// </summary>
-        [CommandOption("-f|--filler <COUNT>")]
-        [Description("Number of additional filler articles to create so pagination is meaningful.")]
-        [DefaultValue(10)]
-        public int FillerArticles { get; init; } = 10;
-
-        /// <inheritdoc />
-        public override ValidationResult Validate() =>
-            FillerArticles < 0 ? ValidationResult.Error("--filler must be zero or greater.") : ValidationResult.Success();
-    }
+    public class Settings : SeedDataSettings;
 }

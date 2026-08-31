@@ -142,6 +142,26 @@ public class SampleAppCommandsTests : GenericRepositoryDataIntegrationTest<Sampl
     }
 
     [Fact]
+    public void UpdateArticleCommand_should_reject_a_title_longer_than_the_model_allows()
+    {
+        var title = new string('a', UpdateArticleCommand.Settings.MaximumTitleLength + 1);
+
+        var result = new UpdateArticleCommand.Settings { Id = 1, Title = title }.Validate();
+
+        result.Successful.Should().BeFalse();
+    }
+
+    [Fact]
+    public void UpdateArticleCommand_should_accept_a_title_of_exactly_the_maximum_length()
+    {
+        var title = new string('a', UpdateArticleCommand.Settings.MaximumTitleLength);
+
+        var result = new UpdateArticleCommand.Settings { Id = 1, Title = title }.Validate();
+
+        result.Successful.Should().BeTrue();
+    }
+
+    [Fact]
     public async Task ListAuthorsCommand_should_succeed_after_seeding()
     {
         await SeedAsync();

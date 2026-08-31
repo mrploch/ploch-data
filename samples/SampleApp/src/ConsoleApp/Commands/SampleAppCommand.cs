@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Ploch.Data.SampleApp.Data;
 using Spectre.Console.Cli;
 
 namespace Ploch.Data.SampleApp.ConsoleApp.Commands;
@@ -34,6 +36,12 @@ public abstract class SampleAppCommand<TSettings>(IServiceScopeFactory scopeFact
     public async Task<int> ExecuteAsync(TSettings settings, CancellationToken cancellationToken = default)
     {
         using var scope = scopeFactory.CreateScope();
+
+        // The sample must be runnable in any order, so make sure the schema exists before a command
+        // queries it. Without this, running a read-only command such as 'list' on a clean checkout
+        // opens an empty SQLite file and fails with "no such table: Articles" rather than reporting
+        // an empty database. Seeding commands still drop and recreate the database themselves.
+        await scope.ServiceProvider.GetRequiredService<SampleAppDbContext>().Database.EnsureCreatedAsync(cancellationToken);
 
         return await ExecuteAsync(scope.ServiceProvider, settings, cancellationToken);
     }

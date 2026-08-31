@@ -47,6 +47,13 @@ public class UpdateArticleCommand(IServiceScopeFactory scopeFactory) : SampleApp
     public class Settings : CommandSettings
     {
         /// <summary>
+        ///     The maximum title length the model allows, mirroring the <c>[MaxLength(256)]</c> attribute on
+        ///     <see cref="Article.Title" />. SQLite silently accepts a longer value, but SQL Server — which this
+        ///     sample also ships a provider project for — rejects it, so the command line is validated instead.
+        /// </summary>
+        public const int MaximumTitleLength = 256;
+
+        /// <summary>
         ///     Gets the identifier of the article to rename.
         /// </summary>
         [CommandArgument(0, "<ARTICLE-ID>")]
@@ -61,7 +68,16 @@ public class UpdateArticleCommand(IServiceScopeFactory scopeFactory) : SampleApp
         public string Title { get; init; } = string.Empty;
 
         /// <inheritdoc />
-        public override ValidationResult Validate() =>
-            string.IsNullOrWhiteSpace(Title) ? ValidationResult.Error("--title must be supplied and must not be empty.") : ValidationResult.Success();
+        public override ValidationResult Validate()
+        {
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                return ValidationResult.Error("--title must be supplied and must not be empty.");
+            }
+
+            return Title.Length > MaximumTitleLength
+                       ? ValidationResult.Error($"--title must be {MaximumTitleLength} characters or fewer.")
+                       : ValidationResult.Success();
+        }
     }
 }

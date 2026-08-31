@@ -46,7 +46,6 @@ public class SampleDataSeeder(IUnitOfWork unitOfWork, SampleAppDbContext dbConte
         var authorRepository = unitOfWork.Repository<Author, int>();
         var author = new Author { Name = authorName, Description = "Technical writer and software engineer" };
         await authorRepository.AddAsync(author, cancellationToken);
-        await unitOfWork.CommitAsync(cancellationToken);
 
         var categoryRepository = unitOfWork.Repository<ArticleCategory, int>();
         var technologyCategory = new ArticleCategory { Name = "Technology" };
@@ -56,7 +55,6 @@ public class SampleDataSeeder(IUnitOfWork unitOfWork, SampleAppDbContext dbConte
 
         await categoryRepository.AddAsync(technologyCategory, cancellationToken);
         await categoryRepository.AddAsync(scienceCategory, cancellationToken);
-        await unitOfWork.CommitAsync(cancellationToken);
 
         var tagRepository = unitOfWork.Repository<ArticleTag, int>();
         var csharpTag = new ArticleTag { Name = "C#", Description = "C# programming language" };
@@ -65,7 +63,6 @@ public class SampleDataSeeder(IUnitOfWork unitOfWork, SampleAppDbContext dbConte
         await tagRepository.AddAsync(csharpTag, cancellationToken);
         await tagRepository.AddAsync(tutorialTag, cancellationToken);
         await tagRepository.AddAsync(beginnerTag, cancellationToken);
-        await unitOfWork.CommitAsync(cancellationToken);
 
         var articleRepository = unitOfWork.Repository<Article, int>();
 
@@ -96,7 +93,6 @@ public class SampleDataSeeder(IUnitOfWork unitOfWork, SampleAppDbContext dbConte
 
         await articleRepository.AddAsync(featuredArticle, cancellationToken);
         await articleRepository.AddAsync(secondArticle, cancellationToken);
-        await unitOfWork.CommitAsync(cancellationToken);
 
         for (var index = 1; index <= fillerArticleCount; index++)
         {
@@ -110,10 +106,10 @@ public class SampleDataSeeder(IUnitOfWork unitOfWork, SampleAppDbContext dbConte
                                              cancellationToken);
         }
 
-        if (fillerArticleCount > 0)
-        {
-            await unitOfWork.CommitAsync(cancellationToken);
-        }
+        // Everything above is staged in the unit of work and persisted here by a single commit, so the
+        // whole sample data set either lands in the database or none of it does. This is the behaviour the
+        // class documentation advertises, and the reason a unit of work is worth demonstrating at all.
+        await unitOfWork.CommitAsync(cancellationToken);
 
         return new SeedResult(author,
                               featuredArticle,
