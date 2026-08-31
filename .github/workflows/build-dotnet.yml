@@ -130,10 +130,25 @@ jobs:
           echo "deb [signed-by=$KEYRING] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
           sudo apt update
           sudo apt install -y mono-devel
+      # The repository's own NuGet.Config already declares a source named "github", so a
+      # "does a github source exist?" guard is always satisfied and would skip supplying the
+      # credentials, leaving restore to fail with 401 the moment a Ploch.* package actually has
+      # to be downloaded from the feed. The credentials are therefore always (re)written, and
+      # into the *user-level* config: the repository config clears inherited package sources,
+      # but packageSourceCredentials are matched by source name across configuration files, so
+      # credentials stored there still apply to the repository's "github" source.
       - name: Add GitHub Packages Source
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+        run: |
+          CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
+          mkdir -p "$(dirname "$CONFIG")"
+          if [ ! -f "$CONFIG" ]; then
+            echo '<configuration />' > "$CONFIG"
+          fi
+          # Removing first keeps the step idempotent: "add source" fails if the name is taken.
+          dotnet nuget remove source github --configfile "$CONFIG" || true
+          dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github --configfile "$CONFIG" "https://nuget.pkg.github.com/mrploch/index.json"
 
       # Restore (UsePlochProjectReferences switches SampleApp from PackageReference to ProjectReference)
       - name: Restore dependencies

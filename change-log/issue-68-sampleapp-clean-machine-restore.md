@@ -39,6 +39,14 @@ the first `Ploch.*` package reference that survives that switch, so CI restore b
 
 - Bumped `PlochDataPackagesVersion` from `3.1.6-prerelease` to `3.1.39-prerelease`, whose transitive
   `Ploch.Common` constraints all resolve exactly.
+- Fixed the workflow's "Add GitHub Packages Source" step, which guarded on
+  `dotnet nuget list source | grep -q github`. The repository's own `NuGet.Config` declares a source named
+  `github`, so that guard was always satisfied and the credentialed `dotnet nuget add source` never ran —
+  leaving restore to fail with `401 (Unauthorized)` the moment a `Ploch.*` package genuinely had to be
+  downloaded. The credentials are now always written, and into the runner's user-level configuration:
+  the repository configuration clears inherited package *sources*, but `packageSourceCredentials` are
+  matched by source name across configuration files, so credentials stored there still authenticate the
+  repository's `github` source. This is the same arrangement that makes local developer restores work.
 - Removed the machine-specific `local` folder feed and its package-source mapping from the repository's
   `NuGet.Config`, which now matches the equivalent file in `ploch-commandline`: `nuget.org` for public
   packages, GitHub Packages for `Ploch.*`. A developer who wants a local folder feed adds it to their
