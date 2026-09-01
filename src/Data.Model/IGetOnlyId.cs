@@ -15,6 +15,11 @@ public interface IGetOnlyId<out TId>
     /// <summary>
     ///     The identifier of the entity.
     /// </summary>
+    /// <remarks>
+    ///     The interface cannot guarantee that an implementation assigns the identifier; in the common types supplied by
+    ///     this library it carries <c>default(TId)</c> until the caller assigns it or the persistence layer generates it.
+    ///     See <see cref="IHasId{TId}.Id" /> for the full contract.
+    /// </remarks>
     [Key]
     TId Id { get; }
 }

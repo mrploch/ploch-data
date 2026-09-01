@@ -52,17 +52,45 @@ classDiagram
 
 | Interface | Property | Type | Notes |
 |-----------|----------|------|-------|
-| `IGetOnlyId<TId>` | `Id` | `TId` (get only) | Read-only identifier |
-| `IHasId<TId>` | `Id` | `TId` | Primary key. Every repository entity must implement this. |
-| `IHasIdSettable<TId>` | `Id` | `TId` | Settable identifier (extends `IHasId<TId>`) |
-| `INamedReadOnly` | `Name` | `string` (get only) | Read-only name |
-| `INamed` | `Name` | `string` | Read/write name |
-| `IHasTitleReadOnly` | `Title` | `string` (get only) | Read-only title |
-| `IHasTitle` | `Title` | `string` | Read/write title |
+| `IGetOnlyId<TId>` | `Id` | `TId` (get only) | Read-only identifier. Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
+| `IHasId<TId>` | `Id` | `TId` | Primary key. Every repository entity must implement this. Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
+| `IHasIdSettable<TId>` | `Id` | `TId` | Settable identifier (extends `IHasId<TId>`). Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
+| `INamedReadOnly` | `Name` | `string` (get only) | Read-only name. Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
+| `INamed` | `Name` | `string` | Read/write name. Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
+| `IHasTitleReadOnly` | `Title` | `string` (get only) | Read-only title. Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
+| `IHasTitle` | `Title` | `string` | Read/write title. Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
 | `IHasDescription` | `Description` | `string?` | Optional description |
 | `IHasContents` | `Contents` | `string?` | Textual content body |
 | `IHasNotes` | `Notes` | `string?` | Free-form notes |
-| `IHasValue<TValue>` | `Value` | `TValue` | Typed value property |
+| `IHasValue<TValue>` | `Value` | `TValue` | Typed value property. Unset until assigned or materialised -- see [Nullability contract](#nullability-contract). |
+
+### Nullability contract
+
+`Name`, `Title`, `Id` and `Value` are annotated as **non-nullable**, yet every example in this guide
+declares them with the null-forgiving initialiser `= null!` (or `= default!`). That is deliberate,
+and it is the contract these interfaces impose:
+
+- **An interface cannot guarantee that an implementation assigns the property.** The common types
+  supplied by `Ploch.Data.Model` -- `Property<TId, TValue>`, `Tag<TId>`, `Category<TCategory, TId>`
+  and `Image` -- do not assign them at construction. A reference-type or open generic property uses
+  a null-forgiving initialiser, while a closed value-type property such as `Image.Id` reaches the
+  same state implicitly.
+- **A freshly constructed entity therefore holds `null`** (or `default(T)`: `0` for `int`,
+  `Guid.Empty` for `Guid`) until the caller assigns a value or Entity Framework Core materialises
+  the entity.
+- **The initialiser exists for EF Core.** It makes the compiler accept the materialisation path, on
+  which the ORM populates the property *after* construction.
+- **Nothing enforces assignment.** The supplied types declare the property neither as `required` nor
+  with a constructor or setter guard, so a deliberate null-forgiving assignment can set it back to
+  `null`. Validation metadata is a separate concern: `Tag<TId>.Name` carries `[Required]`, which
+  constrains validation and the generated column rather than in-memory assignment.
+- **Your implementations may be stricter.** Declaring the property `required`, initialising it in a
+  constructor, or validating it are all fine -- but code written against the interfaces should not
+  rely on either behaviour. Assigning a value before the entity is used or persisted is the
+  caller's responsibility.
+
+The XML remarks on `INamed.Name`, `IHasTitle.Title`, `IHasId<TId>.Id` and `IHasValue<TValue>.Value`
+state the same contract in the API reference.
 
 ### Usage Example
 
@@ -77,6 +105,9 @@ public class Article : IHasId<int>, IHasTitle, IHasDescription, IHasContents
     public string? Contents { get; set; }
 }
 ````
+
+> `= null!` on a non-nullable property is deliberate throughout this guide -- see
+> [Nullability contract](#nullability-contract).
 
 ## Audit Interfaces
 
