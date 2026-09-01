@@ -11,5 +11,10 @@ public interface INamedReadOnly
     /// <value>
     ///     A <see cref="string" /> representing the name of the entity.
     /// </value>
+    /// <remarks>
+    ///     The property is annotated as non-nullable, but the interface cannot guarantee that an implementation assigns
+    ///     it; in the common types supplied by this library it is <see langword="null" /> until a name is assigned or an
+    ///     object-relational mapper materialises the entity. See <see cref="INamed.Name" /> for the full contract.
+    /// </remarks>
     string Name { get; }
 }

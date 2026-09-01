@@ -818,7 +818,7 @@ dotnet run --project samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.Conso
 ### Gotchas
 
 - **NBGV shallow clone error**: If the build fails with `Shallow clone lacks the objects required to calculate version height`, the `ploch-common` repo needs `git fetch --unshallow`.
-- **SQL Server test skipped**: `Data.EFCore.SqlServer.Tests` has one test explicitly skipped (`[Fact(Skip = ...)]`). No Docker/SQL Server setup is needed.
+- **SQL Server tests need Docker**: `Data.EFCore.SqlServer.Tests` starts a throw-away SQL Server container via Testcontainers (`Testcontainers.MsSql`). With a running Docker daemon the tests execute for real; without one they report `[SKIP]`, so SQL Server coverage is absent from that run. No manually started container or connection string is required either way.
 - **No `global.json`**: The repository does not pin an SDK version via `global.json`. Install both the .NET 8.0 and 10.0 SDKs so each target framework can build.
 - **GitHub Packages NuGet source**: `NuGet.Config` declares a `github` source for `Ploch.*` packages. A local solution build with `-p:UsePlochProjectReferences=true` and both sibling repos present resolves everything from source, so no token is needed. Building the SampleApp standalone (`Ploch.Data.SampleApp.slnx`) or producing Release / `pack` artefacts pulls `Ploch.Data.*` from the feed and needs a `GH_PACKAGES_TOKEN`.
 

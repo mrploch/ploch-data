@@ -4,13 +4,77 @@
 
 ### Fixed
 
+- **`CollectionStringSplitConverter<TValue>` has a new, tagged wire format that stores what you gave
+  it** — four defects are fixed together because all four need the same format revision. An empty
+  `string` element is no longer indistinguishable from `null` (`["a", ""]` used to reload as
+  `["a", null]`, and both `[""]` and `[null]` collapsed to `[]`); `DateTime` no longer loses sub-second
+  precision (`10:30:45.1230000` used to be stored as `10:30:45` — corruption with no exception) or
+  `DateTimeKind` (`Utc` and `Local` both read back as `Unspecified`, invisibly, because `DateTime`
+  equality compares ticks only); and element types outside `Convert.ChangeType`'s reach — `Guid`,
+  enums, `Nullable<T>`, `TimeSpan`, `DateTimeOffset`, `DateOnly`, `TimeOnly` — now round-trip instead
+  of serialising successfully and throwing `InvalidCastException` on every read.
+  See `change-log/issue-121-converter-tagged-wire-format.md`. (#121)
+
+  **The format.** A non-`null` collection is written as the version header `!1` followed by one
+  *separator-introduced* segment per element — including the first — and every segment carries a
+  mandatory one-character tag: `n` for a `null` element, or `v` followed by the escaped value.
+
+  | Collection | Payload |
+  |---|---|
+  | `[]` | `!1` |
+  | `[""]` | `!1,v` |
+  | `[null]` | `!1,n` |
+  | `["a", ""]` | `!1,va,v` |
+  | `["a", null]` | `!1,va,n` |
+  | `[1, 0, 2]` | `!1,v1,v0,v2` |
+
+  Because every element is introduced by the separator, no element can be encoded as an empty segment,
+  so the ambiguity is structurally impossible rather than merely narrowed. `!` is a safe sentinel
+  because `Uri.EscapeDataString` output is drawn only from the RFC 3986 unreserved characters
+  (`A-Z a-z 0-9 - . _ ~`) and percent-triplets — `!` escapes to `%21`, so escaped element data can
+  never begin with the header. The `v`/`n` tags are inside that alphabet but are read *positionally*,
+  as the first character of a segment whose boundaries the separator has already fixed, so element data
+  spelling `"v"` or `"n"` cannot be mistaken for structure.
+
+  **Element encodings** are now chosen for round-trip fidelity rather than taken from
+  `Convert.ToString`: `DateTime` and `DateTimeOffset` use `"O"` (which carries all seven
+  fractional-second digits *and* the `Kind`/offset), `TimeSpan` uses `"c"`, `Guid` uses `"D"`,
+  `DateOnly`/`TimeOnly` use `"O"`, enums are written by name, and everything else `IConvertible` keeps
+  its invariant string form. A `Nullable<T>` element decodes through its underlying type, because the
+  `null` case is carried by the tag. A `TValue` outside that set now throws `NotSupportedException`
+  **on write**, naming the type, instead of writing something unreadable.
+
+  Support is judged from the **declared** element type, not from the runtime value, so a converter
+  closed over an unsupported type fails even when the value it is handed happens to be encodable —
+  `CollectionStringSplitConverter<object>` can no longer write a string element it would be unable to
+  read back. Implementing `IConvertible` is not by itself sufficient: decoding converts the stored
+  `string`, and `string`'s own `IConvertible` implementation recognises only the built-in primitives,
+  throwing `InvalidCastException` for a user-defined target. Reading a payload whose `n` tag marks a
+  `null` element is likewise rejected when `TValue` cannot represent `null`, rather than quietly
+  yielding `default(TValue)`.
+
+  **Breaking change — on-disk format, and legacy payloads are rejected.** A non-`null` payload that
+  does not begin with `!1` throws `FormatException`. Reading legacy payloads best-effort was considered
+  and rejected: under the old rules an empty segment meant `null` **and** `string.Empty`, so a
+  best-effort read would hand back data that is quietly wrong for exactly the inputs this change
+  exists to fix — a loud failure is recoverable, a silent misread is not. The blast radius is
+  negligible: the previous format never reached a released version, and the format before it could not
+  be read back at all (its read path threw `InvalidCastException` for *every* payload and every
+  `TValue`), so no data this converter wrote was ever readable. If you do hold rows written by a
+  pre-4.0 build on this branch, rewrite the column before upgrading — there is no in-place migration,
+  and none could be correct.
+
+  **This supersedes the "Known limitations" noted under the entries below.** Those four items are the
+  four fixed here.
+
 - **`CollectionStringSplitConverter<TValue>` no longer throws on a `null` collection** — `convertNulls`
   defaults to `true`, so EF Core invokes the conversion lambdas for nulls instead of short-circuiting
   them, but neither lambda handled null: a `null` collection threw `ArgumentNullException` out of
   `Enumerable.Select` during `SaveChanges`, and a `NULL` column would have thrown
   `NullReferenceException` on read. `null` now maps to `null` in both directions. A side benefit is
   that a `null` collection is now distinguishable from an empty one — the former is a `NULL` column,
-  the latter the empty string. (#122)
+  the latter a non-`NULL` one. (In the final 4.0 format an empty collection is the bare `!1` header,
+  not the empty string — see the #121 entry above.) (#122)
 
   **Behavioural change:** a property mapped with this converter must be declared nullable if it is to
   hold `null`; a non-nullable property still maps to a `NOT NULL` column, which correctly rejects it.
@@ -45,6 +109,9 @@
   earlier versions, because the writer no longer produces empty segments for non-`null` elements
   (see the next entry). (#97)
 
+  *Superseded within this same unreleased cycle by #121:* segments are now tagged and the
+  empty-segment encoding no longer exists in any form — see the first entry above.
+
 - **A one-element collection holding `default(TValue)` no longer vanishes on read** — the write path
   stored *any* element equal to `default(TValue)` as an empty segment, so a collection of exactly one
   such element serialised to the empty payload, which is indistinguishable from an empty collection.
@@ -64,6 +131,9 @@
   therefore use different encodings for the same value, and stored values get slightly longer — which
   matters only for a column with a tight `MaxLength`.
 
+  *Superseded within this same unreleased cycle by #121:* `[1, 0, 2]` is now stored as `"!1,v1,v0,v2"`,
+  and untagged payloads are rejected rather than decoded — see the first entry above.
+
   The read path is unchanged and still decodes an empty segment to `default(TValue)`, so legacy
   *multi-element* payloads such as `"1,,2"` remain readable and still yield `[1, 0, 2]`. Legacy
   *single-default* rows are not recoverable: `[0]` was written as the empty payload, which is
@@ -72,11 +142,12 @@
   the converter's read path threw `InvalidCastException` for *every* payload, so no such data could
   previously be read back at all.
 
-  **Known limitations** (documented on the type, tracked in #121): an empty `string` element is
-  indistinguishable from `null` and reads back as `null`; a collection holding a single empty-or-null
-  string reads back empty; `DateTime` elements lose sub-second precision and `DateTimeKind`, because
-  the invariant general format has neither a fractional-seconds field nor an offset; and a `TValue`
-  outside `Convert.ChangeType`'s supported set (`Guid`, enums, `Nullable<T>`) serialises but throws
+  **Known limitations at the time of that change — all four since fixed by #121, see the first entry
+  above; retained here for the history**: an empty `string` element was
+  indistinguishable from `null` and read back as `null`; a collection holding a single empty-or-null
+  string read back empty; `DateTime` elements lost sub-second precision and `DateTimeKind`, because
+  the invariant general format had neither a fractional-seconds field nor an offset; and a `TValue`
+  outside `Convert.ChangeType`'s supported set (`Guid`, enums, `Nullable<T>`) serialised but threw
   `InvalidCastException` on read.
 
 ### Removed
@@ -233,6 +304,37 @@
   now references `SQLitePCLRaw.bundle_e_sqlite3` 3.0.3 directly, overriding the vulnerable 2.1.x
   version that EF Core still pulls transitively. All packages depending on the SQLite provider
   resolve the patched native SQLite library. See `change-log/issue-91-vulnerable-sqlitepclraw.md`. (#91)
+
+### Documented
+
+- **The nullability contract of the model properties is now stated explicitly** — `INamed.Name`,
+  `INamedReadOnly.Name`, `IHasTitle.Title`, `IHasTitleReadOnly.Title`, `IHasId<TId>.Id`,
+  `IGetOnlyId<TId>.Id`, `IHasValue<TValue>.Value` and `IHasTags<TTag, TTagId>.Tags` are annotated as
+  non-nullable, but the common types supplied in `Ploch.Data.Model` (`Property<TId, TValue>`,
+  `Tag<TId>`, `Category<TCategory, TId>`, `Image`) do not assign them at construction — a
+  reference-type or open generic property uses a null-forgiving initialiser (`= null!` or
+  `= default!`), while a closed value-type property such as `Image.Id` reaches the same state
+  implicitly. The same contract is now documented in Markdown as well: `docs/data-model.md` gains a
+  **Nullability contract** section referenced from the Interface Reference table, and the packaged
+  `Ploch.Data.Model` README explains the `= null!` in its Quick Start. A freshly constructed entity therefore
+  carries `null` (or `default(T)`) until the caller assigns a value or Entity Framework Core
+  materialises the entity, and a deliberate null-forgiving assignment can set the property back to
+  `null`. The null-forgiving initialiser exists so that the compiler accepts the EF Core
+  materialisation path, on which the ORM populates the property after construction. Validation
+  metadata is a separate concern from assignment behaviour: `Tag<TId>.Name` carries `[Required]`,
+  which constrains validation and the generated column rather than in-memory assignment.
+
+  The remarks describe the **supplied common types**, not a guarantee the interfaces impose on their
+  implementers: an implementation outside this library is free to be stricter, and the repository's
+  own test model does exactly that (`Blog.Name` is declared `required`).
+
+  This is a **documentation-only** change: the runtime behaviour and the public API signatures are
+  unchanged for v4.0. Making the properties `required` was rejected because it breaks construction
+  without an object initialiser; annotating them as `string?` was rejected because it pushes null
+  checks onto every consumer and weakens the model interfaces that exist to standardise these
+  property shapes; and a runtime guard on the setter was rejected because entities in this workspace
+  are plain data carriers with no business logic. Assigning a value before the entity is used or
+  persisted remains the caller's responsibility. (#131)
 
 ## v2.1 — NBGV Versioning and Release Pipeline
 
