@@ -234,6 +234,37 @@
   version that EF Core still pulls transitively. All packages depending on the SQLite provider
   resolve the patched native SQLite library. See `change-log/issue-91-vulnerable-sqlitepclraw.md`. (#91)
 
+### Documented
+
+- **The nullability contract of the model properties is now stated explicitly** — `INamed.Name`,
+  `INamedReadOnly.Name`, `IHasTitle.Title`, `IHasTitleReadOnly.Title`, `IHasId<TId>.Id`,
+  `IGetOnlyId<TId>.Id`, `IHasValue<TValue>.Value` and `IHasTags<TTag, TTagId>.Tags` are annotated as
+  non-nullable, but the common types supplied in `Ploch.Data.Model` (`Property<TId, TValue>`,
+  `Tag<TId>`, `Category<TCategory, TId>`, `Image`) do not assign them at construction — a
+  reference-type or open generic property uses a null-forgiving initialiser (`= null!` or
+  `= default!`), while a closed value-type property such as `Image.Id` reaches the same state
+  implicitly. The same contract is now documented in Markdown as well: `docs/data-model.md` gains a
+  **Nullability contract** section referenced from the Interface Reference table, and the packaged
+  `Ploch.Data.Model` README explains the `= null!` in its Quick Start. A freshly constructed entity therefore
+  carries `null` (or `default(T)`) until the caller assigns a value or Entity Framework Core
+  materialises the entity, and a deliberate null-forgiving assignment can set the property back to
+  `null`. The null-forgiving initialiser exists so that the compiler accepts the EF Core
+  materialisation path, on which the ORM populates the property after construction. Validation
+  metadata is a separate concern from assignment behaviour: `Tag<TId>.Name` carries `[Required]`,
+  which constrains validation and the generated column rather than in-memory assignment.
+
+  The remarks describe the **supplied common types**, not a guarantee the interfaces impose on their
+  implementers: an implementation outside this library is free to be stricter, and the repository's
+  own test model does exactly that (`Blog.Name` is declared `required`).
+
+  This is a **documentation-only** change: the runtime behaviour and the public API signatures are
+  unchanged for v4.0. Making the properties `required` was rejected because it breaks construction
+  without an object initialiser; annotating them as `string?` was rejected because it pushes null
+  checks onto every consumer and weakens the model interfaces that exist to standardise these
+  property shapes; and a runtime guard on the setter was rejected because entities in this workspace
+  are plain data carriers with no business logic. Assigning a value before the entity is used or
+  persisted remains the caller's responsibility. (#131)
+
 ## v2.1 — NBGV Versioning and Release Pipeline
 
 ### Overview

@@ -37,6 +37,12 @@ public class ProductCategory : Category<ProductCategory> { }
 public class ProductTag : Tag<int> { }
 ```
 
+`= null!` above is deliberate. The model interfaces annotate `Name`, `Title`, `Id` and `Value` as
+non-nullable, but nothing assigns them at construction -- they hold `null` (or `default(T)`) until
+you assign a value or Entity Framework Core materialises the entity. The initialiser exists so the
+compiler accepts the EF Core materialisation path. See the XML remarks on `INamed.Name` and the
+[nullability contract](https://github.com/mrploch/ploch-data/blob/main/docs/data-model.md#nullability-contract) for the full contract.
+
 ## Documentation
 
-See the [Data Model Guide](../../docs/data-model.md) for the complete reference including interface hierarchy diagrams, audit patterns, and usage examples.
+See the [Data Model Guide](https://github.com/mrploch/ploch-data/blob/main/docs/data-model.md) for the complete reference including interface hierarchy diagrams, audit patterns, and usage examples.
