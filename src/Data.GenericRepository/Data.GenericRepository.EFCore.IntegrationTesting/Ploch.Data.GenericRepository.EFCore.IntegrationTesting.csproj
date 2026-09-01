@@ -27,11 +27,15 @@
 
   </ItemGroup>
 
-  <!-- Debug: ProjectReference to ploch-common for easier debugging -->
+  <!-- Default (UseProjectReferences=true, every configuration): ProjectReference to the sibling
+       ploch-common checkout, for easier debugging and for a consistent Ploch.Common across the
+       solution and the unpublished Ploch.TestingSupport.XUnit3.* test dependencies (issue #95). -->
   <ItemGroup Condition="'$(UseProjectReferences)' == 'true'">
     <ProjectReference Include="..\..\..\..\ploch-common\src\Common\Ploch.Common.csproj" />
   </ItemGroup>
-  <!-- Release: PackageReference (versions from Directory.Packages.props) -->
+  <!-- Opt-in via -p:UseProjectReferences=false: PackageReference (versions from
+       Directory.Packages.props). This is how the release workflows pack, so the published nuspecs
+       declare the central package versions rather than the sibling checkout's. -->
   <ItemGroup Condition="'$(UseProjectReferences)' != 'true'">
     <PackageReference Include="Ploch.Common" />
   </ItemGroup>

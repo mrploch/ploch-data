@@ -115,8 +115,9 @@ jobs:
           echo "::warning title=SonarCloud analysis skipped::SonarScanner Begin did not succeed (outcome: ${{ steps.sonar-begin.outcome }}), so no analysis was submitted for this run. Check the SonarScanner Begin step's log, and the steps before it — Begin reports 'skipped' when an earlier step failed."
 
       # Build and Test (always runs regardless of SonarCloud status).
-      # Release configuration is mandatory here: the packages produced by this
-      # build are what the final step publishes to NuGet.org.
+      # Release configuration is mandatory here so that what is tested matches what is packed.
+      # The packages published at the end of this workflow come from the dedicated pack step below,
+      # not from this build - see the comment there.
       - name: Build
         run: dotnet build ./Ploch.Data.slnx --no-restore -c Release
       - name: Test Coverage
@@ -147,9 +148,28 @@ jobs:
           path: |
             **/CoverageResults/*.xml
 
+      # Pack separately from the build above, with -p:UseProjectReferences=false.
+      #
+      # Build and test must use ProjectReferences: the Ploch.TestingSupport.XUnit3.* projects are not
+      # published as packages, so the test projects always reference the sibling ploch-common checkout
+      # by project. Mixing that with a Ploch.Common PackageReference is what broke `dotnet test -c
+      # Release` in issue #95, which is why UseProjectReferences now defaults to true.
+      #
+      # Packages must NOT be produced that way. A ProjectReference-resolved pack writes the sibling
+      # checkout's version (currently 4.0.x-prerelease) into the nuspec, and no Ploch.Common 4.x exists
+      # on nuget.org - the published packages would be unrestorable. Packing with
+      # -p:UseProjectReferences=false restores the central package versions from Directory.Packages.props
+      # instead. Pinning the ploch-common clone to a released tag is tracked in issue #67.
+      - name: Pack (package-resolved dependencies)
+        run: dotnet pack ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false -o ./artifacts/packages
+
       # Publish all NuGet packages to NuGet.org
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
       # If you retry a failed workflow, already published packages will be skipped without error.
+      # Only the artifacts directory is published: the bin/ directories also hold nupkgs from the
+      # Release build, and those carry ProjectReference-resolved dependency versions. The
+      # Ploch.Data.* filter keeps the sibling ploch-common packages, which packing the solution also
+      # produces via the unpublished Ploch.TestingSupport.XUnit3.* project references, out of the push.
       - name: Publish NuGet package
         env:
           # NUGET_API_KEY is the canonical secret name (issue #126). This workflow used to
@@ -157,13 +177,16 @@ jobs:
           # rotating the nuget.org key in one place left the other publishing with a stale
           # key - a 401 discovered at release time. Both workflows now read the same secret.
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        # Filter out any test packages rather than pushing a broad `./**/*.nupkg` glob,
-        # matching the selection release.yml already uses so the two publishing paths cannot
-        # diverge on what they consider publishable.
+        # Push only what the pack step above produced. A broad `find . -name '*.nupkg'` would
+        # also pick up the bin/ nupkgs from the Release build, which carry
+        # ProjectReference-resolved dependency versions, and the sibling ploch-common packages
+        # produced via the unpublished Ploch.TestingSupport.XUnit3.* project references - the
+        # unrestorable dependency graph issue #95 exists to prevent. The empty check keeps a
+        # silent no-op from passing as a successful publish.
         run: |
-          PKGS=$(find . -name '*.nupkg' -not -path '*/test*' -not -path '*/Test*')
+          PKGS=$(find ./artifacts/packages -name 'Ploch.Data.*.nupkg')
           if [ -z "$PKGS" ]; then
-            echo "::error::No .nupkg files were produced by the build."
+            echo "::error::No Ploch.Data.* .nupkg files were produced by the pack step."
             exit 1
           fi
           echo "$PKGS" | while read -r pkg; do

@@ -29,7 +29,7 @@ This note captures a maintainer-focused map of the repository: packages, structu
 
 - Target frameworks: libraries default to `net10.0` (some multi-target `net8.0`); nullable enabled; analyzers on with `TreatWarningsAsErrors` for test projects.
 - Versioning/packaging: Nerdbank.GitVersioning (`version.json`), SourceLink, central package management (`Directory.Packages.props`).
-- Builds/tests typically via `dotnet test Ploch.Data.slnx` or NUKE (`./build.sh`), but the solution uses conditional project references to a sibling **ploch-common** repo and shared props under `../mrploch-development/dependencies`. Without those checkouts, Debug/default builds fail with missing project/props files. Use `-p:UseProjectReferences=false` or Release with packaged dependencies when the shared repos are unavailable (packages must be in the feed).
+- Builds/tests typically via `dotnet test Ploch.Data.slnx` or NUKE (`./build.sh`), but the solution uses conditional project references to a sibling **ploch-common** repo and shared props under `../mrploch-development/dependencies`. Cross-repo references to **ploch-common** resolve as `ProjectReference` in *every* configuration, so a sibling checkout is mandatory - without it, builds fail with missing project/props files in Release as well as Debug. Pass `-p:UseProjectReferences=false` explicitly to fall back to packaged dependencies when the sibling checkout is unavailable (packages must be in the feed); note that `dotnet test` then fails on the assembly skew described in issue #95, because the unpublished `Ploch.TestingSupport.XUnit3.*` projects are always referenced by project.
 - Baseline in this workspace: `dotnet test Ploch.Data.slnx` currently fails because `../ploch-common` projects are absent.
 
 ## Sample Application Rules (critical)
@@ -40,13 +40,16 @@ This note captures a maintainer-focused map of the repository: packages, structu
 
 ## Conventions to Note
 
-- Default `UseProjectReferences=true` in non-Release builds (set in `Directory.Build.props`); makes local debugging depend on sibling repos.
+- Default `UseProjectReferences=true` in **every** configuration (set in `Directory.Build.props`); makes all local builds depend on sibling repos. NuGet packages are therefore packed with an explicit `-p:UseProjectReferences=false` in the release workflows, so the published nuspecs carry the central package versions rather than the sibling checkout's.
 - Tests use xUnit + FluentAssertions; coverlet included for coverage.
 - Central connection-string helper (`ConnectionString.FromJsonFile`) expects `appsettings.json` copied to output.
 - Auditing: entities implementing `IHasAuditProperties`/`IHasAuditTimeProperties` get timestamps set by `AuditEntityHandler`; `IUserInfoProvider` defaults to `NullUserInfoProvider`.
 
 ## Useful Commands
 
-- Restore/build/tests (packages available, no sibling repos): `dotnet test Ploch.Data.slnx -p:UseProjectReferences=false`
+- Restore/build (packages available, no sibling repos): `dotnet build Ploch.Data.slnx -p:UseProjectReferences=false`.
+  Build only — `dotnet test` is **not** available in this mode. The test projects reference the unpublished
+  `Ploch.TestingSupport.XUnit3.*` projects unconditionally, so running tests always requires the sibling
+  `ploch-common` checkout; without it the run fails to bind `Ploch.Common` (issue #95).
 - NUKE pipeline: `./build.sh` (uses `build/_build.csproj`)
 - SampleApp: `dotnet build Ploch.Data.SampleApp.slnx` (standalone package mode) or `dotnet build Ploch.Data.slnx -p:UsePlochProjectReferences=true` (solution mode)

@@ -75,10 +75,17 @@
          exactly match dependency ranges like >= 3.1.4-prerelease. This is expected
          with cross-repo PackageReference in Release builds. -->
     <NoWarn>$(NoWarn);NU1603</NoWarn>
-    <!-- Conditional cross-repo references: ProjectReference in Debug, PackageReference in Release.
-         Override from CLI with -p:UseProjectReferences=true/false -->
-    <UseProjectReferences Condition="'$(UseProjectReferences)' == '' and '$(Configuration)' != 'Release'">true</UseProjectReferences>
-    <UseProjectReferences Condition="'$(UseProjectReferences)' == '' and '$(Configuration)' == 'Release'">false</UseProjectReferences>
+    <!-- Cross-repo references to ploch-common resolve as ProjectReference in every configuration.
+         They used to switch to PackageReference in Release, which mixed two generations of
+         Ploch.Common in the test output: the Ploch.TestingSupport.XUnit3.* projects are not
+         published as packages, so the test projects always reference them - and therefore the
+         sibling checkout's Ploch.Common - by project, while the rest of the graph resolved
+         Ploch.Common from the 3.x package feed. The TestingSupport assemblies then failed to bind
+         at run time (issue #95). Consistency is only achievable in the ProjectReference direction
+         until those testing-support packages are published.
+         Override from CLI with -p:UseProjectReferences=false to restore PackageReference
+         resolution - note that this makes `dotnet test -c Release` fail again. -->
+    <UseProjectReferences Condition="'$(UseProjectReferences)' == ''">true</UseProjectReferences>
   </PropertyGroup>
   <!-- Nerdbank.GitVersioning and SourceLink for all projects -->
   <ItemGroup>
