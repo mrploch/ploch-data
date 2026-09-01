@@ -18,6 +18,9 @@ Migrations are kept in provider-specific projects.
 - **Unit of Work** -- atomic multi-entity transactions with `CommitAsync`
 - **SQLite design-time factory** for EF Core migrations tooling
 - **Integration tests** using `GenericRepositoryDataIntegrationTest<TDbContext>` base class
+- **A real CLI** built with [`Ploch.CommandLine.Spectre`](https://github.com/mrploch/ploch-commandline) -- `AppBuilder` wires
+  `Microsoft.Extensions.Hosting` (configuration + dependency injection) into a Spectre.Console.Cli command app, and every
+  operation is its own command class with its own options
 
 ## Project Structure
 
@@ -38,37 +41,79 @@ samples/SampleApp/
       SampleAppDbContextFactory.cs
     Data.SqlServer/           # SQL Server design-time factory
       SampleAppDbContextFactory.cs
-    ConsoleApp/               # Console application host
-      Program.cs
+    ConsoleApp/               # Console application host (Ploch.CommandLine.Spectre)
+      Program.cs              # AppBuilder host + command registration
+      Commands/               # One class per operation
+        SampleAppCommand.cs   # Base class opening a DI scope per command
+        DemoCommand.cs
+        SeedCommand.cs
+        ListArticlesCommand.cs
+        ShowArticleCommand.cs
+        SearchArticlesCommand.cs
+        UpdateArticleCommand.cs
+        ListAuthorsCommand.cs
+      Services/
+        SampleDataSeeder.cs   # Shared seeding logic used by 'seed' and 'demo'
   tests/
     IntegrationTests/         # Integration tests
       ArticleRepositoryTests.cs
       UnitOfWorkTests.cs
+      SampleAppCommandsTests.cs  # End-to-end tests for every CLI command
 ```
 
 ## Running the Console App
 
-First, you need to add migrations to the provider-specific project. By default, SQLite is used.
+The console app is a Spectre.Console CLI hosted by
+[`Ploch.CommandLine.Spectre`](https://github.com/mrploch/ploch-commandline). Each operation is a separate command class
+registered in `Program.cs` through `AppBuilder.Create(args).ConfigureCommandApp(...)`.
+
+```bash
+cd samples/SampleApp/src/ConsoleApp
+dotnet run -- --help
+```
+
+The SQLite database file (`sampleapp.db`, see `appsettings.json`) is created in the working directory the first time a
+command needs it, so no migration step is required to try the app out. To exercise the EF Core migrations tooling
+instead, see [Working with migrations](#working-with-migrations) below.
+
+### Commands
+
+| Command | What it demonstrates |
+|---|---|
+| `demo` | The full guided walkthrough -- seeding, eager loading, filtering, updating, pagination, and direct repository injection |
+| `seed` | Writing several entity types atomically through `IUnitOfWork.CommitAsync` |
+| `list` | `GetPageAsync` and `CountAsync` |
+| `show <ARTICLE-ID>` | `GetByIdAsync` with `onDbSet` eager loading (`Include` / navigation collections) |
+| `search <TEXT>` | `GetAllAsync` with a filter applied through `onDbSet` |
+| `update <ARTICLE-ID> --title <TITLE>` | `UpdateAsync` plus automatic `ModifiedTime` audit tracking |
+| `authors` | A directly injected `IReadRepositoryAsync<Author, int>` |
+
+```bash
+dotnet run -- demo --author "Ada Lovelace" --filler 20
+dotnet run -- seed --filler 50 --keep
+dotnet run -- list --all --page-size 4
+dotnet run -- show 1
+dotnet run -- search "Entity Framework"
+dotnet run -- update 1 --title "A better title"
+dotnet run -- authors
+```
+
+Every command supports `--help`, for example `dotnet run -- list --help`.
+
+`AppBuilder` also reads `DEV_RUNTIME`-prefixed environment variables. Set
+`DEV_RUNTIME_CONSOLE_EXIT_PAUSE=true` to make the host wait for Enter before exiting, which is convenient when the app
+is launched from a window that closes on exit. The pause is off unless that variable is set, so the commands are safe
+to script; if you see `Press Enter to exit...`, the variable is set somewhere in your environment.
+
+### Working with migrations
+
+Migrations live in the provider-specific projects. To create and apply them for SQLite:
 
 ```bash
 cd samples/SampleApp/src/Data.SQLite
 dotnet ef migrations add InitialCreate
-```
-
-Then, you need to create the database (it will be created in the Data.SQLite directory, ConsoleApp `appsettings.json` already points to it):
-
-```bash
 dotnet ef database update
 ```
-
-Finally, run the console app (the default connection string points to the `sampleapp.db` file in the Data.SQLite directory created above):
-
-```bash
-cd samples/SampleApp/src/ConsoleApp
-dotnet run
-```
-
-The console app creates sample entities (authors, categories, tags, articles), demonstrates CRUD operations, pagination, filtering, and eager loading.
 
 ## Running the Tests
 
@@ -201,4 +246,8 @@ public class ArticleRepositoryTests
 
 ## Documentation
 
-See the [full documentation](../../docs/README.md) for detailed guides on each library component.
+- [Ploch.Data documentation](../../docs/README.md) -- detailed guides on each library component.
+- [Ploch.CommandLine](https://github.com/mrploch/ploch-commandline) -- the `Ploch.CommandLine.Spectre` packages used to
+  build this CLI (`Ploch.CommandLine.Spectre`, plus the `.Serilog` and `.FluentValidation` companions).
+- [Spectre.Console.Cli](https://spectreconsole.net/cli/) -- the command, settings, and argument-parsing model that
+  `Ploch.CommandLine.Spectre` builds on.
