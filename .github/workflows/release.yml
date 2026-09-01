@@ -188,6 +188,21 @@ jobs:
       - name: Test
         run: dotnet test ./Ploch.Data.slnx --no-build -c Release --verbosity normal --logger "trx;LogFileName=TestOutputResults.trx" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
 
+      # Pack separately from the build above, with -p:UseProjectReferences=false.
+      #
+      # Build and test must use ProjectReferences: the Ploch.TestingSupport.XUnit3.* projects are not
+      # published as packages, so the test projects always reference the sibling ploch-common checkout
+      # by project. Mixing that with a Ploch.Common PackageReference is what broke `dotnet test -c
+      # Release` in issue #95, which is why UseProjectReferences now defaults to true.
+      #
+      # Packages must NOT be produced that way. A ProjectReference-resolved pack writes the sibling
+      # checkout's version (currently 4.0.x-prerelease) into the nuspec, and no Ploch.Common 4.x exists
+      # on nuget.org - the published packages would be unrestorable. Packing with
+      # -p:UseProjectReferences=false restores the central package versions from Directory.Packages.props
+      # instead. Pinning the ploch-common clone to a released tag is tracked in issue #67.
+      - name: Pack (package-resolved dependencies)
+        run: dotnet pack ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false -o ./artifacts/packages
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -235,9 +250,18 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
-          PKGS=$(find . -name '*.nupkg' -not -path '*/test*' -not -path '*/Test*')
+          # Only the artifacts directory: it holds the packages from the dedicated pack step, whose
+          # dependencies were resolved from packages rather than from the sibling ploch-common checkout.
+          # The bin/ directories also contain nupkgs from the Release build, and those carry the wrong
+          # dependency versions - they must never be published.
+          #
+          # The Ploch.Data.* filter is load-bearing: the test projects reference the unpublished
+          # Ploch.TestingSupport.XUnit3.* projects, so packing the solution also packs the ploch-common
+          # projects behind them (Ploch.Common, Ploch.Common.AppServices, ...). Those belong to another
+          # repository and must never be published from here.
+          PKGS=$(find ./artifacts/packages -name 'Ploch.Data.*.nupkg')
           if [ -z "$PKGS" ]; then
-            echo "::error::No .nupkg files were produced by the build."
+            echo "::error::No .nupkg files were produced by the pack step."
             exit 1
           fi
           echo "$PKGS" | while read pkg; do
@@ -250,7 +274,7 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
-          find . -name '*.snupkg' -not -path '*/test*' -not -path '*/Test*' | while read pkg; do
+          find ./artifacts/packages -name 'Ploch.Data.*.snupkg' | while read pkg; do
             echo "Publishing symbols $pkg"
             dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json --skip-duplicate -k "$NUGET_API_KEY"
           done
