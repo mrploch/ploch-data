@@ -20,11 +20,15 @@
 
 ### Changed
 
-- **`Ploch.Common` and friends move from 3.0.0 to 4.0.47** (requires
-  mrploch/mrploch-development#14). The shared `Ploch.Packages.props` drove both package families
-  from a single `PlochPackagesVersion`, which stopped being expressible once ploch-common released
-  4.0.47 while ploch-data remained on 3.x. It is now split into `PlochCommonPackagesVersion` and
-  `PlochDataPackagesVersion`.
+- **`Ploch.Common` and friends move from 3.0.0 to 4.0.47.** The version numbers themselves live in
+  the shared `mrploch-development/dependencies/Ploch.Packages.props`, which this repository imports,
+  so the bump is **a change in another repository** — mrploch/mrploch-development#15, tracking
+  mrploch/mrploch-development#14. Nothing in ploch-data declares those versions, which is why no
+  `.props` file changes here.
+
+  That file drove both package families from a single `PlochPackagesVersion`, which stopped being
+  expressible once ploch-common released 4.0.47 while ploch-data remained on 3.x. It is now split
+  into `PlochCommonPackagesVersion` and `PlochDataPackagesVersion`.
 
   Verified by running the release pack path (`dotnet pack -p:UseProjectReferences=false`) and
   reading the resulting nuspecs. Before:
