@@ -46,4 +46,4 @@
   ```
 
   Without this, `Ploch.Data` 4.0.0 would have shipped declaring a dependency on `Ploch.Common`
-  **3.0.0** — three majors behind, and missing every fix in the 4.0 release.
+  **3.0.0** — a full major version behind, missing every fix in the 4.0 release.
