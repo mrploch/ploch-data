@@ -53,8 +53,18 @@ jobs:
       # Directory.Packages.props imports from mrploch-development.
       - name: Clone mrploch-development (shared build config)
         run: git clone --depth 1 https://github.com/mrploch/mrploch-development.git ../mrploch-development
+      # NOT --depth 1, unlike mrploch-development above. ploch-common versions itself with
+      # Nerdbank.GitVersioning, which walks history to compute the commit height, and a
+      # shallow clone makes that impossible:
+      #
+      #   error MSB4018: Nerdbank.GitVersioning.GitException: Shallow clone lacks the objects
+      #     required to calculate version height. Use full clones or clones with a history at
+      #     least as deep as the last version height resetting change.
+      #
+      # mrploch-development carries no NBGV, so --depth 1 is correct there and wrong here.
+      # build-dotnet.yml already clones ploch-common in full for this reason.
       - name: Clone ploch-common (project references)
-        run: git clone --depth 1 https://github.com/mrploch/ploch-common.git ../ploch-common
+        run: git clone https://github.com/mrploch/ploch-common.git ../ploch-common
 
       - name: Setup .NET
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
