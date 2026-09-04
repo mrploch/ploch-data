@@ -4,6 +4,9 @@
     <LangVersion>12</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- Overrides the solution-wide default in Directory.Build.props.
+         Plain entity interfaces and base types - no Entity Framework Core dependency. -->
+    <PackageTags>ploch;data;model;entities;poco;abstractions;dotnet</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

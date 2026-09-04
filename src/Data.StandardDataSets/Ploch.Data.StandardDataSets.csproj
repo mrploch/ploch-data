@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- Overrides the solution-wide default in Directory.Build.props.
+         Reference data sets - no Entity Framework Core or repository surface. -->
+    <PackageTags>ploch;data;seed-data;reference-data;lookup;countries;regions;dotnet</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
