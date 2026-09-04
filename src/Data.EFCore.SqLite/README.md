@@ -46,4 +46,4 @@ services.AddDbContext<MyDbContext>(configurator.Configure);
 
 ## Documentation
 
-See the [Data Project Setup Guide](../../docs/data-project-setup.md) for full provider project setup and the [Integration Testing Guide](../../docs/integration-testing.md) for testing patterns.
+See the [Data Project Setup Guide](https://github.com/mrploch/ploch-data/blob/main/docs/data-project-setup.md) for full provider project setup and the [Integration Testing Guide](https://github.com/mrploch/ploch-data/blob/main/docs/integration-testing.md) for testing patterns.

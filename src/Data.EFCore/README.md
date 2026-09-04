@@ -42,4 +42,4 @@ public class MyDbContextFactory : BaseDbContextFactory<MyDbContext, MyDbContextF
 
 ## Documentation
 
-See the [Data Project Setup Guide](../../docs/data-project-setup.md) for step-by-step instructions and the [Architecture Overview](../../docs/architecture.md) for package details.
+See the [Data Project Setup Guide](https://github.com/mrploch/ploch-data/blob/main/docs/data-project-setup.md) for step-by-step instructions and the [Architecture Overview](https://github.com/mrploch/ploch-data/blob/main/docs/architecture.md) for package details.

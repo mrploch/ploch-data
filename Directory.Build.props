@@ -5,9 +5,11 @@
     <Authors>Kris Ploch</Authors>
     <Company>Ploch</Company>
     <Product>Ploch.Data</Product>
-    <PackageProjectUrl>https://github.com/mrploch/ploch-data</PackageProjectUrl>
+    <PackageProjectUrl>https://data.github.ploch.dev/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mrploch/ploch-data.git</RepositoryUrl>
     <Description>Generic Repository, Unit of Work and Data Utilities</Description>
+    <!-- Default tags for every package; a project may override with its own PackageTags. -->
+    <PackageTags>ploch;data;repository;generic-repository;unit-of-work;entity-framework-core;efcore;orm;dotnet</PackageTags>
     <Copyright>Kris Ploch $([System.DateTime]::Now.Year)</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>

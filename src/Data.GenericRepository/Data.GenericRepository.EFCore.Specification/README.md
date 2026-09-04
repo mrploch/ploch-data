@@ -39,4 +39,4 @@ var activeProducts = await repository.GetAllBySpecificationAsync(
 
 ## Documentation
 
-See the [Generic Repository Guide](../../../docs/generic-repository.md#specification-pattern-ardalisspecification) for detailed specification patterns.
+See the [Generic Repository Guide](https://github.com/mrploch/ploch-data/blob/main/docs/generic-repository.md#specification-pattern-ardalisspecification) for detailed specification patterns.

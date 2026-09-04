@@ -8,12 +8,12 @@ The generic [Repository](https://martinfowler.com/eaaCatalog/repository.html) an
 
 | Package | Description |
 |---------|-------------|
-| [Ploch.Data.GenericRepository](Data.GenericRepository/) | Provider-agnostic repository and UoW interfaces |
-| [Ploch.Data.GenericRepository.EFCore](Data.GenericRepository.EFCore/) | EF Core implementations and manual DI registration (`AddRepositories`) |
-| [Ploch.Data.GenericRepository.EFCore.SqLite](Data.GenericRepository.EFCore.SqLite/) | One-call DI registration for SQLite (`AddDbContextWithRepositories`) |
-| [Ploch.Data.GenericRepository.EFCore.SqlServer](Data.GenericRepository.EFCore.SqlServer/) | One-call DI registration for SQL Server (`AddDbContextWithRepositories`) |
-| [Ploch.Data.GenericRepository.EFCore.IntegrationTesting](Data.GenericRepository.EFCore.IntegrationTesting/) | Integration test base classes |
-| [Ploch.Data.GenericRepository.EFCore.Specification](Data.GenericRepository.EFCore.Specification/) | Ardalis.Specification support |
+| [Ploch.Data.GenericRepository](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository/) | Provider-agnostic repository and UoW interfaces |
+| [Ploch.Data.GenericRepository.EFCore](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore/) | EF Core implementations and manual DI registration (`AddRepositories`) |
+| [Ploch.Data.GenericRepository.EFCore.SqLite](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/) | One-call DI registration for SQLite (`AddDbContextWithRepositories`) |
+| [Ploch.Data.GenericRepository.EFCore.SqlServer](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/) | One-call DI registration for SQL Server (`AddDbContextWithRepositories`) |
+| [Ploch.Data.GenericRepository.EFCore.IntegrationTesting](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTesting/) | Integration test base classes |
+| [Ploch.Data.GenericRepository.EFCore.Specification](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.Specification/) | Ardalis.Specification support |
 
 ## Motivation
 
@@ -47,8 +47,8 @@ public class MyTransactionService(IUnitOfWork unitOfWork)
 }
 ```
 
-To switch between SQLite and SQL Server, change the package reference and update `appsettings.json` -- no code changes needed. See the [Dependency Injection Guide](../../docs/dependency-injection.md) for details.
+To switch between SQLite and SQL Server, change the package reference and update `appsettings.json` -- no code changes needed. See the [Dependency Injection Guide](https://github.com/mrploch/ploch-data/blob/main/docs/dependency-injection.md) for details.
 
 ## Documentation
 
-See the [Generic Repository Guide](../../docs/generic-repository.md) for the full reference.
+See the [Generic Repository Guide](https://github.com/mrploch/ploch-data/blob/main/docs/generic-repository.md) for the full reference.

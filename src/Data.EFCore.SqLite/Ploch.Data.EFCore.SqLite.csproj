@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
   </PropertyGroup>
 
@@ -29,4 +30,7 @@
     <None Remove="Ploch.Data.EFCore.SqLite.csproj.DotSettings" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include=".\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>

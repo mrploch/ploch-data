@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
   </PropertyGroup>
 
@@ -16,5 +17,8 @@
 
   <ItemGroup>
     <None Remove="Ploch.Data.EFCore.IntegrationTesting.csproj.DotSettings" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
