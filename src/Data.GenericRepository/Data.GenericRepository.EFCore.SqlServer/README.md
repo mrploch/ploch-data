@@ -13,7 +13,7 @@ builder.Services.AddDbContextWithRepositories<MyDbContext>();
 
 That registers the `DbContext` against SQL Server, every repository interface, and `IUnitOfWork`.
 To move to SQLite, swap this package for
-[.SqLite](https://www.nuget.org/packages/Ploch.Data.GenericRepository.EFCore.SqLite/) and update `appsettings.json` —
+[.SqLite](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/) and update `appsettings.json` —
 no code changes needed.
 
 ## Documentation
