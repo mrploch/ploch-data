@@ -78,10 +78,53 @@ jobs:
       # Building first and reading the output sidesteps both. See issue #139.
       # -p:UsePlochProjectReferences=true is load-bearing, not cosmetic: it makes the
       # SampleApp consume the sibling clones via ProjectReference instead of the published
-      # Ploch.* packages. Without it, restore would need an authenticated GitHub Packages
-      # feed that this workflow deliberately does not configure. build-dotnet.yml passes
-      # the same property for the same reason.
+      # Ploch.Data.* and Ploch.Common.* packages. build-dotnet.yml passes the same property
+      # for the same reason.
+      #
+      # It is not sufficient on its own, though. The SampleApp also references
+      # Ploch.CommandLine.Spectre (added in #154), which lives in ploch-commandline - a
+      # repository this workflow does not clone - and is published only to GitHub Packages,
+      # never to nuget.org. So that one package must come from the authenticated feed
+      # regardless of the property, and the step below configures it. Before that step
+      # existed the build failed with:
+      #
+      #   error NU1301: Failed to retrieve information about 'Ploch.CommandLine.Spectre'
+      #     from remote source 'https://nuget.pkg.github.com/mrploch/download/...'
+      #     Response status code does not indicate success: 401 (Unauthorized).
+      #
+      # This was invisible until #164 fixed the Pages source and the environment branch
+      # policy, because the job had been failing at the environment gate with zero steps
+      # executed and never reached the build at all.
+      #
+      # Mirrors build-dotnet.yml. No secret is written to disk: NuGet expands
+      # %GH_PACKAGES_TOKEN% at restore time, and that variable is set only on the build step
+      # below, so the later docfx step cannot resolve the token out of this file.
+      - name: Add GitHub Packages Source
+        run: |
+          CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
+          mkdir -p "$(dirname "$CONFIG")"
+          # The sibling repositories cloned above have no NuGet.Config of their own, so they
+          # resolve their packages through this file. It must therefore still declare the
+          # public sources, not only the credentials, or their restore fails with NU1100.
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<configuration>'
+            echo '  <packageSources>'
+            echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
+            echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
+            echo '  </packageSources>'
+            echo '  <packageSourceCredentials>'
+            echo '    <github>'
+            echo '      <add key="Username" value="kploch" />'
+            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+            echo '    </github>'
+            echo '  </packageSourceCredentials>'
+            echo '</configuration>'
+          } > "$CONFIG"
+
       - name: Build the solution (docfx reads the compiled output)
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet build ./Ploch.Data.slnx -c Release -p:UsePlochProjectReferences=true
 
       - name: Build documentation site
