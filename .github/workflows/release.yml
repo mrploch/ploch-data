@@ -493,8 +493,19 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
           RELEASED_VERSION: ${{ steps.version.outputs.nuget_version }}
+          REPO_URL: https://github.com/${{ github.repository }}.git
         run: |
           set -euo pipefail
+
+          # The checkout runs with persist-credentials: false (issue #128), so there is no
+          # token in .git/config and every push must supply its own. The credentialed remote
+          # is scrubbed on EVERY exit path, including a failed push, so the PAT never
+          # outlives this step. This mirrors the tag push above.
+          #
+          # ploch-common's equivalent step needs none of this because its checkout leaves the
+          # job token in .git/config - porting that step verbatim left this push
+          # unauthenticated.
+          trap 'git remote set-url origin "$REPO_URL"' EXIT
 
           git add version.json
           git add change-log/ || true
@@ -524,9 +535,17 @@ jobs:
           # overwritten. The branch holds only generated bookkeeping and is owned
           # exclusively by this workflow, so a rewrite here discards nobody's work.
           BRANCH="chore/post-release-${RELEASED_VERSION}"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@${REPO_URL#https://}"
           git fetch origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}" 2>/dev/null || true
           git push --force-with-lease origin "HEAD:refs/heads/${BRANCH}"
+          git remote set-url origin "$REPO_URL"
 
+          # An OPEN pull request is updated by the push above and needs nothing further.
+          # A previously CLOSED one is not reopened silently: closing it was a deliberate act,
+          # so a fresh pull request is opened instead. `gh pr create` is allowed to do that
+          # while a closed PR exists for the same head ref, but it is guarded below anyway so
+          # that an unexpected refusal reports the existing pull request rather than failing
+          # the release after the packages are already public.
           EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
           if [ -n "$EXISTING" ]; then
             PR_URL=$(gh pr view "$EXISTING" --json url --jq .url)
@@ -542,12 +561,23 @@ jobs:
               "This arrives as a pull request rather than a direct push because branch protection requires one - see #166." \
               "" \
               "Refs: #166")
-            PR_URL=$(gh pr create \
-              --base "${GITHUB_REF_NAME}" \
-              --head "$BRANCH" \
-              --title "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease after ${RELEASED_VERSION}" \
-              --body "$BODY")
-            echo "Opened ${PR_URL}"
+            if PR_URL=$(gh pr create \
+                 --base "${GITHUB_REF_NAME}" \
+                 --head "$BRANCH" \
+                 --title "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease after ${RELEASED_VERSION}" \
+                 --body "$BODY"); then
+              echo "Opened ${PR_URL}"
+            else
+              # The branch is pushed and the bookkeeping is safe either way; surface whatever
+              # pull request already exists rather than failing a release whose packages are
+              # already published.
+              PR_URL=$(gh pr list --head "$BRANCH" --state all --json url --jq '.[0].url // empty')
+              if [ -z "$PR_URL" ]; then
+                echo "::error::Could not open a pull request for ${BRANCH}, and no existing one was found. The branch is pushed - open the pull request by hand."
+                exit 1
+              fi
+              echo "::warning::Could not open a new pull request; ${PR_URL} already exists for ${BRANCH} and now carries the update."
+            fi
           fi
 
           {
