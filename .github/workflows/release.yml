@@ -12,9 +12,25 @@ on:
         required: false
         type: string
 
+# Serialise runs that release the same version. Two concurrent dispatches would
+# otherwise race on the shared chore/post-release-<version> branch and on the tag,
+# and a release is never something to run twice at once anyway. cancel-in-progress
+# is deliberately false: a run that has already pushed packages to nuget.org must be
+# allowed to finish its bookkeeping rather than be killed part-way.
+concurrency:
+  group: release-${{ inputs.release_version }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   packages: write
+  # The post-release bookkeeping is landed as a pull request rather than a direct
+  # push, because branch protection on main forbids the latter (#166).
+  pull-requests: write
+  # Required for NuGet Trusted Publishing: lets the job request a GitHub OIDC
+  # token that NuGet/login exchanges for a short-lived nuget.org API key.
+  # Without this, NuGet/login fails with 403.
+  id-token: write
 
 jobs:
   release:
@@ -58,6 +74,26 @@ jobs:
             exit 1
           fi
           echo "GH_TOKEN is valid"
+
+      # Validated here rather than at push time so a misconfiguration fails in seconds
+      # instead of after a full build+test run.
+      - name: Validate NuGet Trusted Publishing configuration
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          if [ -z "$NUGET_USER" ]; then
+            echo "::error::Repository/organization variable NUGET_USER is not set. It must contain the nuget.org account name (profile name, NOT the email address) that owns the trusted publishing policy."
+            exit 1
+          fi
+          # Supplying the sign-in email instead of the profile name is the likeliest
+          # misconfiguration, and nuget.org rejects it only at token-exchange time.
+          case "$NUGET_USER" in
+            *@*)
+              echo "::error::NUGET_USER looks like an email address. It must be the nuget.org profile name that owns the trusted publishing policy."
+              exit 1
+              ;;
+          esac
+          echo "NuGet Trusted Publishing user: $NUGET_USER"
 
       # Use the default GITHUB_TOKEN for checkout — it always works and has read access.
       # GH_TOKEN (PAT) is configured separately, inside each push step, because it is the
@@ -245,10 +281,27 @@ jobs:
           fi
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
+      # Exchange the GitHub OIDC token for a short-lived nuget.org API key.
+      #
+      # Placed immediately before the push steps on purpose: the issued key is valid for
+      # only one hour, so requesting it before a full build and test run risks expiry on a
+      # slow release.
+      #
+      # The trusted publishing policy on nuget.org is bound to (owner, repo, workflow
+      # FILENAME). It matches `release.yml` — renaming this file breaks publishing.
+      - name: Authenticate to NuGet.org via Trusted Publishing (OIDC)
+        id: nuget-login
+        if: success()
+        # Pinned to a full commit SHA: the action runs at the publishing boundary with
+        # id-token: write, and the floating v1 tag is mutable (githubactions:S7637).
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: ${{ vars.NUGET_USER }}
+
       - name: Publish NuGet packages to NuGet.org
         if: success()
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
           # Only the artifacts directory: it holds the packages from the dedicated pack step, whose
           # dependencies were resolved from packages rather than from the sibling ploch-common checkout.
@@ -272,7 +325,7 @@ jobs:
       - name: Publish symbol packages to NuGet.org
         if: success()
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
           find ./artifacts/packages -name 'Ploch.Data.*.snupkg' | while read pkg; do
             echo "Publishing symbols $pkg"
@@ -415,35 +468,94 @@ jobs:
             mv change-log/*.md change-log/archive/ 2>/dev/null || true
           fi
 
-      # Idempotent commit: only commit if there are staged changes.
-      # Push may fail if branch protection requires PRs — this is non-fatal.
-      # If push fails, a warning is emitted and the version bump must be done manually via PR.
-      - name: Commit and push next development version
-        id: version-bump
+      # The bookkeeping lands via a PULL REQUEST, not a direct push.
+      #
+      # WHY (#166): branch protection on main rejects a direct push with
+      #   remote: - Required status check "SonarCloud Code Analysis" is expected.
+      #   ! [remote rejected] main -> main (protected branch hook declined)
+      # `enforce_admins: false` does NOT cover the pull-request requirement - that is
+      # governed separately by `bypass_pull_request_allowances`, which is unset on this
+      # branch, so *nobody* may push directly, admin token or not. This sank the final
+      # step of the release run on 2026-03-14 (run 23076934823).
+      #
+      # The previous version of this step downgraded that rejection to a ::warning:: and
+      # carried on, so the run went GREEN while the bookkeeping silently did not land -
+      # leaving version.json claiming the released version and the change-log entries
+      # unarchived, which would duplicate every one of them into the next release's
+      # generated notes. A green run that did half its job is worse than a red one.
+      #
+      # Opening a pull request needs no elevated permission and cannot be refused by
+      # branch protection, so the release finishes green and the bookkeeping waits for a
+      # normal review.
+      - name: Open a pull request with the next development version
         if: success()
         env:
-          NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
-          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          REPO_URL: https://github.com/${{ github.repository }}.git
+          NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
+          RELEASED_VERSION: ${{ steps.version.outputs.nuget_version }}
         run: |
-          # As above: scrub the credentialed remote on every exit path (issue #128).
-          trap 'git remote set-url origin "$REPO_URL"' EXIT
+          set -euo pipefail
+
           git add version.json
           git add change-log/ || true
           git add samples/SampleApp/Directory.Packages.props || true
-          # An `A && B || C` list swallows a failed commit: C runs, the list still succeeds,
-          # and the step would go on to push WITHOUT the next development version committed.
-          # An explicit if/else stops the step instead.
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development
 
-          Update SampleApp to reference stable ${NUGET_VERSION} packages." || exit 1
+          if git diff --cached --quiet; then
+            echo "No bookkeeping changes to land; nothing to open a pull request for."
+            echo "No post-release bookkeeping was required." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@${REPO_URL#https://}"
-          if ! git push origin main 2>&1; then
-            echo "::warning::Could not push version bump directly to main (branch protection). Create a PR to bump version.json to ${NEXT_DEV_VERSION}-prerelease manually."
-            echo "push_failed=true" >> $GITHUB_OUTPUT
+
+          git commit -m "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease for development" \
+                     -m "Post-release bookkeeping for ${RELEASED_VERSION}, applied via pull request because branch protection forbids a direct push (#166). Also points the SampleApp at the stable ${RELEASED_VERSION} packages." \
+                     -m "Refs: #166"
+
+          # One branch per released version, so re-running the same release updates the
+          # same pull request instead of accumulating them.
+          #
+          # The head ref is UPDATED IN PLACE, never deleted and recreated. GitHub closes a
+          # pull request automatically when its head ref is deleted, so a delete would shut
+          # the very PR this step is meant to refresh - and the `gh pr list --state open`
+          # lookup below would then miss it and open a duplicate, losing the original
+          # review and check history.
+          #
+          # --force-with-lease rather than --force: the push is rejected if the remote
+          # branch moved since it was fetched, so a concurrent run cannot be silently
+          # overwritten. The branch holds only generated bookkeeping and is owned
+          # exclusively by this workflow, so a rewrite here discards nobody's work.
+          BRANCH="chore/post-release-${RELEASED_VERSION}"
+          git fetch origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}" 2>/dev/null || true
+          git push --force-with-lease origin "HEAD:refs/heads/${BRANCH}"
+
+          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            PR_URL=$(gh pr view "$EXISTING" --json url --jq .url)
+            echo "Pull request #${EXISTING} was already open for ${BRANCH}; it now carries the update."
+          else
+            BODY=$(printf '%s\n' \
+              "Post-release bookkeeping for **${RELEASED_VERSION}**, opened automatically by the release workflow." \
+              "" \
+              "- \`version.json\` bumped to \`${NEXT_DEV_VERSION}-prerelease\`" \
+              "- Consumed \`change-log/*.md\` entries moved into \`change-log/archive/\`, so they are not duplicated into the next release's generated notes" \
+              "- \`samples/SampleApp/Directory.Packages.props\` pointed at the stable \`${RELEASED_VERSION}\` packages" \
+              "" \
+              "This arrives as a pull request rather than a direct push because branch protection requires one - see #166." \
+              "" \
+              "Refs: #166")
+            PR_URL=$(gh pr create \
+              --base "${GITHUB_REF_NAME}" \
+              --head "$BRANCH" \
+              --title "chore(release): Bump version to ${NEXT_DEV_VERSION}-prerelease after ${RELEASED_VERSION}" \
+              --body "$BODY")
+            echo "Opened ${PR_URL}"
           fi
+
+          {
+            echo "### Post-release bookkeeping"
+            echo
+            echo "Released **${RELEASED_VERSION}**; next development version **${NEXT_DEV_VERSION}-prerelease**."
+            echo
+            echo "Bookkeeping pull request: ${PR_URL}"
+            echo
+            echo "Merge it to bring \`${GITHUB_REF_NAME}\` in line with the published release."
+          } >> "$GITHUB_STEP_SUMMARY"
