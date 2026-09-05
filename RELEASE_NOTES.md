@@ -52,10 +52,9 @@
   defaults to `true` in all configurations; pass `-p:UseProjectReferences=false` to restore
   `PackageReference` resolution. Because a `ProjectReference`-resolved pack would write the sibling
   checkout's `Ploch.Common` version into the nuspec — a version that does not exist on nuget.org —
-  `release.yml` and `deploy-nuget-org.yml` now pack in a dedicated step with
-  `-p:UseProjectReferences=false` and publish only from that output, so the shipped packages keep
-  declaring the central `Ploch.Common` versions. Pinning the `ploch-common` clone to a released tag
-  remains tracked in #67. (#95)
+  `release.yml` now packs in a dedicated step with `-p:UseProjectReferences=false` and publishes
+  only from that output, so the shipped packages keep declaring the central `Ploch.Common`
+  versions. Pinning the `ploch-common` clone to a released tag remains tracked in #67. (#95)
 - **`CollectionStringSplitConverter<TValue>` has a new, tagged wire format that stores what you gave
   it** — four defects are fixed together because all four need the same format revision. An empty
   `string` element is no longer indistinguishable from `null` (`["a", ""]` used to reload as
