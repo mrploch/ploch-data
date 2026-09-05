@@ -33,9 +33,13 @@
   The trusted publishing policy binds to `(owner, repo, workflow filename)` and matches
   `release.yml`. **Renaming that file breaks publishing.**
 
-- **A `concurrency` group keyed on the release version** now serialises runs releasing the same
-  version. `cancel-in-progress` is deliberately `false`: a run that has already pushed packages to
-  nuget.org must be allowed to finish its bookkeeping rather than be killed part-way.
+- **A `concurrency` group now serialises every release run**, not only those releasing the same
+  version. The state a release contends for is not version-scoped — `change-log/` (whose entries
+  the notes are generated from, and which are then archived), `version.json`, and the SampleApp
+  package version — so two different versions running at once would interleave them.
+  `cancel-in-progress` is deliberately `false`: a run that has already pushed packages to
+  nuget.org must be allowed to finish its bookkeeping rather than be killed part-way, because
+  those packages cannot be withdrawn.
 
 ### Removed
 

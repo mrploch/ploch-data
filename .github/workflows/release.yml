@@ -12,13 +12,19 @@ on:
         required: false
         type: string
 
-# Serialise runs that release the same version. Two concurrent dispatches would
-# otherwise race on the shared chore/post-release-<version> branch and on the tag,
-# and a release is never something to run twice at once anyway. cancel-in-progress
-# is deliberately false: a run that has already pushed packages to nuget.org must be
-# allowed to finish its bookkeeping rather than be killed part-way.
+# Serialise ALL release runs, not just those releasing the same version.
+#
+# Keying on release_version would have let 4.0.0 and 4.0.1 run at once, and the state
+# they contend for is not version-scoped: change-log/ (whose entries the release notes
+# are generated from, then archived), version.json, and the SampleApp package version.
+# Two concurrent runs would interleave those. The per-version chore/post-release-<version>
+# branch and the tag are the only genuinely version-scoped resources.
+#
+# cancel-in-progress is deliberately false: a run that has already pushed packages to
+# nuget.org must be allowed to finish its bookkeeping rather than be killed part-way,
+# because those packages cannot be withdrawn.
 concurrency:
-  group: release-${{ inputs.release_version }}
+  group: release
   cancel-in-progress: false
 
 permissions:
@@ -530,14 +536,31 @@ jobs:
           # lookup below would then miss it and open a duplicate, losing the original
           # review and check history.
           #
-          # --force-with-lease rather than --force: the push is rejected if the remote
-          # branch moved since it was fetched, so a concurrent run cannot be silently
-          # overwritten. The branch holds only generated bookkeeping and is owned
-          # exclusively by this workflow, so a rewrite here discards nobody's work.
+          # The lease is taken against the remote tip as it stands immediately before the
+          # push, captured with ls-remote. Note what that does and does not buy:
+          #
+          #   - It does NOT protect against a human commit pushed to this branch minutes
+          #     earlier. Nothing here holds an older snapshot to compare against, so a
+          #     plain `git fetch` straight into the tracking ref followed by
+          #     --force-with-lease would refresh the very value the lease compares to and
+          #     degrade silently into --force. That is the classic footgun and it is why
+          #     the expected SHA is passed explicitly rather than left implicit.
+          #   - It DOES stop two runs that slipped past the concurrency group from
+          #     clobbering each other between the ls-remote and the push.
+          #
+          # The real guarantees that this branch is safe to rewrite are that it is named
+          # after the released version, holds only generated bookkeeping, and is written
+          # exclusively by this workflow.
           BRANCH="chore/post-release-${RELEASED_VERSION}"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@${REPO_URL#https://}"
-          git fetch origin "refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}" 2>/dev/null || true
-          git push --force-with-lease origin "HEAD:refs/heads/${BRANCH}"
+          REMOTE_SHA=$(git ls-remote origin "refs/heads/${BRANCH}" | cut -f1)
+          if [ -n "$REMOTE_SHA" ]; then
+            git push --force-with-lease="refs/heads/${BRANCH}:${REMOTE_SHA}" origin "HEAD:refs/heads/${BRANCH}"
+          else
+            # First run for this version: the branch does not exist yet, so there is
+            # nothing to lease against and nothing to overwrite.
+            git push origin "HEAD:refs/heads/${BRANCH}"
+          fi
           git remote set-url origin "$REPO_URL"
 
           # An OPEN pull request is updated by the push above and needs nothing further.
@@ -546,9 +569,13 @@ jobs:
           # while a closed PR exists for the same head ref, but it is guarded below anyway so
           # that an unexpected refusal reports the existing pull request rather than failing
           # the release after the packages are already public.
-          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          # `|| true` on the lookups is load-bearing under `set -e`: a bare assignment takes
+          # the exit status of its command substitution, so a transient `gh` failure - an API
+          # blip or a rate limit - would abort the step here, AFTER the branch has been
+          # pushed and BEFORE the ::error:: path below can explain what to do by hand.
+          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty' || true)
           if [ -n "$EXISTING" ]; then
-            PR_URL=$(gh pr view "$EXISTING" --json url --jq .url)
+            PR_URL=$(gh pr view "$EXISTING" --json url --jq .url || true)
             echo "Pull request #${EXISTING} was already open for ${BRANCH}; it now carries the update."
           else
             BODY=$(printf '%s\n' \
@@ -568,15 +595,16 @@ jobs:
                  --body "$BODY"); then
               echo "Opened ${PR_URL}"
             else
-              # The branch is pushed and the bookkeeping is safe either way; surface whatever
-              # pull request already exists rather than failing a release whose packages are
-              # already published.
-              PR_URL=$(gh pr list --head "$BRANCH" --state all --json url --jq '.[0].url // empty')
+              # Only an OPEN pull request counts as recovery. Querying `--state all` here
+              # would match a long-closed or already-merged PR for the same branch name and
+              # report success while nothing can actually land the bookkeeping - reinstating
+              # the exact silent half-success this step exists to eliminate.
+              PR_URL=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url // empty' || true)
               if [ -z "$PR_URL" ]; then
-                echo "::error::Could not open a pull request for ${BRANCH}, and no existing one was found. The branch is pushed - open the pull request by hand."
+                echo "::error::Could not open a pull request for ${BRANCH}, and no OPEN one exists. The branch is pushed and the packages are already published - open the pull request by hand against ${GITHUB_REF_NAME} to land the bookkeeping."
                 exit 1
               fi
-              echo "::warning::Could not open a new pull request; ${PR_URL} already exists for ${BRANCH} and now carries the update."
+              echo "::warning::Could not open a new pull request; the open ${PR_URL} already exists for ${BRANCH} and now carries the update."
             fi
           fi
 
