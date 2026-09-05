@@ -43,4 +43,4 @@ public class MyDbContextTests : DataIntegrationTest<MyDbContext>
 
 ## Documentation
 
-See the [Integration Testing Guide](../../docs/integration-testing.md) for detailed patterns, examples, and testing strategies.
+See the [Integration Testing Guide](https://github.com/mrploch/ploch-data/blob/main/docs/integration-testing.md) for detailed patterns, examples, and testing strategies.

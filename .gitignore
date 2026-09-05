@@ -394,7 +394,12 @@ codestream.xml
 
 # Local dev artefacts
 identifier.sqlite
+# Match SQLite database FILES only. A bare `*.sqlite` also matches directories, and with
+# core.ignorecase=true (the Windows default) it silently ignored the whole of
+# src/Data.EFCore.SqLite/ and src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/,
+# so any newly added file in those projects was dropped from commits without warning.
 *.sqlite
+!**/*.SqLite/
 temp-research-*.md
 temp-*.md
 

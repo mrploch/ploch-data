@@ -52,5 +52,5 @@ public class MyService(IReadWriteRepositoryAsync<Product, int> repo)
 
 ## Documentation
 
-- [Dependency Injection Guide](../../../docs/dependency-injection.md) -- all DI registration approaches, provider switching, and lifecycle plugins
-- [Generic Repository Guide](../../../docs/generic-repository.md) -- all read/write operations, Unit of Work patterns, specifications, and error handling
+- [Dependency Injection Guide](https://github.com/mrploch/ploch-data/blob/main/docs/dependency-injection.md) -- all DI registration approaches, provider switching, and lifecycle plugins
+- [Generic Repository Guide](https://github.com/mrploch/ploch-data/blob/main/docs/generic-repository.md) -- all read/write operations, Unit of Work patterns, specifications, and error handling

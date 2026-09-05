@@ -1,5 +1,5 @@
 [![Build, Test and Analyze .NET](https://github.com/mrploch/ploch-data/actions/workflows/build-dotnet.yml/badge.svg)](https://github.com/mrploch/ploch-data/actions/workflows/build-dotnet.yml)
-[![pages-build-deployment](https://github.com/mrploch/ploch-data/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/mrploch/ploch-data/actions/workflows/pages/pages-build-deployment)
+[![Publish Documentation](https://github.com/mrploch/ploch-data/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/mrploch/ploch-data/actions/workflows/publish-docs.yml)
 [![Qodana](https://github.com/mrploch/ploch-data/actions/workflows/code_quality.yml/badge.svg)](https://github.com/mrploch/ploch-data/actions/workflows/code_quality.yml)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=alert_status&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
@@ -27,6 +27,8 @@
 [ef-d]: https://img.shields.io/nuget/dt/Ploch.Data.EFCore.svg
 
 # Ploch.Data Libraries
+
+**[Documentation](https://data.github.ploch.dev/)** — API reference and guides.
 
 A set of .NET libraries for building data access layers using standardised entity models, the Generic Repository and Unit of Work patterns, and Entity Framework Core.
 

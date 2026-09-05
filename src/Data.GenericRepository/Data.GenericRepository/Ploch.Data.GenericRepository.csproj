@@ -2,6 +2,13 @@
   <PropertyGroup>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- Overrides the solution-wide default in Directory.Build.props.
+         This package is the provider-agnostic repository and Unit of Work abstraction: it
+         references only Ploch.Common, Ploch.Data.Model and Microsoft.Extensions.Options,
+         with no Entity Framework Core dependency, so the default efcore/orm tags would put
+         it in the wrong nuget.org searches. The EF implementations live in
+         Ploch.Data.GenericRepository.EFCore. -->
+    <PackageTags>ploch;data;repository;generic-repository;unit-of-work;abstractions;dotnet</PackageTags>
   </PropertyGroup>
 
   <!-- Default (UseProjectReferences=true, every configuration): ProjectReference to the sibling
@@ -22,7 +29,7 @@
     <ProjectReference Include="..\..\Data.Model\Ploch.Data.Model.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include=".\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options" />

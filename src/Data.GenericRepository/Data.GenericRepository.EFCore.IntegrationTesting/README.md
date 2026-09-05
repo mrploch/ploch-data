@@ -51,4 +51,4 @@ public class ProductTests : GenericRepositoryDataIntegrationTest<MyDbContext>
 
 ## Documentation
 
-See the [Integration Testing Guide](../../../docs/integration-testing.md) for detailed patterns and examples.
+See the [Integration Testing Guide](https://github.com/mrploch/ploch-data/blob/main/docs/integration-testing.md) for detailed patterns and examples.

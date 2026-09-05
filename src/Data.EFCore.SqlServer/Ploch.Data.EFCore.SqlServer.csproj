@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
       <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
     </PropertyGroup>
 
@@ -14,4 +15,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include=".\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 </Project>

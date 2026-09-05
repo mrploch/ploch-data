@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
   </PropertyGroup>
 
@@ -21,4 +22,7 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include=".\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>
