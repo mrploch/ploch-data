@@ -11,6 +11,22 @@ on:
         description: 'Next development version after release (e.g. 3.1). Leave empty to auto-increment the minor version.'
         required: false
         type: string
+      # Dry run rehearses everything that cannot be undone, without doing any of it.
+      #
+      # Still runs: validate, checkout, build, test, pack, and - deliberately - the
+      # NuGet/login OIDC token exchange. That last one is the whole point: it is the only
+      # step in this workflow never exercised in this repository, and the one most likely
+      # to be misconfigured, because a trusted publishing policy binds to
+      # (owner, repo, workflow filename) and cannot be verified from outside nuget.org.
+      #
+      # Skipped: the tag push, both nuget.org pushes, the GitHub Release, and the
+      # bookkeeping pull request - every irreversible or externally visible effect.
+      #
+      # On failure ordering in a REAL run: the tag push happens BEFORE NuGet/login, so a
+      # bad trusted-publishing policy fails the run with the tag already pushed. No package
+      # reaches nuget.org - that part is safe, because nothing is published before the
+      # login - but recovery means deleting the tag before re-running, per docs/releasing.md.
+      # Rehearsing with dry_run avoids that cleanup entirely.
       dry_run:
         description: 'Rehearse the release without publishing anything. Builds, tests, packs and exchanges the OIDC token, then stops before the tag push, the nuget.org pushes, the GitHub Release and the bookkeeping PR.'
         required: false
@@ -51,21 +67,6 @@ jobs:
     env:
       RELEASE_VERSION: ${{ inputs.release_version }}
       NEXT_VERSION_INPUT: ${{ inputs.next_version }}
-      # Dry run rehearses everything that cannot be undone, without doing any of it.
-      #
-      # What still runs: validate, checkout, build, test, pack, and - deliberately - the
-      # NuGet/login OIDC token exchange. That last one is the whole point: it is the only
-      # step in this workflow never exercised in this repository, and it is the one most
-      # likely to be misconfigured, because a trusted publishing policy binds to
-      # (owner, repo, workflow filename) and cannot be verified from outside nuget.org.
-      #
-      # What is skipped: the tag push, both nuget.org pushes, the GitHub Release, and the
-      # bookkeeping pull request. Those are the irreversible or externally visible effects.
-      #
-      # Note that NuGet/login placement already makes a real release fail safe: it sits
-      # immediately before the pushes, so a bad policy fails the run BEFORE any package
-      # reaches nuget.org. Dry run exists to find that out without burning a version number.
-      DRY_RUN: ${{ inputs.dry_run }}
 
     steps:
       - name: Validate inputs
