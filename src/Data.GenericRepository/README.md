@@ -13,7 +13,6 @@ The generic [Repository](https://martinfowler.com/eaaCatalog/repository.html) an
 | [Ploch.Data.GenericRepository.EFCore.SqLite](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/) | One-call DI registration for SQLite (`AddDbContextWithRepositories`) |
 | [Ploch.Data.GenericRepository.EFCore.SqlServer](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/) | One-call DI registration for SQL Server (`AddDbContextWithRepositories`) |
 | [Ploch.Data.GenericRepository.EFCore.IntegrationTesting](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.IntegrationTesting/) | Integration test base classes |
-| [Ploch.Data.GenericRepository.EFCore.Specification](https://github.com/mrploch/ploch-data/tree/main/src/Data.GenericRepository/Data.GenericRepository.EFCore.Specification/) | Ardalis.Specification support |
 
 ## Motivation
 

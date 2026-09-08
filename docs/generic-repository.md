@@ -345,6 +345,10 @@ services.AddCustomReadWriteAsyncRepository<
 
 ## Specification Pattern (Ardalis.Specification)
 
+> **Not available in 4.0.0.** This package is not published yet — it is planned for a later
+> release, see [#168](https://github.com/mrploch/ploch-data/issues/168). The section below
+> describes the API as it exists in source.
+
 The `Ploch.Data.GenericRepository.EFCore.Specification` package integrates with [Ardalis.Specification](https://github.com/ardalis/Specification) for composable, reusable query logic.
 
 ### Defining Specifications
