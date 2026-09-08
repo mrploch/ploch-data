@@ -1,8 +1,8 @@
 using Ploch.Data.Model.CommonTypes;
 
-namespace Ploch.Data.SampleApp.Model;
+namespace Ploch.Data.SampleApp.Domain;
 
-public class ArticleTag : Tag
+public class ArticleCategory : Category<ArticleCategory>
 {
     public virtual ICollection<Article> Articles { get; set; } = new List<Article>();
 }

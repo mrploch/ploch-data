@@ -9,6 +9,6 @@
     <PackageReference Include="Ploch.Data.GenericRepository.EFCore" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Ploch.Data.SampleApp.Model.csproj" />
+    <ProjectReference Include="..\Domain\Ploch.Data.SampleApp.Domain.csproj" />
   </ItemGroup>
 </Project>

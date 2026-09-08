@@ -1,4 +1,4 @@
-using Ploch.Data.SampleApp.Model;
+using Ploch.Data.SampleApp.Domain;
 
 namespace Ploch.Data.SampleApp.ConsoleApp.Services;
 
