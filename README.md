@@ -114,7 +114,7 @@ A fully working [Sample Application](samples/SampleApp/) demonstrates entity mod
 | [Ploch.Data.GenericRepository.EFCore](src/Data.GenericRepository/Data.GenericRepository.EFCore/) | EF Core implementations, DI registration via `AddRepositories<TDbContext>()` |
 | [Ploch.Data.GenericRepository.EFCore.SqLite](src/Data.GenericRepository/Data.GenericRepository.EFCore.SqLite/) | One-call DI registration for SQLite (`AddDbContextWithRepositories<TDbContext>()`) |
 | [Ploch.Data.GenericRepository.EFCore.SqlServer](src/Data.GenericRepository/Data.GenericRepository.EFCore.SqlServer/) | One-call DI registration for SQL Server (`AddDbContextWithRepositories<TDbContext>()`) |
-| [Ploch.Data.GenericRepository.EFCore.Specification](src/Data.GenericRepository/Data.GenericRepository.EFCore.Specification/) | Ardalis.Specification integration |
+| [Ploch.Data.GenericRepository.EFCore.Specification](src/Data.GenericRepository/Data.GenericRepository.EFCore.Specification/) | Ardalis.Specification integration — **not published in 4.0.0** — planned for a later release, see [#168](https://github.com/mrploch/ploch-data/issues/168) |
 
 ### Testing
 
@@ -152,7 +152,7 @@ A generic repository and unit of work pattern implementation for Entity Framewor
 - Zero-code database provider switching between SQLite and SQL Server
 - Pluggable `IDbContextCreationLifecycle` for provider-specific model configuration
 - Custom repository support with full interface registration
-- Specification pattern integration via Ardalis.Specification
+- Specification pattern integration via Ardalis.Specification (source only; **not published in 4.0.0** — planned for a later release, see [#168](https://github.com/mrploch/ploch-data/issues/168))
 - Automatic audit property handling
 
 ### [Entity Framework Core Utilities](src/Data.EFCore/)
