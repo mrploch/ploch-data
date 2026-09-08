@@ -11,6 +11,27 @@ on:
         description: 'Next development version after release (e.g. 3.1). Leave empty to auto-increment the minor version.'
         required: false
         type: string
+      # Dry run rehearses everything that cannot be undone, without doing any of it.
+      #
+      # Still runs: validate, checkout, build, test, pack, and - deliberately - the
+      # NuGet/login OIDC token exchange. That last one is the whole point: it is the only
+      # step in this workflow never exercised in this repository, and the one most likely
+      # to be misconfigured, because a trusted publishing policy binds to
+      # (owner, repo, workflow filename) and cannot be verified from outside nuget.org.
+      #
+      # Skipped: the tag push, both nuget.org pushes, the GitHub Release, and the
+      # bookkeeping pull request - every irreversible or externally visible effect.
+      #
+      # On failure ordering in a REAL run: the tag push happens BEFORE NuGet/login, so a
+      # bad trusted-publishing policy fails the run with the tag already pushed. No package
+      # reaches nuget.org - that part is safe, because nothing is published before the
+      # login - but recovery means deleting the tag before re-running, per docs/releasing.md.
+      # Rehearsing with dry_run avoids that cleanup entirely.
+      dry_run:
+        description: 'Rehearse the release without publishing anything. Builds, tests, packs and exchanges the OIDC token, then stops before the tag push, the nuget.org pushes, the GitHub Release and the bookkeeping PR.'
+        required: false
+        default: false
+        type: boolean
 
 # Serialise ALL release runs, not just those releasing the same version.
 #
@@ -260,7 +281,7 @@ jobs:
       # Retry-safe: re-uses existing tag if it already points at HEAD.
       - name: Create and push tag
         id: tag
-        if: success()
+        if: success() && inputs.dry_run != true
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           REPO_URL: https://github.com/${{ github.repository }}.git
@@ -305,7 +326,7 @@ jobs:
           user: ${{ vars.NUGET_USER }}
 
       - name: Publish NuGet packages to NuGet.org
-        if: success()
+        if: success() && inputs.dry_run != true
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
@@ -329,7 +350,7 @@ jobs:
           done
 
       - name: Publish symbol packages to NuGet.org
-        if: success()
+        if: success() && inputs.dry_run != true
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
@@ -337,6 +358,52 @@ jobs:
             echo "Publishing symbols $pkg"
             dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json --skip-duplicate -k "$NUGET_API_KEY"
           done
+
+      # Dry-run report. The point of the rehearsal is to prove the OIDC exchange works and
+      # to show exactly what a real run would have published, so this asserts the key was
+      # actually issued rather than merely assuming the login step's green tick meant so.
+      # The key itself is never printed - only whether it is non-empty and how long it is.
+      - name: Dry run summary
+        if: success() && inputs.dry_run == true
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${NUGET_API_KEY}" ]; then
+            echo "::error::Trusted Publishing returned an EMPTY key. A real release would have failed at the push. Check that the nuget.org policy names this repository and the workflow file release.yml, with a blank environment."
+            exit 1
+          fi
+          echo "OIDC token exchange succeeded: nuget.org issued a key of ${#NUGET_API_KEY} characters."
+
+          PKGS=$(find ./artifacts/packages -name 'Ploch.Data.*.nupkg' | sort)
+          SYMS=$(find ./artifacts/packages -name 'Ploch.Data.*.snupkg' | sort)
+          if [ -z "$PKGS" ]; then
+            echo "::error::No .nupkg files were produced by the pack step."
+            exit 1
+          fi
+
+          {
+            echo "### Dry run \`${NUGET_VERSION}\` - nothing was published"
+            echo
+            echo "Trusted Publishing exchanged the GitHub OIDC token for a nuget.org key successfully."
+            echo "That is the step this rehearsal exists to prove; it has never run in this repository before."
+            echo
+            echo "**Skipped:** tag push, both nuget.org pushes, the GitHub Release, and the bookkeeping pull request."
+            echo
+            echo "A real run would have published these packages:"
+            echo
+            echo "$PKGS" | while IFS= read -r p; do echo "- \`$(basename "$p")\`"; done
+            echo
+            echo "and these symbol packages:"
+            echo
+            if [ -n "$SYMS" ]; then
+              echo "$SYMS" | while IFS= read -r p; do echo "- \`$(basename "$p")\`"; done
+            else
+              echo "- _none_"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
       # Generate release notes BEFORE archiving change-log entries,
       # so only the current release's entries are included.
@@ -370,7 +437,7 @@ jobs:
 
       - name: Create GitHub Release
         id: release
-        if: success()
+        if: success() && inputs.dry_run != true
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
@@ -494,7 +561,7 @@ jobs:
       # branch protection, so the release finishes green and the bookkeeping waits for a
       # normal review.
       - name: Open a pull request with the next development version
-        if: success()
+        if: success() && inputs.dry_run != true
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NEXT_DEV_VERSION: ${{ steps.next.outputs.next_version }}
