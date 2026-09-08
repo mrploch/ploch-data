@@ -163,6 +163,10 @@ The `UnitOfWork<TDbContext>` class wraps the EF Core `DbContext.SaveChangesAsync
 
 ### Ploch.Data.GenericRepository.EFCore.Specification
 
+> **Not published in 4.0.0.** The source is in the tree but the project is deliberately
+> excluded from `Ploch.Data.slnx` and marked `IsPackable=false`, so it is neither built nor
+> packed. Planned for a later release — see [#168](https://github.com/mrploch/ploch-data/issues/168).
+
 - **Target:** `net10.0`
 - **Dependencies:** `Ploch.Data.GenericRepository.EFCore`, `Ardalis.Specification.EntityFrameworkCore`
 - **Purpose:** Extension methods `GetAllBySpecificationAsync` and `GetBySpecificationAsync` for composable queries.
