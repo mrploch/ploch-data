@@ -28,7 +28,7 @@ Comprehensive documentation for the Ploch.Data libraries -- a set of .NET packag
 | `Ploch.Data.GenericRepository.EFCore` | EF Core implementations of the Generic Repository and Unit of Work, plus DI registration |
 | `Ploch.Data.GenericRepository.EFCore.SqLite` | One-call DI registration for SQLite (DbContext + repositories + lifecycle) |
 | `Ploch.Data.GenericRepository.EFCore.SqlServer` | One-call DI registration for SQL Server (DbContext + repositories + lifecycle) |
-| `Ploch.Data.GenericRepository.EFCore.Specification` | Ardalis.Specification integration for composable, reusable query logic |
+| `Ploch.Data.GenericRepository.EFCore.Specification` | Ardalis.Specification integration for composable, reusable query logic — **not published in 4.0.0** — planned for a later release, see [#168](https://github.com/mrploch/ploch-data/issues/168) |
 | `Ploch.Data.EFCore.IntegrationTesting` | `DataIntegrationTest<TDbContext>` base class for EF Core integration tests |
 | `Ploch.Data.GenericRepository.EFCore.IntegrationTesting` | `GenericRepositoryDataIntegrationTest<TDbContext>` base class with repository/UoW helpers |
 

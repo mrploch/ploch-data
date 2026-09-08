@@ -1,6 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- NOT SHIPPED IN 4.0.0 - deliberately deferred to a later release (issue #168).
+         This project is intentionally absent from Ploch.Data.slnx, so the solution build
+         and `dotnet pack ./Ploch.Data.slnx` never touch it. IsPackable=false is the second
+         line of defence: it stops a direct `dotnet build` of this csproj from producing a
+         nupkg, because Directory.Build.props sets GeneratePackageOnBuild=true for every
+         non-test project. Remove both this property and the solution omission together
+         when the package is ready to ship. -->
+    <IsPackable>false</IsPackable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFrameworks>$(TargetFrameworkVersions)</TargetFrameworks>
   </PropertyGroup>
