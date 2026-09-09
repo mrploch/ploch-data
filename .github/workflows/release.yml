@@ -204,10 +204,45 @@ jobs:
       - name: Install NBGV tool
         run: dotnet tool restore
 
+      # The repository's own NuGet.Config already declares a source named "github", so the
+      # previous "does a github source exist?" guard here was always satisfied and never
+      # supplied the credentials. Restore then queried the feed anonymously and failed with
+      # 401/NU1301 for every Ploch.* package the SampleApp consumes (#183).
+      #
+      # The credentials are therefore always written, and into the *user-level* config: the
+      # repository config clears inherited package sources, but packageSourceCredentials are
+      # matched by source name across configuration files, so credentials stored there still
+      # apply to the repository's "github" source. This mirrors build-dotnet.yml and
+      # publish-docs.yml, which already do exactly this.
+      #
+      # Note that release.yml deliberately restores WITHOUT -p:UsePlochProjectReferences=true,
+      # unlike build-dotnet.yml. The SampleApp therefore resolves real published packages, which
+      # is the point of the sample - and the reason this workflow is the only one that actually
+      # exercises the feed.
+      #
+      # No secret is written to disk. NuGet expands %GH_PACKAGES_TOKEN% at restore time, and
+      # that variable is set only on the restore step below, so no later step in this job
+      # (build, test, pack, publish) can resolve the token out of this file.
       - name: Add GitHub Packages Source
-        env:
-          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+        run: |
+          CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
+          mkdir -p "$(dirname "$CONFIG")"
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<configuration>'
+            echo '  <packageSources>'
+            echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
+            echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
+            echo '  </packageSources>'
+            echo '  <packageSourceCredentials>'
+            echo '    <github>'
+            echo '      <add key="Username" value="kploch" />'
+            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+            echo '    </github>'
+            echo '  </packageSourceCredentials>'
+            echo '</configuration>'
+          } > "$CONFIG"
+          cat "$CONFIG"
 
       # Identity only. The PAT is deliberately NOT written into the remote URL here
       # (issue #128): doing so left the credential in .git/config for the remainder of the
@@ -243,6 +278,8 @@ jobs:
           echo "NuGet package version: $NUGET_VERSION"
 
       - name: Restore dependencies
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet restore ./Ploch.Data.slnx
 
       - name: Build (Release)
