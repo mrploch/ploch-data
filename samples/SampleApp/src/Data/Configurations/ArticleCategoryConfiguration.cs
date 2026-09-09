@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Ploch.Data.SampleApp.Model;
+using Ploch.Data.SampleApp.Domain;
 
 namespace Ploch.Data.SampleApp.Data.Configurations;
 

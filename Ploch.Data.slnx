@@ -176,7 +176,7 @@
     <Project Path="samples/SampleApp/src/Data.SQLite/Ploch.Data.SampleApp.Data.SQLite.csproj" />
     <Project Path="samples/SampleApp/src/Data.SqlServer/Ploch.Data.SampleApp.Data.SqlServer.csproj" />
     <Project Path="samples/SampleApp/src/Data/Ploch.Data.SampleApp.Data.csproj" />
-    <Project Path="samples/SampleApp/src/Model/Ploch.Data.SampleApp.Model.csproj" />
+    <Project Path="samples/SampleApp/src/Domain/Ploch.Data.SampleApp.Domain.csproj" />
     <Project Path="samples/SampleApp/tests/IntegrationTests/Ploch.Data.SampleApp.IntegrationTests.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">

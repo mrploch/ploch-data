@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Ploch.Data.Model;
 using Ploch.Data.Model.CommonTypes;
 
-namespace Ploch.Data.SampleApp.Model;
+namespace Ploch.Data.SampleApp.Domain;
 
 public class Article : IHasId<int>, IHasTitle, IHasDescription, IHasContents, IHasAuditProperties,
                        IHasCategories<ArticleCategory>, IHasTags<ArticleTag>

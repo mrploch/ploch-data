@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Ploch.Data.GenericRepository;
 using Ploch.Data.SampleApp.ConsoleApp.Services;
-using Ploch.Data.SampleApp.Model;
+using Ploch.Data.SampleApp.Domain;
 using Spectre.Console;
 using Spectre.Console.Cli;
 

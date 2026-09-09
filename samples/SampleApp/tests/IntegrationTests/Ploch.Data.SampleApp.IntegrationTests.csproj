@@ -28,6 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ConsoleApp\Ploch.Data.SampleApp.ConsoleApp.csproj" />
     <ProjectReference Include="..\..\src\Data\Ploch.Data.SampleApp.Data.csproj" />
-    <ProjectReference Include="..\..\src\Model\Ploch.Data.SampleApp.Model.csproj" />
+    <ProjectReference Include="..\..\src\Domain\Ploch.Data.SampleApp.Domain.csproj" />
   </ItemGroup>
 </Project>

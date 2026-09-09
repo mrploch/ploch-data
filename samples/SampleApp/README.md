@@ -27,7 +27,7 @@ Migrations are kept in provider-specific projects.
 ```
 samples/SampleApp/
   src/
-    Model/                    # Entity POCOs
+    Domain/                   # Entity POCOs
       Article.cs              # Full-featured entity with audit, categories, tags
       ArticleCategory.cs      # Hierarchical category (extends Category<T>)
       ArticleTag.cs           # Tag entity (extends Tag<TId>)

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Ploch.Data.Model;
 
-namespace Ploch.Data.SampleApp.Model;
+namespace Ploch.Data.SampleApp.Domain;
 
 public class Author : IHasId<int>, INamed, IHasDescription, IHasAuditProperties
 {

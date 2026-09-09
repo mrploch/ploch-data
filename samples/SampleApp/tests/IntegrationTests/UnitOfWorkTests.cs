@@ -1,7 +1,7 @@
 using Ploch.Data.GenericRepository;
 using Ploch.Data.GenericRepository.EFCore.IntegrationTesting;
 using Ploch.Data.SampleApp.Data;
-using Ploch.Data.SampleApp.Model;
+using Ploch.Data.SampleApp.Domain;
 
 namespace Ploch.Data.SampleApp.IntegrationTests;
 
