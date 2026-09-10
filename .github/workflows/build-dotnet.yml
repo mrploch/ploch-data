@@ -277,7 +277,12 @@ jobs:
       - name: Build and test the SampleApp against library source
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-          IS_FORK_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
+          # Dependabot is the trap here. Its pull requests are branches on THIS repository, so
+          # head.repo.fork is false, yet they receive no repository Actions secrets - Dependabot
+          # has a separate secret store. Treating them as trusted would fail the error path below
+          # and turn every weekly dependency update red. They are therefore classed with forks:
+          # cannot have the token, so skip rather than fail.
+          NO_SECRETS_EXPECTED: ${{ github.event_name == 'pull_request' && (github.event.pull_request.head.repo.fork || github.actor == 'dependabot[bot]') }}
         run: |
           set -euo pipefail
           # Distinguish "cannot have the secret" from "should have it and does not".
@@ -288,8 +293,8 @@ jobs:
           # silently stop running if the secret were ever removed, renamed or left to expire,
           # and a gate that quietly stops gating is worse than no gate at all.
           if [ -z "${GH_PACKAGES_TOKEN:-}" ]; then
-            if [ "${IS_FORK_PR}" = "true" ]; then
-              echo "::warning title=SampleApp gate skipped::GH_PACKAGES_TOKEN is unavailable, as expected on a fork pull request. The sample consumes Ploch.CommandLine.Spectre from GitHub Packages, so it cannot be built here (#158). The release workflow's consumer gate still covers the sample before anything is published."
+            if [ "${NO_SECRETS_EXPECTED}" = "true" ]; then
+              echo "::warning title=SampleApp gate skipped::GH_PACKAGES_TOKEN is unavailable, as expected on a fork or Dependabot pull request. The sample consumes Ploch.CommandLine.Spectre from GitHub Packages, so it cannot be built here (#158). The release workflow's consumer gate still covers the sample before anything is published."
               exit 0
             fi
             echo "::error title=SampleApp gate cannot run::GH_PACKAGES_TOKEN is missing on a non-fork run. The sample cannot be validated without it, and failing loudly is deliberate - a silent skip would let this gate stop gating unnoticed."

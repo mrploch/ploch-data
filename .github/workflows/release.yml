@@ -603,7 +603,11 @@ jobs:
       # verifies the public surface a real consumer sees. Indexing lag is normal, so it retries
       # rather than failing on the first miss.
       - name: Verify the published packages are resolvable from nuget.org
-        if: success() && inputs.dry_run != true
+        # Deliberately NOT `success()`. A push step that fails part-way is exactly when this
+        # check matters most: some ids are already public and irreversible while others are
+        # not, which is the definition of a partial release. Gating verification behind the
+        # success of the thing it verifies would blind it to its own failure case.
+        if: ${{ !cancelled() && inputs.dry_run != true }}
         # Non-gating on purpose. By the time this runs the packages are ALREADY on nuget.org
         # and cannot be withdrawn, so a red job here would report a successful publish as a
         # failed release - and invite a re-run of steps that are not idempotent. Indexing lag
@@ -618,6 +622,10 @@ jobs:
           MISSING=""
           COUNT=0
           for FILE in ./artifacts/packages/Ploch.Data.*.nupkg; do
+            # With no matches the glob stays literal and the loop runs once over the pattern
+            # itself. The id-derivation guard below already rejects that, but skipping outright
+            # is clearer and keeps the COUNT check meaningful.
+            [ -e "$FILE" ] || continue
             BASE=$(basename "$FILE" .nupkg)
             # The file name is "<id>.<version>", so stripping the known version leaves the id.
             ID="${BASE%.$NUGET_VERSION}"
@@ -628,7 +636,10 @@ jobs:
             COUNT=$((COUNT + 1))
             FOUND=""
             for ATTEMPT in 1 2 3 4 5 6; do
-              if dotnet package search "$ID" --exact-match --source https://api.nuget.org/v3/index.json --format json 2>/dev/null | grep -q "\"$NUGET_VERSION\""; then
+              # The flat container, not the search index. Search indexing lags ingestion by
+              # minutes and is a poor proxy for "can a consumer restore this"; the flat container
+              # is the endpoint restore actually reads, so it answers the question being asked.
+              if curl -sf "https://api.nuget.org/v3-flatcontainer/$(echo "$ID" | tr '[:upper:]' '[:lower:]')/index.json" 2>/dev/null | grep -qi "\"$NUGET_VERSION\""; then
                 FOUND="yes"
                 break
               fi
@@ -643,8 +654,11 @@ jobs:
             fi
           done
           if [ "$COUNT" -eq 0 ]; then
-            echo "::error::No Ploch.Data.*.nupkg found to verify - pack or publish produced nothing."
-            exit 1
+            # Reachable when an earlier step failed before packing, now that this step runs on
+            # failure too. A warning, not an error: the release has already failed elsewhere and
+            # a second red step would only obscure the real cause.
+            echo "::warning::No Ploch.Data.*.nupkg found to verify - an earlier step failed before packing."
+            exit 0
           fi
           if [ -n "$MISSING" ]; then
             echo "::warning::Pushed but not resolvable from nuget.org after ~3 minutes:${MISSING}. Usually catalogue lag; if it persists, the release is PARTIAL - check before announcing it. Do NOT simply re-run this workflow: the publish steps are not idempotent."
@@ -1026,6 +1040,12 @@ jobs:
             echo "Set PlochDataPackagesVersion in ${PROPS} of ${TARGET_REPO} to ${RELEASED_VERSION} by hand." >> "$GITHUB_STEP_SUMMARY"
           }
 
+          # The credential is removed from the remote URL immediately after the clone and
+          # reinstated only for the push, matching the convention the tag and bookkeeping steps
+          # follow (#128): a token embedded in .git/config outlives the command that needed it
+          # and is readable by every later step in the job.
+          CLEAN_URL="https://github.com/${TARGET_REPO}.git"
+          trap 'git -C "$WORK" remote set-url origin "$CLEAN_URL" 2>/dev/null || true' EXIT
           if ! git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${TARGET_REPO}.git" "$WORK" 2>/dev/null; then
             echo "::warning::Could not clone ${TARGET_REPO}; the central package version was not updated."
             note_manual_step "The release could not clone it, most likely because GH_TOKEN lacks write access."
@@ -1033,6 +1053,7 @@ jobs:
           fi
 
           cd "$WORK"
+          git remote set-url origin "$CLEAN_URL"
 
           if [ ! -f "$PROPS" ]; then
             echo "::warning::${PROPS} not found in ${TARGET_REPO}; nothing to update."
@@ -1061,11 +1082,24 @@ jobs:
           # continuation at column 0, which terminates this YAML block scalar.
           git commit -m "chore(deps): Point PlochDataPackagesVersion at ${RELEASED_VERSION}" -m "Ploch.Data ${RELEASED_VERSION} is published on nuget.org. Raised automatically by the ploch-data release workflow." -m "Refs: mrploch/ploch-data#185"
 
-          if ! git push origin "$BRANCH" 2>/dev/null; then
-            echo "::warning::Could not push ${BRANCH} to ${TARGET_REPO}."
-            note_manual_step "The release could not push a branch, most likely because GH_TOKEN lacks write access."
-            exit 0
+          # A previous run may have pushed this branch and then failed before opening its pull
+          # request. A plain push then rejects as non-fast-forward and the retry would give up
+          # having never attempted the PR - the branch sits there forever with nothing tracking
+          # it. Force-with-lease updates our own bookkeeping branch safely, and the push is only
+          # treated as fatal if the branch still does not exist afterwards.
+          # Reinstate the credential for the single command that needs it; the EXIT trap above
+          # removes it again on every path out of this step.
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${TARGET_REPO}.git"
+          if ! git push --force-with-lease origin "$BRANCH" 2>/dev/null; then
+            if ! git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+              echo "::warning::Could not push ${BRANCH} to ${TARGET_REPO}."
+              note_manual_step "The release could not push a branch, most likely because GH_TOKEN lacks write access."
+              exit 0
+            fi
+            echo "::warning::Could not update ${BRANCH}, but it already exists on ${TARGET_REPO}; continuing to the pull request."
           fi
+
+          git remote set-url origin "$CLEAN_URL"
 
           PR_BODY="Ploch.Data ${RELEASED_VERSION} is published on nuget.org, so the central pin can move from ${CURRENT:-unknown}. Raised automatically by the ploch-data release workflow (mrploch/ploch-data#185)."
           PR_URL=$(gh pr create --repo "$TARGET_REPO" --head "$BRANCH" --base main --title "chore(deps): Point PlochDataPackagesVersion at ${RELEASED_VERSION}" --body "$PR_BODY" 2>/dev/null || true)
