@@ -19,8 +19,9 @@ on:
       # to be misconfigured, because a trusted publishing policy binds to
       # (owner, repo, workflow filename) and cannot be verified from outside nuget.org.
       #
-      # Skipped: the tag push, both nuget.org pushes, the GitHub Release, and the
-      # bookkeeping pull request - every irreversible or externally visible effect.
+      # Skipped: the tag push, the GitHub Packages publish, both nuget.org pushes, the
+      # publish verification, the GitHub Release, the bookkeeping pull request and the
+      # mrploch-development version bump - every irreversible or externally visible effect.
       #
       # On failure ordering in a REAL run: the tag push happens BEFORE NuGet/login, so a
       # bad trusted-publishing policy fails the run with the tag already pushed. No package
@@ -28,7 +29,7 @@ on:
       # login - but recovery means deleting the tag before re-running, per docs/releasing.md.
       # Rehearsing with dry_run avoids that cleanup entirely.
       dry_run:
-        description: 'Rehearse the release without publishing anything. Builds, tests, packs and exchanges the OIDC token, then stops before the tag push, the nuget.org pushes, the GitHub Release and the bookkeeping PR.'
+        description: 'Rehearse the release without publishing anything. Builds, tests, packs, gates the SampleApp against the packed artefacts and exchanges the OIDC token, then stops before the tag push, the GitHub Packages publish, the nuget.org pushes, the GitHub Release and the bookkeeping PRs.'
         required: false
         default: false
         type: boolean
@@ -366,8 +367,9 @@ jobs:
       #
       # Hence an isolated globalPackagesFolder plus explicit mappings. Ploch.Data.* is the
       # longest matching prefix and is mapped ONLY to the local feed, so those packages can come
-      # from nowhere else. Ploch.* still resolves from github because the sample consumes
-      # Ploch.CommandLine.Spectre, which is published there and not on nuget.org.
+      # from nowhere else. Ploch.* is mapped to github AND nuget.org: the sample consumes
+      # Ploch.CommandLine.Spectre, published only on GitHub Packages, while the packed packages
+      # depend on stable Ploch.Common, published only on nuget.org.
       #
       # PlochDataPackagesVersion is overridden as an MSBuild global property rather than by
       # rewriting samples/SampleApp/Directory.Packages.props: a global property outranks the
@@ -424,6 +426,16 @@ jobs:
             echo '    </packageSource>'
             echo '    <packageSource key="nuget.org">'
             echo '      <package pattern="*" />'
+            # Ploch.* is listed under BOTH github and nuget.org, for the same reason the
+            # repository NuGet.Config spells out: mapping resolves by the MOST SPECIFIC
+            # matching pattern, not by union, so with Ploch.* on github alone the "*" entry
+            # never applies to a Ploch package and nuget.org is never consulted. Stable
+            # releases live on nuget.org and only prereleases on GitHub Packages, so the
+            # packed Ploch.Data.* packages could not resolve their own stable Ploch.Common
+            # dependency (NU1103). Ploch.Data.* remains a longer, more specific prefix mapped
+            # only to the local feed, so the artefacts under test still cannot come from
+            # anywhere else.
+            echo '      <package pattern="Ploch.*" />'
             echo '    </packageSource>'
             echo '  </packageSourceMapping>'
             echo '</configuration>'
@@ -558,7 +570,7 @@ jobs:
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
-          find ./artifacts/packages -name 'Ploch.Data.*.snupkg' | while read pkg; do
+          find ./artifacts/packages -name 'Ploch.Data.*.snupkg' | while IFS= read -r pkg; do
             echo "Publishing symbols $pkg"
             dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json --skip-duplicate -k "$NUGET_API_KEY"
           done
@@ -648,7 +660,7 @@ jobs:
             echo "Trusted Publishing exchanged the GitHub OIDC token for a nuget.org key successfully."
             echo "That is the step this rehearsal exists to prove; it has never run in this repository before."
             echo
-            echo "**Skipped:** tag push, both nuget.org pushes, the GitHub Release, and the bookkeeping pull request."
+            echo "**Skipped:** tag push, the GitHub Packages publish, both nuget.org pushes, the publish verification, the GitHub Release, the bookkeeping pull request and the mrploch-development version bump."
             echo
             echo "A real run would have published these packages:"
             echo
@@ -964,7 +976,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           RELEASED_VERSION: ${{ steps.version.outputs.nuget_version }}
         run: |
-          set -uo pipefail
+          # -e is already active (Actions runs bash -e) but is stated explicitly to match the
+          # other run blocks in this file. Every command whose failure is tolerable below is
+          # guarded with `|| true` or an `if !` test, and the step is continue-on-error, so a
+          # failure here can never fail the release.
+          set -euo pipefail
           TARGET_REPO="mrploch/mrploch-development"
           PROPS="dependencies/Ploch.Packages.props"
           BRANCH="chore/ploch-data-${RELEASED_VERSION}"
