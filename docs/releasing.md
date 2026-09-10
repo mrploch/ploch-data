@@ -21,12 +21,74 @@ what to do when it fails part-way through.
 |------|--------|
 | Validate inputs and `GH_TOKEN` | Fails fast on a malformed version or an expired PAT |
 | Set and commit the release version | Writes `version.json` and commits it locally |
-| Build, test | Release configuration; the artefacts published later come from this build |
-| **Create and push the tag** | First externally visible effect. Tag-first is deliberate — a tag can be deleted, a NuGet package cannot |
+| Build, test | Release configuration, resolving `ploch-common` by project reference |
+| Build for packaging, then pack | Recompiles with `-p:UseProjectReferences=false` and packs `--no-build`, so the assemblies and the nuspec agree (see below) |
+| **Gate: build and test the SampleApp against the packed artefacts** | The last reversible step. Nothing has left the runner yet |
+| **Create and push the tag** | First externally visible effect |
+| **Publish packages to GitHub Packages** | Internal feed first |
 | **Publish packages to nuget.org** | **Irreversible.** Packages can only be unlisted, never deleted |
+| Verify the packages resolve from nuget.org | Warns, never fails — see below |
 | **Create the GitHub release** | Publishes the release from the tag with notes from `change-log/` |
 | Verify the release is published | Fails the workflow if the release is still a draft (see below) |
 | **Open the bookkeeping pull request** | Commits `version.json`, the archived change-log entries and the SampleApp package version to `chore/post-release-<version>` and opens a PR against `main` |
+| Propagate the version to `mrploch-development` | Best-effort PR updating the central `PlochDataPackagesVersion`. Never fails the run |
+
+### Why the gate comes before the tag
+
+Everything up to and including the SampleApp gate is reversible: it happens on the runner, against
+a local feed of the packages just built. Everything after it is not.
+
+The gate answers the one question the library's own tests cannot: **can a consumer actually use
+what is about to be published?** The tests run against project references, never against the final
+package dependency graph a consumer restores. The SampleApp is a consumer — it resolves
+`Ploch.Data.*` through `PackageReference` exactly as an external project would — so building and
+testing it against the packed artefacts is the closest available proxy for a real install.
+
+It gates against a **local** feed rather than GitHub Packages deliberately. Ids on a remote feed
+cannot practically be withdrawn, so publishing first and gating afterwards would strand an
+unusable version that could never be republished.
+
+The ordering was previously tag-first, on the reasoning that a tag can be deleted and a package
+cannot. That is still true, and the tag still precedes both publishes for the same reason — but a
+tag now only appears once the artefacts have been proved consumable, so a failed gate leaves
+nothing at all to clean up.
+
+### Why packing has its own build step
+
+`dotnet pack -p:UseProjectReferences=false` alone is not enough, and the difference is invisible
+until run time.
+
+That property reaches only the **nuspec generator**. The compile has already happened under the
+previous value, and MSBuild's incremental check sees up-to-date outputs, so it does not recompile.
+The result is a package that declares a dependency on the stable `Ploch.Common` while its
+assemblies still demand the sibling checkout's prerelease:
+
+```text
+nuspec:   Ploch.Common -> 4.0.47
+assembly: Ploch.Common -> 4.1.4.48466
+consumer: System.IO.FileNotFoundException at AddRepositories<TDbContext>()
+```
+
+Restore succeeds; the application fails when it first touches the library. The workflow therefore
+builds explicitly with the property (and `--no-incremental`, so the compile cannot be skipped) and
+then packs with `--no-build`, packaging precisely the binaries it just produced.
+
+The earlier project-reference build and its tests are still required and unchanged: the
+`Ploch.TestingSupport.XUnit3.*` projects are not published as packages, so the test projects must
+resolve `ploch-common` by project (issue #95).
+
+### Why the nuget.org verification only warns
+
+`dotnet nuget push` succeeding means nuget.org **accepted** a package, not that anyone can install
+it — ingestion and catalogue indexing happen afterwards. The verification step re-resolves every
+published id from nuget.org alone, so it checks the public surface a consumer sees rather than our
+internal feed.
+
+It is deliberately non-gating. By the time it runs the packages cannot be withdrawn, so a red job
+would report a successful release as a failed one — and invite re-running publish steps that are
+not idempotent. A slow catalogue is not a broken release. If ids are still missing after the
+retries, the step writes a warning and a job-summary note; check nuget.org by hand before
+announcing the release, and **do not re-run the workflow to "fix" it**.
 
 ### A release produces two things to act on
 
