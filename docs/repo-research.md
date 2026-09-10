@@ -36,7 +36,7 @@ This note captures a maintainer-focused map of the repository: packages, structu
 
 - Treat SampleApp as an external consumer: csproj files must keep `PackageReference` to Ploch.Data packages; switching to `ProjectReference` happens automatically via `ProjectReferences.props` (do not edit csproj to swap).
 - SampleApp `Directory.Build.props`/`Directory.Packages.props` are self-contained; do not import from parents.
-- Update `ProjectReferences.props` when adding new Ploch.Data packages; bump `PlochDataPackagesVersion` in SampleApp package props after publishing new versions.
+- Update `ProjectReferences.props` when adding new Ploch.Data packages. `PlochDataPackagesVersion` in the SampleApp package props is bumped by the release workflow's bookkeeping pull request, not by hand.
 
 ## Conventions to Note
 
@@ -52,4 +52,4 @@ This note captures a maintainer-focused map of the repository: packages, structu
   `Ploch.TestingSupport.XUnit3.*` projects unconditionally, so running tests always requires the sibling
   `ploch-common` checkout; without it the run fails to bind `Ploch.Common` (issue #95).
 - NUKE pipeline: `./build.sh` (uses `build/_build.csproj`)
-- SampleApp: `dotnet build Ploch.Data.SampleApp.slnx` (standalone package mode) or `dotnet build Ploch.Data.slnx -p:UsePlochProjectReferences=true` (solution mode)
+- SampleApp: `dotnet build samples/SampleApp/Ploch.Data.SampleApp.slnx` for package mode, or the same solution with `-p:UsePlochProjectReferences=true` to compile it against library source. Since #185 the sample's projects are no longer members of `Ploch.Data.slnx`, so building the main solution neither builds nor validates them.

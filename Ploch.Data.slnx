@@ -172,12 +172,7 @@
     <File Path="samples/SampleApp/Directory.Packages.props" />
     <File Path="samples/SampleApp/ProjectReferences.props" />
     <File Path="samples/SampleApp/README.md" />
-    <Project Path="samples/SampleApp/src/ConsoleApp/Ploch.Data.SampleApp.ConsoleApp.csproj" />
-    <Project Path="samples/SampleApp/src/Data.SQLite/Ploch.Data.SampleApp.Data.SQLite.csproj" />
-    <Project Path="samples/SampleApp/src/Data.SqlServer/Ploch.Data.SampleApp.Data.SqlServer.csproj" />
-    <Project Path="samples/SampleApp/src/Data/Ploch.Data.SampleApp.Data.csproj" />
-    <Project Path="samples/SampleApp/src/Domain/Ploch.Data.SampleApp.Domain.csproj" />
-    <Project Path="samples/SampleApp/tests/IntegrationTests/Ploch.Data.SampleApp.IntegrationTests.csproj" />
+    <File Path="samples/SampleApp/Ploch.Data.SampleApp.slnx" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/build-dotnet.yml" />

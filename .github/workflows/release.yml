@@ -19,8 +19,9 @@ on:
       # to be misconfigured, because a trusted publishing policy binds to
       # (owner, repo, workflow filename) and cannot be verified from outside nuget.org.
       #
-      # Skipped: the tag push, both nuget.org pushes, the GitHub Release, and the
-      # bookkeeping pull request - every irreversible or externally visible effect.
+      # Skipped: the tag push, the GitHub Packages publish, both nuget.org pushes, the
+      # publish verification, the GitHub Release, the bookkeeping pull request and the
+      # mrploch-development version bump - every irreversible or externally visible effect.
       #
       # On failure ordering in a REAL run: the tag push happens BEFORE NuGet/login, so a
       # bad trusted-publishing policy fails the run with the tag already pushed. No package
@@ -28,7 +29,7 @@ on:
       # login - but recovery means deleting the tag before re-running, per docs/releasing.md.
       # Rehearsing with dry_run avoids that cleanup entirely.
       dry_run:
-        description: 'Rehearse the release without publishing anything. Builds, tests, packs and exchanges the OIDC token, then stops before the tag push, the nuget.org pushes, the GitHub Release and the bookkeeping PR.'
+        description: 'Rehearse the release without publishing anything. Builds, tests, packs, gates the SampleApp against the packed artefacts and exchanges the OIDC token, then stops before the tag push, the GitHub Packages publish, the nuget.org pushes, the GitHub Release and the bookkeeping PRs.'
         required: false
         default: false
         type: boolean
@@ -204,10 +205,40 @@ jobs:
       - name: Install NBGV tool
         run: dotnet tool restore
 
+      # The repository's own NuGet.Config already declares a source named "github", so the
+      # previous "does a github source exist?" guard here was always satisfied and never
+      # supplied the credentials. Restore then queried the feed anonymously and failed with
+      # 401/NU1301 (#183, run 34364169999).
+      #
+      # Credentials are therefore always written, and into the *user-level* config: the
+      # repository config clears inherited package sources, but packageSourceCredentials are
+      # matched by source name across configuration files, so credentials stored there still
+      # apply to the repository's "github" source. This mirrors build-dotnet.yml and
+      # publish-docs.yml, which already do exactly this.
+      #
+      # No secret is written to disk. NuGet expands %GH_PACKAGES_TOKEN% at restore time, and
+      # that variable is set only on the steps that restore, so no later step in this job can
+      # resolve the token out of this file.
       - name: Add GitHub Packages Source
-        env:
-          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+        run: |
+          CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
+          mkdir -p "$(dirname "$CONFIG")"
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<configuration>'
+            echo '  <packageSources>'
+            echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
+            echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
+            echo '  </packageSources>'
+            echo '  <packageSourceCredentials>'
+            echo '    <github>'
+            echo '      <add key="Username" value="kploch" />'
+            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+            echo '    </github>'
+            echo '  </packageSourceCredentials>'
+            echo '</configuration>'
+          } > "$CONFIG"
+          cat "$CONFIG"
 
       # Identity only. The PAT is deliberately NOT written into the remote URL here
       # (issue #128): doing so left the credential in .git/config for the remainder of the
@@ -243,6 +274,8 @@ jobs:
           echo "NuGet package version: $NUGET_VERSION"
 
       - name: Restore dependencies
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet restore ./Ploch.Data.slnx
 
       - name: Build (Release)
@@ -263,8 +296,170 @@ jobs:
       # on nuget.org - the published packages would be unrestorable. Packing with
       # -p:UseProjectReferences=false restores the central package versions from Directory.Packages.props
       # instead. Pinning the ploch-common clone to a released tag is tracked in issue #67.
+      #
+      # GH_PACKAGES_TOKEN is required HERE as well as on the restore above. This step passes no
+      # --no-restore, and -p:UseProjectReferences=false changes the dependency graph to package
+      # references, so it performs a second restore. NuGet.Config maps Ploch.* to nuget.org AND
+      # github, so that restore queries the GitHub feed and 401s without the credential - even
+      # though the SampleApp is no longer part of this solution.
+      # Recompile against PACKAGE references before packing, then pack exactly what was
+      # built (#185).
+      #
+      # This step is not redundant with "Build (Release)" above. That build - and the tests
+      # that follow it - must use ProjectReferences, because the Ploch.TestingSupport.XUnit3.*
+      # projects are not published as packages and the test projects reference the sibling
+      # ploch-common checkout by project. Mixing that with a Ploch.Common PackageReference is
+      # what broke `dotnet test -c Release` in #95.
+      #
+      # Packing, however, must not ship those binaries. -p:UseProjectReferences=false on
+      # `dotnet pack` alone reaches only the NUSPEC GENERATOR: the compile already happened
+      # under the previous property value and MSBuild's incremental check sees up-to-date
+      # outputs, so it never recompiles. The package then declares a dependency on stable
+      # Ploch.Common while its assemblies still demand the sibling checkout's prerelease:
+      #
+      #   nuspec:   Ploch.Common -> 4.0.47
+      #   assembly: Ploch.Common -> 4.1.4.48466
+      #   consumer: System.IO.FileNotFoundException at AddRepositories<TDbContext>()
+      #
+      # Restore succeeds and the application fails at RUN TIME, which is why no existing
+      # check caught it - restore validates the nuspec, compile validates source, and the
+      # tests run against project-referenced binaries. Only executing the packaged assembly
+      # against its own declared dependencies exposes the contradiction, which is exactly
+      # what the SampleApp consumer gate below now does.
+      #
+      # Building explicitly with the same property and then packing with --no-build makes the
+      # intent unambiguous: compile under these references, then package precisely those
+      # binaries. Verified locally - the sample fails 25/25 against packages produced the old
+      # way and passes 25/25 against packages produced this way.
+      #
+      # --no-incremental is load-bearing, not tidiness. The defect this step exists to prevent
+      # WAS an up-to-date check: MSBuild saw current outputs and skipped the recompile, so the
+      # nuspec changed while the assemblies did not. A reference-graph change usually busts
+      # that check, but "usually" is the wrong guarantee for the step whose whole purpose is
+      # to stop a silent skip, so the skip is disabled outright.
+      - name: Build for packaging (package-resolved dependencies)
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: dotnet build ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false --no-incremental
+
       - name: Pack (package-resolved dependencies)
-        run: dotnet pack ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false -o ./artifacts/packages
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: dotnet pack ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false --no-build -o ./artifacts/packages
+
+      # SampleApp consumer gate (#185).
+      #
+      # This is the check the release previously lacked entirely: does the sample - which is the
+      # documentation a consumer starts from - actually build against the packages this release
+      # is about to publish? The library's own tests never answer that, because they run against
+      # project references, not against the final package dependency graph a consumer restores.
+      #
+      # It deliberately runs against a LOCAL feed of the artefacts just packed, NOT against
+      # GitHub Packages. Package ids on a remote feed are effectively immutable, so publishing
+      # first and gating afterwards would strand an unusable 4.0.0 that could never be
+      # republished. Gating locally keeps the whole check reversible: nothing has left this
+      # runner yet.
+      #
+      # The generated config is not a convenience - two NuGet behaviours make it mandatory:
+      #
+      #   1. packageSourceMapping requires EVERY package to match a pattern, and sources that
+      #      match no pattern are never consulted. The repository NuGet.Config maps Ploch.* to
+      #      nuget.org and github only, so a local feed added with --source would be silently
+      #      ignored (NU1102: "Versions from <source> were not considered").
+      #   2. "When the requested package already exists in the global packages folder, no source
+      #      look-up will happen and the mappings will be ignored." A cached Ploch.Data.* of the
+      #      same version would therefore satisfy the restore and the gate would pass without
+      #      ever looking at the freshly packed artefacts - a green check proving nothing.
+      #
+      # Hence an isolated globalPackagesFolder plus explicit mappings. Ploch.Data.* is the
+      # longest matching prefix and is mapped ONLY to the local feed, so those packages can come
+      # from nowhere else. Ploch.* is mapped to github AND nuget.org: the sample consumes
+      # Ploch.CommandLine.Spectre, published only on GitHub Packages, while the packed packages
+      # depend on stable Ploch.Common, published only on nuget.org.
+      #
+      # PlochDataPackagesVersion is overridden as an MSBuild global property rather than by
+      # rewriting samples/SampleApp/Directory.Packages.props: a global property outranks the
+      # project-file assignment, so the gate needs no file mutation and leaves no dirty working
+      # tree across the tag and publish steps that follow. The durable update to that file stays
+      # where it belongs, in the post-release bookkeeping.
+      - name: Build and test the SampleApp against the packed artefacts
+        if: success()
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          set -euo pipefail
+
+          FEED="$(pwd)/artifacts/packages"
+          CONFIG="$RUNNER_TEMP/sample-gate.nuget.config"
+          GPF="$RUNNER_TEMP/sample-gate-packages"
+          SAMPLE="./samples/SampleApp/Ploch.Data.SampleApp.slnx"
+
+          # Fail loudly rather than silently gating against an empty feed.
+          PACKED=$(find "$FEED" -name 'Ploch.Data.*.nupkg' | wc -l)
+          if [ "$PACKED" -eq 0 ]; then
+            echo "::error::No Ploch.Data.*.nupkg found in $FEED - the pack step produced nothing to gate against."
+            exit 1
+          fi
+          # Assert the artefacts really carry the version being released. Without this, a
+          # stale nupkg left in the output directory could be gated and published under the
+          # wrong assumption, and the -p:PlochDataPackagesVersion override would quietly
+          # resolve something other than what was just built.
+          WRONG=$(find "$FEED" -name 'Ploch.Data.*.nupkg' ! -name "*.${NUGET_VERSION}.nupkg" || true)
+          if [ -n "$WRONG" ]; then
+            echo "::error::The package output directory holds Ploch.Data artefacts that are not version ${NUGET_VERSION}:"
+            echo "$WRONG"
+            exit 1
+          fi
+          echo "Gating the SampleApp against $PACKED packed package(s) at version ${NUGET_VERSION}."
+
+          mkdir -p "$GPF"
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<configuration>'
+            echo '  <config>'
+            echo "    <add key=\"globalPackagesFolder\" value=\"$GPF\" />"
+            echo '  </config>'
+            echo '  <packageSources>'
+            echo '    <clear />'
+            echo "    <add key=\"local\" value=\"$FEED\" />"
+            echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
+            echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
+            echo '  </packageSources>'
+            echo '  <packageSourceCredentials>'
+            echo '    <github>'
+            echo '      <add key="Username" value="kploch" />'
+            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+            echo '    </github>'
+            echo '  </packageSourceCredentials>'
+            echo '  <packageSourceMapping>'
+            echo '    <clear />'
+            echo '    <packageSource key="local">'
+            echo '      <package pattern="Ploch.Data.*" />'
+            echo '    </packageSource>'
+            echo '    <packageSource key="github">'
+            echo '      <package pattern="Ploch.*" />'
+            echo '    </packageSource>'
+            echo '    <packageSource key="nuget.org">'
+            echo '      <package pattern="*" />'
+            # Ploch.* is listed under BOTH github and nuget.org, for the same reason the
+            # repository NuGet.Config spells out: mapping resolves by the MOST SPECIFIC
+            # matching pattern, not by union, so with Ploch.* on github alone the "*" entry
+            # never applies to a Ploch package and nuget.org is never consulted. Stable
+            # releases live on nuget.org and only prereleases on GitHub Packages, so the
+            # packed Ploch.Data.* packages could not resolve their own stable Ploch.Common
+            # dependency (NU1103). Ploch.Data.* remains a longer, more specific prefix mapped
+            # only to the local feed, so the artefacts under test still cannot come from
+            # anywhere else.
+            echo '      <package pattern="Ploch.*" />'
+            echo '    </packageSource>'
+            echo '  </packageSourceMapping>'
+            echo '</configuration>'
+          } > "$CONFIG"
+
+          dotnet restore "$SAMPLE" --configfile "$CONFIG" -p:PlochDataPackagesVersion="$NUGET_VERSION"
+          dotnet build   "$SAMPLE" --no-restore -c Release -p:PlochDataPackagesVersion="$NUGET_VERSION"
+          dotnet test    "$SAMPLE" --no-build   -c Release --verbosity normal -p:PlochDataPackagesVersion="$NUGET_VERSION"
 
       - name: Upload test results
         if: always()
@@ -307,6 +502,43 @@ jobs:
             git remote set-url origin "$REPO_URL"
           fi
           echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      # Publish to GitHub Packages BEFORE nuget.org, and only after the consumer gate has
+      # passed (#185).
+      #
+      # Every irreversible publish is deferred until the sample has proved the artefacts are
+      # consumable, because ids on a remote feed cannot practically be withdrawn. GitHub
+      # Packages goes first because it is the internal feed this workspace restores from, so a
+      # bad artefact surfaces there rather than on the public one.
+      #
+      # These are the SAME files the gate validated and the same files nuget.org receives
+      # below. Nothing is rebuilt in between, so what consumers install is byte-for-byte what
+      # was tested.
+      - name: Publish NuGet packages to GitHub Packages
+        if: success() && inputs.dry_run != true
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Same Ploch.Data.* filter as the nuget.org push below: packing the solution also
+          # packs the ploch-common projects behind the unpublished TestingSupport references,
+          # and those belong to another repository.
+          PKGS=$(find ./artifacts/packages -name 'Ploch.Data.*.nupkg')
+          if [ -z "$PKGS" ]; then
+            echo "::error::No Ploch.Data.*.nupkg found to publish to GitHub Packages."
+            exit 1
+          fi
+          echo "$PKGS" | while IFS= read -r p; do
+            dotnet nuget push "$p" --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN"
+          done
+          # Symbols are best-effort: a symbol rejection must not abort a release whose
+          # packages are already published.
+          SYMS=$(find ./artifacts/packages -name 'Ploch.Data.*.snupkg' || true)
+          if [ -n "$SYMS" ]; then
+            echo "$SYMS" | while IFS= read -r p; do
+              dotnet nuget push "$p" --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN" || true
+            done
+          fi
 
       # Exchange the GitHub OIDC token for a short-lived nuget.org API key.
       #
@@ -354,10 +586,94 @@ jobs:
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
-          find ./artifacts/packages -name 'Ploch.Data.*.snupkg' | while read pkg; do
+          find ./artifacts/packages -name 'Ploch.Data.*.snupkg' | while IFS= read -r pkg; do
             echo "Publishing symbols $pkg"
             dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json --skip-duplicate -k "$NUGET_API_KEY"
           done
+
+      # Publish verification (#185).
+      #
+      # A successful `dotnet nuget push` means nuget.org ACCEPTED the package, not that anyone
+      # can install it: ingestion and catalogue indexing are asynchronous, and a package can be
+      # accepted and still fail validation. Without this, a PARTIAL release - some ids live,
+      # others silently missing - is indistinguishable from a complete one, and the first to
+      # find out is a consumer hitting NU1101.
+      #
+      # Resolution is checked against nuget.org ONLY, ignoring the GitHub feed, so this
+      # verifies the public surface a real consumer sees. Indexing lag is normal, so it retries
+      # rather than failing on the first miss.
+      - name: Verify the published packages are resolvable from nuget.org
+        # Deliberately NOT `success()`. A push step that fails part-way is exactly when this
+        # check matters most: some ids are already public and irreversible while others are
+        # not, which is the definition of a partial release. Gating verification behind the
+        # success of the thing it verifies would blind it to its own failure case.
+        if: ${{ !cancelled() && inputs.dry_run != true }}
+        # Non-gating on purpose. By the time this runs the packages are ALREADY on nuget.org
+        # and cannot be withdrawn, so a red job here would report a successful publish as a
+        # failed release - and invite a re-run of steps that are not idempotent. Indexing lag
+        # is routine and is not a failed release. The signal is kept, loudly, as a warning and
+        # a step summary; what changes is that a slow catalogue can no longer masquerade as a
+        # broken 4.0.0.
+        continue-on-error: true
+        env:
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          set -euo pipefail
+          MISSING=""
+          COUNT=0
+          for FILE in ./artifacts/packages/Ploch.Data.*.nupkg; do
+            # With no matches the glob stays literal and the loop runs once over the pattern
+            # itself. The id-derivation guard below already rejects that, but skipping outright
+            # is clearer and keeps the COUNT check meaningful.
+            [ -e "$FILE" ] || continue
+            BASE=$(basename "$FILE" .nupkg)
+            # The file name is "<id>.<version>", so stripping the known version leaves the id.
+            ID="${BASE%.$NUGET_VERSION}"
+            if [ "$ID" = "$BASE" ]; then
+              echo "::warning::Could not derive an id from ${BASE} at ${NUGET_VERSION}; skipping."
+              continue
+            fi
+            COUNT=$((COUNT + 1))
+            FOUND=""
+            for ATTEMPT in 1 2 3 4 5 6; do
+              # The flat container, not the search index. Search indexing lags ingestion by
+              # minutes and is a poor proxy for "can a consumer restore this"; the flat container
+              # is the endpoint restore actually reads, so it answers the question being asked.
+              if curl -sf "https://api.nuget.org/v3-flatcontainer/$(echo "$ID" | tr '[:upper:]' '[:lower:]')/index.json" 2>/dev/null | grep -qi "\"$NUGET_VERSION\""; then
+                FOUND="yes"
+                break
+              fi
+              echo "  ${ID} not indexed yet (attempt ${ATTEMPT}/6); waiting 30s."
+              sleep 30
+            done
+            if [ -n "$FOUND" ]; then
+              echo "  OK      ${ID} ${NUGET_VERSION}"
+            else
+              echo "  MISSING ${ID} ${NUGET_VERSION}"
+              MISSING="${MISSING} ${ID}"
+            fi
+          done
+          if [ "$COUNT" -eq 0 ]; then
+            # Reachable when an earlier step failed before packing, now that this step runs on
+            # failure too. A warning, not an error: the release has already failed elsewhere and
+            # a second red step would only obscure the real cause.
+            echo "::warning::No Ploch.Data.*.nupkg found to verify - an earlier step failed before packing."
+            exit 0
+          fi
+          if [ -n "$MISSING" ]; then
+            echo "::warning::Pushed but not resolvable from nuget.org after ~3 minutes:${MISSING}. Usually catalogue lag; if it persists, the release is PARTIAL - check before announcing it. Do NOT simply re-run this workflow: the publish steps are not idempotent."
+            {
+              echo "### Publish verification incomplete"
+              echo
+              echo "These ids were pushed but were not resolvable from nuget.org within ~3 minutes:"
+              echo
+              for ID in $MISSING; do echo "- \`${ID}\` ${NUGET_VERSION}"; done
+              echo
+              echo "This is usually indexing lag. Re-check on nuget.org before announcing the release, and do not re-run the workflow to 'fix' it - the publish steps are not idempotent."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "All ${COUNT} published package(s) are resolvable from nuget.org."
 
       # Dry-run report. The point of the rehearsal is to prove the OIDC exchange works and
       # to show exactly what a real run would have published, so this asserts the key was
@@ -390,7 +706,7 @@ jobs:
             echo "Trusted Publishing exchanged the GitHub OIDC token for a nuget.org key successfully."
             echo "That is the step this rehearsal exists to prove; it has never run in this repository before."
             echo
-            echo "**Skipped:** tag push, both nuget.org pushes, the GitHub Release, and the bookkeeping pull request."
+            echo "**Skipped:** tag push, the GitHub Packages publish, both nuget.org pushes, the publish verification, the GitHub Release, the bookkeeping pull request and the mrploch-development version bump."
             echo
             echo "A real run would have published these packages:"
             echo
@@ -684,3 +1000,121 @@ jobs:
             echo
             echo "Merge it to bring \`${GITHUB_REF_NAME}\` in line with the published release."
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # Propagate the released version to the org-wide central package versions (#185).
+      #
+      # dependencies/Ploch.Packages.props in mrploch-development is what every other repository
+      # in this workspace imports to pin Ploch.* versions. Left alone it drifts behind - it
+      # still said 3.0.1 while 4.x was being prepared - and each consuming repository silently
+      # keeps building against a superseded major.
+      #
+      # DELIBERATELY NON-GATING. By the time this runs the packages are on nuget.org and cannot
+      # be withdrawn, so a failure here must not fail the release: that would report a
+      # successful publish as a failed run and invite re-running steps that are not idempotent.
+      # It is also the only step reaching into another repository, so it is the likeliest to
+      # fail on permissions alone - GITHUB_TOKEN cannot write to another repo, hence the
+      # org-level GH_TOKEN. Every failure path degrades to a warning plus a step-summary note
+      # saying exactly what to change by hand.
+      - name: Propagate the released version to mrploch-development
+        if: success() && inputs.dry_run != true
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          RELEASED_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          # -e is already active (Actions runs bash -e) but is stated explicitly to match the
+          # other run blocks in this file. Every command whose failure is tolerable below is
+          # guarded with `|| true` or an `if !` test, and the step is continue-on-error, so a
+          # failure here can never fail the release.
+          set -euo pipefail
+          TARGET_REPO="mrploch/mrploch-development"
+          PROPS="dependencies/Ploch.Packages.props"
+          BRANCH="chore/ploch-data-${RELEASED_VERSION}"
+          WORK="$RUNNER_TEMP/mrploch-development"
+
+          note_manual_step() {
+            echo "### Central package version NOT updated" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "$1" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Set PlochDataPackagesVersion in ${PROPS} of ${TARGET_REPO} to ${RELEASED_VERSION} by hand." >> "$GITHUB_STEP_SUMMARY"
+          }
+
+          # The credential is removed from the remote URL immediately after the clone and
+          # reinstated only for the push, matching the convention the tag and bookkeeping steps
+          # follow (#128): a token embedded in .git/config outlives the command that needed it
+          # and is readable by every later step in the job.
+          CLEAN_URL="https://github.com/${TARGET_REPO}.git"
+          trap 'git -C "$WORK" remote set-url origin "$CLEAN_URL" 2>/dev/null || true' EXIT
+          if ! git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${TARGET_REPO}.git" "$WORK" 2>/dev/null; then
+            echo "::warning::Could not clone ${TARGET_REPO}; the central package version was not updated."
+            note_manual_step "The release could not clone it, most likely because GH_TOKEN lacks write access."
+            exit 0
+          fi
+
+          cd "$WORK"
+          git remote set-url origin "$CLEAN_URL"
+
+          if [ ! -f "$PROPS" ]; then
+            echo "::warning::${PROPS} not found in ${TARGET_REPO}; nothing to update."
+            note_manual_step "The expected file was not found, so its location has probably changed."
+            exit 0
+          fi
+
+          CURRENT=$(grep -oP '(?<=<PlochDataPackagesVersion>)[^<]+' "$PROPS" || true)
+          if [ "$CURRENT" = "$RELEASED_VERSION" ]; then
+            echo "${PROPS} already pins ${RELEASED_VERSION}; nothing to do."
+            exit 0
+          fi
+
+          sed -i "s|<PlochDataPackagesVersion>[^<]*</PlochDataPackagesVersion>|<PlochDataPackagesVersion>${RELEASED_VERSION}</PlochDataPackagesVersion>|" "$PROPS"
+          if git diff --quiet; then
+            echo "::warning::The substitution in ${PROPS} changed nothing; the property may have been renamed."
+            note_manual_step "The release edited the file but produced no diff, so the property name has probably changed."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add "$PROPS"
+          # Repeated single-line -m flags: an embedded multi-line string would need a
+          # continuation at column 0, which terminates this YAML block scalar.
+          git commit -m "chore(deps): Point PlochDataPackagesVersion at ${RELEASED_VERSION}" -m "Ploch.Data ${RELEASED_VERSION} is published on nuget.org. Raised automatically by the ploch-data release workflow." -m "Refs: mrploch/ploch-data#185"
+
+          # A previous run may have pushed this branch and then failed before opening its pull
+          # request. A plain push then rejects as non-fast-forward and the retry would give up
+          # having never attempted the PR - the branch sits there forever with nothing tracking
+          # it. Force-with-lease updates our own bookkeeping branch safely, and the push is only
+          # treated as fatal if the branch still does not exist afterwards.
+          # Reinstate the credential for the single command that needs it; the EXIT trap above
+          # removes it again on every path out of this step.
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${TARGET_REPO}.git"
+          if ! git push --force-with-lease origin "$BRANCH" 2>/dev/null; then
+            if ! git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
+              echo "::warning::Could not push ${BRANCH} to ${TARGET_REPO}."
+              note_manual_step "The release could not push a branch, most likely because GH_TOKEN lacks write access."
+              exit 0
+            fi
+            echo "::warning::Could not update ${BRANCH}, but it already exists on ${TARGET_REPO}; continuing to the pull request."
+          fi
+
+          git remote set-url origin "$CLEAN_URL"
+
+          PR_BODY="Ploch.Data ${RELEASED_VERSION} is published on nuget.org, so the central pin can move from ${CURRENT:-unknown}. Raised automatically by the ploch-data release workflow (mrploch/ploch-data#185)."
+          PR_URL=$(gh pr create --repo "$TARGET_REPO" --head "$BRANCH" --base main --title "chore(deps): Point PlochDataPackagesVersion at ${RELEASED_VERSION}" --body "$PR_BODY" 2>/dev/null || true)
+
+          if [ -z "$PR_URL" ]; then
+            PR_URL=$(gh pr list --repo "$TARGET_REPO" --head "$BRANCH" --state open --json url --jq '.[0].url // empty' 2>/dev/null || true)
+          fi
+
+          if [ -z "$PR_URL" ]; then
+            echo "::warning::Pushed ${BRANCH} to ${TARGET_REPO} but could not open a pull request."
+            note_manual_step "The branch ${BRANCH} is pushed; open its pull request by hand."
+            exit 0
+          fi
+
+          echo "Opened ${PR_URL}"
+          echo "### Central package version" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Pull request against ${TARGET_REPO} moving PlochDataPackagesVersion to ${RELEASED_VERSION}: ${PR_URL}" >> "$GITHUB_STEP_SUMMARY"

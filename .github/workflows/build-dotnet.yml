@@ -175,11 +175,13 @@ jobs:
             echo '</configuration>'
           } > "$CONFIG"
           cat "$CONFIG"
-      # Restore (UsePlochProjectReferences switches SampleApp from PackageReference to ProjectReference)
+      # The SampleApp is no longer a member of this solution (#185), so
+      # -p:UsePlochProjectReferences=true would be inert here. The sample is built
+      # from its own solution further down, where the switch actually applies.
       - name: Restore dependencies
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet restore ./Ploch.Data.slnx -p:UsePlochProjectReferences=true
+        run: dotnet restore ./Ploch.Data.slnx
 
       # Capture the NBGV-computed package version so SonarScanner can pass it
       # as sonar.projectVersion. Without this, the "Previous version" new-code
@@ -238,9 +240,9 @@ jobs:
 
       # Build and Test (always runs regardless of SonarCloud status)
       - name: Build
-        run: dotnet build ./Ploch.Data.slnx --no-restore -p:UsePlochProjectReferences=true
+        run: dotnet build ./Ploch.Data.slnx --no-restore
       - name: Test Coverage
-        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
 
       # SonarCloud end (runs even after test failures, only if begin succeeded).
       # Fails the job loudly if post-processing fails — silent failures here led
@@ -250,6 +252,58 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+
+      # SampleApp source gate (#185).
+      #
+      # The sample ships as documentation for the CURRENT library version, so a change that
+      # breaks it must fail the pull request that introduced the change - not the release
+      # weeks later. -p:UsePlochProjectReferences=true swaps the sample's Ploch.Data.*
+      # PackageReferences for ProjectReferences into this checkout's source, so this gate
+      # answers "does the sample still compile against the code as it is right now?".
+      #
+      # It still needs the GitHub Packages credential despite that switch. The switch replaces
+      # only the Ploch.Data.* references; the sample's ConsoleApp also consumes
+      # Ploch.CommandLine.Spectre, which lives in another repository and is published only to
+      # GitHub Packages. Without the token this step fails with 401/NU1301 - which is exactly
+      # how this was found, on the first CI run of this gate.
+      #
+      # It therefore does NOT run on fork pull requests, which cannot read repository secrets
+      # (#158). It skips with a warning there rather than failing: a fork contributor must not
+      # see a red build for a credential they cannot have. The complementary consumer gate,
+      # which builds the sample against the real packed artefacts, lives in release.yml.
+      #
+      # Placed after SonarScanner End on purpose: the sample is documentation, not library
+      # code, and including it would distort the analysed codebase and its coverage figures.
+      - name: Build and test the SampleApp against library source
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          # Dependabot is the trap here. Its pull requests are branches on THIS repository, so
+          # head.repo.fork is false, yet they receive no repository Actions secrets - Dependabot
+          # has a separate secret store. Treating them as trusted would fail the error path below
+          # and turn every weekly dependency update red. They are therefore classed with forks:
+          # cannot have the token, so skip rather than fail.
+          NO_SECRETS_EXPECTED: ${{ github.event_name == 'pull_request' && (github.event.pull_request.head.repo.fork || github.actor == 'dependabot[bot]') }}
+        run: |
+          set -euo pipefail
+          # Distinguish "cannot have the secret" from "should have it and does not".
+          #
+          # A fork pull request has no access to repository secrets, so skipping is the only
+          # option and a red build would punish a contributor for something they cannot fix.
+          # On this repository the secret must be present: a blanket skip would let the gate
+          # silently stop running if the secret were ever removed, renamed or left to expire,
+          # and a gate that quietly stops gating is worse than no gate at all.
+          if [ -z "${GH_PACKAGES_TOKEN:-}" ]; then
+            if [ "${NO_SECRETS_EXPECTED}" = "true" ]; then
+              echo "::warning title=SampleApp gate skipped::GH_PACKAGES_TOKEN is unavailable, as expected on a fork or Dependabot pull request. The sample consumes Ploch.CommandLine.Spectre from GitHub Packages, so it cannot be built here (#158). The release workflow's consumer gate still covers the sample before anything is published."
+              exit 0
+            fi
+            echo "::error title=SampleApp gate cannot run::GH_PACKAGES_TOKEN is missing on a non-fork run. The sample cannot be validated without it, and failing loudly is deliberate - a silent skip would let this gate stop gating unnoticed."
+            exit 1
+          fi
+          SAMPLE=./samples/SampleApp/Ploch.Data.SampleApp.slnx
+          dotnet restore "$SAMPLE" -p:UsePlochProjectReferences=true
+          dotnet build   "$SAMPLE" --no-restore -p:UsePlochProjectReferences=true
+          dotnet test    "$SAMPLE" --no-build --verbosity normal -p:UsePlochProjectReferences=true
 
       - name: Upload Test Results
         if: always()
@@ -286,7 +340,7 @@ jobs:
           # docfx reads the compiled Release assemblies and their XML doc files (see
           # publish-docs.yml for why source-based extraction cannot work here). The main
           # build above is Debug, so Release output has to be produced for the docs.
-          dotnet build ./Ploch.Data.slnx -c Release -p:UsePlochProjectReferences=true
+          dotnet build ./Ploch.Data.slnx -c Release
           dotnet docfx DocumentationSite/docfx.json
 
       - name: Warn if the documentation build failed
