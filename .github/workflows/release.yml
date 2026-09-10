@@ -441,6 +441,43 @@ jobs:
           fi
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
+      # Publish to GitHub Packages BEFORE nuget.org, and only after the consumer gate has
+      # passed (#185).
+      #
+      # Every irreversible publish is deferred until the sample has proved the artefacts are
+      # consumable, because ids on a remote feed cannot practically be withdrawn. GitHub
+      # Packages goes first because it is the internal feed this workspace restores from, so a
+      # bad artefact surfaces there rather than on the public one.
+      #
+      # These are the SAME files the gate validated and the same files nuget.org receives
+      # below. Nothing is rebuilt in between, so what consumers install is byte-for-byte what
+      # was tested.
+      - name: Publish NuGet packages to GitHub Packages
+        if: success() && inputs.dry_run != true
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Same Ploch.Data.* filter as the nuget.org push below: packing the solution also
+          # packs the ploch-common projects behind the unpublished TestingSupport references,
+          # and those belong to another repository.
+          PKGS=$(find ./artifacts/packages -name 'Ploch.Data.*.nupkg')
+          if [ -z "$PKGS" ]; then
+            echo "::error::No Ploch.Data.*.nupkg found to publish to GitHub Packages."
+            exit 1
+          fi
+          echo "$PKGS" | while IFS= read -r p; do
+            dotnet nuget push "$p" --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN"
+          done
+          # Symbols are best-effort: a symbol rejection must not abort a release whose
+          # packages are already published.
+          SYMS=$(find ./artifacts/packages -name 'Ploch.Data.*.snupkg' || true)
+          if [ -n "$SYMS" ]; then
+            echo "$SYMS" | while IFS= read -r p; do
+              dotnet nuget push "$p" --source github --skip-duplicate -k "$GH_PACKAGES_TOKEN" || true
+            done
+          fi
+
       # Exchange the GitHub OIDC token for a short-lived nuget.org API key.
       #
       # Placed immediately before the push steps on purpose: the issued key is valid for
@@ -491,6 +528,60 @@ jobs:
             echo "Publishing symbols $pkg"
             dotnet nuget push "$pkg" --source https://api.nuget.org/v3/index.json --skip-duplicate -k "$NUGET_API_KEY"
           done
+
+      # Publish verification (#185).
+      #
+      # A successful `dotnet nuget push` means nuget.org ACCEPTED the package, not that anyone
+      # can install it: ingestion and catalogue indexing are asynchronous, and a package can be
+      # accepted and still fail validation. Without this, a PARTIAL release - some ids live,
+      # others silently missing - is indistinguishable from a complete one, and the first to
+      # find out is a consumer hitting NU1101.
+      #
+      # Resolution is checked against nuget.org ONLY, ignoring the GitHub feed, so this
+      # verifies the public surface a real consumer sees. Indexing lag is normal, so it retries
+      # rather than failing on the first miss.
+      - name: Verify the published packages are resolvable from nuget.org
+        if: success() && inputs.dry_run != true
+        env:
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          set -euo pipefail
+          MISSING=""
+          COUNT=0
+          for FILE in ./artifacts/packages/Ploch.Data.*.nupkg; do
+            BASE=$(basename "$FILE" .nupkg)
+            # The file name is "<id>.<version>", so stripping the known version leaves the id.
+            ID="${BASE%.$NUGET_VERSION}"
+            if [ "$ID" = "$BASE" ]; then
+              echo "::warning::Could not derive an id from ${BASE} at ${NUGET_VERSION}; skipping."
+              continue
+            fi
+            COUNT=$((COUNT + 1))
+            FOUND=""
+            for ATTEMPT in 1 2 3 4 5 6; do
+              if dotnet package search "$ID" --exact-match --source https://api.nuget.org/v3/index.json --format json 2>/dev/null | grep -q "\"$NUGET_VERSION\""; then
+                FOUND="yes"
+                break
+              fi
+              echo "  ${ID} not indexed yet (attempt ${ATTEMPT}/6); waiting 30s."
+              sleep 30
+            done
+            if [ -n "$FOUND" ]; then
+              echo "  OK      ${ID} ${NUGET_VERSION}"
+            else
+              echo "  MISSING ${ID} ${NUGET_VERSION}"
+              MISSING="${MISSING} ${ID}"
+            fi
+          done
+          if [ "$COUNT" -eq 0 ]; then
+            echo "::error::No Ploch.Data.*.nupkg found to verify - pack or publish produced nothing."
+            exit 1
+          fi
+          if [ -n "$MISSING" ]; then
+            echo "::error::Pushed but not resolvable from nuget.org after ~3 minutes:${MISSING}. This release is PARTIAL - investigate before announcing it."
+            exit 1
+          fi
+          echo "All ${COUNT} published package(s) are resolvable from nuget.org."
 
       # Dry-run report. The point of the rehearsal is to prove the OIDC exchange works and
       # to show exactly what a real run would have published, so this asserts the key was
@@ -817,3 +908,97 @@ jobs:
             echo
             echo "Merge it to bring \`${GITHUB_REF_NAME}\` in line with the published release."
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # Propagate the released version to the org-wide central package versions (#185).
+      #
+      # dependencies/Ploch.Packages.props in mrploch-development is what every other repository
+      # in this workspace imports to pin Ploch.* versions. Left alone it drifts behind - it
+      # still said 3.0.1 while 4.x was being prepared - and each consuming repository silently
+      # keeps building against a superseded major.
+      #
+      # DELIBERATELY NON-GATING. By the time this runs the packages are on nuget.org and cannot
+      # be withdrawn, so a failure here must not fail the release: that would report a
+      # successful publish as a failed run and invite re-running steps that are not idempotent.
+      # It is also the only step reaching into another repository, so it is the likeliest to
+      # fail on permissions alone - GITHUB_TOKEN cannot write to another repo, hence the
+      # org-level GH_TOKEN. Every failure path degrades to a warning plus a step-summary note
+      # saying exactly what to change by hand.
+      - name: Propagate the released version to mrploch-development
+        if: success() && inputs.dry_run != true
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          RELEASED_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          set -uo pipefail
+          TARGET_REPO="mrploch/mrploch-development"
+          PROPS="dependencies/Ploch.Packages.props"
+          BRANCH="chore/ploch-data-${RELEASED_VERSION}"
+          WORK="$RUNNER_TEMP/mrploch-development"
+
+          note_manual_step() {
+            echo "### Central package version NOT updated" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "$1" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Set PlochDataPackagesVersion in ${PROPS} of ${TARGET_REPO} to ${RELEASED_VERSION} by hand." >> "$GITHUB_STEP_SUMMARY"
+          }
+
+          if ! git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${TARGET_REPO}.git" "$WORK" 2>/dev/null; then
+            echo "::warning::Could not clone ${TARGET_REPO}; the central package version was not updated."
+            note_manual_step "The release could not clone it, most likely because GH_TOKEN lacks write access."
+            exit 0
+          fi
+
+          cd "$WORK"
+
+          if [ ! -f "$PROPS" ]; then
+            echo "::warning::${PROPS} not found in ${TARGET_REPO}; nothing to update."
+            note_manual_step "The expected file was not found, so its location has probably changed."
+            exit 0
+          fi
+
+          CURRENT=$(grep -oP '(?<=<PlochDataPackagesVersion>)[^<]+' "$PROPS" || true)
+          if [ "$CURRENT" = "$RELEASED_VERSION" ]; then
+            echo "${PROPS} already pins ${RELEASED_VERSION}; nothing to do."
+            exit 0
+          fi
+
+          sed -i "s|<PlochDataPackagesVersion>[^<]*</PlochDataPackagesVersion>|<PlochDataPackagesVersion>${RELEASED_VERSION}</PlochDataPackagesVersion>|" "$PROPS"
+          if git diff --quiet; then
+            echo "::warning::The substitution in ${PROPS} changed nothing; the property may have been renamed."
+            note_manual_step "The release edited the file but produced no diff, so the property name has probably changed."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add "$PROPS"
+          # Repeated single-line -m flags: an embedded multi-line string would need a
+          # continuation at column 0, which terminates this YAML block scalar.
+          git commit -m "chore(deps): Point PlochDataPackagesVersion at ${RELEASED_VERSION}" -m "Ploch.Data ${RELEASED_VERSION} is published on nuget.org. Raised automatically by the ploch-data release workflow." -m "Refs: mrploch/ploch-data#185"
+
+          if ! git push origin "$BRANCH" 2>/dev/null; then
+            echo "::warning::Could not push ${BRANCH} to ${TARGET_REPO}."
+            note_manual_step "The release could not push a branch, most likely because GH_TOKEN lacks write access."
+            exit 0
+          fi
+
+          PR_BODY="Ploch.Data ${RELEASED_VERSION} is published on nuget.org, so the central pin can move from ${CURRENT:-unknown}. Raised automatically by the ploch-data release workflow (mrploch/ploch-data#185)."
+          PR_URL=$(gh pr create --repo "$TARGET_REPO" --head "$BRANCH" --base main --title "chore(deps): Point PlochDataPackagesVersion at ${RELEASED_VERSION}" --body "$PR_BODY" 2>/dev/null || true)
+
+          if [ -z "$PR_URL" ]; then
+            PR_URL=$(gh pr list --repo "$TARGET_REPO" --head "$BRANCH" --state open --json url --jq '.[0].url // empty' 2>/dev/null || true)
+          fi
+
+          if [ -z "$PR_URL" ]; then
+            echo "::warning::Pushed ${BRANCH} to ${TARGET_REPO} but could not open a pull request."
+            note_manual_step "The branch ${BRANCH} is pushed; open its pull request by hand."
+            exit 0
+          fi
+
+          echo "Opened ${PR_URL}"
+          echo "### Central package version" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Pull request against ${TARGET_REPO} moving PlochDataPackagesVersion to ${RELEASED_VERSION}: ${PR_URL}" >> "$GITHUB_STEP_SUMMARY"
