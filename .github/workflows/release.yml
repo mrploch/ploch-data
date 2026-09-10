@@ -204,10 +204,40 @@ jobs:
       - name: Install NBGV tool
         run: dotnet tool restore
 
+      # The repository's own NuGet.Config already declares a source named "github", so the
+      # previous "does a github source exist?" guard here was always satisfied and never
+      # supplied the credentials. Restore then queried the feed anonymously and failed with
+      # 401/NU1301 (#183, run 34364169999).
+      #
+      # Credentials are therefore always written, and into the *user-level* config: the
+      # repository config clears inherited package sources, but packageSourceCredentials are
+      # matched by source name across configuration files, so credentials stored there still
+      # apply to the repository's "github" source. This mirrors build-dotnet.yml and
+      # publish-docs.yml, which already do exactly this.
+      #
+      # No secret is written to disk. NuGet expands %GH_PACKAGES_TOKEN% at restore time, and
+      # that variable is set only on the steps that restore, so no later step in this job can
+      # resolve the token out of this file.
       - name: Add GitHub Packages Source
-        env:
-          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet nuget list source --format short | grep -q github || dotnet nuget add source --username kploch --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mrploch/index.json"
+        run: |
+          CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
+          mkdir -p "$(dirname "$CONFIG")"
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<configuration>'
+            echo '  <packageSources>'
+            echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
+            echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
+            echo '  </packageSources>'
+            echo '  <packageSourceCredentials>'
+            echo '    <github>'
+            echo '      <add key="Username" value="kploch" />'
+            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+            echo '    </github>'
+            echo '  </packageSourceCredentials>'
+            echo '</configuration>'
+          } > "$CONFIG"
+          cat "$CONFIG"
 
       # Identity only. The PAT is deliberately NOT written into the remote URL here
       # (issue #128): doing so left the credential in .git/config for the remainder of the
@@ -243,6 +273,8 @@ jobs:
           echo "NuGet package version: $NUGET_VERSION"
 
       - name: Restore dependencies
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet restore ./Ploch.Data.slnx
 
       - name: Build (Release)
@@ -263,8 +295,109 @@ jobs:
       # on nuget.org - the published packages would be unrestorable. Packing with
       # -p:UseProjectReferences=false restores the central package versions from Directory.Packages.props
       # instead. Pinning the ploch-common clone to a released tag is tracked in issue #67.
+      #
+      # GH_PACKAGES_TOKEN is required HERE as well as on the restore above. This step passes no
+      # --no-restore, and -p:UseProjectReferences=false changes the dependency graph to package
+      # references, so it performs a second restore. NuGet.Config maps Ploch.* to nuget.org AND
+      # github, so that restore queries the GitHub feed and 401s without the credential - even
+      # though the SampleApp is no longer part of this solution.
       - name: Pack (package-resolved dependencies)
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: dotnet pack ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false -o ./artifacts/packages
+
+      # SampleApp consumer gate (#185).
+      #
+      # This is the check the release previously lacked entirely: does the sample - which is the
+      # documentation a consumer starts from - actually build against the packages this release
+      # is about to publish? The library's own tests never answer that, because they run against
+      # project references, not against the final package dependency graph a consumer restores.
+      #
+      # It deliberately runs against a LOCAL feed of the artefacts just packed, NOT against
+      # GitHub Packages. Package ids on a remote feed are effectively immutable, so publishing
+      # first and gating afterwards would strand an unusable 4.0.0 that could never be
+      # republished. Gating locally keeps the whole check reversible: nothing has left this
+      # runner yet.
+      #
+      # The generated config is not a convenience - two NuGet behaviours make it mandatory:
+      #
+      #   1. packageSourceMapping requires EVERY package to match a pattern, and sources that
+      #      match no pattern are never consulted. The repository NuGet.Config maps Ploch.* to
+      #      nuget.org and github only, so a local feed added with --source would be silently
+      #      ignored (NU1102: "Versions from <source> were not considered").
+      #   2. "When the requested package already exists in the global packages folder, no source
+      #      look-up will happen and the mappings will be ignored." A cached Ploch.Data.* of the
+      #      same version would therefore satisfy the restore and the gate would pass without
+      #      ever looking at the freshly packed artefacts - a green check proving nothing.
+      #
+      # Hence an isolated globalPackagesFolder plus explicit mappings. Ploch.Data.* is the
+      # longest matching prefix and is mapped ONLY to the local feed, so those packages can come
+      # from nowhere else. Ploch.* still resolves from github because the sample consumes
+      # Ploch.CommandLine.Spectre, which is published there and not on nuget.org.
+      #
+      # PlochDataPackagesVersion is overridden as an MSBuild global property rather than by
+      # rewriting samples/SampleApp/Directory.Packages.props: a global property outranks the
+      # project-file assignment, so the gate needs no file mutation and leaves no dirty working
+      # tree across the tag and publish steps that follow. The durable update to that file stays
+      # where it belongs, in the post-release bookkeeping.
+      - name: Build and test the SampleApp against the packed artefacts
+        if: success()
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
+        run: |
+          set -euo pipefail
+
+          FEED="$(pwd)/artifacts/packages"
+          CONFIG="$RUNNER_TEMP/sample-gate.nuget.config"
+          GPF="$RUNNER_TEMP/sample-gate-packages"
+          SAMPLE="./samples/SampleApp/Ploch.Data.SampleApp.slnx"
+
+          # Fail loudly rather than silently gating against an empty feed.
+          PACKED=$(find "$FEED" -name 'Ploch.Data.*.nupkg' | wc -l)
+          if [ "$PACKED" -eq 0 ]; then
+            echo "::error::No Ploch.Data.*.nupkg found in $FEED - the pack step produced nothing to gate against."
+            exit 1
+          fi
+          echo "Gating the SampleApp against $PACKED packed package(s) at version ${NUGET_VERSION}."
+
+          mkdir -p "$GPF"
+          {
+            echo '<?xml version="1.0" encoding="utf-8"?>'
+            echo '<configuration>'
+            echo '  <config>'
+            echo "    <add key=\"globalPackagesFolder\" value=\"$GPF\" />"
+            echo '  </config>'
+            echo '  <packageSources>'
+            echo '    <clear />'
+            echo "    <add key=\"local\" value=\"$FEED\" />"
+            echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
+            echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
+            echo '  </packageSources>'
+            echo '  <packageSourceCredentials>'
+            echo '    <github>'
+            echo '      <add key="Username" value="kploch" />'
+            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+            echo '    </github>'
+            echo '  </packageSourceCredentials>'
+            echo '  <packageSourceMapping>'
+            echo '    <clear />'
+            echo '    <packageSource key="local">'
+            echo '      <package pattern="Ploch.Data.*" />'
+            echo '    </packageSource>'
+            echo '    <packageSource key="github">'
+            echo '      <package pattern="Ploch.*" />'
+            echo '    </packageSource>'
+            echo '    <packageSource key="nuget.org">'
+            echo '      <package pattern="*" />'
+            echo '    </packageSource>'
+            echo '  </packageSourceMapping>'
+            echo '</configuration>'
+          } > "$CONFIG"
+
+          dotnet restore "$SAMPLE" --configfile "$CONFIG" -p:PlochDataPackagesVersion="$NUGET_VERSION"
+          dotnet build   "$SAMPLE" --no-restore -c Release -p:PlochDataPackagesVersion="$NUGET_VERSION"
+          dotnet test    "$SAMPLE" --no-build   -c Release --verbosity normal -p:PlochDataPackagesVersion="$NUGET_VERSION"
 
       - name: Upload test results
         if: always()

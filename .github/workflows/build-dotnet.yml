@@ -175,11 +175,13 @@ jobs:
             echo '</configuration>'
           } > "$CONFIG"
           cat "$CONFIG"
-      # Restore (UsePlochProjectReferences switches SampleApp from PackageReference to ProjectReference)
+      # The SampleApp is no longer a member of this solution (#185), so
+      # -p:UsePlochProjectReferences=true would be inert here. The sample is built
+      # from its own solution further down, where the switch actually applies.
       - name: Restore dependencies
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet restore ./Ploch.Data.slnx -p:UsePlochProjectReferences=true
+        run: dotnet restore ./Ploch.Data.slnx
 
       # Capture the NBGV-computed package version so SonarScanner can pass it
       # as sonar.projectVersion. Without this, the "Previous version" new-code
@@ -238,9 +240,9 @@ jobs:
 
       # Build and Test (always runs regardless of SonarCloud status)
       - name: Build
-        run: dotnet build ./Ploch.Data.slnx --no-restore -p:UsePlochProjectReferences=true
+        run: dotnet build ./Ploch.Data.slnx --no-restore
       - name: Test Coverage
-        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover" -p:UsePlochProjectReferences=true
+        run: dotnet test ./Ploch.Data.slnx --verbosity normal --no-build --logger "trx;LogFileName=TestOutputResults.xml" /p:CollectCoverage=true /p:CoverletOutput=./CoverageResults/ "/p:CoverletOutputFormat=cobertura%2copencover"
 
       # SonarCloud end (runs even after test failures, only if begin succeeded).
       # Fails the job loudly if post-processing fails — silent failures here led
@@ -250,6 +252,26 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+
+      # SampleApp source gate (#185).
+      #
+      # The sample ships as documentation for the CURRENT library version, so a change that
+      # breaks it must fail the pull request that introduced the change - not the release
+      # weeks later. -p:UsePlochProjectReferences=true swaps the sample's Ploch.Data.*
+      # PackageReferences for ProjectReferences into this checkout's source, so this gate
+      # answers "does the sample still compile against the code as it is right now?".
+      #
+      # It needs no package feed, which is what makes it work on FORK pull requests - those
+      # cannot reach GitHub Packages at all (#158). The complementary consumer gate, which
+      # builds the sample against the real packed artefacts, lives in release.yml.
+      #
+      # Placed after SonarScanner End on purpose: the sample is documentation, not library
+      # code, and including it would distort the analysed codebase and its coverage figures.
+      - name: Build and test the SampleApp against library source
+        run: |
+          dotnet restore ./samples/SampleApp/Ploch.Data.SampleApp.slnx -p:UsePlochProjectReferences=true
+          dotnet build ./samples/SampleApp/Ploch.Data.SampleApp.slnx --no-restore -p:UsePlochProjectReferences=true
+          dotnet test ./samples/SampleApp/Ploch.Data.SampleApp.slnx --no-build --verbosity normal -p:UsePlochProjectReferences=true
 
       - name: Upload Test Results
         if: always()
@@ -286,7 +308,7 @@ jobs:
           # docfx reads the compiled Release assemblies and their XML doc files (see
           # publish-docs.yml for why source-based extraction cannot work here). The main
           # build above is Debug, so Release output has to be produced for the docs.
-          dotnet build ./Ploch.Data.slnx -c Release -p:UsePlochProjectReferences=true
+          dotnet build ./Ploch.Data.slnx -c Release
           dotnet docfx DocumentationSite/docfx.json
 
       - name: Warn if the documentation build failed
