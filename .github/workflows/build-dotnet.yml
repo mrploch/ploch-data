@@ -277,11 +277,23 @@ jobs:
       - name: Build and test the SampleApp against library source
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          IS_FORK_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
         run: |
           set -euo pipefail
+          # Distinguish "cannot have the secret" from "should have it and does not".
+          #
+          # A fork pull request has no access to repository secrets, so skipping is the only
+          # option and a red build would punish a contributor for something they cannot fix.
+          # On this repository the secret must be present: a blanket skip would let the gate
+          # silently stop running if the secret were ever removed, renamed or left to expire,
+          # and a gate that quietly stops gating is worse than no gate at all.
           if [ -z "${GH_PACKAGES_TOKEN:-}" ]; then
-            echo "::warning title=SampleApp gate skipped::GH_PACKAGES_TOKEN is unavailable, which is expected on a fork pull request. The sample consumes Ploch.CommandLine.Spectre from GitHub Packages, so it cannot be built here (#158). The release workflow's consumer gate still covers the sample before anything is published."
-            exit 0
+            if [ "${IS_FORK_PR}" = "true" ]; then
+              echo "::warning title=SampleApp gate skipped::GH_PACKAGES_TOKEN is unavailable, as expected on a fork pull request. The sample consumes Ploch.CommandLine.Spectre from GitHub Packages, so it cannot be built here (#158). The release workflow's consumer gate still covers the sample before anything is published."
+              exit 0
+            fi
+            echo "::error title=SampleApp gate cannot run::GH_PACKAGES_TOKEN is missing on a non-fork run. The sample cannot be validated without it, and failing loudly is deliberate - a silent skip would let this gate stop gating unnoticed."
+            exit 1
           fi
           SAMPLE=./samples/SampleApp/Ploch.Data.SampleApp.slnx
           dotnet restore "$SAMPLE" -p:UsePlochProjectReferences=true

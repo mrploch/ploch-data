@@ -331,10 +331,16 @@ jobs:
       # intent unambiguous: compile under these references, then package precisely those
       # binaries. Verified locally - the sample fails 25/25 against packages produced the old
       # way and passes 25/25 against packages produced this way.
+      #
+      # --no-incremental is load-bearing, not tidiness. The defect this step exists to prevent
+      # WAS an up-to-date check: MSBuild saw current outputs and skipped the recompile, so the
+      # nuspec changed while the assemblies did not. A reference-graph change usually busts
+      # that check, but "usually" is the wrong guarantee for the step whose whole purpose is
+      # to stop a silent skip, so the skip is disabled outright.
       - name: Build for packaging (package-resolved dependencies)
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet build ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false
+        run: dotnet build ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false --no-incremental
 
       - name: Pack (package-resolved dependencies)
         env:
@@ -393,6 +399,16 @@ jobs:
           PACKED=$(find "$FEED" -name 'Ploch.Data.*.nupkg' | wc -l)
           if [ "$PACKED" -eq 0 ]; then
             echo "::error::No Ploch.Data.*.nupkg found in $FEED - the pack step produced nothing to gate against."
+            exit 1
+          fi
+          # Assert the artefacts really carry the version being released. Without this, a
+          # stale nupkg left in the output directory could be gated and published under the
+          # wrong assumption, and the -p:PlochDataPackagesVersion override would quietly
+          # resolve something other than what was just built.
+          WRONG=$(find "$FEED" -name 'Ploch.Data.*.nupkg' ! -name "*.${NUGET_VERSION}.nupkg" || true)
+          if [ -n "$WRONG" ]; then
+            echo "::error::The package output directory holds Ploch.Data artefacts that are not version ${NUGET_VERSION}:"
+            echo "$WRONG"
             exit 1
           fi
           echo "Gating the SampleApp against $PACKED packed package(s) at version ${NUGET_VERSION}."
@@ -588,6 +604,13 @@ jobs:
       # rather than failing on the first miss.
       - name: Verify the published packages are resolvable from nuget.org
         if: success() && inputs.dry_run != true
+        # Non-gating on purpose. By the time this runs the packages are ALREADY on nuget.org
+        # and cannot be withdrawn, so a red job here would report a successful publish as a
+        # failed release - and invite a re-run of steps that are not idempotent. Indexing lag
+        # is routine and is not a failed release. The signal is kept, loudly, as a warning and
+        # a step summary; what changes is that a slow catalogue can no longer masquerade as a
+        # broken 4.0.0.
+        continue-on-error: true
         env:
           NUGET_VERSION: ${{ steps.version.outputs.nuget_version }}
         run: |
@@ -624,8 +647,17 @@ jobs:
             exit 1
           fi
           if [ -n "$MISSING" ]; then
-            echo "::error::Pushed but not resolvable from nuget.org after ~3 minutes:${MISSING}. This release is PARTIAL - investigate before announcing it."
-            exit 1
+            echo "::warning::Pushed but not resolvable from nuget.org after ~3 minutes:${MISSING}. Usually catalogue lag; if it persists, the release is PARTIAL - check before announcing it. Do NOT simply re-run this workflow: the publish steps are not idempotent."
+            {
+              echo "### Publish verification incomplete"
+              echo
+              echo "These ids were pushed but were not resolvable from nuget.org within ~3 minutes:"
+              echo
+              for ID in $MISSING; do echo "- \`${ID}\` ${NUGET_VERSION}"; done
+              echo
+              echo "This is usually indexing lag. Re-check on nuget.org before announcing the release, and do not re-run the workflow to 'fix' it - the publish steps are not idempotent."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
           echo "All ${COUNT} published package(s) are resolvable from nuget.org."
 
