@@ -301,10 +301,44 @@ jobs:
       # references, so it performs a second restore. NuGet.Config maps Ploch.* to nuget.org AND
       # github, so that restore queries the GitHub feed and 401s without the credential - even
       # though the SampleApp is no longer part of this solution.
+      # Recompile against PACKAGE references before packing, then pack exactly what was
+      # built (#185).
+      #
+      # This step is not redundant with "Build (Release)" above. That build - and the tests
+      # that follow it - must use ProjectReferences, because the Ploch.TestingSupport.XUnit3.*
+      # projects are not published as packages and the test projects reference the sibling
+      # ploch-common checkout by project. Mixing that with a Ploch.Common PackageReference is
+      # what broke `dotnet test -c Release` in #95.
+      #
+      # Packing, however, must not ship those binaries. -p:UseProjectReferences=false on
+      # `dotnet pack` alone reaches only the NUSPEC GENERATOR: the compile already happened
+      # under the previous property value and MSBuild's incremental check sees up-to-date
+      # outputs, so it never recompiles. The package then declares a dependency on stable
+      # Ploch.Common while its assemblies still demand the sibling checkout's prerelease:
+      #
+      #   nuspec:   Ploch.Common -> 4.0.47
+      #   assembly: Ploch.Common -> 4.1.4.48466
+      #   consumer: System.IO.FileNotFoundException at AddRepositories<TDbContext>()
+      #
+      # Restore succeeds and the application fails at RUN TIME, which is why no existing
+      # check caught it - restore validates the nuspec, compile validates source, and the
+      # tests run against project-referenced binaries. Only executing the packaged assembly
+      # against its own declared dependencies exposes the contradiction, which is exactly
+      # what the SampleApp consumer gate below now does.
+      #
+      # Building explicitly with the same property and then packing with --no-build makes the
+      # intent unambiguous: compile under these references, then package precisely those
+      # binaries. Verified locally - the sample fails 25/25 against packages produced the old
+      # way and passes 25/25 against packages produced this way.
+      - name: Build for packaging (package-resolved dependencies)
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: dotnet build ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false
+
       - name: Pack (package-resolved dependencies)
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: dotnet pack ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false -o ./artifacts/packages
+        run: dotnet pack ./Ploch.Data.slnx -c Release -p:UseProjectReferences=false --no-build -o ./artifacts/packages
 
       # SampleApp consumer gate (#185).
       #
