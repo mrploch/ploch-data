@@ -261,17 +261,32 @@ jobs:
       # PackageReferences for ProjectReferences into this checkout's source, so this gate
       # answers "does the sample still compile against the code as it is right now?".
       #
-      # It needs no package feed, which is what makes it work on FORK pull requests - those
-      # cannot reach GitHub Packages at all (#158). The complementary consumer gate, which
-      # builds the sample against the real packed artefacts, lives in release.yml.
+      # It still needs the GitHub Packages credential despite that switch. The switch replaces
+      # only the Ploch.Data.* references; the sample's ConsoleApp also consumes
+      # Ploch.CommandLine.Spectre, which lives in another repository and is published only to
+      # GitHub Packages. Without the token this step fails with 401/NU1301 - which is exactly
+      # how this was found, on the first CI run of this gate.
+      #
+      # It therefore does NOT run on fork pull requests, which cannot read repository secrets
+      # (#158). It skips with a warning there rather than failing: a fork contributor must not
+      # see a red build for a credential they cannot have. The complementary consumer gate,
+      # which builds the sample against the real packed artefacts, lives in release.yml.
       #
       # Placed after SonarScanner End on purpose: the sample is documentation, not library
       # code, and including it would distort the analysed codebase and its coverage figures.
       - name: Build and test the SampleApp against library source
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: |
-          dotnet restore ./samples/SampleApp/Ploch.Data.SampleApp.slnx -p:UsePlochProjectReferences=true
-          dotnet build ./samples/SampleApp/Ploch.Data.SampleApp.slnx --no-restore -p:UsePlochProjectReferences=true
-          dotnet test ./samples/SampleApp/Ploch.Data.SampleApp.slnx --no-build --verbosity normal -p:UsePlochProjectReferences=true
+          set -euo pipefail
+          if [ -z "${GH_PACKAGES_TOKEN:-}" ]; then
+            echo "::warning title=SampleApp gate skipped::GH_PACKAGES_TOKEN is unavailable, which is expected on a fork pull request. The sample consumes Ploch.CommandLine.Spectre from GitHub Packages, so it cannot be built here (#158). The release workflow's consumer gate still covers the sample before anything is published."
+            exit 0
+          fi
+          SAMPLE=./samples/SampleApp/Ploch.Data.SampleApp.slnx
+          dotnet restore "$SAMPLE" -p:UsePlochProjectReferences=true
+          dotnet build   "$SAMPLE" --no-restore -p:UsePlochProjectReferences=true
+          dotnet test    "$SAMPLE" --no-build --verbosity normal -p:UsePlochProjectReferences=true
 
       - name: Upload Test Results
         if: always()
