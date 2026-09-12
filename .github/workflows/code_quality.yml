@@ -1,20 +1,19 @@
 name: Qodana
 #
-# KNOWN BLOCKER - this workflow cannot currently produce results, and the cause is a
-# licence, not a configuration defect. Dispatch 33428446669 on this branch (the first run
-# ever to get past solution loading) failed with:
+# FORMER BLOCKER (issue #151) - every scan used to fail a licence check before the
+# solution was even opened:
 #
 #   Your Qodana Cloud organization has Community license that doesn't support
 #   "Qodana for .NET" linter, please try one of the community linters instead
 #
-# The check happens before the solution is opened, so no SARIF can be produced no matter
-# how the scan is configured. Everything below - the correct solution file, the sibling
-# clones and their container mounts, the private-feed credentials, the exclude paths - is
-# necessary for a scan that runs, but none of it is sufficient while the linter itself is
-# unlicensed. Resolving that (a paid Qodana licence, or moving to a community linter) is
-# tracked separately; see issue #138. The observability wiring below is what surfaced this
-# at all: the job stays green, emits warnings and reports the scan outcome instead of
-# failing silently.
+# qodana.yaml pointed at `jetbrains/qodana-dotnet`, the paid "Qodana for .NET" linter,
+# which the mrploch organisation's Community licence does not cover. Switched to
+# `jetbrains/qodana-cdnet` (Community .NET), the same linter ploch-common uses
+# successfully on every push/PR. Left on workflow_dispatch until a scan with the new
+# linter is confirmed to actually complete and upload a SARIF; once that is verified,
+# add `pull_request` / `push` triggers to match ploch-common and this workflow's
+# non-blocking observability scaffolding (continue-on-error, the SARIF-existence gate,
+# the outcome warning) can be simplified away.
 on:
   workflow_dispatch:
 
