@@ -1,5 +1,11 @@
 version: "1.0"
-linter: jetbrains/qodana-dotnet:latest
+# jetbrains/qodana-dotnet is the paid "Qodana for .NET" linter, which the mrploch
+# organisation's Community licence does not cover (issue #151) - every scan failed a
+# licence check before the solution was even opened. jetbrains/qodana-cdnet is the free
+# Community .NET linter and is what ploch-common uses successfully (its
+# qodana_code_quality.yml has been green on every push/PR since 2026-09-04). Same linter
+# tag pinned here for consistency across the two repos.
+linter: jetbrains/qodana-cdnet:2026.1
 dotnet:
   # This was `Ploch.Common.sln` - a solution file that has never existed in this repository;
   # it was copied verbatim from a sibling repo. Qodana could not open it, which is why the
