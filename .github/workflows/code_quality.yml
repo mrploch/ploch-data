@@ -34,6 +34,14 @@ jobs:
     # additionally pulls the linter image, restores, and runs InspectCode over everything.
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    # A fork's `pull_request` event never receives repository secrets (GitHub strips them
+    # by design), so on a fork PR QODANA_TOKEN and QODANA_NUGET_PASSWORD would both expand
+    # to empty strings: the scan can't report to Qodana Cloud and can't restore the
+    # SampleApp projects from the authenticated GitHub Packages feed either. Skipping fork
+    # PRs here avoids a scan that is guaranteed to fail on missing credentials, and avoids
+    # ever handing PR-controlled MSBuild/restore code a live token from a fork's context
+    # (flagged by Sourcery, codeant-ai, qodo-code-review and CodeRabbit on PR #190).
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     permissions:
       contents: read
     steps:
