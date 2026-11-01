@@ -151,10 +151,28 @@ jobs:
       # No secret is written to disk. NuGet expands %GH_PACKAGES_TOKEN% at restore time, and
       # that variable is set only on the restore step below, so no later repository-controlled
       # step (build, test, SonarScanner, docfx) can resolve the token out of this file.
+      #
+      # Dependabot and fork pull requests receive no Actions secrets, so GH_PACKAGES_TOKEN is
+      # empty there. A credentials entry whose password expands to an empty string makes every
+      # restore fail with "Value cannot be null or empty string. (Parameter 'password')", even
+      # though this build never downloads a Ploch.* package: it uses ProjectReferences to the
+      # cloned ploch-common (UseProjectReferences=true). The entry is therefore written only
+      # when the secret exists. Only a boolean reaches this step, never the token itself.
       - name: Add GitHub Packages Source
+        env:
+          HAS_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN != '' }}
+          NO_SECRETS_EXPECTED: ${{ github.event_name == 'pull_request' && (github.event.pull_request.head.repo.fork || github.actor == 'dependabot[bot]') }}
         run: |
           CONFIG="$HOME/.nuget/NuGet/NuGet.Config"
           mkdir -p "$(dirname "$CONFIG")"
+          if [ "${HAS_PACKAGES_TOKEN}" != "true" ]; then
+            if [ "${NO_SECRETS_EXPECTED}" = "true" ]; then
+              echo "::warning title=No GitHub Packages credentials::GH_PACKAGES_TOKEN is unavailable, as expected on a fork or Dependabot pull request. Restoring without credentials for the github source."
+            else
+              echo "::error title=GH_PACKAGES_TOKEN missing::GH_PACKAGES_TOKEN is missing on a non-fork run. Failing loudly rather than silently restoring without credentials."
+              exit 1
+            fi
+          fi
           # The sibling repositories cloned above (ploch-common) have no NuGet.Config of their
           # own, so they resolve their packages through this file. It must therefore still
           # declare the public sources, not only the credentials, or their restore fails with
@@ -166,12 +184,14 @@ jobs:
             echo '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />'
             echo '    <add key="github" value="https://nuget.pkg.github.com/mrploch/index.json" />'
             echo '  </packageSources>'
-            echo '  <packageSourceCredentials>'
-            echo '    <github>'
-            echo '      <add key="Username" value="kploch" />'
-            echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
-            echo '    </github>'
-            echo '  </packageSourceCredentials>'
+            if [ "${HAS_PACKAGES_TOKEN}" = "true" ]; then
+              echo '  <packageSourceCredentials>'
+              echo '    <github>'
+              echo '      <add key="Username" value="kploch" />'
+              echo '      <add key="ClearTextPassword" value="%GH_PACKAGES_TOKEN%" />'
+              echo '    </github>'
+              echo '  </packageSourceCredentials>'
+            fi
             echo '</configuration>'
           } > "$CONFIG"
           cat "$CONFIG"
