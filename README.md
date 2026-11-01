@@ -4,6 +4,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=alert_status&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mrploch_ploch-data&metric=coverage&token=1ea9277b2f110b6b2d99685a20c037074d08d1c1)](https://sonarcloud.io/summary/new_code?id=mrploch_ploch-data)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/mrploch/ploch-data?utm_source=oss&utm_medium=github&utm_campaign=mrploch%2Fploch-data&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/krisploch)
 
 | Package | Version | Downloads |
