@@ -409,3 +409,7 @@ temp-*.md
 **/*.props.bak
 **/*.md.bak
 temp/
+
+# Codex project state written by local tools: config.toml with machine-local MCP servers
+# (it can hold credentials) and SonarQube's generated hooks with absolute local paths.
+.codex/
